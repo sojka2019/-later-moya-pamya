@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LATER — твоя друга пам'ять</title>
+<style>
+:root{--bg:#0b0d14;--panel:#141824;--panel2:#1b2030;--text:#f5f6fb;--muted:#9da5b8;--purple:#a99aff;--purple2:#7560d9;--line:#2a3042;--green:#8de2c0}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 0%,#20203b 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1120px;margin:auto;padding:24px 18px 48px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}.brand{font-weight:850;letter-spacing:.22em;font-size:25px}.tag{color:var(--muted);font-size:13px;margin-top:2px}.avatar{border:1px solid var(--line);border-radius:50%;width:42px;height:42px;display:grid;place-items:center;background:var(--panel)}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-bottom:20px}.card{background:linear-gradient(145deg,rgba(27,32,48,.97),rgba(17,20,31,.97));border:1px solid var(--line);border-radius:24px;padding:23px;box-shadow:0 18px 50px #0002}.eyebrow{color:var(--purple);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase}.hero h1{font-size:clamp(28px,4vw,43px);line-height:1.08;margin:10px 0 12px;letter-spacing:-.04em}.hero p{color:var(--muted);margin:0;max-width:520px}.capture{display:flex;gap:10px;margin-top:22px}.field{background:#0e111b;border:1px solid var(--line);border-radius:14px;color:var(--text);padding:13px 14px;width:100%;outline:none}.field:focus{border-color:var(--purple2)}textarea.field{min-height:94px;resize:vertical}.primary{border:0;border-radius:13px;background:linear-gradient(135deg,#b4a5ff,#8d78f1);color:#171326;font-weight:800;padding:12px 17px;white-space:nowrap}.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:10px 13px}.capture-card{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:230px;background:radial-gradient(circle at 50% 20%,#3b306b 0,transparent 50%),linear-gradient(145deg,#171b2a,#11141f)}.mic{width:84px;height:84px;border:1px solid #c7bbff;border-radius:50%;display:grid;place-items:center;background:#a99aff;color:#211943;font-size:32px;box-shadow:0 0 0 9px #a99aff16,0 0 35px #8f7bf755;margin:15px 0 12px}.hint{font-size:12px;color:var(--muted)}.status{font-size:12px;color:var(--green);min-height:18px;margin-top:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}.stat{padding:16px;border-radius:18px;background:var(--panel);border:1px solid var(--line)}.stat strong{display:block;font-size:25px}.stat span{font-size:12px;color:var(--muted)}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:24px 0 13px}.section-head h2{font-size:20px;margin:0}.section-head p{font-size:12px;color:var(--muted);margin:4px 0 0}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.toolbar .field{flex:1;min-width:180px}.chip{border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--muted);padding:9px 13px;font-size:13px}.chip.active{background:#292342;color:#d9d0ff;border-color:#7161b8}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.note{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:17px;min-width:0;display:flex;flex-direction:column;gap:11px}.note-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.kind{font-size:12px;color:var(--purple);background:#a99aff16;border:1px solid #a99aff30;border-radius:999px;padding:5px 9px}.note h3{font-size:16px;margin:0;overflow-wrap:anywhere}.note p{margin:0;color:#c1c7d5;overflow-wrap:anywhere;white-space:pre-wrap}.meta{font-size:11px;color:var(--muted)}.note-actions{display:flex;gap:7px;margin-top:auto;padding-top:4px}.note-actions button{font-size:12px;flex:1}.empty{grid-column:1/-1;text-align:center;padding:35px 15px;color:var(--muted);border:1px dashed var(--line);border-radius:18px}.footer{color:var(--muted);font-size:12px;text-align:center;margin-top:28px}.modal{position:fixed;inset:0;background:#05060bcc;display:none;align-items:center;justify-content:center;padding:16px;z-index:10}.modal.open{display:flex}.modal-box{width:min(520px,100%);background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px}.modal-box h2{margin-top:0}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.capture-card{min-height:180px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.app{padding:18px 12px 35px}.card{padding:19px}.hero h1{font-size:32px}}
+@media(max-width:480px){.grid{grid-template-columns:1fr}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:21px}.capture{flex-direction:column}.top{margin-bottom:18px}.form-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div><div class="brand">LATER<span style="color:var(--purple)">.</span></div><div class="tag">Твоя друга пам'ять</div></div>
+    <div class="avatar" title="Профіль">✦</div>
+  </header>
+
+  <section class="hero">
+    <div class="card">
+      <div class="eyebrow">Менше забувай. Більше живи.</div>
+      <h1>Що хочеш<br>запам'ятати?</h1>
+      <p>Ідея, покупка, рекомендація чи маленька думка — збережи її тут, а LATER допоможе повернутися до неї вчасно.</p>
+      <div class="capture">
+        <input id="quickInput" class="field" placeholder="Наприклад: купити подарунок мамі…" aria-label="Швидкий запис">
+        <button class="primary" id="quickAdd">＋ Зберегти</button>
+      </div>
+      <div class="status" id="quickStatus" aria-live="polite"></div>
+    </div>
+    <div class="card capture-card">
+      <div class="hint">Зручніше сказати вголос?</div>
+      <button class="mic" id="micBtn" aria-label="Записати голосом">🎙</button>
+      <strong id="micTitle">Запам'ятати голосом</strong>
+      <div class="hint" id="micHint">Натисни та продиктуй думку</div>
+      <div class="status" id="voiceStatus" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><strong id="totalStat">0</strong><span>Збережено записів</span></div>
+    <div class="stat"><strong id="reminderStat">0</strong><span>Мають нагадування</span></div>
+    <div class="stat"><strong id="categoryStat">0</strong><span>Категорій використано</span></div>
+  </section>
+
+  <div class="section-head"><div><h2>Твоя пам'ять</h2><p>Усе важливе — в одному місці.</p></div><button class="secondary" id="addDetailed">＋ Новий запис</button></div>
+  <div class="toolbar" id="filters">
+    <button class="chip active" data-filter="Усе">Усе</button>
+    <button class="chip" data-filter="Покупки">🛍 Покупки</button>
+    <button class="chip" data-filter="Ідеї">💡 Ідеї</button>
+    <button class="chip" data-filter="Місця">📍 Місця</button>
+    <button class="chip" data-filter="Рекомендації">🎬 Рекомендації</button>
+    <button class="chip" data-filter="Справи">✓ Справи</button>
+    <input class="field" id="search" placeholder="⌕ Пошук за змістом…">
+  </div>
+  <div class="grid" id="notesGrid"></div>
+  <div class="footer">Прототип LATER · Дані зберігаються локально в цьому браузері на цьому пристрої.</div>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+ <div class="modal-box">
+  <h2 id="modalTitle">Новий запис</h2>
+  <label class="form-label" for="noteText">Що хочеш запам'ятати?</label>
+  <textarea class="field" id="noteText" placeholder="Напиши думку, ідею або річ…" rows="3"></textarea>
+  <div class="form-row">
+   <div><label class="form-label" for="noteCategory">Категорія</label><select class="field" id="noteCategory"><option>Автоматично</option><option>Покупки</option><option>Ідеї</option><option>Місця</option><option>Рекомендації</option><option>Справи</option><option>Інше</option></select></div>
+   <div><label class="form-label" for="noteDate">Нагадати (необов'язково)</label><input class="field" id="noteDate" type="datetime-local"></div>
+  </div>
+  <div class="modal-actions"><button class="secondary" id="cancelModal">Скасувати</button><button class="primary" id="saveNote">Зберегти запис</button></div>
+ </div>
+</div>
+<script>
+const KEY='later-prototype-v1';
+let notes=[];
+let activeFilter='Усе';
+let editingId=null;
+const $=id=>document.getElementById(id);
+const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Інше':'✦'};
+function load(){try{notes=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){notes=[]}render()}
+function persist(){localStorage.setItem(KEY,JSON.stringify(notes));render()}
+function categoryFor(text){const t=text.toLowerCase();if(/куп|магазин|ціна|кросів|навуш|подар|замов|придбат/.test(t))return'Покупки';if(/фільм|серіал|книг|пісн|музик|порад/.test(t))return'Рекомендації';if(/відвід|поїхат|ресторан|кафе|місц|адрес/.test(t))return'Місця';if(/ідея|придум|проєкт|бізнес|створ/.test(t))return'Ідеї';if(/треба|зробити|купити|нагад|зателефон|написати/.test(t))return'Справи';return'Інше'}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function add(text,category='Автоматично',date=''){text=text.trim();if(!text)return;const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false});persist();$('quickStatus').textContent='Збережено. Продовжуй займатися своїми справами.';setTimeout(()=>$('quickStatus').textContent='',3500)}
+function fmtDate(d){if(!d)return'';const dt=new Date(d);if(Number.isNaN(dt.getTime()))return'';return dt.toLocaleString('uk-UA',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
+function render(){const q=$('search').value.toLowerCase().trim();const shown=notes.filter(n=>(activeFilter==='Усе'||n.category===activeFilter)&&(!q||(n.text+' '+n.category).toLowerCase().includes(q)));$('totalStat').textContent=notes.length;$('reminderStat').textContent=notes.filter(n=>n.date&&!n.done).length;$('categoryStat').textContent=new Set(notes.map(n=>n.category)).size;const grid=$('notesGrid');if(!shown.length){grid.innerHTML='<div class="empty">'+(notes.length?'Нічого не знайдено. Спробуй інший запит.':'Тут поки порожньо — збережи першу думку вище. ✨')+'</div>';return}grid.innerHTML=shown.map(n=>`<article class="note"><div class="note-top"><span class="kind">${icons[n.category]||'✦'} ${escapeHtml(n.category)}</span><span class="meta">${n.done?'✓ Виконано':''}</span></div><h3>${escapeHtml(n.text.length>54?n.text.slice(0,54)+'…':n.text)}</h3>${n.text.length>54?`<p>${escapeHtml(n.text)}</p>`:''}<div class="meta">${n.date?'⏰ '+escapeHtml(fmtDate(n.date))+' · ':''}Додано ${escapeHtml(new Date(n.created).toLocaleDateString('uk-UA'))}</div><div class="note-actions"><button class="secondary" data-action="remind" data-id="${n.id}">${n.date?'Змінити нагадування':'＋ Нагадати'}</button><button class="secondary" data-action="done" data-id="${n.id}">${n.done?'Повернути':'✓ Готово'}</button><button class="secondary" data-action="delete" data-id="${n.id}">✕</button></div></article>`).join('')}
+function openModal(n=null){editingId=n?n.id:null;$('modalTitle').textContent=n?'Редагувати запис':'Новий запис';$('noteText').value=n?n.text:'';$('noteCategory').value=n?n.category:'Автоматично';$('noteDate').value=n&&n.date?n.date:'';$('modal').classList.add('open');$('noteText').focus()}
+function closeModal(){$('modal').classList.remove('open')}
+$('quickAdd').onclick=()=>{add($('quickInput').value);$('quickInput').value=''};
+$('quickInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('quickAdd').click()}});
+$('addDetailed').onclick=()=>openModal();
+$('cancelModal').onclick=closeModal;
+$('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
+$('saveNote').onclick=()=>{const text=$('noteText').value.trim();if(!text){$('noteText').focus();return}const category=$('noteCategory').value;const date=$('noteDate').value;if(editingId){const n=notes.find(n=>n.id===editingId);if(n){n.text=text;n.category=category==='Автоматично'?categoryFor(text):category;n.date=date;n.done=false}}else{const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false})}persist();closeModal()};
+$('search').addEventListener('input',render);
+$('filters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;activeFilter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));render()});
+$('notesGrid').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const id=Number(b.dataset.id);const n=notes.find(x=>x.id===id);if(!n)return;if(b.dataset.action==='delete'){if(confirm('Видалити цей запис?')){notes=notes.filter(x=>x.id!==id);persist()}}else if(b.dataset.action==='done'){n.done=!n.done;persist()}else if(b.dataset.action==='remind'){openModal(n)}});
+let recognition=null;
+$('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('voiceStatus').textContent='Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.';return}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang='uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;$('micTitle').textContent='Слухаю тебе…';$('micHint').textContent='Говори після запиту браузера на доступ до мікрофона';$('voiceStatus').textContent='';recognition.onresult=e=>{const text=e.results[0][0].transcript;add(text);$('voiceStatus').textContent='Розпізнано: '+text};recognition.onerror=e=>{$('voiceStatus').textContent='Не вдалося записати голос: '+e.error};recognition.onend=()=>{$('micTitle').textContent='Запам’ятати голосом';$('micHint').textContent='Натисни та продиктуй думку';recognition=null};recognition.start()};
+load();
+</script>
+</body>
+</html>
