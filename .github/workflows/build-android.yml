@@ -355,9 +355,9 @@ jobs:
           # Force every launcher density to use the known green source icon.
           declare -A icon_sizes=( [ldpi]=36 [mdpi]=48 [hdpi]=72 [xhdpi]=96 [xxhdpi]=144 [xxxhdpi]=192 )
           for density in ldpi mdpi hdpi xhdpi xxhdpi xxxhdpi; do
-          size=${icon_sizes[$density]}
-          convert assets/icon.png -resize ${size}x${size} "android/app/src/main/res/mipmap-${density}/ic_launcher.png"
-          convert assets/icon.png -resize ${size}x${size} "android/app/src/main/res/mipmap-${density}/ic_launcher_round.png"
+            size=${icon_sizes[$density]}
+            convert assets/icon.png -resize ${size}x${size} "android/app/src/main/res/mipmap-${density}/ic_launcher.png"
+            convert assets/icon.png -resize ${size}x${size} "android/app/src/main/res/mipmap-${density}/ic_launcher_round.png"
           done
           rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
           python3 - <<'PY'
