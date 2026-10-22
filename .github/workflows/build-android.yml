@@ -31,12 +31,32 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y imagemagick
+          sudo apt-get install -y imagemagick python3-pil
           mkdir -p native-app/public native-app/assets
           cp index.html native-app/index.html
           cp manifest.json icon-192.png icon-512.png native-app/public/
-          # Use the existing green Remember logo for the native Android launcher icon.
-          convert icon-512.png -resize 1024x1024 native-app/assets/icon.png
+          # Create a distinct green launcher icon for the new Android app.
+          python3 - <<'PY'
+          from PIL import Image, ImageDraw
+          from pathlib import Path
+
+          size = 1024
+          img = Image.new("RGB", (size, size), "#168653")
+          d = ImageDraw.Draw(img)
+
+          # White notebook
+          d.rounded_rectangle((230, 140, 750, 850), radius=65, fill="white")
+          # Notebook binding
+          d.rounded_rectangle((350, 105, 630, 175), radius=30, fill="#d9f4e5")
+          # Green lines
+          for y in (350, 440, 530):
+          d.rounded_rectangle((320, y, 650, y + 18), radius=9, fill="#b8dcca")
+          # Check mark
+          d.line([(350, 650), (440, 730), (610, 590)], fill="#168653", width=42, joint="curve")
+
+          Path("native-app/assets").mkdir(parents=True, exist_ok=True)
+          img.save("native-app/assets/icon.png")
+          PY
           # Make a separate Android copy. Leave the published website untouched.
           python3 - <<'PY'
           from pathlib import Path
@@ -335,9 +355,9 @@ jobs:
           # Force every launcher density to use the known green source icon.
           declare -A icon_sizes=( [ldpi]=36 [mdpi]=48 [hdpi]=72 [xhdpi]=96 [xxhdpi]=144 [xxxhdpi]=192 )
           for density in ldpi mdpi hdpi xhdpi xxhdpi xxxhdpi; do
-            size=${icon_sizes[$density]}
-            convert public/icon-512.png -resize ${size}x${size} "android/app/src/main/res/mipmap-${density}/ic_launcher.png"
-            convert public/icon-512.png -resize ${size}x${size} "android/app/src/main/res/mipmap-${density}/ic_launcher_round.png"
+          size=${icon_sizes[$density]}
+          convert assets/icon.png -resize ${size}x${size} "android/app/src/main/res/mipmap-${density}/ic_launcher.png"
+          convert assets/icon.png -resize ${size}x${size} "android/app/src/main/res/mipmap-${density}/ic_launcher_round.png"
           done
           rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
           python3 - <<'PY'
