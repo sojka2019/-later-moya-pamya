@@ -60,7 +60,9 @@ jobs:
               "@capacitor/core": "^8.0.0",
               "@capacitor/local-notifications": "^8.3.1",
               "@capgo/capacitor-speech-recognition": "^8.4.4",
-              "@capawesome/capacitor-file-picker": "^8.1.0"
+              "@capawesome/capacitor-file-picker": "^8.1.0",
+              "@capacitor/filesystem": "^8.0.0",
+              "@capacitor/share": "^8.0.0"
             },
             "devDependencies": {
               "@capacitor/android": "^8.0.0",
@@ -216,6 +218,40 @@ jobs:
                     const quickStatus = document.getElementById('quickStatus');
                     if (quickStatus) quickStatus.textContent = 'Не вдалося імпортувати файл: ' + (error && error.message ? error.message : 'невідома помилка');
                     else alert('Не вдалося імпортувати файл резервної копії.');
+                  }
+                };
+              }
+              const exportButton = document.getElementById('exportBackup');
+              if (exportButton) {
+                exportButton.onclick = async () => {
+                  const quickStatus = document.getElementById('quickStatus');
+                  try {
+                    if (quickStatus) quickStatus.textContent = 'Створюю резервну копію…';
+                    const { Filesystem, Directory } = await import('@capacitor/filesystem');
+                    const { Share } = await import('@capacitor/share');
+                    const payload = {
+                      format: 'pamyatai-backup',
+                      version: 1,
+                      exportedAt: new Date().toISOString(),
+                      notes: getNotes()
+                    };
+                    const fileName = 'pamyatai-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+                    const file = await Filesystem.writeFile({
+                      path: fileName,
+                      data: JSON.stringify(payload, null, 2),
+                      directory: Directory.Cache,
+                      recursive: true
+                    });
+                    await Share.share({
+                      title: 'Резервна копія «Пам’ятай»',
+                      text: 'Збережи цей файл у надійному місці.',
+                      files: [file.uri],
+                      dialogTitle: 'Зберегти резервну копію'
+                    });
+                    if (quickStatus) quickStatus.textContent = 'Вибери програму для збереження резервної копії.';
+                  } catch (error) {
+                    console.error('Native backup export error:', error);
+                    if (quickStatus) quickStatus.textContent = 'Не вдалося створити резервну копію: ' + (error?.message || 'невідома помилка');
                   }
                 };
               }
