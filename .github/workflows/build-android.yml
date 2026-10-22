@@ -28,6 +28,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
           mkdir -p native-app/public native-app/assets
           cp index.html native-app/index.html
           cp manifest.json icon-192.png icon-512.png native-app/public/
