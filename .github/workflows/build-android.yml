@@ -1,0 +1,229 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current Remember website
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Prepare Android app from the existing site
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p native-app/public
+          cp index.html native-app/index.html
+          cp manifest.json icon-192.png icon-512.png native-app/public/
+
+          # Make a separate Android copy. Leave the published website untouched.
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("native-app/index.html")
+          html = p.read_text(encoding="utf-8")
+          marker = "load();\n</script>"
+          if marker not in html:
+              raise SystemExit("Could not find the expected end of the main app script in index.html")
+          html = html.split(marker, 1)[0] + marker
+          html += '\n<script type="module" src="./native-reminders.js"></script>\n</body>\n</html>\n'
+          p.write_text(html, encoding="utf-8")
+          PY
+
+          cat > native-app/package.json <<'EOF'
+          {
+            "name": "pamyatai-android",
+            "version": "1.0.0",
+            "private": true,
+            "type": "module",
+            "scripts": { "build": "vite build" },
+            "dependencies": {
+              "@capacitor/core": "^8.0.0",
+              "@capacitor/local-notifications": "^8.3.1"
+            },
+            "devDependencies": {
+              "@capacitor/android": "^8.0.0",
+              "@capacitor/cli": "^8.0.0",
+              "vite": "^7.1.12"
+            }
+          }
+          EOF
+
+          cat > native-app/vite.config.js <<'EOF'
+          import { defineConfig } from 'vite';
+          export default defineConfig({
+            base: './',
+            build: { outDir: 'dist', emptyOutDir: true }
+          });
+          EOF
+
+          cat > native-app/capacitor.config.json <<'EOF'
+          {
+            "appId": "ch.pamyatai.remember",
+            "appName": "Пам’ятай",
+            "webDir": "dist"
+          }
+          EOF
+
+          cat > native-app/native-reminders.js <<'EOF'
+          import { Capacitor } from '@capacitor/core';
+          import { LocalNotifications } from '@capacitor/local-notifications';
+
+          const STORAGE_KEY = 'later-prototype-v1';
+
+          if (Capacitor.isNativePlatform()) {
+            const sectionHead = document.querySelector('.section-head');
+            if (sectionHead) {
+              const button = document.createElement('button');
+              button.className = 'secondary';
+              button.textContent = '🔔 Увімкнути системні нагадування';
+              button.style.width = '100%';
+              button.style.margin = '0 0 6px';
+              sectionHead.insertAdjacentElement('afterend', button);
+
+              const status = document.createElement('div');
+              status.className = 'status';
+              status.style.margin = '0 0 12px';
+              button.insertAdjacentElement('afterend', status);
+
+              function getNotes() {
+                try {
+                  return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                } catch {
+                  return [];
+                }
+              }
+
+              function notificationId(value) {
+                let hash = 2166136261;
+                for (const ch of String(value)) {
+                  hash ^= ch.charCodeAt(0);
+                  hash = Math.imul(hash, 16777619);
+                }
+                return (hash >>> 0) % 2000000000 + 1;
+              }
+
+              async function syncReminders() {
+                try {
+                  const permission = await LocalNotifications.checkPermissions();
+                  if (permission.display !== 'granted') return;
+
+                  const notes = getNotes();
+                  const now = Date.now();
+                  const futureNotes = notes.filter(note => {
+                    const time = note.date ? new Date(note.date).getTime() : NaN;
+                    return Boolean(note.date) && !note.done && Number.isFinite(time) && time > now;
+                  });
+
+                  await LocalNotifications.cancelAll();
+
+                  if (futureNotes.length === 0) {
+                    status.textContent = 'Немає майбутніх нагадувань із заданою датою та часом.';
+                    return;
+                  }
+
+                  const result = await LocalNotifications.schedule({
+                    notifications: futureNotes.map(note => ({
+                      id: notificationId(note.id),
+                      title: 'Пам’ятай 🔔',
+                      body: String(note.text || 'У тебе є нагадування!').slice(0, 500),
+                      schedule: {
+                        at: new Date(note.date),
+                        allowWhileIdle: true
+                      },
+                      extra: { noteId: String(note.id) }
+                    }))
+                  });
+
+                  status.textContent = 'Заплановано нагадувань: ' + futureNotes.length + '.';
+                  if (result && result.warning) {
+                    status.textContent += ' Android може показати деякі сповіщення із затримкою, якщо точний час не дозволено.';
+                  }
+                } catch (error) {
+                  console.error('Local reminder error:', error);
+                  status.textContent = 'Не вдалося запланувати нагадування. Перевір дозволи сповіщень.';
+                }
+              }
+
+              button.addEventListener('click', async () => {
+                try {
+                  let permission = await LocalNotifications.checkPermissions();
+                  if (permission.display !== 'granted') {
+                    permission = await LocalNotifications.requestPermissions();
+                  }
+                  if (permission.display !== 'granted') {
+                    status.textContent = 'Дозволь сповіщення для застосунку в налаштуваннях Android.';
+                    return;
+                  }
+                  status.textContent = 'Перевіряю та планую нагадування…';
+                  await syncReminders();
+                } catch (error) {
+                  console.error(error);
+                  status.textContent = 'Не вдалося ввімкнути сповіщення.';
+                }
+              });
+
+              const refreshSoon = () => setTimeout(syncReminders, 600);
+              document.getElementById('saveNote')?.addEventListener('click', refreshSoon);
+              document.getElementById('quickAdd')?.addEventListener('click', refreshSoon);
+              document.getElementById('notesGrid')?.addEventListener('click', refreshSoon);
+
+              setTimeout(async () => {
+                const permission = await LocalNotifications.checkPermissions();
+                if (permission.display === 'granted') await syncReminders();
+              }, 800);
+            }
+          }
+          EOF
+
+      - name: Install web and Capacitor packages
+        working-directory: native-app
+        run: npm install --no-audit --no-fund
+
+      - name: Build the web files for Android
+        working-directory: native-app
+        run: npm run build
+
+      - name: Generate Android project and connect local notifications
+        working-directory: native-app
+        run: |
+          npx cap add android
+          npx cap sync android
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("android/app/src/main/AndroidManifest.xml")
+          text = p.read_text(encoding="utf-8")
+          permission = '    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />'
+          if "android.permission.SCHEDULE_EXACT_ALARM" not in text:
+              text = text.replace("<application", permission + "\n\n    <application", 1)
+              p.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Build installable debug APK
+        working-directory: native-app/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK for download
+        uses: actions/upload-artifact@v4
+        with:
+          name: pamyatai-android-apk
+          path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
