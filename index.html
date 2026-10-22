@@ -109,19 +109,8 @@ $('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||windo
 load();
 </script>
 <script>
- if (permission === "granted") {
-          button.textContent = "🔔 Сповіщення ввімкнено";
-          checkReminders();
-        } else {
-          button.textContent = "Дозволь сповіщення в налаштуваннях";
-        }
-      });
 
-      checkReminders();
-      setInterval(checkReminders, 15000);
-    })
-    .catch(error => console.log("Помилка сповіщень:", error));
-}
+  
 </script>
  <script>
 if ("Notification" in window && "serviceWorker" in navigator) {
