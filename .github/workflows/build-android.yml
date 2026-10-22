@@ -1,9 +1,4 @@
-name: Build Android APK
 
-on:
-  workflow_dispatch:
-
-permissions:
   contents: read
 
 jobs:
@@ -85,9 +80,14 @@ jobs:
           import { Capacitor } from '@capacitor/core';
           import { LocalNotifications } from '@capacitor/local-notifications';
           import { SpeechRecognition } from '@capgo/capacitor-speech-recognition';
-          import { FilePicker } from '@capawesome/capacitor-file-picker';
           const STORAGE_KEY = 'later-prototype-v1';
           if (Capacitor.isNativePlatform()) {
+            // Temporary visible marker confirms the Android bridge module loaded.
+            const startupVoiceStatus = document.getElementById('voiceStatus');
+            if (startupVoiceStatus) {
+              startupVoiceStatus.textContent = 'Android-модуль завантажено';
+              setTimeout(() => { if (startupVoiceStatus.textContent === 'Android-модуль завантажено') startupVoiceStatus.textContent = ''; }, 4000);
+            }
             // Use native Android speech recognition because WebView does not reliably expose Web Speech API.
             const micBtn = document.getElementById('micBtn');
             const micTitle = document.getElementById('micTitle');
@@ -165,6 +165,7 @@ jobs:
                   try {
                     const quickStatus = document.getElementById('quickStatus');
                     if (quickStatus) quickStatus.textContent = 'Відкриваю вибір резервної копії…';
+                    const { FilePicker } = await import('@capawesome/capacitor-file-picker');
                     const picked = await FilePicker.pickFiles({
                       types: ['application/json', 'application/octet-stream'],
                       limit: 1,
@@ -307,6 +308,15 @@ jobs:
           npx cap add android
           npx cap sync android
           npx capacitor-assets generate --android
+          # Force every launcher density to use the known green source icon.
+          # Remove adaptive XML overrides so Android resolves the PNG resources below.
+          declare -A icon_sizes=( [ldpi]=36 [mdpi]=48 [hdpi]=72 [xhdpi]=96 [xxhdpi]=144 [xxxhdpi]=192 )
+          for density in ldpi mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            size=${icon_sizes[$density]}
+            convert public/icon-512.png -resize ${size}x${size} "android/app/src/main/res/mipmap-${density}/ic_launcher.png"
+            convert public/icon-512.png -resize ${size}x${size} "android/app/src/main/res/mipmap-${density}/ic_launcher_round.png"
+          done
+          rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
           python3 - <<'PY'
           from pathlib import Path
           p = Path("android/app/src/main/AndroidManifest.xml")
