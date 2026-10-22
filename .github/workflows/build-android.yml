@@ -56,7 +56,8 @@ jobs:
             "scripts": { "build": "vite build" },
             "dependencies": {
               "@capacitor/core": "^8.0.0",
-              "@capacitor/local-notifications": "^8.3.1"
+              "@capacitor/local-notifications": "^8.3.1",
+              "@capgo/capacitor-speech-recognition": "^8.4.4"
             },
             "devDependencies": {
               "@capacitor/android": "^8.0.0",
@@ -82,9 +83,59 @@ jobs:
           cat > native-app/native-reminders.js <<'EOF_REMINDERS'
           import { Capacitor } from '@capacitor/core';
           import { LocalNotifications } from '@capacitor/local-notifications';
-
+          import { SpeechRecognition } from '@capgo/capacitor-speech-recognition';
           const STORAGE_KEY = 'later-prototype-v1';
           if (Capacitor.isNativePlatform()) {
+            // Use native Android speech recognition because WebView does not reliably expose Web Speech API.
+            const micBtn = document.getElementById('micBtn');
+            const micTitle = document.getElementById('micTitle');
+            const micHint = document.getElementById('micHint');
+            const voiceStatus = document.getElementById('voiceStatus');
+            if (micBtn) {
+              micBtn.onclick = async () => {
+                try {
+                  if (voiceStatus) voiceStatus.textContent = 'Перевіряю доступ до мікрофона…';
+                  const permission = await SpeechRecognition.requestPermissions();
+                  if (permission.speechRecognition !== 'granted') {
+                    if (voiceStatus) voiceStatus.textContent = 'Дозволь доступ до мікрофона в налаштуваннях Android.';
+                    return;
+                  }
+                  const availability = await SpeechRecognition.available();
+                  if (!availability.available) {
+                    if (voiceStatus) voiceStatus.textContent = 'На телефоні недоступне розпізнавання голосу. Перевір сервіс голосового введення Google.';
+                    return;
+                  }
+                  if (micTitle) micTitle.textContent = 'Слухаю тебе…';
+                  if (micHint) micHint.textContent = 'Скажи думку у вікні розпізнавання голосу';
+                  if (voiceStatus) voiceStatus.textContent = '';
+                  const result = await SpeechRecognition.start({
+                    language: 'uk-UA',
+                    maxResults: 1,
+                    prompt: 'Скажіть, що потрібно запам’ятати',
+                    popup: true,
+                    partialResults: false
+                  });
+                  const spokenText = String(result?.matches?.[0] || '').trim();
+                  if (!spokenText) {
+                    if (voiceStatus) voiceStatus.textContent = 'Не вдалося розпізнати слова. Спробуй ще раз або введи текст.';
+                    return;
+                  }
+                  const quickInput = document.getElementById('quickInput');
+                  const quickAdd = document.getElementById('quickAdd');
+                  if (quickInput && quickAdd) {
+                    quickInput.value = spokenText;
+                    quickAdd.click();
+                    if (voiceStatus) voiceStatus.textContent = 'Розпізнано: ' + spokenText;
+                  }
+                } catch (error) {
+                  console.error('Native speech recognition error:', error);
+                  if (voiceStatus) voiceStatus.textContent = 'Не вдалося використати мікрофон. Перевір дозвіл і сервіс голосового введення на телефоні.';
+                } finally {
+                  if (micTitle) micTitle.textContent = 'Запам’ятати голосом';
+                  if (micHint) micHint.textContent = 'Натисни та продиктуй думку';
+                }
+              };
+            }
             const sectionHead = document.querySelector('.section-head');
             if (sectionHead) {
               const button = document.createElement('button');
@@ -97,7 +148,6 @@ jobs:
               status.className = 'status';
               status.style.margin = '0 0 12px';
               button.insertAdjacentElement('afterend', status);
-
               function getNotes() {
                 try {
                   return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -123,7 +173,6 @@ jobs:
                     const time = note.date ? new Date(note.date).getTime() : NaN;
                     return Boolean(note.date) && !note.done && Number.isFinite(time) && time > now;
                   });
-
                   await LocalNotifications.cancelAll();
                   if (futureNotes.length === 0) {
                     status.textContent = 'Немає майбутніх нагадувань із заданою датою та часом.';
@@ -178,7 +227,6 @@ jobs:
             }
           }
           EOF_REMINDERS
-
       - name: Install web and Capacitor packages
         working-directory: native-app
         run: npm install --no-audit --no-fund
