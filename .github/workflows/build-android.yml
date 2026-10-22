@@ -1,4 +1,11 @@
+name: Build Android APK
 
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
   contents: read
 
 jobs:
@@ -82,13 +89,11 @@ jobs:
           import { SpeechRecognition } from '@capgo/capacitor-speech-recognition';
           const STORAGE_KEY = 'later-prototype-v1';
           if (Capacitor.isNativePlatform()) {
-            // Temporary visible marker confirms the Android bridge module loaded.
             const startupVoiceStatus = document.getElementById('voiceStatus');
             if (startupVoiceStatus) {
               startupVoiceStatus.textContent = 'Android-модуль завантажено';
               setTimeout(() => { if (startupVoiceStatus.textContent === 'Android-модуль завантажено') startupVoiceStatus.textContent = ''; }, 4000);
             }
-            // Use native Android speech recognition because WebView does not reliably expose Web Speech API.
             const micBtn = document.getElementById('micBtn');
             const micTitle = document.getElementById('micTitle');
             const micHint = document.getElementById('micHint');
@@ -151,14 +156,9 @@ jobs:
               status.style.margin = '0 0 12px';
               button.insertAdjacentElement('afterend', status);
               function getNotes() {
-                try {
-                  return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-                } catch {
-                  return [];
-                }
+                try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+                catch { return []; }
               }
-              // Android WebView file-input selection can return without firing the page's change event.
-              // Use the native file picker and merge a chosen JSON backup into the existing notes.
               const importButton = document.getElementById('importBackup');
               if (importButton) {
                 importButton.onclick = async () => {
@@ -176,9 +176,7 @@ jobs:
                       if (quickStatus) quickStatus.textContent = 'Файл не вибрано.';
                       return;
                     }
-                    if (!file.data) {
-                      throw new Error('Не вдалося прочитати файл. Спробуй вибрати JSON-файл із папки «Завантаження».');
-                    }
+                    if (!file.data) throw new Error('Не вдалося прочитати файл. Спробуй вибрати JSON-файл із папки «Завантаження».');
                     const base64 = String(file.data).includes(',') ? String(file.data).split(',').pop() : String(file.data);
                     const binary = atob(base64);
                     const bytes = new Uint8Array(binary.length);
@@ -223,10 +221,7 @@ jobs:
               }
               function notificationId(value) {
                 let hash = 2166136261;
-                for (const ch of String(value)) {
-                  hash ^= ch.charCodeAt(0);
-                  hash = Math.imul(hash, 16777619);
-                }
+                for (const ch of String(value)) { hash ^= ch.charCodeAt(0); hash = Math.imul(hash, 16777619); }
                 return (hash >>> 0) % 2000000000 + 1;
               }
               async function syncReminders() {
@@ -249,17 +244,12 @@ jobs:
                       id: notificationId(note.id),
                       title: 'Пам’ятай 🔔',
                       body: String(note.text || 'У тебе є нагадування!').slice(0, 500),
-                      schedule: {
-                        at: new Date(note.date),
-                        allowWhileIdle: true
-                      },
+                      schedule: { at: new Date(note.date), allowWhileIdle: true },
                       extra: { noteId: String(note.id) }
                     }))
                   });
                   status.textContent = 'Заплановано нагадувань: ' + futureNotes.length + '.';
-                  if (result && result.warning) {
-                    status.textContent += ' Android може показати деякі сповіщення із затримкою, якщо точний час не дозволено.';
-                  }
+                  if (result && result.warning) status.textContent += ' Android може показати деякі сповіщення із затримкою, якщо точний час не дозволено.';
                 } catch (error) {
                   console.error('Local reminder error:', error);
                   status.textContent = 'Не вдалося запланувати нагадування. Перевір дозволи сповіщень.';
@@ -268,9 +258,7 @@ jobs:
               button.addEventListener('click', async () => {
                 try {
                   let permission = await LocalNotifications.checkPermissions();
-                  if (permission.display !== 'granted') {
-                    permission = await LocalNotifications.requestPermissions();
-                  }
+                  if (permission.display !== 'granted') permission = await LocalNotifications.requestPermissions();
                   if (permission.display !== 'granted') {
                     status.textContent = 'Дозволь сповіщення для застосунку в налаштуваннях Android.';
                     return;
@@ -301,7 +289,7 @@ jobs:
         working-directory: native-app
         run: npm run build
 
-      - name: Generate Android project, icons, and local notifications
+      - name: Generate Android project, icons, permissions and local notifications
         working-directory: native-app
         run: |
           npm install --no-save @capacitor/assets --no-audit --no-fund
@@ -309,7 +297,6 @@ jobs:
           npx cap sync android
           npx capacitor-assets generate --android
           # Force every launcher density to use the known green source icon.
-          # Remove adaptive XML overrides so Android resolves the PNG resources below.
           declare -A icon_sizes=( [ldpi]=36 [mdpi]=48 [hdpi]=72 [xhdpi]=96 [xxhdpi]=144 [xxxhdpi]=192 )
           for density in ldpi mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             size=${icon_sizes[$density]}
@@ -321,11 +308,22 @@ jobs:
           from pathlib import Path
           p = Path("android/app/src/main/AndroidManifest.xml")
           text = p.read_text(encoding="utf-8")
-          permission = '    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />'
-          if "android.permission.SCHEDULE_EXACT_ALARM" not in text:
-              text = text.replace("<application", permission + "\n\n    <application", 1)
-              p.write_text(text, encoding="utf-8")
+          permissions = [
+              '    <uses-permission android:name="android.permission.RECORD_AUDIO" />',
+              '    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />',
+          ]
+          for permission in permissions:
+              permission_name = permission.split('"')[1]
+              if permission_name not in text:
+                  text = text.replace("<application", permission + "\n\n    <application", 1)
+          p.write_text(text, encoding="utf-8")
           PY
+
+      - name: Verify Android manifest permissions
+        working-directory: native-app
+        run: |
+          grep -n 'android.permission.RECORD_AUDIO' android/app/src/main/AndroidManifest.xml
+          grep -n 'android.permission.SCHEDULE_EXACT_ALARM' android/app/src/main/AndroidManifest.xml
 
       - name: Build installable debug APK
         working-directory: native-app/android
