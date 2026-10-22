@@ -57,7 +57,8 @@ jobs:
             "dependencies": {
               "@capacitor/core": "^8.0.0",
               "@capacitor/local-notifications": "^8.3.1",
-              "@capgo/capacitor-speech-recognition": "^8.4.4"
+              "@capgo/capacitor-speech-recognition": "^8.4.4",
+              "@capawesome/capacitor-file-picker": "^8.1.0"
             },
             "devDependencies": {
               "@capacitor/android": "^8.0.0",
@@ -84,6 +85,7 @@ jobs:
           import { Capacitor } from '@capacitor/core';
           import { LocalNotifications } from '@capacitor/local-notifications';
           import { SpeechRecognition } from '@capgo/capacitor-speech-recognition';
+          import { FilePicker } from '@capawesome/capacitor-file-picker';
           const STORAGE_KEY = 'later-prototype-v1';
           if (Capacitor.isNativePlatform()) {
             // Use native Android speech recognition because WebView does not reliably expose Web Speech API.
@@ -154,6 +156,69 @@ jobs:
                 } catch {
                   return [];
                 }
+              }
+              // Android WebView file-input selection can return without firing the page's change event.
+              // Use the native file picker and merge a chosen JSON backup into the existing notes.
+              const importButton = document.getElementById('importBackup');
+              if (importButton) {
+                importButton.onclick = async () => {
+                  try {
+                    const quickStatus = document.getElementById('quickStatus');
+                    if (quickStatus) quickStatus.textContent = 'Відкриваю вибір резервної копії…';
+                    const picked = await FilePicker.pickFiles({
+                      types: ['application/json', 'application/octet-stream'],
+                      limit: 1,
+                      readData: true
+                    });
+                    const file = picked && picked.files && picked.files[0];
+                    if (!file) {
+                      if (quickStatus) quickStatus.textContent = 'Файл не вибрано.';
+                      return;
+                    }
+                    if (!file.data) {
+                      throw new Error('Не вдалося прочитати файл. Спробуй вибрати JSON-файл із папки «Завантаження».');
+                    }
+                    const base64 = String(file.data).includes(',') ? String(file.data).split(',').pop() : String(file.data);
+                    const binary = atob(base64);
+                    const bytes = new Uint8Array(binary.length);
+                    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+                    const text = new TextDecoder('utf-8').decode(bytes);
+                    const backup = JSON.parse(text);
+                    const incoming = Array.isArray(backup) ? backup : (backup && Array.isArray(backup.notes) ? backup.notes : null);
+                    if (!incoming) throw new Error('Це не файл резервної копії «Пам’ятай».');
+                    const merged = getNotes();
+                    const fingerprints = new Set(merged.map(n => [String(n.text || '').trim().toLowerCase(), String(n.category || ''), String(n.date || ''), String(n.created || '')].join('\u241f')));
+                    const ids = new Set(merged.map(n => String(n.id)));
+                    let added = 0;
+                    let skipped = 0;
+                    for (const raw of incoming) {
+                      if (!raw || typeof raw.text !== 'string' || !raw.text.trim()) { skipped++; continue; }
+                      const item = {
+                        ...raw,
+                        text: raw.text.trim(),
+                        category: typeof raw.category === 'string' ? raw.category : 'Інше',
+                        date: typeof raw.date === 'string' ? raw.date : '',
+                        created: typeof raw.created === 'string' ? raw.created : new Date().toISOString(),
+                        done: Boolean(raw.done)
+                      };
+                      const fingerprint = [item.text.toLowerCase(), String(item.category), item.date, item.created].join('\u241f');
+                      if (fingerprints.has(fingerprint)) { skipped++; continue; }
+                      if (item.id === undefined || item.id === null || ids.has(String(item.id))) item.id = Date.now() + Math.random();
+                      ids.add(String(item.id));
+                      fingerprints.add(fingerprint);
+                      merged.push(item);
+                      added++;
+                    }
+                    if (added > 0) localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+                    if (quickStatus) quickStatus.textContent = 'Імпорт завершено. Додано: ' + added + '. Пропущено повторів або некоректних записів: ' + skipped + '. Оновлюю список…';
+                    if (added > 0) setTimeout(() => window.location.reload(), 1200);
+                  } catch (error) {
+                    console.error('Native backup import error:', error);
+                    const quickStatus = document.getElementById('quickStatus');
+                    if (quickStatus) quickStatus.textContent = 'Не вдалося імпортувати файл: ' + (error && error.message ? error.message : 'невідома помилка');
+                    else alert('Не вдалося імпортувати файл резервної копії.');
+                  }
+                };
               }
               function notificationId(value) {
                 let hash = 2166136261;
