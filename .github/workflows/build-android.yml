@@ -31,7 +31,6 @@ jobs:
           mkdir -p native-app/public
           cp index.html native-app/index.html
           cp manifest.json icon-192.png icon-512.png native-app/public/
-
           # Make a separate Android copy. Leave the published website untouched.
           python3 - <<'PY'
           from pathlib import Path
@@ -44,8 +43,7 @@ jobs:
           html += '\n<script type="module" src="./native-reminders.js"></script>\n</body>\n</html>\n'
           p.write_text(html, encoding="utf-8")
           PY
-
-          cat > native-app/package.json <<'EOF'
+          cat > native-app/package.json <<'EOF_PACKAGE'
           {
             "name": "pamyatai-android",
             "version": "1.0.0",
@@ -62,30 +60,26 @@ jobs:
               "vite": "^7.1.12"
             }
           }
-          EOF
-
-          cat > native-app/vite.config.js <<'EOF'
+          EOF_PACKAGE
+          cat > native-app/vite.config.js <<'EOF_VITE'
           import { defineConfig } from 'vite';
           export default defineConfig({
             base: './',
             build: { outDir: 'dist', emptyOutDir: true }
           });
-          EOF
-
-          cat > native-app/capacitor.config.json <<'EOF'
+          EOF_VITE
+          cat > native-app/capacitor.config.json <<'EOF_CONFIG'
           {
             "appId": "ch.pamyatai.remember",
             "appName": "Пам’ятай",
             "webDir": "dist"
           }
-          EOF
-
-          cat > native-app/native-reminders.js <<'EOF'
+          EOF_CONFIG
+          cat > native-app/native-reminders.js <<'EOF_REMINDERS'
           import { Capacitor } from '@capacitor/core';
           import { LocalNotifications } from '@capacitor/local-notifications';
 
           const STORAGE_KEY = 'later-prototype-v1';
-
           if (Capacitor.isNativePlatform()) {
             const sectionHead = document.querySelector('.section-head');
             if (sectionHead) {
@@ -95,7 +89,6 @@ jobs:
               button.style.width = '100%';
               button.style.margin = '0 0 6px';
               sectionHead.insertAdjacentElement('afterend', button);
-
               const status = document.createElement('div');
               status.className = 'status';
               status.style.margin = '0 0 12px';
@@ -108,7 +101,6 @@ jobs:
                   return [];
                 }
               }
-
               function notificationId(value) {
                 let hash = 2166136261;
                 for (const ch of String(value)) {
@@ -117,12 +109,10 @@ jobs:
                 }
                 return (hash >>> 0) % 2000000000 + 1;
               }
-
               async function syncReminders() {
                 try {
                   const permission = await LocalNotifications.checkPermissions();
                   if (permission.display !== 'granted') return;
-
                   const notes = getNotes();
                   const now = Date.now();
                   const futureNotes = notes.filter(note => {
@@ -131,12 +121,10 @@ jobs:
                   });
 
                   await LocalNotifications.cancelAll();
-
                   if (futureNotes.length === 0) {
                     status.textContent = 'Немає майбутніх нагадувань із заданою датою та часом.';
                     return;
                   }
-
                   const result = await LocalNotifications.schedule({
                     notifications: futureNotes.map(note => ({
                       id: notificationId(note.id),
@@ -149,7 +137,6 @@ jobs:
                       extra: { noteId: String(note.id) }
                     }))
                   });
-
                   status.textContent = 'Заплановано нагадувань: ' + futureNotes.length + '.';
                   if (result && result.warning) {
                     status.textContent += ' Android може показати деякі сповіщення із затримкою, якщо точний час не дозволено.';
@@ -159,7 +146,6 @@ jobs:
                   status.textContent = 'Не вдалося запланувати нагадування. Перевір дозволи сповіщень.';
                 }
               }
-
               button.addEventListener('click', async () => {
                 try {
                   let permission = await LocalNotifications.checkPermissions();
@@ -177,19 +163,17 @@ jobs:
                   status.textContent = 'Не вдалося ввімкнути сповіщення.';
                 }
               });
-
               const refreshSoon = () => setTimeout(syncReminders, 600);
               document.getElementById('saveNote')?.addEventListener('click', refreshSoon);
               document.getElementById('quickAdd')?.addEventListener('click', refreshSoon);
               document.getElementById('notesGrid')?.addEventListener('click', refreshSoon);
-
               setTimeout(async () => {
                 const permission = await LocalNotifications.checkPermissions();
                 if (permission.display === 'granted') await syncReminders();
               }, 800);
             }
           }
-          EOF
+          EOF_REMINDERS
 
       - name: Install web and Capacitor packages
         working-directory: native-app
@@ -212,6 +196,92 @@ jobs:
           if "android.permission.SCHEDULE_EXACT_ALARM" not in text:
               text = text.replace("<application", permission + "\n\n    <application", 1)
               p.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Apply Remember launcher icon
+        working-directory: native-app
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv /tmp/icon-venv
+          /tmp/icon-venv/bin/pip install --quiet Pillow
+          /tmp/icon-venv/bin/python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageDraw
+
+          res = Path("android/app/src/main/res")
+          source = Image.open("public/icon-512.png").convert("RGBA")
+          sizes = {
+              "mdpi": (48, 108),
+              "hdpi": (72, 162),
+              "xhdpi": (96, 216),
+              "xxhdpi": (144, 324),
+              "xxxhdpi": (192, 432),
+          }
+
+          # Create a simple, legible foreground symbol designed for Android's
+          # circular/adaptive launcher mask: checklist plus a clock, on transparent.
+          base_size = 432
+          fg = Image.new("RGBA", (base_size, base_size), (0, 0, 0, 0))
+          d = ImageDraw.Draw(fg)
+          dark = (20, 91, 61, 255)
+          paper = (255, 255, 255, 255)
+          blue = (150, 188, 215, 255)
+          green = (59, 205, 45, 255)
+          yellow = (255, 211, 24, 255)
+
+          # Notebook page, kept inside the adaptive icon's safe central area.
+          d.rounded_rectangle((145, 112, 270, 294), radius=20, fill=paper, outline=dark, width=8)
+          # Binding loops.
+          for x in (164, 195, 226, 257):
+              d.rounded_rectangle((x - 6, 94, x + 6, 132), radius=6, fill=dark)
+          # Checklist boxes and lines.
+          d.rounded_rectangle((162, 151, 185, 174), radius=4, fill=(238, 255, 238, 255), outline=green, width=5)
+          d.line((167, 161, 174, 168, 182, 155), fill=green, width=5)
+          d.rounded_rectangle((162, 190, 184, 212), radius=4, outline=blue, width=5)
+          d.rounded_rectangle((162, 229, 184, 251), radius=4, outline=blue, width=5)
+          for y, right in ((158, 228), (198, 218), (237, 216)):
+              d.rounded_rectangle((194, y - 4, right, y + 4), radius=4, fill=blue)
+          # Clock overlapping the lower-right of the notebook.
+          d.ellipse((211, 210, 307, 306), fill=green, outline=dark, width=7)
+          d.ellipse((222, 221, 296, 295), fill=paper, outline=(178, 239, 110, 255), width=4)
+          d.line((259, 237, 259, 259, 279, 243), fill=dark, width=7)
+          d.ellipse((252, 252, 266, 266), fill=green)
+          # Small yellow reminder rays.
+          d.line((276, 183, 294, 150), fill=yellow, width=10)
+          d.line((294, 193, 314, 178), fill=yellow, width=10)
+
+          for density, (legacy_size, foreground_size) in sizes.items():
+              folder = res / f"mipmap-{density}"
+              folder.mkdir(parents=True, exist_ok=True)
+              legacy = source.resize((legacy_size, legacy_size), Image.Resampling.LANCZOS)
+              legacy.save(folder / "ic_launcher.png", optimize=True)
+              legacy.save(folder / "ic_launcher_round.png", optimize=True)
+              fg.resize((foreground_size, foreground_size), Image.Resampling.LANCZOS).save(
+                  folder / "ic_launcher_foreground.png", optimize=True
+              )
+
+          # Adaptive icons use a green background and the centered foreground symbol.
+          drawable = res / "drawable"
+          drawable.mkdir(parents=True, exist_ok=True)
+          (drawable / "ic_launcher_background.xml").write_text(
+              '<?xml version="1.0" encoding="utf-8"?>\n'
+              '<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">\n'
+              '  <solid android:color="#2FC83A" />\n'
+              '</shape>\n', encoding="utf-8"
+          )
+          adaptive = res / "mipmap-anydpi-v26"
+          adaptive.mkdir(parents=True, exist_ok=True)
+          xml = (
+              '<?xml version="1.0" encoding="utf-8"?>\n'
+              '<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n'
+              '  <background android:drawable="@drawable/ic_launcher_background" />\n'
+              '  <foreground android:drawable="@mipmap/ic_launcher_foreground" />\n'
+              '</adaptive-icon>\n'
+          )
+          (adaptive / "ic_launcher.xml").write_text(xml, encoding="utf-8")
+          (adaptive / "ic_launcher_round.xml").write_text(xml, encoding="utf-8")
+          print("Remember launcher icons generated successfully.")
           PY
 
       - name: Build installable debug APK
