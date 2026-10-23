@@ -351,7 +351,7 @@ jobs:
           npm install --no-save @capacitor/assets --no-audit --no-fund
           npx cap add android
           npx cap sync android
-          sed -i '/^android[[:space:]]*{/a\    compileSdk 36' android/app/build.gradle
+          sed -i '/^android[[:space:]]*{/a\    compileSdk 36' android/app/build.gradle 
           npx capacitor-assets generate --android
           # Force every launcher density to use the known green source icon.
           declare -A icon_sizes=( [ldpi]=36 [mdpi]=48 [hdpi]=72 [xhdpi]=96 [xxhdpi]=144 [xxxhdpi]=192 )
