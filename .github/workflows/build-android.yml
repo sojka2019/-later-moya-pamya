@@ -100,7 +100,7 @@ jobs:
           EOF_VITE
           cat > native-app/capacitor.config.json <<'EOF_CAP'
           {
-            "appId": "ch.pamyatai.remember",
+           "appId": "ch.pamyatai.remember.new",
             "appName": "Пам’ятай",
             "webDir": "dist"
           }
