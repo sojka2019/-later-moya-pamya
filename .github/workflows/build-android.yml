@@ -35,28 +35,8 @@ jobs:
           mkdir -p native-app/public native-app/assets
           cp index.html native-app/index.html
           cp manifest.json icon-192.png icon-512.png native-app/public/
-          # Create a distinct green launcher icon for the new Android app.
-          python3 - <<'PY'
-          from PIL import Image, ImageDraw
-          from pathlib import Path
-
-          size = 1024
-          img = Image.new("RGB", (size, size), "#168653")
-          d = ImageDraw.Draw(img)
-
-          # White notebook
-          d.rounded_rectangle((230, 140, 750, 850), radius=65, fill="white")
-          # Notebook binding
-          d.rounded_rectangle((350, 105, 630, 175), radius=30, fill="#d9f4e5")
-          # Green lines
-          for y in (350, 440, 530):
-              d.rounded_rectangle((320, y, 650, y + 18), radius=9, fill="#b8dcca")
-          # Check mark
-          d.line([(350, 650), (440, 730), (610, 590)], fill="#168653", width=42, joint="curve")
-
-          Path("native-app/assets").mkdir(parents=True, exist_ok=True)
-          img.save("native-app/assets/icon.png")
-          PY
+                  # Use the new Remember icon for the Android launcher.
+          cp icon-512.png native-app/assets/icon.png
           # Make a separate Android copy. Leave the published website untouched.
           python3 - <<'PY'
           from pathlib import Path
