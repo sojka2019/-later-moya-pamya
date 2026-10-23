@@ -81,7 +81,7 @@ jobs:
           cat > native-app/capacitor.config.json <<'EOF_CAP'
           {
            "appId": "ch.pamyatai.remember.second",
-            "appName": "Пам’ятай",
+            "appName": "Нагадування",
             "webDir": "dist"
           }
           EOF_CAP
