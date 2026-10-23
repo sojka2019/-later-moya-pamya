@@ -60,8 +60,116 @@ function backupStatus(message){$('quickStatus').textContent=message;setTimeout((
 $('exportBackup').onclick=()=>{try{const payload={format:'pamyatai-backup',version:1,exportedAt:new Date().toISOString(),notes};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='pamyatai-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);backupStatus('Резервну копію створено: '+notes.length+' записів. Збережи файл у надійному місці.')}catch(error){console.error(error);backupStatus('Не вдалося створити резервну копію в цьому середовищі. Спробуй вебверсію в Chrome.')}};
 $('importBackup').onclick=()=>$('importFile').click();
 $('importFile').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());const incoming=Array.isArray(data)?data:data&&Array.isArray(data.notes)?data.notes:null;if(!incoming)throw new Error('Це не файл резервної копії «Пам’ятай».');const existingKeys=new Set(notes.map(n=>[String(n.text||'').trim().toLowerCase(),String(n.category||''),String(n.date||''),String(n.created||'')].join('\u241f')));const ids=new Set(notes.map(n=>String(n.id)));let added=0,skipped=0;for(const raw of incoming){if(!raw||typeof raw.text!=='string'||!raw.text.trim()){skipped++;continue}const item={...raw,text:raw.text.trim(),category:typeof raw.category==='string'?raw.category:categoryFor(raw.text),date:typeof raw.date==='string'?raw.date:'',created:typeof raw.created==='string'?raw.created:new Date().toISOString(),done:Boolean(raw.done)};const fingerprint=[item.text.toLowerCase(),String(item.category),item.date,item.created].join('\u241f');if(existingKeys.has(fingerprint)){skipped++;continue}if(item.id===undefined||item.id===null||ids.has(String(item.id)))item.id=Date.now()+Math.random();ids.add(String(item.id));existingKeys.add(fingerprint);notes.push(item);added++}persist();backupStatus('Імпорт завершено. Додано: '+added+'. Пропущено повторів або некоректних записів: '+skipped+'.');const nativeReminderButton=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.includes('Увімкнути системні нагадування'));if(nativeReminderButton)nativeReminderButton.click()}catch(error){console.error(error);alert('Не вдалося імпортувати файл. Переконайся, що вибрав JSON-резервну копію з «Пам’ятай». '+error.message)}finally{$('importFile').value=''}});
-let recognition=null;
-$('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('voiceStatus').textContent='Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.';return}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang='uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;$('micTitle').textContent='Слухаю тебе…';$('micHint').textContent='Говори після запиту браузера на доступ до мікрофона';$('voiceStatus').textContent='';recognition.onresult=e=>{const text=e.results[0][0].transcript;add(text);$('voiceStatus').textContent='Розпізнано: '+text};recognition.onerror=e=>{$('voiceStatus').textContent='Не вдалося записати голос: '+e.error};recognition.onend=()=>{$('micTitle').textContent='Запам’ятати голосом';$('micHint').textContent='Натисни та продиктуй думку';recognition=null};recognition.start()};
+```javascript
+function parseVoiceReminder(transcript) {
+  const original = transcript.trim();
+  let text = original;
+  const now = new Date();
+  let date = new Date(now);
+  let hasDate = false;
+  let hasTime = false;
+
+  // Розпізнаємо дату
+  if (/\bпіслязавтра\b/i.test(text)) {
+    date.setDate(date.getDate() + 2);
+    hasDate = true;
+    text = text.replace(/\bпіслязавтра\b/ig, '');
+  } else if (/\bзавтра\b/i.test(text)) {
+    date.setDate(date.getDate() + 1);
+    hasDate = true;
+    text = text.replace(/\bзавтра\b/ig, '');
+  } else if (/\bсьогодні\b/i.test(text)) {
+    hasDate = true;
+    text = text.replace(/\bсьогодні\b/ig, '');
+  }
+
+  // Розпізнаємо день тижня
+  const weekdays = {
+    'неділю': 0, 'неділя': 0,
+    'понеділок': 1, 'понеділка': 1,
+    'вівторок': 2, 'вівторка': 2,
+    'середу': 3, 'середа': 3,
+    'четвер': 4, 'четверга': 4,
+    'п’ятницю': 5, "п'ятницю": 5, 'пятницю': 5,
+    'суботу': 6, 'субота': 6
+  };
+
+  for (const [word, day] of Object.entries(weekdays)) {
+    const re = new RegExp('\\b' + word + '\\b', 'i');
+    if (re.test(text)) {
+      let diff = (day - date.getDay() + 7) % 7;
+      if (diff === 0) diff = 7;
+      date.setDate(date.getDate() + diff);
+      hasDate = true;
+      text = text.replace(re, '');
+      break;
+    }
+  }
+
+  // Розпізнаємо дату, наприклад 25.10 або 25.10.2026
+  const dateMatch = text.match(/\b(\d{1,2})[.\/](\d{1,2})(?:[.\/](\d{4}))?\b/);
+  if (dateMatch) {
+    let year = dateMatch[3] ? Number(dateMatch[3]) : date.getFullYear();
+    const month = Number(dateMatch[2]) - 1;
+    const day = Number(dateMatch[1]);
+    let candidate = new Date(year, month, day);
+    if (!dateMatch[3] && candidate < new Date(now.getFullYear(), now.getMonth(), now.getDate())) {
+      candidate.setFullYear(candidate.getFullYear() + 1);
+    }
+    if (candidate.getDate() === day && candidate.getMonth() === month) {
+      date.setFullYear(candidate.getFullYear(), candidate.getMonth(), candidate.getDate());
+      hasDate = true;
+      text = text.replace(dateMatch[0], '');
+    }
+  }
+
+  // Розпізнаємо час: 10:00, 10.30 або 10
+  const timeMatch = text.match(/\b(?:о|об|на)\s*(\d{1,2})(?:[:.](\d{2}))?\b/i)
+    || text.match(/\b(\d{1,2})[:.](\d{2})\b/);
+
+  if (timeMatch) {
+    const hour = Number(timeMatch[1]);
+    const minute = Number(timeMatch[2] || 0);
+    if (hour >= 0 && hour <= 23 && minute <= 59) {
+      date.setHours(hour, minute, 0, 0);
+      hasTime = true;
+      text = text.replace(timeMatch[0], '');
+    }
+  }
+
+  // Якщо дату вказано, а час ні — встановлюємо 09:00
+  if (hasDate && !hasTime) {
+    date.setHours(9, 0, 0, 0);
+  }
+
+  // Прибираємо вступні слова
+  text = text
+    .replace(/^\s*нагадай\s+мені\s*/i, '')
+    .replace(/^\s*нагадай\s*/i, '')
+    .replace(/^\s*будь ласка\s*/i, '')
+    .replace(/\s+/g, ' ')
+    .replace(/^[,.\s]+|[,.\s]+$/g, '')
+    .trim();
+
+  const dateValue = hasDate
+    ? date.getFullYear() + '-' +
+      String(date.getMonth() + 1).padStart(2, '0') + '-' +
+      String(date.getDate()).padStart(2, '0') + 'T' +
+      String(date.getHours()).padStart(2, '0') + ':' +
+      String(date.getMinutes()).padStart(2, '0')
+    : '';
+
+  return {
+    text: text || original,
+    date: dateValue,
+    hasDate: hasDate,
+    hasTime: hasTime
+  };
+}
+```
+
+  let recognition=null;
+$('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('voiceStatus').textContent='Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.';return}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang='uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;$('micTitle').textContent='Слухаю тебе…';$('micHint').textContent='Говори після запиту браузера на доступ до мікрофона';$('voiceStatus').textContent='';recognition.onresult=e=>{const text=e.results[0][0].transcript;const result=parseVoiceReminder(text);add(result.text,'Автоматично',result.date);$('voiceStatus').textContent='Розпізнано: '+result.text+(result.hasDate?' · Нагадування: '+new Date(result.date).toLocaleString('uk-UA'):' · Дату не визначено — встанови її вручну.')};recognition.onerror=e=>{$('voiceStatus').textContent='Не вдалося записати голос: '+e.error};recognition.onend=()=>{$('micTitle').textContent='Запам’ятати голосом';$('micHint').textContent='Натисни та продиктуй думку';recognition=null};recognition.start()};
 load();
 </script>
 <script>
