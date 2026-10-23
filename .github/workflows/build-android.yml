@@ -50,7 +50,7 @@ jobs:
           d.rounded_rectangle((350, 105, 630, 175), radius=30, fill="#d9f4e5")
           # Green lines
           for y in (350, 440, 530):
-          d.rounded_rectangle((320, y, 650, y + 18), radius=9, fill="#b8dcca")
+              d.rounded_rectangle((320, y, 650, y + 18), radius=9, fill="#b8dcca")
           # Check mark
           d.line([(350, 650), (440, 730), (610, 590)], fill="#168653", width=42, joint="curve")
 
