@@ -70,17 +70,17 @@ function parseVoiceReminder(transcript) {
   let hasTime = false;
 
   // Розпізнаємо дату
-  if (/\bпіслязавтра\b/i.test(text)) {
+  if (/(?<![\p{L}\p{N}])післязавтра(?![\p{L}\p{N}])/iu.test(text)) {
     date.setDate(date.getDate() + 2);
     hasDate = true;
-    text = text.replace(/\bпіслязавтра\b/ig, '');
-  } else if (/\bзавтра\b/i.test(text)) {
+    text = text.replace(/(?<![\p{L}\p{N}])післязавтра(?![\p{L}\p{N}])/giu, '');
+  } else if (/(?<![\p{L}\p{N}])завтра(?![\p{L}\p{N}])/iu.test(text)) {
     date.setDate(date.getDate() + 1);
     hasDate = true;
-    text = text.replace(/\bзавтра\b/ig, '');
-  } else if (/\bсьогодні\b/i.test(text)) {
+    text = text.replace(/(?<![\p{L}\p{N}])завтра(?![\p{L}\p{N}])/giu, '');
+  } else if (/(?<![\p{L}\p{N}])сьогодні(?![\p{L}\p{N}])/iu.test(text)) {
     hasDate = true;
-    text = text.replace(/\bсьогодні\b/ig, '');
+    text = text.replace(/(?<![\p{L}\p{N}])сьогодні(?![\p{L}\p{N}])/giu, '');
   }
 
   // Розпізнаємо день тижня
@@ -95,10 +95,13 @@ function parseVoiceReminder(transcript) {
   };
 
   for (const [word, day] of Object.entries(weekdays)) {
-    const re = new RegExp('\\b' + word + '\\b', 'i');
+    const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp('(?<![\\p{L}\\p{N}])' + escaped + '(?![\\p{L}\\p{N}])', 'iu');
+
     if (re.test(text)) {
       let diff = (day - date.getDay() + 7) % 7;
       if (diff === 0) diff = 7;
+
       date.setDate(date.getDate() + diff);
       hasDate = true;
       text = text.replace(re, '');
@@ -106,47 +109,61 @@ function parseVoiceReminder(transcript) {
     }
   }
 
-  // Розпізнаємо дату, наприклад 25.10 або 25.10.2026
-  const dateMatch = text.match(/\b(\d{1,2})[.\/](\d{1,2})(?:[.\/](\d{4}))?\b/);
+  // Розпізнаємо дату: 25.10 або 25.10.2026
+  const dateMatch = text.match(/(?:^|\s)(\d{1,2})[./](\d{1,2})(?:[./](\d{4}))?(?=\s|$)/);
+
   if (dateMatch) {
-    let year = dateMatch[3] ? Number(dateMatch[3]) : date.getFullYear();
-    const month = Number(dateMatch[2]) - 1;
     const day = Number(dateMatch[1]);
+    const month = Number(dateMatch[2]) - 1;
+    let year = dateMatch[3] ? Number(dateMatch[3]) : date.getFullYear();
+
     let candidate = new Date(year, month, day);
-    if (!dateMatch[3] && candidate < new Date(now.getFullYear(), now.getMonth(), now.getDate())) {
-      candidate.setFullYear(candidate.getFullYear() + 1);
+
+    if (
+      !dateMatch[3] &&
+      candidate < new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    ) {
+      year++;
+      candidate = new Date(year, month, day);
     }
-    if (candidate.getDate() === day && candidate.getMonth() === month) {
-      date.setFullYear(candidate.getFullYear(), candidate.getMonth(), candidate.getDate());
+
+    if (
+      candidate.getFullYear() === year &&
+      candidate.getMonth() === month &&
+      candidate.getDate() === day
+    ) {
+      date.setFullYear(year, month, day);
       hasDate = true;
-      text = text.replace(dateMatch[0], '');
+      text = text.replace(dateMatch[0], ' ');
     }
   }
 
-  // Розпізнаємо час: 10:00, 10.30 або 10
-  const timeMatch = text.match(/\b(?:о|об|на)\s*(\d{1,2})(?:[:.](\d{2}))?\b/i)
-    || text.match(/\b(\d{1,2})[:.](\d{2})\b/);
+  // Розпізнаємо час: о 10:00, о 10.30, о 10
+  const timeMatch =
+    text.match(/(?:^|\s)(?:о|об|на)\s*(\d{1,2})(?:[:.](\d{2}))?(?=\s|$)/iu) ||
+    text.match(/(?:^|\s)(\d{1,2})[:.](\d{2})(?=\s|$)/);
 
   if (timeMatch) {
     const hour = Number(timeMatch[1]);
     const minute = Number(timeMatch[2] || 0);
-    if (hour >= 0 && hour <= 23 && minute <= 59) {
+
+    if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) {
       date.setHours(hour, minute, 0, 0);
       hasTime = true;
-      text = text.replace(timeMatch[0], '');
+      text = text.replace(timeMatch[0], ' ');
     }
   }
 
-  // Якщо дату вказано, а час ні — встановлюємо 09:00
+  // Якщо дату вказано без часу — встановлюємо 09:00
   if (hasDate && !hasTime) {
     date.setHours(9, 0, 0, 0);
   }
 
-  // Прибираємо вступні слова
+  // Прибираємо зайві слова та пробіли
   text = text
-    .replace(/^\s*нагадай\s+мені\s*/i, '')
-    .replace(/^\s*нагадай\s*/i, '')
-    .replace(/^\s*будь ласка\s*/i, '')
+    .replace(/^\s*нагадай\s+мені\s*/iu, '')
+    .replace(/^\s*нагадай\s*/iu, '')
+    .replace(/^\s*будь ласка\s*/iu, '')
     .replace(/\s+/g, ' ')
     .replace(/^[,.\s]+|[,.\s]+$/g, '')
     .trim();
@@ -165,6 +182,7 @@ function parseVoiceReminder(transcript) {
     hasDate: hasDate,
     hasTime: hasTime
   };
+}
 }
 ```
 
