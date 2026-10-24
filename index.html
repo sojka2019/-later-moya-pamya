@@ -137,20 +137,74 @@ function parseVoiceReminder(transcript) {
     }
   }
 
-  // Розпізнаємо час: о 10:00, о 10.30, о 10
-  const timeMatch =
-    text.match(/(?:^|\s)(?:о|об|на)\s*(\d{1,2})(?:[:.](\d{2}))?(?=\s|$)/iu) ||
-    text.match(/(?:^|\s)(\d{1,2})[:.](\d{2})(?=\s|$)/);
+   // Розпізнаємо час цифрами або словами
+  const hourWords = {
+    'першій': 1, 'першу': 1, 'одній': 1, 'одну': 1,
+    'другій': 2, 'другу': 2,
+    'третій': 3, 'третю': 3,
+    'четвертій': 4, 'четверту': 4,
+    'пятій': 5, 'п’ятій': 5, "п'ятій": 5,
+    'пяту': 5, 'п’яту': 5, "п'яту": 5,
+    'шостій': 6, 'шосту': 6,
+    'сьомій': 7, 'сьому': 7,
+    'восьмій': 8, 'восьму': 8,
+    'девятій': 9, 'дев’ятій': 9, "дев'ятій": 9,
+    'девяту': 9, 'дев’яту': 9, "дев'яту": 9,
+    'десятій': 10, 'десяту': 10,
+    'одинадцятій': 11, 'одинадцяту': 11,
+    'дванадцятій': 12, 'дванадцяту': 12
+  };
+
+  const hourPattern = Object.keys(hourWords)
+    .sort((a, b) => b.length - a.length)
+    .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('|');
+
+  let timeMatch = text.match(
+    /(?:^|\s)(?:о|об|на)\s*(\d{1,2})(?:[:.](\d{2}))?(?=\s|$)/iu
+  );
+
+  let hour;
+  let minute = 0;
 
   if (timeMatch) {
-    const hour = Number(timeMatch[1]);
-    const minute = Number(timeMatch[2] || 0);
+    hour = Number(timeMatch[1]);
+    minute = Number(timeMatch[2] || 0);
+  } else {
+    timeMatch = text.match(
+      new RegExp(
+        '(?:^|\\s)(?:о|об|на)\\s*(' + hourPattern +
+        ')(?:\\s+(ранку|вранці|дня|днем|вечора|увечері|ночі))?(?=\\s|$)',
+        'iu'
+      )
+    );
 
-    if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) {
-      date.setHours(hour, minute, 0, 0);
-      hasTime = true;
-      text = text.replace(timeMatch[0], ' ');
+    if (timeMatch) {
+      hour = hourWords[timeMatch[1].toLowerCase()];
+      const period = (timeMatch[2] || '').toLowerCase();
+
+      if (
+        (period === 'вечора' || period === 'увечері' ||
+         period === 'дня' || period === 'днем') &&
+        hour < 12
+      ) {
+        hour += 12;
+      }
+
+      if (period === 'ночі' && hour === 12) {
+        hour = 0;
+      }
     }
+  }
+
+  if (
+    timeMatch &&
+    hour >= 0 && hour <= 23 &&
+    minute >= 0 && minute <= 59
+  ) {
+    date.setHours(hour, minute, 0, 0);
+    hasTime = true;
+    text = text.replace(timeMatch[0], ' ');
   }
 
   // Якщо дату вказано без часу — встановлюємо 09:00
