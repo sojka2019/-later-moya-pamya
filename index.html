@@ -160,16 +160,29 @@ function parseVoiceReminder(transcript) {
     .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
     .join('|');
 
-  let timeMatch = text.match(
-    /(?:^|\s)(?:о|об|на)\s*(\d{1,2})(?:[:.](\d{2}))?(?=\s|$)/iu
-  );
+let timeMatch = text.match(
+  /(?:^|\s)(?:о|об|на)\s*(\d{1,2})(?:-(?:й|ий|ій|го|му))?(?:[:.](\d{2}))?(?:\s+(ранку|вранці|дня|днем|вечора|увечері|ночі))?(?=\s|$)/iu
+);
 
   let hour;
   let minute = 0;
 
-  if (timeMatch) {
+ if (timeMatch) {
     hour = Number(timeMatch[1]);
     minute = Number(timeMatch[2] || 0);
+    const period = (timeMatch[3] || '').toLowerCase();
+
+    if (
+      (period === 'вечора' || period === 'увечері' ||
+       period === 'дня' || period === 'днем') &&
+      hour < 12
+    ) {
+      hour += 12;
+    }
+
+    if (period === 'ночі' && hour === 12) {
+      hour = 0;
+    }
   } else {
     timeMatch = text.match(
       new RegExp(
@@ -179,8 +192,9 @@ function parseVoiceReminder(transcript) {
       )
     );
 
-    if (timeMatch) {
+  if (timeMatch) {
       hour = hourWords[timeMatch[1].toLowerCase()];
+      minute = 0;
       const period = (timeMatch[2] || '').toLowerCase();
 
       if (
@@ -238,7 +252,36 @@ function parseVoiceReminder(transcript) {
 }
 
   let recognition=null;
-$('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('voiceStatus').textContent='Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.';return}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang='uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;$('micTitle').textContent='Слухаю тебе…';$('micHint').textContent='Говори після запиту браузера на доступ до мікрофона';$('voiceStatus').textContent='';recognition.onresult=e=>{const text=e.results[0][0].transcript;const result=parseVoiceReminder(text);add(result.text,'Автоматично',result.date);$('voiceStatus').textContent='Розпізнано: '+result.text+(result.hasDate?' · Нагадування: '+new Date(result.date).toLocaleString('uk-UA'):' · Дату не визначено — встанови її вручну.')};recognition.onerror=e=>{$('voiceStatus').textContent='Не вдалося записати голос: '+e.error};recognition.onend=()=>{$('micTitle').textContent='Запам’ятати голосом';$('micHint').textContent='Натисни та продиктуй думку';recognition=null};recognition.start()};
+$('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('voiceStatus').textContent='Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.';return}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang='uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;$('micTitle').textContent='Слухаю тебе…';$('micHint').textContent='Говори після запиту браузера на доступ до мікрофона';$('voiceStatus').textContent='';recognition.onresult = e => {
+  const spokenText = e.results[0][0].transcript;
+  const result = parseVoiceReminder(spokenText);
+
+  $('noteText').value = result.text;
+  $('noteCategory').value = categoryFor(result.text);
+  $('noteDate').value = result.date || '';
+  editingId = null;
+
+  $('modalTitle').textContent = 'Перевір голосове нагадування';
+  $('modal').classList.add('open');
+
+  $('voiceStatus').textContent =
+    'Розпізнано: ' + result.text +
+    (result.hasDate
+      ? ' · Дата: ' + new Date(result.date).toLocaleString('uk-UA')
+      : ' · Укажи дату й час, якщо вони потрібні.');
+};
+
+recognition.onerror = e => {
+  $('voiceStatus').textContent = 'Не вдалося записати голос: ' + e.error;
+};
+
+recognition.onend = () => {
+  $('micTitle').textContent = 'Запам’ятати голосом';
+  $('micHint').textContent = 'Натисни та продиктуй думку';
+  recognition = null;
+};
+
+recognition.start()};
 load();
 </script>
 <script>
