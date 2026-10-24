@@ -80,9 +80,9 @@ jobs:
           EOF_VITE
           cat > native-app/capacitor.config.json <<'EOF_CAP'
           {
-            "appId": "ch.pamyatai.remember.test30"
-            "appName": "Нагадування",
-            "webDir": "dist"
+           "appId": "ch.pamyatai.remember.test30",
+           "appName": "Нагадування",
+           "webDir": "dist"
           }
           EOF_CAP
           cat > native-app/native-reminders.js <<'EOF_REMINDERS'
