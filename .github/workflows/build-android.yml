@@ -132,9 +132,22 @@ jobs:
                   const quickInput = document.getElementById('quickInput');
                   const quickAdd = document.getElementById('quickAdd');
                   if (quickInput && quickAdd) {
-                    quickInput.value = spokenText;
-                    quickAdd.click();
-                    if (voiceStatus) voiceStatus.textContent = 'Розпізнано: ' + spokenText;
+                    const parsed = parseVoiceReminder(spokenText);
+
+                    document.getElementById('noteText').value = parsed.text;
+                    document.getElementById('noteCategory').value = categoryFor(parsed.text);
+                    document.getElementById('noteDate').value = parsed.date || '';
+
+                    editingId = null;
+                    document.getElementById('modalTitle').textContent = 'Перевір голосове нагадування';
+                    document.getElementById('modal').classList.add('open');
+
+                    if (voiceStatus) {
+                      voiceStatus.textContent = 'Розпізнано: ' + parsed.text +
+                        (parsed.hasDate
+                          ? ' · Дата: ' + new Date(parsed.date).toLocaleString('uk-UA')
+                          : ' · Укажи дату й час, якщо вони потрібні.');
+                    }
                   }
                 } catch (error) {
                   console.error('Native speech recognition error:', error);
