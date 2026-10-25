@@ -67,59 +67,135 @@ function parseVoiceReminder(transcript) {
   let date = new Date(now);
   let hasDate = false;
   let hasTime = false;
+  let defaultHour = null;
 
-  // Розпізнаємо дату
-  if (/(?<![\p{L}\p{N}])післязавтра(?![\p{L}\p{N}])/iu.test(text)) {
-    date.setDate(date.getDate() + 2);
-    hasDate = true;
-    text = text.replace(/(?<![\p{L}\p{N}])післязавтра(?![\p{L}\p{N}])/giu, '');
-  } else if (/(?<![\p{L}\p{N}])завтра(?![\p{L}\p{N}])/iu.test(text)) {
-    date.setDate(date.getDate() + 1);
-    hasDate = true;
-    text = text.replace(/(?<![\p{L}\p{N}])завтра(?![\p{L}\p{N}])/giu, '');
-  } else if (/(?<![\p{L}\p{N}])сьогодні(?![\p{L}\p{N}])/iu.test(text)) {
-    hasDate = true;
-    text = text.replace(/(?<![\p{L}\p{N}])сьогодні(?![\p{L}\p{N}])/giu, '');
+  // Допоміжна функція для пошуку цілих слів
+  function removePhrase(regex) {
+    if (regex.test(text)) {
+      text = text.replace(regex, ' ');
+      return true;
+    }
+    return false;
   }
 
-  // Розпізнаємо день тижня
-  const weekdays = {
-    'неділю': 0, 'неділя': 0,
-    'понеділок': 1, 'понеділка': 1,
-    'вівторок': 2, 'вівторка': 2,
-    'середу': 3, 'середа': 3,
-    'четвер': 4, 'четверга': 4,
-    'п’ятницю': 5, "п'ятницю": 5, 'пятницю': 5,
-    'суботу': 6, 'субота': 6
+  // 1. Відносні дати: завтра, післязавтра, сьогодні
+  if (removePhrase(/(?<![\p{L}\p{N}])післязавтра(?![\p{L}\p{N}])/iu)) {
+    date.setDate(date.getDate() + 2);
+    hasDate = true;
+  } else if (removePhrase(/(?<![\p{L}\p{N}])завтра(?![\p{L}\p{N}])/iu)) {
+    date.setDate(date.getDate() + 1);
+    hasDate = true;
+  } else if (removePhrase(/(?<![\p{L}\p{N}])сьогодні(?![\p{L}\p{N}])/iu)) {
+    hasDate = true;
+  }
+
+  // 2. Через одну, дві або три неділі / тижні
+  const weekMatch = text.match(
+    /(?<![\p{L}\p{N}])через\s+(одну|один|дві|два|три|1|2|3)\s+(?:неділю|неділі|тиждень|тижні)(?![\p{L}\p{N}])/iu
+  );
+
+  if (weekMatch) {
+    const word = weekMatch[1].toLowerCase();
+    const weeks = ({
+      'одну': 1, 'один': 1, '1': 1,
+      'дві': 2, 'два': 2, '2': 2,
+      'три': 3, '3': 3
+    })[word];
+
+    date.setDate(date.getDate() + weeks * 7);
+    hasDate = true;
+    text = text.replace(weekMatch[0], ' ');
+  } else if (
+    removePhrase(/(?<![\p{L}\p{N}])через\s+(?:неділю|тиждень)(?![\p{L}\p{N}])/iu)
+  ) {
+    date.setDate(date.getDate() + 7);
+    hasDate = true;
+  }
+
+  // 3. Через місяць — один календарний місяць
+  if (removePhrase(/(?<![\p{L}\p{N}])через\s+місяць(?![\p{L}\p{N}])/iu)) {
+    const day = date.getDate();
+    date.setDate(1);
+    date.setMonth(date.getMonth() + 1);
+    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    date.setDate(Math.min(day, lastDay));
+    hasDate = true;
+  }
+
+  // 4. Назви місяців
+  const months = {
+    'січня': 0, 'січень': 0,
+    'лютого': 1, 'лютий': 1,
+    'березня': 2, 'березень': 2,
+    'квітня': 3, 'квітень': 3,
+    'травня': 4, 'травень': 4,
+    'червня': 5, 'червень': 5,
+    'липня': 6, 'липень': 6,
+    'серпня': 7, 'серпень': 7,
+    'вересня': 8, 'вересень': 8,
+    'жовтня': 9, 'жовтень': 9,
+    'листопада': 10, 'листопад': 10,
+    'грудня': 11, 'грудень': 11
   };
 
-  for (const [word, day] of Object.entries(weekdays)) {
-    const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const re = new RegExp('(?<![\\p{L}\\p{N}])' + escaped + '(?![\\p{L}\\p{N}])', 'iu');
+  const monthNames = Object.keys(months)
+    .sort((a, b) => b.length - a.length)
+    .join('|');
 
-    if (re.test(text)) {
-      let diff = (day - date.getDay() + 7) % 7;
-      if (diff === 0) diff = 7;
+  const monthDateRegex = new RegExp(
+    '(?<![\\p{L}\\p{N}])(\\d{1,2})\\s+(' +
+    monthNames +
+    ')(?:\\s+(\\d{4})(?:\\s+року)?)?(?![\\p{L}])',
+    'iu'
+  );
 
-      date.setDate(date.getDate() + diff);
+  const monthMatch = text.match(monthDateRegex);
+
+  if (monthMatch) {
+    const day = Number(monthMatch[1]);
+    const month = months[monthMatch[2].toLowerCase()];
+    let year = monthMatch[3] ? Number(monthMatch[3]) : now.getFullYear();
+
+    let candidate = new Date(year, month, day);
+
+    // Якщо дата без року вже минула, беремо наступний рік
+    if (
+      !monthMatch[3] &&
+      candidate < new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    ) {
+      year++;
+      candidate = new Date(year, month, day);
+    }
+
+    // Перевіряємо, що дата справді існує
+    if (
+      candidate.getFullYear() === year &&
+      candidate.getMonth() === month &&
+      candidate.getDate() === day
+    ) {
+      date = candidate;
       hasDate = true;
-      text = text.replace(re, '');
-      break;
+      text = text.replace(monthMatch[0], ' ');
     }
   }
 
-  // Розпізнаємо дату: 25.10 або 25.10.2026
-  const dateMatch = text.match(/(?:^|\s)(\d{1,2})[./](\d{1,2})(?:[./](\d{4}))?(?=\s|$)/);
+  // 5. Числова дата: 25.10, 25.10.2026, 25/10/2026
+  const numericDateRegex =
+    /(?<![\p{L}\p{N}])(\d{1,2})[./](\d{1,2})(?:[./](\d{4}))?(?![\p{L}\p{N}])/u;
 
-  if (dateMatch) {
-    const day = Number(dateMatch[1]);
-    const month = Number(dateMatch[2]) - 1;
-    let year = dateMatch[3] ? Number(dateMatch[3]) : date.getFullYear();
+  const numericDateMatch = text.match(numericDateRegex);
+
+  if (numericDateMatch) {
+    const day = Number(numericDateMatch[1]);
+    const month = Number(numericDateMatch[2]) - 1;
+    let year = numericDateMatch[3]
+      ? Number(numericDateMatch[3])
+      : now.getFullYear();
 
     let candidate = new Date(year, month, day);
 
     if (
-      !dateMatch[3] &&
+      !numericDateMatch[3] &&
       candidate < new Date(now.getFullYear(), now.getMonth(), now.getDate())
     ) {
       year++;
@@ -131,13 +207,13 @@ function parseVoiceReminder(transcript) {
       candidate.getMonth() === month &&
       candidate.getDate() === day
     ) {
-      date.setFullYear(year, month, day);
+      date = candidate;
       hasDate = true;
-      text = text.replace(dateMatch[0], ' ');
+      text = text.replace(numericDateMatch[0], ' ');
     }
   }
 
-   // Розпізнаємо час цифрами або словами
+  // 6. Час цифрами або словами
   const hourWords = {
     'першій': 1, 'першу': 1, 'одній': 1, 'одну': 1,
     'другій': 2, 'другу': 2,
@@ -160,21 +236,47 @@ function parseVoiceReminder(transcript) {
     .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
     .join('|');
 
-let timeMatch = text.match(
-  /(?:^|\s)(?:о|об|на)\s*(\d{1,2})(?:-(?:й|ий|ій|го|му))?(?:[:.](\d{2}))?(?:\s+(ранку|вранці|дня|днем|вечора|увечері|ночі))?(?=\s|$)/iu
-);
+  const periodPattern = '(?:ранку|вранці|дня|днем|після\\s+обіду|вечора|увечері|ввечері|вечором|ночі)';
+
+  // Спочатку шукаємо час цифрами: "о 9", "в 11", "о 15:30"
+  let timeMatch = text.match(
+    new RegExp(
+      '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у)\\s*(\\d{1,2})' +
+      '(?:\\s*[:.]\\s*(\\d{2}))?' +
+      '(?:\\s+(' + periodPattern + '))?' +
+      '(?![\\p{L}\\p{N}])',
+      'iu'
+    )
+  );
 
   let hour;
   let minute = 0;
 
- if (timeMatch) {
+  if (timeMatch) {
     hour = Number(timeMatch[1]);
     minute = Number(timeMatch[2] || 0);
-    const period = (timeMatch[3] || '').toLowerCase();
+  } else {
+    // Час словами: "о дев'ятій", "в одинадцятій"
+    timeMatch = text.match(
+      new RegExp(
+        '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у)\\s*(' +
+        hourPattern +
+        ')(?:\\s+(' + periodPattern + '))?(?![\\p{L}\\p{N}])',
+        'iu'
+      )
+    );
+
+    if (timeMatch) {
+      hour = hourWords[timeMatch[1].toLowerCase()];
+      minute = 0;
+    }
+  }
+
+  if (timeMatch && Number.isFinite(hour)) {
+    const period = (timeMatch[3] || timeMatch[2] || '').toLowerCase();
 
     if (
-      (period === 'вечора' || period === 'увечері' ||
-       period === 'дня' || period === 'днем') &&
+      ['дня', 'днем', 'після обіду', 'вечора', 'увечері', 'ввечері', 'вечором'].includes(period) &&
       hour < 12
     ) {
       hour += 12;
@@ -183,50 +285,47 @@ let timeMatch = text.match(
     if (period === 'ночі' && hour === 12) {
       hour = 0;
     }
-  } else {
-    timeMatch = text.match(
-      new RegExp(
-        '(?:^|\\s)(?:о|об|на)\\s*(' + hourPattern +
-        ')(?:\\s+(ранку|вранці|дня|днем|вечора|увечері|ночі))?(?=\\s|$)',
-        'iu'
-      )
-    );
 
-  if (timeMatch) {
-      hour = hourWords[timeMatch[1].toLowerCase()];
-      minute = 0;
-      const period = (timeMatch[2] || '').toLowerCase();
+    if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) {
+      date.setHours(hour, minute, 0, 0);
+      hasTime = true;
+      hasDate = true;
+      text = text.replace(timeMatch[0], ' ');
+    }
+  }
 
-      if (
-        (period === 'вечора' || period === 'увечері' ||
-         period === 'дня' || period === 'днем') &&
-        hour < 12
-      ) {
-        hour += 12;
-      }
+  // 7. Періоди дня без конкретної години
+  const dayPeriods = [
+    {
+      regex: /(?<![\p{L}\p{N}])після\s+обіду(?![\p{L}\p{N}])/iu,
+      hour: 14
+    },
+    {
+      regex: /(?<![\p{L}\p{N}])(?:зранку|вранці|ранком)(?![\p{L}\p{N}])/iu,
+      hour: 9
+    },
+    {
+      regex: /(?<![\p{L}\p{N}])(?:ввечері|увечері|вечором|вечері)(?![\p{L}\p{N}])/iu,
+      hour: 19
+    }
+  ];
 
-      if (period === 'ночі' && hour === 12) {
-        hour = 0;
+  if (!hasTime) {
+    for (const period of dayPeriods) {
+      if (period.regex.test(text)) {
+        defaultHour = period.hour;
+        text = text.replace(period.regex, ' ');
+        hasDate = true;
+        break;
       }
     }
   }
 
-  if (
-    timeMatch &&
-    hour >= 0 && hour <= 23 &&
-    minute >= 0 && minute <= 59
-  ) {
-    date.setHours(hour, minute, 0, 0);
-    hasTime = true;
-    text = text.replace(timeMatch[0], ' ');
-  }
-
-  // Якщо дату вказано без часу — встановлюємо 09:00
   if (hasDate && !hasTime) {
-    date.setHours(9, 0, 0, 0);
+    date.setHours(defaultHour === null ? 9 : defaultHour, 0, 0, 0);
   }
 
-  // Прибираємо зайві слова та пробіли
+  // 8. Прибираємо початкові слова-команди та зайві пробіли
   text = text
     .replace(/^\s*нагадай\s+мені\s*/iu, '')
     .replace(/^\s*нагадай\s*/iu, '')
