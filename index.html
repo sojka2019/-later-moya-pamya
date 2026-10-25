@@ -44,7 +44,13 @@ function fmtDate(d){if(!d)return'';const dt=new Date(d);if(Number.isNaN(dt.getTi
 function render(){const q=$('search').value.toLowerCase().trim();const shown=notes.filter(n=>(activeFilter==='Усе'||n.category===activeFilter)&&(!q||(n.text+' '+n.category).toLowerCase().includes(q)));$('totalStat').textContent=notes.length;$('reminderStat').textContent=notes.filter(n=>n.date&&!n.done).length;$('categoryStat').textContent=new Set(notes.map(n=>n.category)).size;const grid=$('notesGrid');if(!shown.length){grid.innerHTML='<div class="empty">'+(notes.length?'Нічого не знайдено.\nСпробуй інший запит.':'Тут поки порожньо — збережи першу думку вище.\n✨')+'</div>';return}grid.innerHTML=shown.map(n=>`<article class="note"><div class="note-top"><span class="kind">${icons[n.category]||'✦'} ${escapeHtml(n.category)}</span><span class="meta">${n.done?'✓ Виконано':''}</span></div><h3>${escapeHtml(n.text.length>54?n.text.slice(0,54)+'…':n.text)}</h3>${n.text.length>54?`<p>${escapeHtml(n.text)}</p>`:''}<div class="meta">${n.date?'⏰ '+escapeHtml(fmtDate(n.date))+' · ':''}Додано ${escapeHtml(new Date(n.created).toLocaleDateString('uk-UA'))}</div><div class="note-actions"><button class="secondary" data-action="remind" data-id="${n.id}">${n.date?'Змінити нагадування':'＋ Нагадати'}</button><button class="secondary" data-action="done" data-id="${n.id}">${n.done?'Повернути':'✓ Готово'}</button><button class="secondary" data-action="delete" data-id="${n.id}">✕</button></div></article>`).join('')}
 function openModal(n=null){editingId=n?n.id:null;$('modalTitle').textContent=n?'Редагувати запис':'Новий запис';$('noteText').value=n?n.text:'';$('noteCategory').value=n?n.category:'Автоматично';$('noteDate').value=n&&n.date?n.date:'';$('modal').classList.add('open');$('noteText').focus()}
 function closeModal(){$('modal').classList.remove('open')}
-$('quickAdd').onclick=()=>{$('quickStatus').textContent='';add($('quickInput').value);$('quickInput').value=''};
+$('quickAdd').onclick=()=>{
+  const input=$('quickInput');
+  const result=parseVoiceReminder(input.value);
+  if(!input.value.trim())return;
+  add(result.text,'Автоматично',result.date);
+  input.value='';
+};
 $('quickInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('quickAdd').click()}});
 $('addDetailed').onclick=()=>openModal();
 $('cancelModal').onclick=closeModal;
