@@ -477,6 +477,7 @@ function parseVoiceReminder(transcript) {
   let recognition=null;
 $('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('voiceStatus').textContent='Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.';return}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang='uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;$('micTitle').textContent='Слухаю тебе…';$('micHint').textContent='Говори після запиту браузера на доступ до мікрофона';$('voiceStatus').textContent='';recognition.onresult = e => {
   const spokenText = e.results[0][0].transcript;
+  alert('Розпізнано мікрофоном: ' + spokenText);
   const result = parseVoiceReminder(spokenText);
   
   alert('Текст: ' + result.text + '\nДата і час: ' + result.date);
