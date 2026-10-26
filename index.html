@@ -483,7 +483,12 @@ function parseVoiceReminder(transcript) {
       String(date.getHours()).padStart(2, '0') + ':' +
       String(date.getMinutes()).padStart(2, '0')
     : '';
-
+ // Прибираємо вступні слова, які розпізнає мікрофон
+  text = text.replace(
+    /^\s*(?:нагадаємо|нагадай(?:\s+мені)?|нагадуй(?:\s+мені)?)\s*[,!:.]?\s*/iu,
+    ''
+  ).trim();
+ 
   return {
     text: text || original,
     date: dateValue,
