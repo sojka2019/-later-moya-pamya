@@ -343,7 +343,7 @@ function parseVoiceReminder(transcript) {
   };
 
   const periodPattern =
-    '(?:ранку|вранці|дня|днем|після\\s+обіду|вечора|увечері|ввечері|вечором|ночі)';
+    '(?:ранку|вранці|дня|днем|після\\s+обіду|вечора|вечір|увечері|ввечері|вечором|ночі)';
 
   const escapeRegex = word =>
     word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -429,7 +429,7 @@ function parseVoiceReminder(transcript) {
     const period = (timeMatch[3] || '').toLowerCase();
 
     if (
-      ['дня', 'днем', 'після обіду', 'вечора', 'увечері', 'ввечері', 'вечором'].includes(period) &&
+      ['дня', 'днем', 'після обіду', 'вечора', 'вечір', 'увечері', 'ввечері', 'вечором'].includes(period) &&
       hour < 12
     ) {
       hour += 12;
