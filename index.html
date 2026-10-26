@@ -356,26 +356,45 @@ function parseVoiceReminder(transcript) {
     .map(escapeRegex)
     .join('|');
 
-  let timeMatch;
+   let timeMatch;
   let hour;
   let minute = 0;
 
-  // Спочатку шукаємо цифровий час: "о 7:15", "о 18:30"
+  // 1. Час цифрами та хвилинами словами: "о 7 п'ятнадцять"
   timeMatch = text.match(
     new RegExp(
-      '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у)\\s*(\\d{1,2})' +
-      '(?:\\s*[:.]\\s*(\\d{1,2}))?' +
-      '(?:\\s+(' + periodPattern + '))?' +
-      '(?![\\p{L}\\p{N}])',
+      '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у)\\s*(\\d{1,2})\\s+(' +
+      minutePattern +
+      ')(?:\\s+(' + periodPattern + '))?(?![\\p{L}\\p{N}])',
       'iu'
     )
   );
 
   if (timeMatch) {
     hour = Number(timeMatch[1]);
-    minute = Number(timeMatch[2] || 0);
-  } else {
-    // Час словами: "о сьомій п'ятнадцять" або "сім п'ятнадцять"
+    minute = minuteWords[timeMatch[2].toLowerCase()];
+  }
+
+  // 2. Цифровий час: "о 7:15", "о 18:30"
+  if (!timeMatch) {
+    timeMatch = text.match(
+      new RegExp(
+        '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у)\\s*(\\d{1,2})' +
+        '(?:\\s*[:.]\\s*(\\d{1,2}))?' +
+        '(?:\\s+(' + periodPattern + '))?' +
+        '(?![\\p{L}\\p{N}])',
+        'iu'
+      )
+    );
+
+    if (timeMatch) {
+      hour = Number(timeMatch[1]);
+      minute = Number(timeMatch[2] || 0);
+    }
+  }
+
+  // 3. Час словами: "о сьомій п'ятнадцять"
+  if (!timeMatch) {
     timeMatch = text.match(
       new RegExp(
         '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у)?\\s*(' +
@@ -394,7 +413,6 @@ function parseVoiceReminder(transcript) {
         : 0;
     }
   }
-
   if (timeMatch && Number.isFinite(hour)) {
     const period = (timeMatch[3] || '').toLowerCase();
 
