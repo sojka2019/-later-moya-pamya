@@ -415,7 +415,7 @@ function parseVoiceReminder(transcript) {
   }
  // Виправляємо випадок, коли мікрофон розбиває 14:45 на "14 40 п'ять"
   const splitMinuteMatch = text.match(
-    /(?<![\p{L}\p{N}])(?:о|об|на|в|у)\s*(\d{1,2})\s+40\s+(?:п’ять|п'ять|пять)(?![\p{L}\p{N}])/iu
+    /(?<![\p{L}\p{N}])(?:о|об|на|в|у)\s*(\d{1,2})[.\s]+\s*40\s+(?:п’ять|п'ять|пять)(?![\p{L}\p{N}])/iu
   );
 
   if (splitMinuteMatch) {
