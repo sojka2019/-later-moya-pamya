@@ -564,7 +564,7 @@ function parseVoiceReminder(transcript) {
 
   // 8. Прибираємо початкові слова-команди та зайві пробіли
   text = text
-    .replace(/^\s*нагадай\s+мені\s*/iu, '')
+    .replace(/^\s*(?:нагадай|нагадаємо)\s+мені\s*/iu, '')
     .replace(/^\s*нагадай\s*/iu, '')
     .replace(/^\s*будь ласка\s*/iu, '')
     .replace(/\s+/g, ' ')
