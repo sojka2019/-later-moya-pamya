@@ -328,7 +328,7 @@ function parseVoiceReminder(transcript) {
     .sort((a, b) => b.length - a.length)
     .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
     .join('|');
- const minuteWords = {
+  const minuteWords = {
     'нуль': 0,
     'п’ять': 5, "п'ять": 5, 'пять': 5,
     'десять': 10,
@@ -375,6 +375,24 @@ function parseVoiceReminder(transcript) {
     if (timeMatch) {
       hour = hourWords[timeMatch[1].toLowerCase()];
       minute = 0;
+
+      const minutePattern = Object.keys(minuteWords)
+        .sort((a, b) => b.length - a.length)
+        .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+        .join('|');
+
+    const wordsAfterHour = text.slice(
+        text.indexOf(timeMatch[0]) + timeMatch[0].length
+      ).trim();
+
+      const minuteMatch = wordsAfterHour.match(
+        new RegExp('^(' + minutePattern + ')(?=\\s|$)', 'iu')
+      );
+
+      if (minuteMatch) {
+        minute = minuteWords[minuteMatch[1].toLowerCase()];
+        text = text.replace(minuteMatch[0], ' ');
+      }
     }
   }
 
