@@ -394,7 +394,8 @@ function parseVoiceReminder(transcript) {
     timeMatch = colloquialPastMatch;
   }
   // Виправляємо цифровий час, коли мікрофон розділяє 08:05 як "8, 0 5"
-  timeMatch = text.match(
+   if (!timeMatch) {
+    timeMatch = text.match(
     new RegExp(
       '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у)\\s*(\\d{1,2})\\s*[,\\s.]+0\\s+([1-9])' +
       '(?:\\s+(' + periodPattern + '))?' +
@@ -407,7 +408,7 @@ function parseVoiceReminder(transcript) {
     hour = Number(timeMatch[1]);
     minute = Number(timeMatch[2]);
   }
-  
+}
     // 1. Час цифрами та хвилинами словами: "о 7 п'ятнадцять"
   if (!timeMatch) {
     timeMatch = text.match(
@@ -491,7 +492,11 @@ function parseVoiceReminder(transcript) {
       date.setHours(hour, minute, 0, 0);
       hasTime = true;
       hasDate = true;
-      text = text.replace(timeMatch[0], ' ');
+       text = text.replace(timeMatch[0], ' ');
+
+      if (colloquialPastMatch) {
+        text = text.replace(colloquialPastMatch[0], ' ');
+      }
     }
   }
   
