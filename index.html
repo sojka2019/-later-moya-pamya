@@ -99,7 +99,9 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
   <section class="stats">
     <div class="stat"><strong id="totalStat">0</strong><span>Збережено записів</span></div><div class="stat"><strong id="reminderStat">0</strong><span>Мають нагадування</span></div><div class="stat"><strong id="categoryStat">0</strong><span>Категорій використано</span></div></section>
   <div class="section-head"><div><h2>Твоя пам'ять</h2><p>Усе важливе — в одному місці.</p></div><div class="section-actions"><button class="secondary" id="exportBackup">⬇ Резервна копія</button><button class="secondary" id="importBackup">⬆ Імпорт записів</button><input type="file" id="importFile" accept="application/json,.json" hidden><button class="secondary" id="addDetailed">＋ Новий запис</button></div></div>
-  <div class="toolbar" id="filters"><button class="chip active" data-filter="Усе">Усе</button><button class="chip" data-filter="Покупки">🛍 Покупки</button><button class="chip" data-filter="Ідеї">💡 Ідеї</button><button class="chip" data-filter="Місця">📍 Місця</button><button class="chip" data-filter="Рекомендації">🎬 Рекомендації</button><button class="chip" data-filter="Справи">✓ Справи</button><input class="field" id="search" placeholder="⌕ Пошук за змістом…"></div>
+ <div class="toolbar" id="filters">
+  <input class="field" id="search" placeholder="⌕ Пошук за змістом…">
+</div>
   <div class="grid" id="notesGrid"></div>
   <div class="footer">Прототип LATER · Дані зберігаються локально на цьому пристрої. Регулярно роби резервну копію.</div>
 </div>
@@ -136,16 +138,16 @@ $('cancelModal').onclick=closeModal;
 $('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
 $('saveNote').onclick=()=>{const text=$('noteText').value.trim();if(!text){$('noteText').focus();return}const category=$('noteCategory').value;const date=$('noteDate').value;if(editingId){const n=notes.find(n=>n.id===editingId);if(n){n.text=text;n.category=category==='Автоматично'?categoryFor(text):category;n.date=date;n.done=false}}else{const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false})}persist();closeModal()};
 $('search').addEventListener('input',render);
-$('filters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;activeFilter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));render()});
 document.querySelector('.categories').addEventListener('click',e=>{
   const b=e.target.closest('[data-filter]');
   if(!b)return;
   activeFilter=b.dataset.filter;
-  document.querySelectorAll('[data-filter]').forEach(x=>
+  document.querySelectorAll('.category-box').forEach(x=>
     x.classList.toggle('active',x===b)
   );
   render();
 });
+
 $('notesGrid').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const id=Number(b.dataset.id);const n=notes.find(x=>x.id===id);if(!n)return;if(b.dataset.action==='delete'){if(confirm('Видалити цей запис?')){notes=notes.filter(x=>x.id!==id);persist()}}else if(b.dataset.action==='done'){n.done=!n.done;persist()}else if(b.dataset.action==='remind'){openModal(n)}});
 function backupStatus(message){$('quickStatus').textContent=message;setTimeout(()=>$('quickStatus').textContent='',6000)}
 $('exportBackup').onclick=()=>{try{const payload={format:'pamyatai-backup',version:1,exportedAt:new Date().toISOString(),notes};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='pamyatai-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);backupStatus('Резервну копію створено: '+notes.length+' записів. Збережи файл у надійному місці.')}catch(error){console.error(error);backupStatus('Не вдалося створити резервну копію в цьому середовищі. Спробуй вебверсію в Chrome.')}};
