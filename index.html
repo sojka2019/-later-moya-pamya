@@ -333,26 +333,10 @@ const dayWords = {
   'тридцятого': 30,
   'тридцять першого': 31
 };
- const escapeRegex = value =>
+ const escapeDateRegex = value =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-const monthNames = Object.keys(months)
-  .sort((a, b) => b.length - a.length)
-  .map(escapeRegex)
-  .join('|');
-
-const dayWordNames = Object.keys(dayWords)
-  .sort((a, b) => b.length - a.length)
-  .map(escapeRegex)
-  .join('|');
-
-const monthDateRegex = new RegExp(
-  '(?<![\\p{L}\\p{N}])(' +
-  '\\d{1,2}|' + dayWordNames +
-  ')\\s+(' + monthNames +
-  ')(?:\\s+(\\d{4})(?:\\s+року)?)?(?![\\p{L}])',
-  'iu'
-);
+const monthNames = Object.keys(months) .sort((a, b) => b.length - a.length) .map(escapeDateRegex) .join('|'); const dayWordNames = Object.keys(dayWords) .sort((a, b) => b.length - a.length) .map(escapeDateRegex) .join('|'); const monthDateRegex = new RegExp( '(?<![\\p{L}\\p{N}])(' + '\\d{1,2}|' + dayWordNames + ')\\s+(' + monthNames + ')(?:\\s+(\\d{4})(?:\\s+року)?)?(?![\\p{L}])', 'iu' );
 
 const monthMatch = text.match(monthDateRegex);
 
