@@ -392,6 +392,7 @@ function parseVoiceReminder(transcript) {
     minute = colloquialMinutes[colloquialPastMatch[1].toLowerCase()];
 
     timeMatch = colloquialPastMatch;
+    console.log('РОЗМОВНИЙ ЧАС:', colloquialPastMatch[0], hour, minute);
   }
   // Виправляємо цифровий час, коли мікрофон розділяє 08:05 як "8, 0 5"
    if (!timeMatch) {
