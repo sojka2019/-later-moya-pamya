@@ -364,7 +364,32 @@ function parseVoiceReminder(transcript) {
   let timeMatch;
   let hour;
   let minute = 0;
- 
+  // Розмовний час: "п'ять по восьмій" = 08:05
+  const colloquialPastMatch = text.match(
+    /(?<![\p{L}\p{N}])(п’ять|п'ять|пять|десять|десят|п’ятнадцять|п'ятнадцять|пятнадцать|двадцять)\s+по\s+(першій|другій|третій|четвертій|п’ятій|п'ятій|пятой|шостій|сьомій|восьмій|дев’ятій|дев'ятій|десятій|одинадцятій|дванадцятій)(?![\p{L}\p{N}])/iu
+  );
+
+  if (colloquialPastMatch) {
+    const colloquialMinutes = {
+      'п’ять': 5, "п'ять": 5, 'пять': 5,
+      'десять': 10, 'десят': 10,
+      'п’ятнадцять': 15, "п'ятнадцять": 15, 'пятнадцать': 15,
+      'двадцять': 20
+    };
+
+    const colloquialHours = {
+      'першій': 1, 'другій': 2, 'третій': 3, 'четвертій': 4,
+      'п’ятій': 5, "п'ятій": 5, 'пятой': 5,
+      'шостій': 6, 'сьомій': 7, 'восьмій': 8, 'дев’ятій': 9,
+      "дев'ятій": 9, 'десятій': 10, 'одинадцятій': 11,
+      'дванадцятій': 12
+    };
+
+    hour = colloquialHours[colloquialPastMatch[2].toLowerCase()];
+    minute = colloquialMinutes[colloquialPastMatch[1].toLowerCase()];
+
+    timeMatch = colloquialPastMatch;
+  }
   // Виправляємо цифровий час, коли мікрофон розділяє 08:05 як "8, 0 5"
   timeMatch = text.match(
     new RegExp(
