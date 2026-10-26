@@ -299,49 +299,97 @@ function parseVoiceReminder(transcript) {
     'листопада': 10, 'листопад': 10,
     'грудня': 11, 'грудень': 11
   };
+// Дні місяця, сказані словами
+const dayWords = {
+  'першого': 1, 'першого числа': 1,
+  'другого': 2,
+  'третього': 3,
+  'четвертого': 4, 'четвёртого': 4,
+  'п’ятого': 5, "п'ятого": 5, 'пятого': 5,
+  'шостого': 6,
+  'сьомого': 7,
+  'восьмого': 8,
+  'дев’ятого': 9, "дев'ятого": 9, 'девятого': 9,
+  'десятого': 10,
+  'одинадцятого': 11,
+  'дванадцятого': 12,
+  'тринадцятого': 13,
+  'чотирнадцятого': 14,
+  'п’ятнадцятого': 15, "п'ятнадцятого": 15, 'пятнадцатого': 15, 'пятнадцятого': 15,
+  'шістнадцятого': 16,
+  'сімнадцятого': 17,
+  'вісімнадцятого': 18,
+  'дев’ятнадцятого': 19, "дев'ятнадцятого": 19,
+  'двадцятого': 20,
+  'двадцять першого': 21,
+  'двадцять другого': 22,
+  'двадцять третього': 23,
+  'двадцять четвертого': 24,
+  'двадцять п’ятого': 25, "двадцять п'ятого": 25,
+  'двадцять шостого': 26,
+  'двадцять сьомого': 27,
+  'двадцять восьмого': 28,
+  'двадцять дев’ятого': 29, "двадцять дев'ятого": 29,
+  'тридцятого': 30,
+  'тридцять першого': 31
+};
+ const escapeRegex = value =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-  const monthNames = Object.keys(months)
-    .sort((a, b) => b.length - a.length)
-    .join('|');
+const monthNames = Object.keys(months)
+  .sort((a, b) => b.length - a.length)
+  .map(escapeRegex)
+  .join('|');
 
-  const monthDateRegex = new RegExp(
-    '(?<![\\p{L}\\p{N}])(\\d{1,2})\\s+(' +
-    monthNames +
-    ')(?:\\s+(\\d{4})(?:\\s+року)?)?(?![\\p{L}])',
-    'iu'
-  );
+const dayWordNames = Object.keys(dayWords)
+  .sort((a, b) => b.length - a.length)
+  .map(escapeRegex)
+  .join('|');
 
-  const monthMatch = text.match(monthDateRegex);
+const monthDateRegex = new RegExp(
+  '(?<![\\p{L}\\p{N}])(' +
+  '\\d{1,2}|' + dayWordNames +
+  ')\\s+(' + monthNames +
+  ')(?:\\s+(\\d{4})(?:\\s+року)?)?(?![\\p{L}])',
+  'iu'
+);
 
-  if (monthMatch) {
-    const day = Number(monthMatch[1]);
-    const month = months[monthMatch[2].toLowerCase()];
-    let year = monthMatch[3] ? Number(monthMatch[3]) : now.getFullYear();
+const monthMatch = text.match(monthDateRegex);
 
-    let candidate = new Date(year, month, day);
+if (monthMatch) {
+  const dayText = monthMatch[1].toLowerCase();
+  const day = dayWords[dayText] ?? Number(dayText);
+  const month = months[monthMatch[2].toLowerCase()];
+  let year = monthMatch[3]
+    ? Number(monthMatch[3])
+    : now.getFullYear();
 
-    // Якщо дата без року вже минула, беремо наступний рік
-    if (
-      !monthMatch[3] &&
-      candidate < new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    ) {
-      year++;
-      candidate = new Date(year, month, day);
-    }
+  let candidate = new Date(year, month, day);
 
-    // Перевіряємо, що дата справді існує
-    if (
-      candidate.getFullYear() === year &&
-      candidate.getMonth() === month &&
-      candidate.getDate() === day
-    ) {
-      date = candidate;
-      hasDate = true;
-      text = text.replace(monthMatch[0], ' ');
-    }
+  // Якщо дата без року вже минула, беремо наступний рік
+  if (
+    !monthMatch[3] &&
+    candidate < new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    )
+  ) {
+    year++;
+    candidate = new Date(year, month, day);
   }
 
-  // 5. Числова дата: 25.10, 25.10.2026, 25/10/2026
+  // Перевіряємо, що дата справді існує
+  if (
+    candidate.getFullYear() === year &&
+    candidate.getMonth() === month &&
+    candidate.getDate() === day
+  ) {
+    date = candidate;
+    hasDate = true;
+    text = text.replace(monthMatch[0], ' ');
+  }
+}
   const numericDateRegex =
     /(?<![\p{L}\p{N}])(\d{1,2})[./](\d{1,2})(?:[./](\d{4}))?(?![\p{L}\p{N}])/u;
 
