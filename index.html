@@ -110,11 +110,12 @@ let notes=[];
 let activeFilter='Усе';
 let editingId=null;
 const $=id=>document.getElementById(id);
-const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Інше':'✦'};
+const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Зустрічі':'🩺','Нотатки':'📝','Інше':'✦'};
 function load(){try{notes=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(notes))notes=[]}catch(e){notes=[]}render()}
 function persist(){localStorage.setItem(KEY,JSON.stringify(notes));render()}
 function categoryFor(text){const t=text.toLowerCase();
 if(/зустріч|лікар|прийом|консультац|візит/.test(t))return'Зустрічі';                     
+if(/нотатк|занотува|особистий запис/.test(t))return'Нотатки';
 if(/куп|магазин|ціна|кросів|навуш|подар|замов|придбат/.test(t))return'Покупки';if(/фільм|серіал|книг|пісн|музик|порад/.test(t))return'Рекомендації';if(/відвід|поїхат|ресторан|кафе|місц|адрес/.test(t))return'Місця';if(/ідея|придум|проєкт|бізнес|створ/.test(t))return'Ідеї';if(/треба|зробити|купити|нагад|зателефон|написати/.test(t))return'Справи';return'Інше'}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function add(text,category='Автоматично',date=''){text=text.trim();if(!text)return;const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false});persist();$('quickStatus').textContent='Збережено. Продовжуй займатися своїми справами.';setTimeout(()=>$('quickStatus').textContent='',3500)}
