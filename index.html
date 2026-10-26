@@ -380,7 +380,7 @@ function parseVoiceReminder(transcript) {
     timeMatch = text.match(
       new RegExp(
         '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у)\\s*(\\d{1,2})' +
-        '(?:\\s*[:.]\\s*(\\d{1,2}))?' +
+        '(?:\\s*(?:[:.]\\s*|\\s+)(\\d{1,2}))?' +
         '(?:\\s+(' + periodPattern + '))?' +
         '(?![\\p{L}\\p{N}])',
         'iu'
