@@ -88,7 +88,7 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
     </div> 
   </section> 
     <section class="categories">
-    <button class="category-box" data-filter="Усе">📚<span>Усе</span></button>
+    <button class="category-box" data-filter="Усе">📚<span>Усі записи</span></button>
     <button class="category-box" data-filter="Покупки">🛍️<span>Покупки</span></button>
     <button class="category-box" data-filter="Зустрічі">🩺<span>Зустрічі</span></button>
     <button class="category-box" data-filter="Справи">✓<span>Справи</span></button>
@@ -107,15 +107,15 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
     Усі нагадування
   </button>
 </div>
-  <div class="grid" id="notesGrid"></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"> <button class="secondary" id="showUnfinished" type="button">🔴 Невиконані</button> <button class="secondary" id="showFinished" type="button">🟢 Завершені</button> </div> <div class="grid" id="notesGrid"></div>
   <div class="footer">Прототип LATER · Дані зберігаються локально на цьому пристрої. Регулярно роби резервну копію.</div>
 </div>
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-box"><h2 id="modalTitle">Новий запис</h2><label class="form-label" for="noteText">Що хочеш запам'ятати?</label><textarea class="field" id="noteText" placeholder="Напиши думку, ідею або річ…" rows="3"></textarea><div class="form-row"><div><label class="form-label" for="noteCategory">Категорія</label><select class="field" id="noteCategory"><option>Автоматично</option><option>Покупки</option><option>Ідеї</option><option>Місця</option><option>Рекомендації</option><option>Зустрічі</option><option>Нотатки</option><option>Справи</option><option>Інше</option></select></div><div><label class="form-label" for="noteDate">Нагадати (необов'язково)</label><input class="field" id="noteDate" type="datetime-local"></div></div><div class="modal-actions"><button class="secondary" id="cancelModal">Скасувати</button><button class="primary" id="saveNote">Зберегти запис</button></div></div></div>
 <script>
 const KEY='later-prototype-v1';
-let notes=[];
 let activeFilter='Усе';
 let showAllNotes=false;
+let statusFilter='all';
 let editingId=null;
 const $=id=>document.getElementById(id);
 const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Зустрічі':'🩺','Нотатки':'📝','Інше':'✦'};
@@ -133,9 +133,12 @@ function render(){
   const now=Date.now();
 
   const filtered=notes.filter(n=>
-    (activeFilter==='Усе'||n.category===activeFilter)&&
-    (!q||(n.text+' '+n.category).toLowerCase().includes(q))
-  );
+(activeFilter==='Усе'||n.category===activeFilter)&&
+(!q||(n.text+' '+n.category).toLowerCase().includes(q))&&
+(statusFilter==='all'||
+(statusFilter==='unfinished'&&!n.done)||
+(statusFilter==='finished'&&n.done))
+);
 
   $('totalStat').textContent=notes.length;
   $('reminderStat').textContent=notes.filter(n=>n.date&&!n.done).length;
@@ -147,7 +150,7 @@ function render(){
     .filter(n=>n.date&&!n.done&&new Date(n.date).getTime()>=now)
     .sort((a,b)=>new Date(a.date)-new Date(b.date));
 
-  const shown=showAllNotes
+  const shown=(showAllNotes||statusFilter!=='all')
     ?filtered
     :upcoming.slice(0,3);
 
@@ -159,21 +162,25 @@ function render(){
   }
 
   if(!shown.length){
-    grid.innerHTML='<div class="empty">'+
-      (q||activeFilter!=='Усе'
-        ?'Нічого не знайдено.\\nСпробуй інший запит.'
-        :showAllNotes
-          ?'Записів поки немає.'
-          :'Немає майбутніх нагадувань.\\nВідкрий усі записи або додай нове нагадування.')
-      +'</div>';
+    const emptyMessage = statusFilter==='unfinished'
+      ? 'Невиконаних записів немає.'
+      : statusFilter==='finished'
+        ? 'Завершених записів немає.'
+        : q||activeFilter!=='Усе'
+          ? 'Нічого не знайдено.\nСпробуй інший запит.'
+          : showAllNotes
+            ? 'Записів поки немає.'
+            : 'Немає майбутніх нагадувань.\nВідкрий усі записи або додай нове нагадування.';
+
+    grid.innerHTML='<div class="empty">'+emptyMessage+'</div>';
     return;
-  }
+}
 
   grid.innerHTML=shown.map(n=>
     `<article class="note">
       <div class="note-top">
         <span class="kind">${icons[n.category]||'✦'} ${escapeHtml(n.category)}</span>
-        <span class="meta">${n.done?'✓ Виконано':''}</span>
+        <span class="meta">${n.done?'🟢 Виконано':'🔴 Не виконано'}</span>
       </div>
       <h3>${escapeHtml(n.text.length>54?n.text.slice(0,54)+'…':n.text)}</h3>
       ${n.text.length>54?`<p>${escapeHtml(n.text)}</p>`:''}
@@ -210,12 +217,21 @@ document.querySelector('.categories').addEventListener('click',e=>{
   );
   render();
 });
+  $('showUnfinished').addEventListener('click',()=>{
+statusFilter='unfinished';
+render();
+});
+$('showFinished').addEventListener('click',()=>{
+statusFilter='finished';
+render();
+});
 $('toggleAllNotes').addEventListener('click',()=>{
-  showAllNotes=!showAllNotes;
-  $('toggleAllNotes').textContent=showAllNotes
-    ?'Показати 3 найближчі'
-    :`Усі нагадування (${notes.length})`;
-  render();
+showAllNotes=!showAllNotes;
+statusFilter='all';
+$('toggleAllNotes').textContent=showAllNotes
+?'Показати 3 найближчі'
+:Усі нагадування (${notes.length});
+render();
 });
 $('notesGrid').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const id=Number(b.dataset.id);const n=notes.find(x=>x.id===id);if(!n)return;if(b.dataset.action==='delete'){if(confirm('Видалити цей запис?')){notes=notes.filter(x=>x.id!==id);persist()}}else if(b.dataset.action==='done'){n.done=!n.done;persist()}else if(b.dataset.action==='remind'){openModal(n)}});
 function backupStatus(message){$('quickStatus').textContent=message;setTimeout(()=>$('quickStatus').textContent='',6000)}
