@@ -192,11 +192,21 @@ jobs:
                       return;
                     }
                     if (!file.data) throw new Error('Не вдалося прочитати файл. Спробуй вибрати JSON-файл із папки «Завантаження».');
-                    const base64 = String(file.data).includes(',') ? String(file.data).split(',').pop() : String(file.data);
+                    const rawData = String(file.data).trim(); 
+                    let text;
+                    if (rawData.startsWith('{') || rawData.startsWith('[')) {
+                    text = rawData; 
+                    } else {
+                    const base64 = rawData.includes(',') 
+                    ? rawData.split(',').pop() 
+                    : rawData;
                     const binary = atob(base64);
-                    const bytes = new Uint8Array(binary.length);
-                    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-                    const text = new TextDecoder('utf-8').decode(bytes);
+                    const bytes = new Uint8Array(binary.length); 
+                    for (let i = 0; i < binary.length; i++) {
+                    bytes[i] = binary.charCodeAt(i); 
+                    }
+                    text = new TextDecoder('utf-8').decode(bytes); 
+                    }
                     const backup = JSON.parse(text);
                     const incoming = Array.isArray(backup) ? backup : (backup && Array.isArray(backup.notes) ? backup.notes : null);
                     if (!incoming) throw new Error('Це не файл резервної копії «Пам’ятай».');
