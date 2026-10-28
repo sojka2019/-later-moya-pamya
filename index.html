@@ -732,7 +732,20 @@ load();
 <script>
 if ("Notification" in window && "serviceWorker" in navigator) {
   let reminderRegistration = null;
-  function checkReminders() { if (!reminderRegistration || Notification.permission !== "granted") return; const now = Date.now(); let changed = false; const dayKey = value => { const d = new Date(value); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }; notes.forEach(note => { if (!note.date || note.done) return; const eventTime = new Date(note.date).getTime(); if (!Number.isFinite(eventTime) || eventTime <= now) return; const eventDay = dayKey(eventTime); const createdDay = note.created ? dayKey(note.created) : dayKey(now); const createdForToday = createdDay === eventDay; const schedules = createdForToday ? [ { key: "twoHours", time: eventTime - 2 * 60 * 60 * 1000, message: `Через дві години: ${note.text}` } ] : [ { key: "oneDay", time: eventTime - 24 * 60 * 60 * 1000, message: `Завтра: ${note.text}` }, { key: "oneHour", time: eventTime - 60 * 60 * 1000, message: `Через годину: ${note.text}` } ]; schedules.forEach(item => { const marker = `notified_${item.key}_${note.date}`; if ( now >= item.time && now < item.time + 60 * 1000 && !note[marker] ) { reminderRegistration.showNotification("Нагадування 🔔", { body: item.message, icon: "./icon-192.png", badge: "./icon-192.png" }).then(() => { note[marker] = true; persist(); }).catch(error => console.log("Помилка сповіщення:", error)); } }); }); if (changed) persist(); }
+  function checkReminders() { if (!reminderRegistration || Notification.permission !== "granted") return; const now = Date.now(); let changed = false; const dayKey = value => { const d = new Date(value); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }; notes.forEach(note => { if (!note.date || note.done) return; const eventTime = new Date(note.date).getTime(); if (!Number.isFinite(eventTime) || eventTime <= now) return; const eventDay = dayKey(eventTime); const createdDay = note.created ? dayKey(note.created) : dayKey(now); const createdForToday = createdDay === eventDay; const schedules = createdForToday ? [ { key: "twoHours", time: eventTime - 2 * 60 * 60 * 1000, message: `Через дві години: ${note.text}` } ] : [ { key: "oneDay", time: eventTime - 24 * 60 * 60 * 1000, message: `Завтра: ${note.text}` }, { key: "oneHour", time: eventTime - 60 * 60 * 1000, message: `Через годину: ${note.text}` } ]; schedules.forEach(item => { const marker = `notified_${item.key}_${note.date}`; if (
+  now >= item.time &&
+  now < item.time + 5 * 60 * 1000 &&
+  !note[marker]
+) {
+  reminderRegistration.showNotification("Нагадування 🔔", {
+    body: item.message,
+    icon: "./icon-192.png",
+    badge: "./icon-192.png"
+  }).then(() => {
+    note[marker] = true;
+    persist();
+  }).catch(error => console.log("Помилка сповіщення:", error));
+} }); }); if (changed) persist(); }
   navigator.serviceWorker.register("./sw.js").then(registration => {
     reminderRegistration = registration;const button = document.createElement("button");button.className = "secondary";button.textContent = "🔔 Увімкнути сповіщення";document.querySelector(".section-head").appendChild(button);
     button.addEventListener("click", async () => {const permission = await Notification.requestPermission();if (permission === "granted") {button.textContent = "🔔 Сповіщення ввімкнено";checkReminders();} else {button.textContent = "Сповіщення не дозволено";}});
