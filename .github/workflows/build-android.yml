@@ -314,6 +314,7 @@ jobs:
         run: |
           echo "=== First 10 lines ==="
           head -n 10 native-reminders.js
+          nl -ba native-reminders.js | sed -n '200,225p'
           echo "=== JavaScript syntax check ==="
           node --check native-reminders.js
       - name: Build the web files for Android
