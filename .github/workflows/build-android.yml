@@ -337,7 +337,13 @@ jobs:
       - name: Build the web files for Android
         working-directory: native-app
         run: npm run build
-
+      - name: Check native reminder module
+        working-directory: native-app 
+        run: | 
+          echo "=== Lines 1-119 ===" 
+          nl -ba native-reminders.js | sed -n '1,119p' 
+          echo "=== JavaScript syntax check ===" 
+          node --check native-reminders.js
       - name: Generate Android project, icons, permissions and local notifications
         working-directory: native-app
         run: |
