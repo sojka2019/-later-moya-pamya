@@ -310,10 +310,10 @@ jobs:
         working-directory: native-app
         run: npm install --no-audit --no-fund
       - name: Check native reminder module 
-        working-directory: native-app  
+        working-directory: native-app 
         run: | 
-          echo "=== Lines 120-200 ===" 
-          nl -ba native-reminders.js | sed -n '120,200p' 
+          echo "=== Lines 1-119 ===" 
+          nl -ba native-reminders.js | sed -n '1,119p' 
           echo "=== JavaScript syntax check ===" 
           node --check native-reminders.js
       - name: Build the web files for Android
