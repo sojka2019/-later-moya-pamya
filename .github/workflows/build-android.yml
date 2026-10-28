@@ -80,7 +80,7 @@ jobs:
           EOF_VITE
           cat > native-app/capacitor.config.json <<'EOF_CAP'
           {
-           "appId": "ch.pamyatai.remember.test46",
+           "appId": "ch.pamyatai.remember.test47",
            "appName": "Нагадування",
            "webDir": "dist"
           }
@@ -273,37 +273,7 @@ jobs:
                 for (const ch of String(value)) { hash ^= ch.charCodeAt(0); hash = Math.imul(hash, 16777619); }
                 return (hash >>> 0) % 2000000000 + 1;
               }
-              async function syncReminders() {
-                try {
-                  const permission = await LocalNotifications.checkPermissions();
-                  if (permission.display !== 'granted') return;
-                  const notes = getNotes();
-                  const now = Date.now();
-                  const futureNotes = notes.filter(note => {
-                    const time = note.date ? new Date(note.date).getTime() : NaN;
-                    return Boolean(note.date) && !note.done && Number.isFinite(time) && time > now;
-                  });
-                  await LocalNotifications.cancelAll();
-                  if (futureNotes.length === 0) {
-                    status.textContent = 'Немає майбутніх нагадувань із заданою датою та часом.';
-                    return;
-                  }
-                  const result = await LocalNotifications.schedule({
-                    notifications: futureNotes.map(note => ({
-                      id: notificationId(note.id),
-                      title: 'Пам’ятай 🔔',
-                      body: String(note.text || 'У тебе є нагадування!').slice(0, 500),
-                      schedule: { at: new Date(note.date), allowWhileIdle: true },
-                      extra: { noteId: String(note.id) }
-                    }))
-                  });
-                  status.textContent = 'Заплановано нагадувань: ' + futureNotes.length + '.';
-                  if (result && result.warning) status.textContent += ' Android може показати деякі сповіщення із затримкою, якщо точний час не дозволено.';
-                } catch (error) {
-                  console.error('Local reminder error:', error);
-                  status.textContent = 'Не вдалося запланувати нагадування. Перевір дозволи сповіщень.';
-                }
-              }
+             async function syncReminders() { try { const permission = await LocalNotifications.checkPermissions(); if (permission.display !== 'granted') return; const notes = getNotes(); const now = Date.now(); const dayKey = value => { const d = new Date(value); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }; const schedules = []; for (const note of notes) { if (!note.date || note.done) continue; const eventTime = new Date(note.date).getTime(); if (!Number.isFinite(eventTime) || eventTime <= now) continue; const eventDay = dayKey(eventTime); const createdDay = note.created ? dayKey(note.created) : dayKey(now); const reminders = createdDay === eventDay ? [ { key: 'twoHours', time: eventTime - 2 * 60 * 60 * 1000, message: `Через дві години: ${note.text}` } ] : [ { key: 'oneDay', time: eventTime - 24 * 60 * 60 * 1000, message: `Завтра: ${note.text}` }, { key: 'oneHour', time: eventTime - 60 * 60 * 1000, message: `Через годину: ${note.text}` } ]; for (const reminder of reminders) { if (reminder.time <= now) continue; schedules.push({ id: notificationId(`${note.id}:${reminder.key}`), title: 'Нагадування 🔔', body: String(reminder.message || note.text || 'У тебе є нагадування!').slice(0, 500), schedule: { at: new Date(reminder.time), allowWhileIdle: true }, extra: { noteId: String(note.id) } }); } } // Скасовуємо попередні сповіщення, пов'язані з наявними записами. // Не скасовуємо всі системні сповіщення Android. const pendingResult = await LocalNotifications.getPending(); const pending = pendingResult.notifications || []; const knownIds = new Set(); for (const note of notes) { knownIds.add(notificationId(note.id)); // старий формат knownIds.add(notificationId(`${note.id}:twoHours`)); knownIds.add(notificationId(`${note.id}:oneDay`)); knownIds.add(notificationId(`${note.id}:oneHour`)); } const toCancel = pending .filter(item => knownIds.has(item.id)) .map(item => ({ id: item.id })); if (toCancel.length) { await LocalNotifications.cancel({ notifications: toCancel }); } if (schedules.length) { await LocalNotifications.schedule({ notifications: schedules }); } status.textContent = schedules.length ? 'Заплановано сповіщень: ' + schedules.length + '.' : 'Немає майбутніх сповіщень, які ще потрібно запланувати.'; } catch (error) { console.error('Local reminder error:', error); status.textContent = 'Не вдалося запланувати нагадування. Перевір дозволи сповіщень.'; } }
               button.addEventListener('click', async () => {
                 try {
                   let permission = await LocalNotifications.checkPermissions();
@@ -317,6 +287,12 @@ jobs:
                 } catch (error) {
                   console.error(error);
                   status.textContent = 'Не вдалося ввімкнути сповіщення.';
+                }
+              });
+              LocalNotifications.addListener('localNotificationActionPerformed', action => {
+                const noteId = action.notification.extra?.noteId;
+                if (noteId && typeof window.openReminderNote === 'function') {
+                  window.openReminderNote(noteId);
                 }
               });
               const refreshSoon = () => setTimeout(syncReminders, 600);
@@ -389,7 +365,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: Nagaduvannya_test46
+          name: Nagaduvannya_test47
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
