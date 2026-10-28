@@ -188,7 +188,13 @@ function render(){
 }
 function openModal(n=null){editingId=n?n.id:null;$('modalTitle').textContent=n?'Редагувати запис':'Новий запис';$('noteText').value=n?n.text:'';$('noteCategory').value=n?n.category:'Автоматично';$('noteDate').value=n&&n.date?n.date:'';$('modal').classList.add('open');$('noteText').focus()}
 function closeModal(){$('modal').classList.remove('open')}
-$('quickAdd').onclick=()=>{
+window.openReminderNote = function(noteId) {
+  const note = notes.find(n => String(n.id) === String(noteId));
+  if (note) {
+    openModal(note);
+  }
+};
+  $('quickAdd').onclick=()=>{
   const input=$('quickInput');
   const result=parseVoiceReminder(input.value);
   if(!input.value.trim())return;
