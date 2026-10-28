@@ -173,7 +173,7 @@ function render(){
     `<article class="note">
       <div class="note-top">
         <span class="kind">${icons[n.category]||'✦'} ${escapeHtml(n.category)}</span>
-        <span class="meta">${n.done?'✓ Виконано':''}</span>
+        <span class="meta">${n.done?'<span style="color:green;font-weight:bold">✓ Виконано</span>':'<span style="color:red;font-weight:bold">● Не виконано</span>'}</span>
       </div>
       <h3>${escapeHtml(n.text.length>54?n.text.slice(0,54)+'…':n.text)}</h3>
       ${n.text.length>54?`<p>${escapeHtml(n.text)}</p>`:''}
