@@ -60,17 +60,17 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
 </head>
 <body>
 <div class="app">
-  <header class="top"><div><div class="brand">Пам’ятай</div><div class="tag">Remember — твоя друга пам’ять</div></div><div class="avatar" title="Профіль">✦</div></header>
+  <header class="top"><div><div class="brand">Твої нагадування</div><div class="tag">Зберігай важливе й отримуй нагадування вчасно</div></div><div class="avatar" title="Профіль">✦</div></header>
   <section class="hero"> 
     <div class="card">
       <div class="eyebrow">Швидкий запис</div> 
-      <h1>Що хочеш<br>запам'ятати?</h1>
-      <p>Скажи або напиши, що потрібно зробити й коли нагадати.</p> 
+      <h1>Що і коли<br>нагадати?</h1>
+      <p>Натисни 🎙 і скажи, що зробити та коли. Наприклад: «Зателефонувати дочці завтра ввечері». Перевір текст і час у формі та натисни «Зберегти».</p> 
       <div style="display:flex;align-items:center;gap:16px;margin-top:20px"> 
         <button class="mic" id="micBtn" aria-label="Продиктувати нагадування">🎙</button>
         <div> 
-          <strong id="micTitle">Продиктувати нагадування</strong> 
-          <div class="hint" id="micHint">Натисни мікрофон і говори</div>
+          <strong id="micTitle">Сказати нагадування</strong>
+          <div class="hint" id="micHint">Натисни й продиктуй справу та час</div>
         </div> 
       </div> 
       <div class="status" id="voiceStatus" aria-live="polite"></div>
@@ -84,7 +84,7 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
       <div class="eyebrow">Твоя друга пам'ять</div> 
   <h2 style="font-size:27px;line-height:1.2;margin:16px 0"> Менше забувай.<br>Більше живи. </h2>
       <p> Ідея, покупка, рекомендація чи маленька думка — збережи її тут, а «Нагадування» допоможе повернутися до неї вчасно. </p>
-      <div class="hint" style="margin-top:20px"> 🎙 Можна говорити або вводити текст </div>
+      <div class="hint" style="margin-top:20px"> </div>
     </div> 
   </section> 
     <section class="categories">
@@ -102,8 +102,11 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
  <div class="toolbar" id="filters">
   <input class="field" id="search" placeholder="⌕ Пошук за змістом…">
 </div>
- <div style="margin:12px 0">
-  <button class="secondary" id="toggleAllNotes" type="button">
+ <div class="note-view-switch" role="group" aria-label="Показ записів">
+  <button class="secondary active" id="showUpcomingNotes" type="button" aria-pressed="true">
+    3 найближчі
+  </button>
+  <button class="secondary" id="showAllNotes" type="button" aria-pressed="false">
     Усі нагадування
   </button>
 </div>
