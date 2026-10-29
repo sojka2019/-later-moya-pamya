@@ -121,7 +121,7 @@ jobs:
                     language: 'uk-UA',
                     maxResults: 1,
                     prompt: 'Скажіть, що потрібно запам’ятати',
-                    popup: true,
+                    popup: false,
                     partialResults: false
                   });
                   const spokenText = String(result?.matches?.[0] || '').trim();
