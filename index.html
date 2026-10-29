@@ -749,7 +749,7 @@ if (monthMatch) {
     },
     {
       // Вечір — 18:00
-      regex: /(?<![\p{L}\p{N}])(?:(?:в|у)\s+)?(?:вечір|вечором|вечері|ввечері|увечері)(?![\p{L}\p{N}])/iu,
+      regex: /(?:^|\s)(?:(?:в|у)\s+)?(?:вечір|вечором|вечері|ввечері|увечері)(?=$|\s|[,.!?])/iu,
       hour: 18
     },
     {
@@ -758,7 +758,6 @@ if (monthMatch) {
       hour: 14
     }
   ];
-alert('ПЕРЕВІРКА ПЕРІОДУ:\nТекст: ' + text + '\nЧас уже знайдено: ' + hasTime + '\nДату знайдено: ' + hasDate);
   if (!hasTime) {
     for (const period of dayPeriods) {
       if (period.regex.test(text)) {
