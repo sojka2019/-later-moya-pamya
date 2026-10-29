@@ -238,17 +238,10 @@ jobs:
               if (exportButton) {
                 exportButton.onclick = async () => {
                   const quickStatus = document.getElementById('quickStatus');
-                  let exportStage = 'початок';
                   try {
-                    if (quickStatus) quickStatus.textContent = 'Починаю експорт…';
-
-                    exportStage = 'завантаження Filesystem';
+                    if (quickStatus) quickStatus.textContent = 'Створюю резервну копію…';
                     const { Filesystem, Directory } = await import('@capacitor/filesystem');
-
-                    exportStage = 'завантаження Share';
                     const { Share } = await import('@capacitor/share');
-
-                    exportStage = 'підготовка даних';
                     const payload = {
                       format: 'pamyatai-backup',
                       version: 1,
@@ -256,28 +249,22 @@ jobs:
                       notes: getNotes()
                     };
                     const fileName = 'pamyatai-backup-' + new Date().toISOString().slice(0, 10) + '.json';
-
-                    exportStage = 'запис файлу';
                     const file = await Filesystem.writeFile({
                       path: fileName,
                       data: JSON.stringify(payload, null, 2),
                       directory: Directory.Cache,
                       recursive: true
                     });
-
-                    exportStage = 'відкриття меню Android';
                     await Share.share({
                       title: 'Резервна копія «Пам’ятай»',
                       text: 'Збережи цей файл у надійному місці.',
                       files: [file.uri],
                       dialogTitle: 'Зберегти резервну копію'
                     });
-
                     if (quickStatus) quickStatus.textContent = 'Вибери програму для збереження резервної копії.';
                   } catch (error) {
                     console.error('Native backup export error:', error);
-                    const details = error?.message || (error ? String(error) : 'невідома помилка');
-                    if (quickStatus) quickStatus.textContent = 'Помилка на кроці «' + exportStage + '»: ' + details;
+                    if (quickStatus) quickStatus.textContent = 'Не вдалося створити резервну копію: ' + (error?.message || 'невідома помилка');
                   }
                 };
               }
