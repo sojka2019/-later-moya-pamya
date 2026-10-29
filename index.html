@@ -245,7 +245,40 @@ function parseVoiceReminder(transcript) {
     }
     return false;
   }
+ // Відносний час: через годину, дві години або кілька хвилин
+  const relativeTimeMatch = text.match(
+    /(?<![\p{L}\p{N}])через\s+(?:(одну|одна|один|одну|дві|два|три|1|2|3|30|15|10|5)\s+)?(годину|години|годин|год|хвилину|хвилини|хвилин|хв)(?![\p{L}\p{N}])/iu
+  );
 
+  if (relativeTimeMatch) {
+    const amountWord = (relativeTimeMatch[1] || '1')
+      .toLowerCase();
+
+    const unit = relativeTimeMatch[2].toLowerCase();
+
+    const amounts = {
+      'одну': 1, 'один': 1, 'одна': 1,
+      'дві': 2, 'два': 2, 'три': 3,
+      '1': 1, '2': 2, '3': 3,
+      '5': 5, '10': 10, '15': 15, '30': 30
+    };
+
+    const amount = amounts[amountWord];
+
+    const isMinutes = [
+      'хвилину', 'хвилини', 'хвилин', 'хв'
+    ].includes(unit);
+
+    const milliseconds = amount *
+      (isMinutes ? 60 * 1000 : 60 * 60 * 1000);
+
+    date = new Date(now.getTime() + milliseconds);
+
+    hasDate = true;
+    hasTime = true;
+
+    text = text.replace(relativeTimeMatch[0], ' ');
+  }
   // 1. Відносні дати: завтра, післязавтра, сьогодні
   if (removePhrase(/(?<![\p{L}\p{N}])післязавтра(?![\p{L}\p{N}])/iu)) {
     date.setDate(date.getDate() + 2);
@@ -280,13 +313,44 @@ function parseVoiceReminder(transcript) {
     hasDate = true;
   }
 
- // 3. Через один, два або три календарні місяці
+ // 3. Через один, два або три календарні роки
+const relativeYearMatch = text.match(
+  /(?<![\p{L}\p{N}])через\s+(?:(один|одна|одну|два|дві|три|1|2|3)\s+)?(рік|роки|років|року)(?![\p{L}\p{N}])/iu
+);
+
+if (relativeYearMatch) {
+  const word = (relativeYearMatch[1] || '1').toLowerCase();
+
+  const yearsToAdd = ({
+    'один': 1, 'одна': 1, 'одну': 1, '1': 1,
+    'два': 2, 'дві': 2, '2': 2,
+    'три': 3, '3': 3
+  })[word];
+
+  const day = date.getDate();
+  const month = date.getMonth();
+  const targetYear = date.getFullYear() + yearsToAdd;
+
+  date = new Date(targetYear, month, 1);
+
+  const lastDay = new Date(
+    targetYear,
+    month + 1,
+    0
+  ).getDate();
+
+  date.setDate(Math.min(day, lastDay));
+
+  hasDate = true;
+  text = text.replace(relativeYearMatch[0], ' ');
+}
+  // 3. Через один, два або три календарні місяці
 const relativeMonthMatch = text.match(
-  /(?<![\p{L}\p{N}])через\s+(один|одна|одну|два|дві|три|1|2|3)\s+місяц(?:ь|я|і|ів)(?![\p{L}\p{N}])/iu
+  /(?<![\p{L}\p{N}])через\s+(?:(один|одна|одну|два|дві|три|1|2|3)\s+)?місяц(?:ь|я|і|ів)(?![\p{L}\p{N}])/iu
 );
 
 if (relativeMonthMatch) {
-  const word = relativeMonthMatch[1].toLowerCase();
+ const word = (relativeMonthMatch[1] || '1').toLowerCase();
 
   const monthsToAdd = ({
     'один': 1, 'одна': 1, 'одну': 1, '1': 1,
@@ -634,7 +698,7 @@ if (monthMatch) {
     hour = Number(splitMinuteMatch[1]);
     minute = 45;
   }
-  if (timeMatch && Number.isFinite(hour)) {
+  if (!relativeTimeMatch && timeMatch && Number.isFinite(hour)) {
     const period = (timeMatch[3] || '').toLowerCase();
 
     if (
@@ -664,16 +728,24 @@ if (monthMatch) {
   // 7. Періоди дня без конкретної години
   const dayPeriods = [
     {
-      regex: /(?<![\p{L}\p{N}])після\s+обіду(?![\p{L}\p{N}])/iu,
-      hour: 14
+      // Обід — 12:00
+      regex: /(?<![\p{L}\p{N}])(?:(?:в|у)\s+)?(?:обід|опівдні)(?![\p{L}\p{N}])/iu,
+      hour: 12
     },
     {
-      regex: /(?<![\p{L}\p{N}])(?:зранку|вранці|ранком)(?![\p{L}\p{N}])/iu,
+      // Ранок — 09:00
+      regex: /(?<![\p{L}\p{N}])(?:(?:в|у)\s+)?(?:ранок|ранком|зранку|вранці)(?![\p{L}\p{N}])/iu,
       hour: 9
     },
     {
-      regex: /(?<![\p{L}\p{N}])(?:ввечері|увечері|вечором|вечері)(?![\p{L}\p{N}])/iu,
-      hour: 19
+      // Вечір — 18:00
+      regex: /(?<![\p{L}\p{N}])(?:(?:в|у)\s+)?(?:вечір|вечором|вечері|ввечері|увечері)(?![\p{L}\p{N}])/iu,
+      hour: 18
+    },
+    {
+      // Після обіду — 14:00
+      regex: /(?<![\p{L}\p{N}])після\s+обіду(?![\p{L}\p{N}])/iu,
+      hour: 14
     }
   ];
 
