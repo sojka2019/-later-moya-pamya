@@ -760,7 +760,6 @@ if (monthMatch) {
   if (!hasTime) {
     for (const period of dayPeriods) {
       if (period.regex.test(text)) {
-        alert('ЗНАЙДЕНО ПЕРІОД: ' + period.hour + ':00');
         defaultHour = period.hour;
         text = text.replace(period.regex, ' ');
         hasDate = true;
