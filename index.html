@@ -280,15 +280,38 @@ function parseVoiceReminder(transcript) {
     hasDate = true;
   }
 
-  // 3. Через місяць — один календарний місяць
-  if (removePhrase(/(?<![\p{L}\p{N}])через\s+місяць(?![\p{L}\p{N}])/iu)) {
-    const day = date.getDate();
-    date.setDate(1);
-    date.setMonth(date.getMonth() + 1);
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-    date.setDate(Math.min(day, lastDay));
-    hasDate = true;
-  }
+ // 3. Через один, два або три календарні місяці
+const relativeMonthMatch = text.match(
+  /(?<![\p{L}\p{N}])через\s+(один|одна|одну|два|дві|три|1|2|3)\s+місяц(?:ь|я|і|ів)(?![\p{L}\p{N}])/iu
+);
+
+if (relativeMonthMatch) {
+  const word = relativeMonthMatch[1].toLowerCase();
+
+  const monthsToAdd = ({
+    'один': 1, 'одна': 1, 'одну': 1, '1': 1,
+    'два': 2, 'дві': 2, '2': 2,
+    'три': 3, '3': 3
+  })[word];
+
+  const day = date.getDate();
+
+  // Спочатку переходимо на перше число місяця,
+  // щоб правильно обробляти кінець місяця.
+  date.setDate(1);
+  date.setMonth(date.getMonth() + monthsToAdd);
+
+  const lastDay = new Date(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    0
+  ).getDate();
+
+  date.setDate(Math.min(day, lastDay));
+
+  hasDate = true;
+  text = text.replace(relativeMonthMatch[0], ' ');
+}
 
   // 4. Назви місяців
   const months = {
