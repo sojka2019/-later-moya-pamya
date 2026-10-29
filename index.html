@@ -758,7 +758,7 @@ if (monthMatch) {
       hour: 14
     }
   ];
-
+alert('ПЕРЕВІРКА ПЕРІОДУ:\nТекст: ' + text + '\nЧас уже знайдено: ' + hasTime + '\nДату знайдено: ' + hasDate);
   if (!hasTime) {
     for (const period of dayPeriods) {
       if (period.regex.test(text)) {
