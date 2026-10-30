@@ -71,6 +71,11 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
   color: #d9d0ff;
   border-color: #7161b8;
 }
+.brand {
+  white-space: nowrap;
+  font-size: clamp(20px, 6vw, 26px);
+  letter-spacing: 0.04em;
+}
 </style>
 </head>
 <body>
@@ -79,9 +84,9 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
   <section class="hero"> 
     <div class="card">
       <div class="eyebrow">Швидкий запис</div> 
-      <h1>Що і коли<br>нагадати?</h1>
-      <p>Натисни 🎙 і скажи, що зробити та коли. Наприклад: «Зателефонувати дочці завтра ввечері». Перевір текст і час у формі та натисни «Зберегти».</p> 
-      <div style="display:flex;align-items:center;gap:16px;margin-top:20px"> 
+      <h1 style="white-space:nowrap;font-size:clamp(22px,7vw,30px);line-height:1.1;letter-spacing:-.04em">Що і коли нагадати?</h1>
+      <p>Натисни 🎙 і скажи, що та коли нагадати. Перевір дані й натисни «Зберегти».</p> 
+      <div style="display:flex;align-items:center;gap:16px;margin-top:12px"> 
         <button class="mic" id="micBtn" aria-label="Продиктувати нагадування">🎙</button>
         <div> 
           <strong id="micTitle">Сказати нагадування</strong>
