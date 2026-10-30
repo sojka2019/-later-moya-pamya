@@ -150,6 +150,7 @@ let appLanguage = localStorage.getItem('app-language') || 'uk';
 
 function setAppLanguage(language) {
   appLanguage = language;
+   document.documentElement.lang = language === 'ru' ? 'ru' : 'uk';
   localStorage.setItem('app-language', language);
 
   const russian = language === 'ru';
@@ -176,7 +177,9 @@ function setAppLanguage(language) {
   if (input) input.placeholder = russian ? 'Или напиши здесь…' : 'Або напиши тут…';
 
   text('#quickAdd', russian ? '＋ Сохранить' : '＋ Зберегти');
- const categoryNames = russian
+  text('#showUpcomingNotes', russian ? '3 ближайших' : '3 найближчі');
+  text('#showAllNotes', russian ? 'Все напоминания' : 'Усі нагадування');
+  const categoryNames = russian
     ? ['Всё', 'Покупки', 'Встречи', 'Дела', 'Места', 'Заметки']
     : ['Усе', 'Покупки', 'Зустрічі', 'Справи', 'Місця', 'Нотатки'];
 
@@ -220,6 +223,41 @@ function setAppLanguage(language) {
   text('.footer', russian
     ? 'Прототип LATER · Данные хранятся локально на этом устройстве. Регулярно создавай резервную копию.'
     : 'Прототип LATER · Дані зберігаються локально на цьому пристрої. Регулярно роби резервну копію.');
+  text('#modalTitle', russian ? 'Новая запись' : 'Новий запис');
+  text('label[for="noteText"]', russian ? 'Что хочешь запомнить?' : "Що хочеш запам'ятати?");
+  text('label[for="noteCategory"]', russian ? 'Категория' : 'Категорія');
+  text('label[for="noteDate"]', russian ? 'Напомнить (необязательно)' : "Нагадати (необов'язково)");
+  text('#cancelModal', russian ? 'Отмена' : 'Скасувати');
+  text('#saveNote', russian ? 'Сохранить запись' : 'Зберегти запис');
+
+  const noteText = $('noteText');
+  if (noteText) {
+    noteText.placeholder = russian
+      ? 'Напиши мысль, идею или дело…'
+      : 'Напиши думку, ідею або річ…';
+  }
+    const categorySelect = $('noteCategory');
+  if (categorySelect) {
+    const categories = [
+      { value: 'Автоматично', uk: 'Автоматично', ru: 'Автоматически' },
+      { value: 'Покупки', uk: 'Покупки', ru: 'Покупки' },
+      { value: 'Ідеї', uk: 'Ідеї', ru: 'Идеи' },
+      { value: 'Місця', uk: 'Місця', ru: 'Места' },
+      { value: 'Рекомендації', uk: 'Рекомендації', ru: 'Рекомендации' },
+      { value: 'Зустрічі', uk: 'Зустрічі', ru: 'Встречи' },
+      { value: 'Нотатки', uk: 'Нотатки', ru: 'Заметки' },
+      { value: 'Справи', uk: 'Справи', ru: 'Дела' },
+      { value: 'Інше', uk: 'Інше', ru: 'Другое' }
+    ];
+
+    categories.forEach((category, index) => {
+      const option = categorySelect.options[index];
+      if (option) {
+        option.value = category.value;
+        option.textContent = russian ? category.ru : category.uk;
+      }
+    });
+  }
   const ukButton = $('langUk');
   const ruButton = $('langRu');
 
@@ -239,13 +277,34 @@ setAppLanguage(appLanguage);
 const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Зустрічі':'🩺','Нотатки':'📝','Інше':'✦'};
 function load(){try{notes=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(notes))notes=[]}catch(e){notes=[]}render()}
 function persist(){localStorage.setItem(KEY,JSON.stringify(notes));render()}
-function categoryFor(text){const t=text.toLowerCase();
-if(/зустріч|лікар|прийом|консультац|візит/.test(t))return'Зустрічі';                     
-if(/нотатк|занотува|особистий запис/.test(t))return'Нотатки';
-if(/куп|магазин|ціна|кросів|навуш|подар|замов|придбат/.test(t))return'Покупки';if(/фільм|серіал|книг|пісн|музик|порад/.test(t))return'Рекомендації';if(/відвід|поїхат|ресторан|кафе|місц|адрес/.test(t))return'Місця';if(/ідея|придум|проєкт|бізнес|створ/.test(t))return'Ідеї';if(/треба|зробити|купити|нагад|зателефон|написати/.test(t))return'Справи';return'Інше'}
+function categoryFor(text) {
+  const t = text.toLowerCase();
+
+  if (/зустріч|лікар|прийом|консультац|візит|встреч|врач|доктор|приём|прием|собрани/.test(t)) return 'Зустрічі';
+  if (/нотатк|занотува|особистий запис|заметк|личн(?:ая|ую)? запись/.test(t)) return 'Нотатки';
+  if (/куп|магазин|ціна|кросів|навуш|подар|замов|придбат|покуп|цен|кроссов|науш|заказ|приобрест/.test(t)) return 'Покупки';
+  if (/фільм|серіал|книг|пісн|музик|порад|фильм|сериал|книг|песн|музык|совет|рекомендац/.test(t)) return 'Рекомендації';
+  if (/відвід|поїхат|ресторан|кафе|місц|адрес|посет|поехать|мест/.test(t)) return 'Місця';
+  if (/ідея|придум|проєкт|бізнес|створ|проект|бизнес|создат/.test(t)) return 'Ідеї';
+  if (/треба|зробити|купити|нагад|зателефон|написати|надо|нужно|сделать|напомн|позвон|написать/.test(t)) return 'Справи';
+
+  return 'Інше';
+}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function add(text,category='Автоматично',date=''){text=text.trim();if(!text)return;const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false});persist();$('quickStatus').textContent='Збережено. Продовжуй займатися своїми справами.';setTimeout(()=>$('quickStatus').textContent='',3500)}
-function fmtDate(d){if(!d)return'';const dt=new Date(d);if(Number.isNaN(dt.getTime()))return'';return dt.toLocaleString('uk-UA',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
+function add(text,category='Автоматично',date=''){text=text.trim();if(!text)return;const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false});persist();$('quickStatus').textContent=appLanguage === 'ru'
+  ? 'Сохранено. Продолжай заниматься своими делами.'
+  : 'Збережено. Продовжуй займатися своїми справами.';setTimeout(()=>$('quickStatus').textContent='',3500)}
+function fmtDate(d) {
+  if (!d) return '';
+  const dt = new Date(d);
+  if (Number.isNaN(dt.getTime())) return '';
+  return dt.toLocaleString(appLanguage === 'ru' ? 'ru-RU' : 'uk-UA', {
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
 function render(){
   const q=$('search').value.toLowerCase().trim();
   const now=Date.now();
@@ -283,28 +342,43 @@ if (allButton) {
 }
 
   if(!shown.length){
-    grid.innerHTML='<div class="empty">'+
-      (q||activeFilter!=='Усе'
-        ?'Нічого не знайдено.\\nСпробуй інший запит.'
-        :showAllNotes
-          ?'Записів поки немає.'
-          :'Немає майбутніх нагадувань.\\nВідкрий усі записи або додай нове нагадування.')
-      +'</div>';
+    grid.innerHTML = '<div class="empty">' + (
+      q || activeFilter !== 'Усе'
+        ? (appLanguage === 'ru'
+            ? 'Ничего не найдено.\\nПопробуй другой запрос.'
+            : 'Нічого не знайдено.\\nСпробуй інший запит.')
+        : showAllNotes
+          ? (appLanguage === 'ru' ? 'Записей пока нет.' : 'Записів поки немає.')
+          : (appLanguage === 'ru'
+              ? 'Нет предстоящих напоминаний.\\nОткрой все записи или добавь новое напоминание.'
+              : 'Немає майбутніх нагадувань.\\nВідкрий усі записи або додай нове нагадування.')
+    ) + '</div>';
     return;
   }
 
   grid.innerHTML=shown.map(n=>
     `<article class="note">
       <div class="note-top">
-        <span class="kind">${icons[n.category]||'✦'} ${escapeHtml(n.category)}</span>
-        <span class="meta">${n.done?'<span style="color:green;font-weight:bold">✓ Виконано</span>':'<span style="color:red;font-weight:bold">● Не виконано</span>'}</span>
+        <span class="kind">${icons[n.category]||'✦'} ${escapeHtml(appLanguage === 'ru'
+  ? ({
+      'Покупки': 'Покупки',
+      'Зустрічі': 'Встречи',
+      'Справи': 'Дела',
+      'Місця': 'Места',
+      'Нотатки': 'Заметки',
+      'Ідеї': 'Идеи',
+      'Рекомендації': 'Рекомендации',
+      'Інше': 'Другое'
+    }[n.category] || n.category)
+  : n.category)}</span>
+        <span class="meta">${n.done ? (appLanguage === 'ru' ? '<span style="color:green;font-weight:bold">✓ Выполнено</span>' : '<span style="color:green;font-weight:bold">✓ Виконано</span>') : (appLanguage === 'ru' ? '<span style="color:red;font-weight:bold">● Не выполнено</span>' : '<span style="color:red;font-weight:bold">● Не виконано</span>')}</span>
       </div>
       <h3>${escapeHtml(n.text.length>54?n.text.slice(0,54)+'…':n.text)}</h3>
       ${n.text.length>54?`<p>${escapeHtml(n.text)}</p>`:''}
-      <div class="meta">${n.date?'⏰ '+escapeHtml(fmtDate(n.date))+' · ':''}Додано ${escapeHtml(new Date(n.created).toLocaleDateString('uk-UA'))}</div>
+      <div class="meta">${n.date ? '⏰ ' + escapeHtml(fmtDate(n.date)) + ' · ' : ''}${appLanguage === 'ru' ? 'Добавлено ' : 'Додано '}${escapeHtml(new Date(n.created).toLocaleDateString(appLanguage === 'ru' ? 'ru-RU' : 'uk-UA'))}</div>
       <div class="note-actions">
-        <button class="secondary" data-action="remind" data-id="${n.id}">${n.date?'Змінити нагадування':'＋ Нагадати'}</button>
-        <button class="secondary" data-action="done" data-id="${n.id}">${n.done?'Повернути':'✓ Готово'}</button>
+        <button class="secondary" data-action="remind" data-id="${n.id}">${n.date ? (appLanguage === 'ru' ? 'Изменить напоминание' : 'Змінити нагадування') : (appLanguage === 'ru' ? '＋ Напомнить' : '＋ Нагадати')}</button>
+        <button class="secondary" data-action="done" data-id="${n.id}">${n.done ? (appLanguage === 'ru' ? 'Вернуть' : 'Повернути') : '✓ Готово'}</button>
         <button class="secondary" data-action="delete" data-id="${n.id}">✕</button>
       </div>
     </article>`
@@ -921,35 +995,35 @@ if (monthMatch) {
   }
  
   // 7. Періоди дня без конкретної години
-  const dayPeriods = [
-     {
-     // Опівночі — 00:00
-     regex: /(?<![\p{L}\p{N}])опівночі(?![\p{L}\p{N}])/iu,
-     hour: 0
+ const dayPeriods = [
+    {
+      // Опівночі — 00:00
+      regex: /(?<![\p{L}\p{N}])(?:опівночі|полночь|полуночи|полуночью)(?![\p{L}\p{N}])/iu,
+      hour: 0
     },
     {
-     // До обіду — 11:00
-     regex: /(?<![\p{L}\p{N}])до\s+обіду(?![\p{L}\p{N}])/iu,
-     hour: 11
+      // До обіду — 11:00
+      regex: /(?<![\p{L}\p{N}])до\s+(?:обіду|обеда)(?![\p{L}\p{N}])/iu,
+      hour: 11
     },
     {
-    // Обід — 12:00
-    regex: /(?<![\p{L}\p{N}])(?:(?:в|у)\s+)?(?:обід|обідом|обіді|опівдні)(?![\p{L}\p{N}])/iu,
-    hour: 12
+      // Обід — 12:00
+      regex: /(?<![\p{L}\p{N}])(?:(?:в|у|во)\s+)?(?:обід|обідом|обіді|опівдні|обед|обедом|обеде|полдень)(?![\p{L}\p{N}])/iu,
+      hour: 12
     },
     {
       // Ранок — 09:00
-      regex: /(?<![\p{L}\p{N}])(?:(?:в|у)\s+)?(?:ранок|ранком|зранку|вранці)(?![\p{L}\p{N}])/iu,
+      regex: /(?<![\p{L}\p{N}])(?:(?:в|у|с)\s+)?(?:ранок|ранком|зранку|вранці|утро|утром)(?![\p{L}\p{N}])/iu,
       hour: 9
     },
-     {
+    {
       // Вечір — 19:00
-      regex: /(?:^|\s)(?:(?:в|у)\s+)?(?:вечір|вечором|вечері|ввечері|увечері|вечером)(?=$|\s|[,.!?])/iu,
+      regex: /(?:^|\s)(?:(?:в|у)\s+)?(?:вечір|вечором|вечері|ввечері|увечері|вечер|вечером|вечера)(?=$|\s|[,.!?])/iu,
       hour: 19
     },
     {
       // Після обіду — 14:00
-      regex: /(?<![\p{L}\p{N}])після\s+обіду(?![\p{L}\p{N}])/iu,
+      regex: /(?<![\p{L}\p{N}])(?:після\s+обіду|после\s+обеда)(?![\p{L}\p{N}])/iu,
       hour: 14
     }
   ];
@@ -999,7 +1073,11 @@ if (monthMatch) {
 }
 
   let recognition=null;
-$('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('voiceStatus').textContent='Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.';return}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang = appLanguage === 'ru' ? 'ru-RU' : 'uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;$('micTitle').textContent='Слухаю тебе…';$('micHint').textContent='Говори після запиту браузера на доступ до мікрофона';$('voiceStatus').textContent='';recognition.onresult = e => {
+$('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('voiceStatus').textContent = appLanguage === 'ru'
+  ? 'Голосовой ввод не поддерживается этим браузером. Попробуй Chrome или введи текст.'
+  : 'Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.';return}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang = appLanguage === 'ru' ? 'ru-RU' : 'uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;$('micTitle').textContent = appLanguage === 'ru' ? 'Слушаю тебя…' : 'Слухаю тебе…';$('micHint').textContent = appLanguage === 'ru'
+  ? 'Говори после запроса браузера на доступ к микрофону'
+  : 'Говори після запиту браузера на доступ до мікрофона';$('voiceStatus').textContent='';recognition.onresult = e => {
   const spokenText = e.results[0][0].transcript;
   const result = parseVoiceReminder(spokenText);
  
@@ -1008,23 +1086,30 @@ $('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||windo
   $('noteDate').value = result.date || '';
   editingId = null;
 
-  $('modalTitle').textContent = 'Перевір голосове нагадування';
+  $('modalTitle').textContent = appLanguage === 'ru'
+    ? 'Проверь голосовое напоминание'
+    : 'Перевір голосове нагадування';
   $('modal').classList.add('open');
 
   $('voiceStatus').textContent =
-    'Розпізнано: ' + result.text +
+    (appLanguage === 'ru' ? 'Распознано: ' : 'Розпізнано: ') + result.text +
     (result.hasDate
-      ? ' · Дата: ' + new Date(result.date).toLocaleString('uk-UA')
-      : ' · Укажи дату й час, якщо вони потрібні.');
+      ? ' · Дата: ' + new Date(result.date).toLocaleString(appLanguage === 'ru' ? 'ru-RU' : 'uk-UA')
+      : appLanguage === 'ru'
+        ? ' · Укажи дату и время, если они нужны.'
+        : ' · Укажи дату й час, якщо вони потрібні.');
 };
 
 recognition.onerror = e => {
-  $('voiceStatus').textContent = 'Не вдалося записати голос: ' + e.error;
+  $('voiceStatus').textContent =
+    (appLanguage === 'ru' ? 'Не удалось записать голос: ' : 'Не вдалося записати голос: ') + e.error;
 };
 
 recognition.onend = () => {
-  $('micTitle').textContent = 'Запам’ятати голосом';
-  $('micHint').textContent = 'Натисни та продиктуй думку';
+  $('micTitle').textContent = appLanguage === 'ru' ? 'Сказать напоминание' : 'Сказати нагадування';
+  $('micHint').textContent = appLanguage === 'ru'
+    ? 'Нажми и продиктуй дело и время'
+    : 'Натисни й продиктуй справу та час';
   recognition = null;
 };
 
