@@ -80,7 +80,14 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
 </head>
 <body>
 <div class="app">
-  <header class="top"><div><div class="brand">Твої нагадування</div><div class="tag">Зберігай важливе й отримуй нагадування вчасно</div></div><div class="avatar" title="Профіль">✦</div></header>
+  <header class="top"><div><div class="brand">Твої нагадування</div><div class="tag">Зберігай важливе й отримуй нагадування вчасно</div></div>
+ <div style="display:flex;align-items:center;gap:8px">
+  <div style="display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:12px;background:var(--panel)">
+    <button id="langUk" type="button" style="border:0;border-radius:8px;padding:8px 10px;background:#a99aff;color:#111;font-weight:700">UA</button>
+    <button id="langRu" type="button" style="border:0;border-radius:8px;padding:8px 10px;background:transparent;color:var(--muted);font-weight:700">RU</button>
+  </div>
+  <div class="avatar" title="Профіль">✦</div>
+</div></header>
   <section class="hero"> 
     <div class="card">
       <div class="eyebrow">Швидкий запис</div> 
