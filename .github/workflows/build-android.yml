@@ -80,7 +80,7 @@ jobs:
           EOF_VITE
           cat > native-app/capacitor.config.json <<'EOF_CAP'
           {
-           "appId": "ch.pamyatai.remember.test59",
+           "appId": "ch.pamyatai.remember.test60",
            "appName": "Нагадування",
            "webDir": "dist"
           }
@@ -435,6 +435,8 @@ jobs:
           npx cap add android
           npx cap sync android
           sed -i '/^android[[:space:]]*{/a\    compileSdk 36' android/app/build.gradle 
+          mkdir -p assets
+          cp ../icon.png.png assets/icon.png
           npx capacitor-assets generate --android
           # Force every launcher density to use the known green source icon.
           declare -A icon_sizes=( [ldpi]=36 [mdpi]=48 [hdpi]=72 [xhdpi]=96 [xxhdpi]=144 [xxxhdpi]=192 )
@@ -479,7 +481,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: Nagaduvannya_test59
+          name: Nagaduvannya_test60
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
