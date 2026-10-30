@@ -747,7 +747,60 @@ if (monthMatch) {
     }
   }
   
+ // Дні тижня: найближчий день або порядковий день місяця
+  const weekdayMatch = text.match(
+    /(?:(?:у|в|на)\s+)?(?:(перш(?:ий|ого|у|а)|друг(?:ий|ого|у|а)|трет(?:ій|ього|ю|я)|четверт(?:ий|ого|у|а))\s+)?(понеділ(?:ок|ка|ку)|вівтор(?:ок|ка|ку)|серед(?:а|и|у)|четвер(?:г|га|гу)?|п[’'ʼ]?ятниц(?:я|і|ю)|субот(?:а|и|у)|неділ(?:я|і|ю))(?![\p{L}\p{N}])/iu
+  );
 
+  if (weekdayMatch) {
+    const weekdayText = weekdayMatch[2].toLowerCase();
+    const ordinalText = (weekdayMatch[1] || '').toLowerCase();
+
+    const weekday = weekdayText.startsWith('понеділ') ? 1
+      : weekdayText.startsWith('вівтор') ? 2
+      : weekdayText.startsWith('серед') ? 3
+      : weekdayText.startsWith('четвер') ? 4
+      : weekdayText.includes('ятниц') ? 5
+      : weekdayText.startsWith('субот') ? 6
+      : 0;
+
+    const ordinal = ordinalText.startsWith('перш') ? 1
+      : ordinalText.startsWith('друг') ? 2
+      : ordinalText.startsWith('трет') ? 3
+      : ordinalText.startsWith('четверт') ? 4
+      : 0;
+
+    if (ordinal) {
+      let year = now.getFullYear();
+      let month = now.getMonth();
+
+      const findNthWeekday = (y, m) => {
+        const firstDay = new Date(y, m, 1).getDay();
+        const firstMatch = 1 + (weekday - firstDay + 7) % 7;
+        return firstMatch + (ordinal - 1) * 7;
+      };
+
+      let day = findNthWeekday(year, month);
+      let candidate = new Date(year, month, day);
+
+      if (candidate < new Date(now.getFullYear(), now.getMonth(), now.getDate())) {
+        month++;
+        if (month > 11) {
+          month = 0;
+          year++;
+        }
+        day = findNthWeekday(year, month);
+      }
+
+      date.setFullYear(year, month, day);
+    } else {
+      const daysAhead = (weekday - now.getDay() + 7) % 7;
+      date.setDate(now.getDate() + daysAhead);
+    }
+
+    hasDate = true;
+    text = text.replace(weekdayMatch[0], ' ');
+  }
   // 7. Періоди дня без конкретної години
   const dayPeriods = [
      {
