@@ -176,7 +176,50 @@ function setAppLanguage(language) {
   if (input) input.placeholder = russian ? 'Или напиши здесь…' : 'Або напиши тут…';
 
   text('#quickAdd', russian ? '＋ Сохранить' : '＋ Зберегти');
+ const categoryNames = russian
+    ? ['Всё', 'Покупки', 'Встречи', 'Дела', 'Места', 'Заметки']
+    : ['Усе', 'Покупки', 'Зустрічі', 'Справи', 'Місця', 'Нотатки'];
 
+  document.querySelectorAll('.categories .category-box span').forEach((element, index) => {
+    if (categoryNames[index]) element.textContent = categoryNames[index];
+  });
+
+  const statNames = russian
+    ? ['Сохранено записей', 'Есть напоминания', 'Использовано категорий']
+    : ['Збережено записів', 'Мають нагадування', 'Категорій використано'];
+
+  document.querySelectorAll('.stats .stat span').forEach((element, index) => {
+    if (statNames[index]) element.textContent = statNames[index];
+  });
+ text('.capture-card .eyebrow', russian ? 'Твоя вторая память' : "Твоя друга пам'ять");
+
+  const slogan = document.querySelector('.capture-card h2');
+  if (slogan) {
+    slogan.innerHTML = russian
+      ? 'Меньше забывай.<br>Больше живи.'
+      : 'Менше забувай.<br>Більше живи.';
+  }
+
+  text('.capture-card p', russian
+    ? 'Идея, покупка, рекомендация или небольшая мысль — сохрани её здесь, а «Напоминания» помогут вернуться к ней вовремя.'
+    : 'Ідея, покупка, рекомендація чи маленька думка — збережи її тут, а «Нагадування» допоможе повернутися до неї вчасно.');
+
+  text('.capture-card .hint', russian
+    ? '🎙 Можно говорить или вводить текст'
+    : '🎙 Можна говорити або вводити текст');
+
+  text('.section-head h2', russian ? 'Твои напоминания' : "Твоя пам'ять");
+  text('.section-head p', russian ? 'Всё важное — в одном месте.' : 'Усе важливе — в одному місці.');
+  text('#exportBackup', russian ? '⬇ Резервная копия' : '⬇ Резервна копія');
+  text('#importBackup', russian ? '⬆ Импорт записей' : '⬆ Імпорт записів');
+  text('#addDetailed', russian ? '＋ Новая запись' : '＋ Новий запис');
+
+  const search = $('search');
+  if (search) search.placeholder = russian ? '⌕ Поиск по содержимому…' : '⌕ Пошук за змістом…';
+
+  text('.footer', russian
+    ? 'Прототип LATER · Данные хранятся локально на этом устройстве. Регулярно создавай резервную копию.'
+    : 'Прототип LATER · Дані зберігаються локально на цьому пристрої. Регулярно роби резервну копію.');
   const ukButton = $('langUk');
   const ruButton = $('langRu');
 
