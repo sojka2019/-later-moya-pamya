@@ -146,6 +146,53 @@ let activeFilter='Усе';
 let showAllNotes=false;
 let editingId=null;
 const $=id=>document.getElementById(id);
+let appLanguage = localStorage.getItem('app-language') || 'uk';
+
+function setAppLanguage(language) {
+  appLanguage = language;
+  localStorage.setItem('app-language', language);
+
+  const russian = language === 'ru';
+  const text = (selector, value) => {
+    const element = document.querySelector(selector);
+    if (element) element.textContent = value;
+  };
+
+  text('header .brand', russian ? 'Твои напоминания' : 'Твої нагадування');
+  text('header .tag', russian
+    ? 'Сохраняй важное и получай напоминания вовремя'
+    : 'Зберігай важливе й отримуй нагадування вчасно');
+
+  text('.hero .card:first-child .eyebrow', russian ? 'Быстрая запись' : 'Швидкий запис');
+  text('.hero .card:first-child h1', russian ? 'Что и когда напомнить?' : 'Що і коли нагадати?');
+  text('.hero .card:first-child p', russian
+    ? 'Нажми 🎙 и скажи, что и когда напомнить. Проверь данные и нажми «Сохранить».'
+    : 'Натисни 🎙 і скажи, що та коли нагадати. Перевір дані й натисни «Зберегти».');
+
+  text('#micTitle', russian ? 'Сказать напоминание' : 'Сказати нагадування');
+  text('#micHint', russian ? 'Нажми и продиктуй дело и время' : 'Натисни й продиктуй справу та час');
+
+  const input = $('quickInput');
+  if (input) input.placeholder = russian ? 'Или напиши здесь…' : 'Або напиши тут…';
+
+  text('#quickAdd', russian ? '＋ Сохранить' : '＋ Зберегти');
+
+  const ukButton = $('langUk');
+  const ruButton = $('langRu');
+
+  if (ukButton) {
+    ukButton.style.background = russian ? 'transparent' : '#a99aff';
+    ukButton.style.color = russian ? 'var(--muted)' : '#111';
+  }
+  if (ruButton) {
+    ruButton.style.background = russian ? '#a99aff' : 'transparent';
+    ruButton.style.color = russian ? '#111' : 'var(--muted)';
+  }
+}
+
+$('langUk').addEventListener('click', () => setAppLanguage('uk'));
+$('langRu').addEventListener('click', () => setAppLanguage('ru'));
+setAppLanguage(appLanguage);
 const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Зустрічі':'🩺','Нотатки':'📝','Інше':'✦'};
 function load(){try{notes=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(notes))notes=[]}catch(e){notes=[]}render()}
 function persist(){localStorage.setItem(KEY,JSON.stringify(notes));render()}
