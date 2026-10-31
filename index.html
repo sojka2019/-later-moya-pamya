@@ -1111,9 +1111,7 @@ if (monthMatch) {
   ? 'Голосовой ввод не поддерживается этим браузером. Попробуй Chrome или введи текст.'
   : 'Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.';return}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang = appLanguage === 'ru' ? 'ru-RU' : 'uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;$('micTitle').textContent = appLanguage === 'ru' ? 'Слушаю тебя…' : 'Слухаю тебе…';$('micHint').textContent = appLanguage === 'ru'
   ? 'Говори после запроса браузера на доступ к микрофону'
-  : 'Говори після запиту браузера на доступ до мікрофона';$('voiceStatus').textContent='';recognition.onspeechend = () => {
-  if (recognition) recognition.stop();
-   };recognition.onresult = e => {
+  : 'Говори після запиту браузера на доступ до мікрофона';$('voiceStatus').textContent='';;recognition.onresult = e => {
   const spokenText = e.results[0][0].transcript;
   const result = parseVoiceReminder(spokenText);
  
