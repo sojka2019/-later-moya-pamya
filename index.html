@@ -1168,12 +1168,6 @@ recognition.onerror = e => {
   $('micBtn').classList.remove('listening');
   $('voiceStatus').textContent =
     (appLanguage === 'ru' ? 'Не удалось записать голос: ' : 'Не вдалося записати голос: ') + e.error;
-
-  try {
-    recognition.abort();
-  } catch (abortError) {
-    console.log('Не вдалося перервати розпізнавання:', abortError);
-  }
 };
 recognition.onstart = () => {
   $('micBtn').classList.add('listening');
@@ -1181,7 +1175,13 @@ recognition.onstart = () => {
   clearTimeout(recognitionTimer);
   recognitionTimer = setTimeout(() => {
     if (recognition) recognition.stop();
-  }, 10000);
+  }, 20000);
+};
+
+recognition.onspeechend = () => {
+  clearTimeout(recognitionTimer);
+  recognitionTimer = null;
+  if (recognition) recognition.stop();
 };
 recognition.onend = () => {
   clearTimeout(recognitionTimer);
