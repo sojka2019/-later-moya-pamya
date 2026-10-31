@@ -82,6 +82,19 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
   box-shadow: 0 0 0 2px rgba(169, 154, 255, 0.3);
   font-weight: 700;
 }
+.mic.listening {
+  background: #e8757f;
+  border-color: #ffadb3;
+  color: #fff;
+  box-shadow: 0 0 0 9px rgba(232, 117, 127, 0.2), 0 0 32px rgba(232, 117, 127, 0.6);
+  animation: micPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes micPulse {
+  50% {
+    box-shadow: 0 0 0 14px rgba(232, 117, 127, 0.12), 0 0 42px rgba(232, 117, 127, 0.75);
+  }
+}
 </style>
 </head>
 <body>
@@ -954,8 +967,8 @@ if (monthMatch) {
   }
   
   // Дні тижня українською та російською
-  const weekdayMatch = text.match(
-    /(?:(?:у|в|во|на)\s+)?(?:(перш(?:ий|ого|у|а)|перв(?:ый|ого|ую|ая)|друг(?:ий|ого|у|а)|втор(?:ой|ого|ую|ая)|трет(?:ій|ього|ю|я)|треть(?:ий|его|ю|я)|четверт(?:ий|ого|у|а|ый|ую|ая)|четвёрт(?:ый|ого|ую|ая))\s+)?(понеділ(?:ок|ка|ку)|понедельник(?:а|у)?|вівтор(?:ок|ка|ку)|вторник(?:а|у)?|серед(?:а|и|у)|сред(?:а|ы|у|е)|четвер(?:г|га|гу)|п[’'ʼ]?ятниц(?:я|і|ю)|пятниц(?:а|ы|у|е)|субот(?:а|и|у)|суббот(?:а|ы|у|е)|неділ(?:я|і|ю)|воскресень(?:е|я|ю))(?![\p{L}\p{N}])/iu
+   const weekdayMatch = text.match(
+    /(?:(?:у|в|во|на)\s+)?(?:(наступного|следующий|перш(?:ий|ого|у|а)|перв(?:ый|ого|ую|ая)|друг(?:ий|ого|у|а)|втор(?:ой|ого|ую|ая)|трет(?:ій|ього|ю|я)|треть(?:ий|его|ю|я)|четверт(?:ий|ого|у|а|ый|ую|ая)|четвёрт(?:ый|ого|ую|ая))\s+)?(понеділ(?:ок|ка|ку)|понедельник(?:а|у)?|вівтор(?:ок|ка|ку)|вторник(?:а|у)?|серед(?:а|и|у)|сред(?:а|ы|у|е)|четвер(?:г|га|гу)|п[’'ʼ]?ятниц(?:я|і|ю)|пятниц(?:а|ы|у|е)|субот(?:а|и|у)|суббот(?:а|ы|у|е)|неділ(?:я|і|ю)|воскресень(?:е|я|ю))(?![\p{L}\p{N}])/iu
   );
 
   if (weekdayMatch) {
@@ -977,7 +990,8 @@ if (monthMatch) {
       : ordinalText.startsWith('трет') || ordinalText.startsWith('треть') ? 3
       : ordinalText.startsWith('четверт') || ordinalText.startsWith('четвёрт') ? 4
       : 0;
-
+    const isNextWeekWord =
+      ordinalText === 'наступного' || ordinalText === 'следующий';
     if (ordinal) {
       let year = now.getFullYear();
       let month = now.getMonth();
@@ -1002,7 +1016,10 @@ if (monthMatch) {
 
       date.setFullYear(year, month, day);
     } else {
-      const daysAhead = (weekday - now.getDay() + 7) % 7;
+      let daysAhead = (weekday - now.getDay() + 7) % 7;
+      if (isNextWeekWord && daysAhead === 0) {
+        daysAhead = 7;
+      }
       date.setDate(now.getDate() + daysAhead);
     }
 
@@ -1117,11 +1134,15 @@ $('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||windo
 };
 
 recognition.onerror = e => {
+  $('micBtn').classList.remove('listening');
   $('voiceStatus').textContent =
     (appLanguage === 'ru' ? 'Не удалось записать голос: ' : 'Не вдалося записати голос: ') + e.error;
 };
-
+recognition.onstart = () => {
+  $('micBtn').classList.add('listening');
+};
 recognition.onend = () => {
+  $('micBtn').classList.remove('listening');
   $('micTitle').textContent = appLanguage === 'ru' ? 'Сказать напоминание' : 'Сказати нагадування';
   $('micHint').textContent = appLanguage === 'ru'
     ? 'Нажми и продиктуй дело и время'
