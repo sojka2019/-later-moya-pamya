@@ -181,8 +181,8 @@ function setAppLanguage(language) {
   text('#showUpcomingNotes', russian ? '3 ближайших' : '3 найближчі');
   text('#showAllNotes', russian ? 'Все напоминания' : 'Усі нагадування');
   const categoryNames = russian
-    ? ['Всё', 'Покупки', 'Встречи', 'Дела', 'Места', 'Заметки']
-    : ['Усе', 'Покупки', 'Зустрічі', 'Справи', 'Місця', 'Нотатки'];
+    ? ['Всё', 'Покупки', 'Встречи', 'Дела', 'Места', 'Заметки', 'Еда и кафе']
+    : ['Усе', 'Покупки', 'Зустрічі', 'Справи', 'Місця', 'Нотатки', 'Їжа та кафе'];
 
   document.querySelectorAll('.categories .category-box span').forEach((element, index) => {
     if (categoryNames[index]) element.textContent = categoryNames[index];
@@ -371,6 +371,7 @@ if (allButton) {
       'Нотатки': 'Заметки',
       'Ідеї': 'Идеи',
       'Рекомендації': 'Рекомендации',
+      'Їжа та кафе': 'Еда и кафе',
       'Інше': 'Другое'
     }[n.category] || n.category)
   : n.category)}</span>
