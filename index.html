@@ -1106,7 +1106,8 @@ if (monthMatch) {
 }
 
   let recognition=null;
-$('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('voiceStatus').textContent = appLanguage === 'ru'
+  let recognitionTimer = null;
+  $('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('voiceStatus').textContent = appLanguage === 'ru'
   ? 'Голосовой ввод не поддерживается этим браузером. Попробуй Chrome или введи текст.'
   : 'Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.';return}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang = appLanguage === 'ru' ? 'ru-RU' : 'uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;$('micTitle').textContent = appLanguage === 'ru' ? 'Слушаю тебя…' : 'Слухаю тебе…';$('micHint').textContent = appLanguage === 'ru'
   ? 'Говори после запроса браузера на доступ к микрофону'
@@ -1142,8 +1143,15 @@ recognition.onerror = e => {
 };
 recognition.onstart = () => {
   $('micBtn').classList.add('listening');
+
+  clearTimeout(recognitionTimer);
+  recognitionTimer = setTimeout(() => {
+    if (recognition) recognition.stop();
+  }, 10000);
 };
 recognition.onend = () => {
+  clearTimeout(recognitionTimer);
+  recognitionTimer = null;
   $('micBtn').classList.remove('listening');
   $('micTitle').textContent = appLanguage === 'ru' ? 'Сказать напоминание' : 'Сказати нагадування';
   $('micHint').textContent = appLanguage === 'ru'
