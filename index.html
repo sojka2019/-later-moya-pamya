@@ -1171,18 +1171,9 @@ recognition.onerror = e => {
 };
 recognition.onstart = () => {
   $('micBtn').classList.add('listening');
-
-  clearTimeout(recognitionTimer);
-  recognitionTimer = setTimeout(() => {
-    if (recognition) recognition.stop();
-  }, 20000);
 };
 
-recognition.onspeechend = () => {
-  clearTimeout(recognitionTimer);
-  recognitionTimer = null;
-  if (recognition) recognition.stop();
-};
+
 recognition.onend = () => {
   clearTimeout(recognitionTimer);
   recognitionTimer = null;
