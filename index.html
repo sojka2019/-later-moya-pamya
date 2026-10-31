@@ -1163,9 +1163,17 @@ if (monthMatch) {
 };
 
 recognition.onerror = e => {
+  clearTimeout(recognitionTimer);
+  recognitionTimer = null;
   $('micBtn').classList.remove('listening');
   $('voiceStatus').textContent =
     (appLanguage === 'ru' ? 'Не удалось записать голос: ' : 'Не вдалося записати голос: ') + e.error;
+
+  try {
+    recognition.abort();
+  } catch (abortError) {
+    console.log('Не вдалося перервати розпізнавання:', abortError);
+  }
 };
 recognition.onstart = () => {
   $('micBtn').classList.add('listening');
