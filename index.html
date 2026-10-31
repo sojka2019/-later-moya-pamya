@@ -520,6 +520,24 @@ function parseVoiceReminder(transcript) {
   }
 
   // 2. Через одну, дві або три неділі / тижні
+  const beforeWeekendMatch = text.match(
+    /(?<![\p{L}\p{N}])перед\s+(?:(?:наступними|следующими)\s+)?(?:вихідними|выходными)(?![\p{L}\p{N}])/iu
+  );
+
+  if (beforeWeekendMatch) {
+    let daysUntilFriday = (5 - now.getDay() + 7) % 7;
+    const fridayAtFive = new Date(now);
+    fridayAtFive.setDate(now.getDate() + daysUntilFriday);
+    fridayAtFive.setHours(17, 0, 0, 0);
+
+    if (fridayAtFive <= now) daysUntilFriday += 7;
+
+    date.setDate(date.getDate() + daysUntilFriday);
+    date.setHours(17, 0, 0, 0);
+    hasDate = true;
+    hasTime = true;
+    text = text.replace(beforeWeekendMatch[0], ' ');
+  }
   const weekMatch = text.match(
     /(?<![\p{L}\p{N}])через\s+(одну|один|дві|две|два|три|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели)(?![\p{L}\p{N}])/iu
   );
