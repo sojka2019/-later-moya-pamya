@@ -76,6 +76,12 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
   font-size: clamp(20px, 6vw, 26px);
   letter-spacing: 0.04em;
 }
+.category-box.active {
+  border-color: #a99aff;
+  background: rgba(169, 154, 255, 0.22);
+  box-shadow: 0 0 0 2px rgba(169, 154, 255, 0.3);
+  font-weight: 700;
+}
 </style>
 </head>
 <body>
@@ -113,7 +119,7 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
     </div> 
   </section> 
     <section class="categories">
-    <button class="category-box" data-filter="Усе">📚<span>Усе</span></button>
+    <button class="category-box active" data-filter="Усе">📚<span>Усе</span></button>
     <button class="category-box" data-filter="Покупки">🛍️<span>Покупки</span></button>
     <button class="category-box" data-filter="Зустрічі">🩺<span>Зустрічі</span></button>
     <button class="category-box" data-filter="Справи">✓<span>Справи</span></button>
