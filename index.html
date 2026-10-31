@@ -409,14 +409,20 @@ $('cancelModal').onclick=closeModal;
 $('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
 $('saveNote').onclick=()=>{const text=$('noteText').value.trim();if(!text){$('noteText').focus();return}const category=$('noteCategory').value;const date=$('noteDate').value;if(editingId){const n=notes.find(n=>n.id===editingId);if(n){n.text=text;n.category=category==='Автоматично'?categoryFor(text):category;n.date=date;n.done=false}}else{const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false})}persist();closeModal()};
 $('search').addEventListener('input',render);
-document.querySelector('.categories').addEventListener('click',e=>{
-  const b=e.target.closest('[data-filter]');
-  if(!b)return;
-  activeFilter=b.dataset.filter;
-  document.querySelectorAll('.category-box').forEach(x=>
-    x.classList.toggle('active',x===b)
+document.querySelector('.categories').addEventListener('click', e => {
+  const b = e.target.closest('[data-filter]');
+  if (!b) return;
+
+  activeFilter = b.dataset.filter;
+  document.querySelectorAll('.category-box').forEach(x =>
+    x.classList.toggle('active', x === b)
   );
+
   render();
+  document.querySelector('.section-head')?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
 });
 $('showUpcomingNotes').addEventListener('click', () => {
   showAllNotes = false;
