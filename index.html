@@ -119,7 +119,8 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
     <button class="category-box" data-filter="Справи">✓<span>Справи</span></button>
     <button class="category-box" data-filter="Місця">📍<span>Місця</span></button>
     <button class="category-box" data-filter="Нотатки">📝<span>Нотатки</span></button>
-  </section>
+    <button class="category-box" data-filter="Їжа та кафе">🍽️<span>Їжа та кафе</span></button>
+    </section>
   
   <section class="stats">
     <div class="stat"><strong id="totalStat">0</strong><span>Збережено записів</span></div><div class="stat"><strong id="reminderStat">0</strong><span>Мають нагадування</span></div><div class="stat"><strong id="categoryStat">0</strong><span>Категорій використано</span></div></section>
@@ -138,7 +139,7 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
   <div class="grid" id="notesGrid"></div>
   <div class="footer">Прототип LATER · Дані зберігаються локально на цьому пристрої. Регулярно роби резервну копію.</div>
 </div>
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-box"><h2 id="modalTitle">Новий запис</h2><label class="form-label" for="noteText">Що хочеш запам'ятати?</label><textarea class="field" id="noteText" placeholder="Напиши думку, ідею або річ…" rows="3"></textarea><div class="form-row"><div><label class="form-label" for="noteCategory">Категорія</label><select class="field" id="noteCategory"><option>Автоматично</option><option>Покупки</option><option>Ідеї</option><option>Місця</option><option>Рекомендації</option><option>Зустрічі</option><option>Нотатки</option><option>Справи</option><option>Інше</option></select></div><div><label class="form-label" for="noteDate">Нагадати (необов'язково)</label><input class="field" id="noteDate" type="datetime-local"></div></div><div class="modal-actions"><button class="secondary" id="cancelModal">Скасувати</button><button class="primary" id="saveNote">Зберегти запис</button></div></div></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-box"><h2 id="modalTitle">Новий запис</h2><label class="form-label" for="noteText">Що хочеш запам'ятати?</label><textarea class="field" id="noteText" placeholder="Напиши думку, ідею або річ…" rows="3"></textarea><div class="form-row"><div><label class="form-label" for="noteCategory">Категорія</label><select class="field" id="noteCategory"><option>Автоматично</option><option>Покупки</option><option>Ідеї</option><option>Місця</option><option>Рекомендації</option><option>Зустрічі</option><option>Нотатки</option><option>Справи</option><option>Їжа та кафе</option><option>Інше</option></select></div><div><label class="form-label" for="noteDate">Нагадати (необов'язково)</label><input class="field" id="noteDate" type="datetime-local"></div></div><div class="modal-actions"><button class="secondary" id="cancelModal">Скасувати</button><button class="primary" id="saveNote">Зберегти запис</button></div></div></div>
 <script>
 const KEY='later-prototype-v1';
 let notes=[];
@@ -247,6 +248,7 @@ function setAppLanguage(language) {
       { value: 'Зустрічі', uk: 'Зустрічі', ru: 'Встречи' },
       { value: 'Нотатки', uk: 'Нотатки', ru: 'Заметки' },
       { value: 'Справи', uk: 'Справи', ru: 'Дела' },
+      { value: 'Їжа та кафе', uk: 'Їжа та кафе', ru: 'Еда и кафе' },
       { value: 'Інше', uk: 'Інше', ru: 'Другое' }
     ];
 
@@ -274,7 +276,7 @@ function setAppLanguage(language) {
 $('langUk').addEventListener('click', () => setAppLanguage('uk'));
 $('langRu').addEventListener('click', () => setAppLanguage('ru'));
 setAppLanguage(appLanguage);
-const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Зустрічі':'🩺','Нотатки':'📝','Інше':'✦'};
+const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Зустрічі':'🩺','Нотатки':'📝','Їжа та кафе':'🍽️','Інше':'✦'};
 function load(){try{notes=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(notes))notes=[]}catch(e){notes=[]}render()}
 function persist(){localStorage.setItem(KEY,JSON.stringify(notes));render()}
 function categoryFor(text) {
@@ -282,9 +284,10 @@ function categoryFor(text) {
 
   if (/зустріч|лікар|прийом|консультац|візит|встреч|врач|доктор|приём|прием|собрани/.test(t)) return 'Зустрічі';
   if (/нотатк|занотува|особистий запис|заметк|личн(?:ая|ую)? запись/.test(t)) return 'Нотатки';
+  if (/їж|їст|поїст|поїм|снідан|обід|пообід|вечер|перекус|кафе|ресторан|куш|поесть|завтрак|обед|ужин|еда|будем\s+есть/.test(t)) return 'Їжа та кафе';
   if (/куп|магазин|ціна|кросів|навуш|подар|замов|придбат|покуп|цен|кроссов|науш|заказ|приобрест/.test(t)) return 'Покупки';
   if (/фільм|серіал|книг|пісн|музик|порад|фильм|сериал|книг|песн|музык|совет|рекомендац/.test(t)) return 'Рекомендації';
-  if (/відвід|поїхат|ресторан|кафе|місц|адрес|посет|поехать|мест/.test(t)) return 'Місця';
+  if (/відвід|поїхат|місц|адрес|посет|поехать|мест/.test(t)) return 'Місця';
   if (/ідея|придум|проєкт|бізнес|створ|проект|бизнес|создат/.test(t)) return 'Ідеї';
   if (/треба|зробити|купити|нагад|зателефон|написати|надо|нужно|сделать|напомн|позвон|написать/.test(t)) return 'Справи';
 
