@@ -135,6 +135,7 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
     <button class="category-box active" data-filter="Усе">📚<span>Усе</span></button>
     <button class="category-box" data-filter="Покупки">🛍️<span>Покупки</span></button>
     <button class="category-box" data-filter="Зустрічі">🩺<span>Зустрічі</span></button>
+    <button class="category-box" data-filter="Здоров'я">💊<span>Здоров'я</span></button>
     <button class="category-box" data-filter="Справи">✓<span>Справи</span></button>
     <button class="category-box" data-filter="Місця">📍<span>Місця</span></button>
     <button class="category-box" data-filter="Нотатки">📝<span>Нотатки</span></button>
@@ -204,8 +205,8 @@ function setAppLanguage(language) {
   text('#showUpcomingNotes', russian ? '3 ближайших' : '3 найближчі');
   text('#showAllNotes', russian ? 'Все напоминания' : 'Усі нагадування');
   const categoryNames = russian
-    ? ['Всё', 'Покупки', 'Встречи', 'Дела', 'Места', 'Заметки', 'Еда и кафе']
-    : ['Усе', 'Покупки', 'Зустрічі', 'Справи', 'Місця', 'Нотатки', 'Їжа та кафе'];
+    ? ['Всё', 'Покупки', 'Встречи', 'Здоровье', 'Дела', 'Места', 'Заметки', 'Еда и кафе']
+    : ['Усе', 'Покупки', 'Зустрічі', 'Здоров’я', 'Справи', 'Місця', 'Нотатки', 'Їжа та кафе'];
 
   document.querySelectorAll('.categories .category-box span').forEach((element, index) => {
     if (categoryNames[index]) element.textContent = categoryNames[index];
@@ -269,6 +270,7 @@ function setAppLanguage(language) {
       { value: 'Місця', uk: 'Місця', ru: 'Места' },
       { value: 'Рекомендації', uk: 'Рекомендації', ru: 'Рекомендации' },
       { value: 'Зустрічі', uk: 'Зустрічі', ru: 'Встречи' },
+      { value: 'Здоров’я', uk: 'Здоров’я', ru: 'Здоровье' },
       { value: 'Нотатки', uk: 'Нотатки', ru: 'Заметки' },
       { value: 'Справи', uk: 'Справи', ru: 'Дела' },
       { value: 'Їжа та кафе', uk: 'Їжа та кафе', ru: 'Еда и кафе' },
@@ -299,12 +301,13 @@ function setAppLanguage(language) {
 $('langUk').addEventListener('click', () => setAppLanguage('uk'));
 $('langRu').addEventListener('click', () => setAppLanguage('ru'));
 setAppLanguage(appLanguage);
-const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Зустрічі':'🩺','Нотатки':'📝','Їжа та кафе':'🍽️','Інше':'✦'};
+const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Зустрічі':'🩺','Здоров’я':'💊','Нотатки':'📝','Їжа та кафе':'🍽️','Інше':'✦'};
 function load(){try{notes=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(notes))notes=[]}catch(e){notes=[]}render()}
 function persist(){localStorage.setItem(KEY,JSON.stringify(notes));render()}
 function categoryFor(text) {
   const t = text.toLowerCase();
 
+  if (/таблет|ліки|лікарств|медикамент|випити|прийняти ліки|упражнен|гимнастик|зарядк|таблетк|лекарств|медикамент|выпить лекарств|принять лекарств|физическ/.test(t)) return 'Здоров’я';
   if (/зустріч|лікар|прийом|консультац|візит|встреч|врач|доктор|приём|прием|собрани/.test(t)) return 'Зустрічі';
   if (/нотатк|занотува|особистий запис|заметк|личн(?:ая|ую)? запись/.test(t)) return 'Нотатки';
   if (/їж|їст|поїст|поїм|снідан|обід|пообід|вечеря|перекус|хліб|хлеб|молок|яйц|сир|сыр|кафе|ресторан|куш|поесть|завтрак|обед|ужин|еда|будем\s+есть/.test(t)) return 'Їжа та кафе';
@@ -417,6 +420,7 @@ if (completedButton) {
   ? ({
       'Покупки': 'Покупки',
       'Зустрічі': 'Встречи',
+      'Здоров’я': 'Здоровье',
       'Справи': 'Дела',
       'Місця': 'Места',
       'Нотатки': 'Заметки',
