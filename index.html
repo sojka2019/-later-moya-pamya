@@ -154,7 +154,10 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
   <button class="secondary" id="showAllNotes" type="button" aria-pressed="false">
     Усі нагадування
   </button>
-</div>
+   <button class="secondary" id="showCompletedNotes" type="button" aria-pressed="false">
+    ✓ Завершені
+  </button>
+ </div>
   <div class="grid" id="notesGrid"></div>
   <div class="footer">Прототип LATER · Дані зберігаються локально на цьому пристрої. Регулярно роби резервну копію.</div>
 </div>
@@ -164,6 +167,7 @@ const KEY='later-prototype-v1';
 let notes=[];
 let activeFilter='Усе';
 let showAllNotes=false;
+let showCompletedNotes = false;  
 let editingId=null;
 const $=id=>document.getElementById(id);
 let appLanguage = localStorage.getItem('app-language') || 'uk';
@@ -346,21 +350,29 @@ function render(){
     .filter(n=>n.date&&!n.done&&new Date(n.date).getTime()>=now)
     .sort((a,b)=>new Date(a.date)-new Date(b.date));
 
-  const shown=showAllNotes
-    ?filtered
-    :upcoming.slice(0,3);
+  const shown = showCompletedNotes
+  ? filtered.filter(n => n.done)
+  : showAllNotes
+    ? filtered.filter(n => !n.done)
+    : upcoming.slice(0, 3);
 
-  const upcomingButton = $('showUpcomingNotes');
-const allButton = $('showAllNotes');
+ const upcomingButton = $('showUpcomingNotes');
+ const allButton = $('showAllNotes');
+ const completedButton = $('showCompletedNotes');
 
 if (upcomingButton) {
-  upcomingButton.classList.toggle('active', !showAllNotes);
-  upcomingButton.setAttribute('aria-pressed', String(!showAllNotes));
+  upcomingButton.classList.toggle('active', !showAllNotes && !showCompletedNotes);
+  upcomingButton.setAttribute('aria-pressed', String(!showAllNotes && !showCompletedNotes));
 }
 
 if (allButton) {
   allButton.classList.toggle('active', showAllNotes);
   allButton.setAttribute('aria-pressed', String(showAllNotes));
+}
+
+if (completedButton) {
+  completedButton.classList.toggle('active', showCompletedNotes);
+  completedButton.setAttribute('aria-pressed', String(showCompletedNotes));
 }
 
   if(!shown.length){
@@ -445,11 +457,19 @@ document.querySelector('.categories').addEventListener('click', e => {
 });
 $('showUpcomingNotes').addEventListener('click', () => {
   showAllNotes = false;
+  showCompletedNotes = false;
   render();
 });
 
 $('showAllNotes').addEventListener('click', () => {
   showAllNotes = true;
+  showCompletedNotes = false;
+  render();
+});
+
+$('showCompletedNotes').addEventListener('click', () => {
+  showAllNotes = false;
+  showCompletedNotes = true;
   render();
 });
 $('notesGrid').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const id=Number(b.dataset.id);const n=notes.find(x=>x.id===id);if(!n)return;if(b.dataset.action==='delete'){if(confirm('Видалити цей запис?')){notes=notes.filter(x=>x.id!==id);persist()}}else if(b.dataset.action==='done'){n.done=!n.done;persist()}else if(b.dataset.action==='remind'){openModal(n)}});
