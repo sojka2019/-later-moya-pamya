@@ -475,6 +475,17 @@ function parseVoiceReminder(transcript) {
     return false;
   }
  // Відносний час: через годину, дві години або кілька хвилин
+   // Через пів години / полчаса
+  const halfHourMatch = text.match(
+    /(?<![\p{L}\p{N}])через\s+(?:пів\s+години|півгодини|полчаса)(?![\p{L}\p{N}])/iu
+  );
+
+  if (halfHourMatch) {
+    date = new Date(now.getTime() + 30 * 60 * 1000);
+    hasDate = true;
+    hasTime = true;
+    text = text.replace(halfHourMatch[0], ' ');
+  }
   const relativeTimeMatch = text.match(
     /(?<![\p{L}\p{N}])через\s+(?:(одну|одна|один|одну|дві|два|три|1|2|3|30|15|10|5)\s+)?(годину|години|годин|год|хвилину|хвилини|хвилин|хв)(?![\p{L}\p{N}])/iu
   );
