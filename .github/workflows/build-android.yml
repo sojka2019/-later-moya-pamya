@@ -335,7 +335,7 @@ jobs:
                    for (const reminder of reminders) {
                      if (reminder.time <= now) continue;
 
-                     schedules.push({
+                       schedules.push({
                        id: notificationId(String(note.id) + ':' + reminder.key),
                        title: reminder.title,
                        body: String(reminder.message || note.text || 'У тебе є нагадування!').slice(0, 500),
@@ -347,11 +347,10 @@ jobs:
                          noteId: String(note.id)
                        }
                      });
-                     });
-                   } // закриває for (const reminder of reminders)
-                 }   // закриває for (const note of notes)
-
-                 if (schedules.length) {
+                   }
+                 }
+                 await LocalNotifications.cancelAll();
+                 
                  if (schedules.length) {
                    await LocalNotifications.schedule({ notifications: schedules });
                  }
