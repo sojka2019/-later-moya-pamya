@@ -478,18 +478,21 @@ document.querySelector('.categories').addEventListener('click', e => {
 $('showUpcomingNotes').addEventListener('click', () => {
   showAllNotes = false;
   showCompletedNotes = false;
+  activeFilter = 'Усе';
   render();
 });
 
 $('showAllNotes').addEventListener('click', () => {
   showAllNotes = true;
   showCompletedNotes = false;
+  activeFilter = 'Усе';
   render();
 });
 
 $('showCompletedNotes').addEventListener('click', () => {
   showAllNotes = false;
   showCompletedNotes = true;
+  activeFilter = 'Усе';
   render();
 });
 $('notesGrid').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const id=Number(b.dataset.id);const n=notes.find(x=>x.id===id);if(!n)return;if(b.dataset.action==='delete'){if(confirm('Видалити цей запис?')){notes=notes.filter(x=>x.id!==id);persist()}}else if(b.dataset.action==='done'){n.done=!n.done;persist()}else if(b.dataset.action==='remind'){openModal(n)}});
