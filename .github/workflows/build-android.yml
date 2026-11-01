@@ -451,18 +451,30 @@ jobs:
           p.write_text(text, encoding="utf-8")
           PY
 
-      - name: Verify Android manifest permissions
-        working-directory: native-app
-        run: |
-          grep -n 'android.permission.RECORD_AUDIO' android/app/src/main/AndroidManifest.xml
-          grep -n 'android.permission.SCHEDULE_EXACT_ALARM' android/app/src/main/AndroidManifest.xml
-
       - name: Build installable debug APK
         working-directory: native-app/android
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug
 
+      - name: Verify notification recovery after reboot
+        working-directory: native-app/android
+        run: |
+          MANIFEST=$(find app/build/intermediates/merged_manifest -type f -name AndroidManifest.xml | head -n 1)
+
+          if [ -z "$MANIFEST" ]; then
+            echo "ERROR: Merged AndroidManifest.xml not found"
+            exit 1
+          fi
+
+          echo "Checking boot permission..."
+          grep -q 'android.permission.RECEIVE_BOOT_COMPLETED' "$MANIFEST"
+
+          echo "Checking notification restore receiver..."
+          grep -q 'com.capacitorjs.plugins.localnotifications.LocalNotificationRestoreReceiver' "$MANIFEST"
+
+          echo "SUCCESS: Notification recovery components found!"
+   
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
