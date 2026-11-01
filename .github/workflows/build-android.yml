@@ -314,18 +314,21 @@ jobs:
                     const reminders = [
                     {
                       key: 'oneDay',
+                      title: 'Попередження: за добу!',
                       time: eventTime - 24 * 60 * 60 * 1000,
-                      message: 'Попередження: за добу! ' + note.text
+                      message: String(note.text || 'У тебе є нагадування!')
                     },
                     {
                       key: 'twoHours',
+                      title: 'Попередження: за 2 години!',
                       time: eventTime - 2 * 60 * 60 * 1000,
-                      message: 'Попередження: за 2 години! ' + note.text
+                      message: String(note.text || 'У тебе є нагадування!')
                     },
                     {
                       key: 'event',
+                      title: 'Час події 🔔',
                       time: eventTime,
-                      message: 'Час події: ' + note.text
+                      message: String(note.text || 'У тебе є нагадування!')
                     }
                   ];
 
@@ -334,7 +337,7 @@ jobs:
 
                      schedules.push({
                        id: notificationId(String(note.id) + ':' + reminder.key),
-                       title: 'Нагадування 🔔',
+                       title: reminder.title,
                        body: String(reminder.message || note.text || 'У тебе є нагадування!').slice(0, 500),
                        schedule: {
                          at: new Date(reminder.time),
@@ -344,28 +347,6 @@ jobs:
                          noteId: String(note.id)
                        }
                      });
-                   }
-                 }
-
-                 const pendingResult = await LocalNotifications.getPending();
-                 const pending = pendingResult.notifications || [];
-                 const knownIds = new Set();
-
-                 for (const note of notes) {
-                   knownIds.add(notificationId(note.id));
-                   knownIds.add(notificationId(String(note.id) + ':twoHours'));
-                   knownIds.add(notificationId(String(note.id) + ':event'));
-                   knownIds.add(notificationId(String(note.id) + ':oneDay'));
-                   knownIds.add(notificationId(String(note.id) + ':oneHour'));
-                 }
-
-                 const toCancel = pending
-                   .filter(item => knownIds.has(item.id))
-                   .map(item => ({ id: item.id }));
-
-                 if (toCancel.length) {
-                   await LocalNotifications.cancel({ notifications: toCancel });
-                 }
 
                  if (schedules.length) {
                    await LocalNotifications.schedule({ notifications: schedules });
