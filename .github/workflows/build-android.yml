@@ -347,7 +347,11 @@ jobs:
                          noteId: String(note.id)
                        }
                      });
+                     });
+                   } // закриває for (const reminder of reminders)
+                 }   // закриває for (const note of notes)
 
+                 if (schedules.length) {
                  if (schedules.length) {
                    await LocalNotifications.schedule({ notifications: schedules });
                  }
