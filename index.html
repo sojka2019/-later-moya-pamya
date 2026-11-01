@@ -359,7 +359,21 @@ function render(){
  const upcomingButton = $('showUpcomingNotes');
  const allButton = $('showAllNotes');
  const completedButton = $('showCompletedNotes');
+if (upcomingButton) {
+  upcomingButton.textContent =
+    appLanguage === 'ru' ? '3 ближайших' : '3 найближчі';
+}
 
+if (allButton) {
+  allButton.textContent =
+    appLanguage === 'ru' ? 'Все незавершённые' : 'Усі незавершені';
+}
+
+if (completedButton) {
+  completedButton.textContent =
+    appLanguage === 'ru' ? '✓ Завершённые' : '✓ Завершені';
+}
+  
 if (upcomingButton) {
   upcomingButton.classList.toggle('active', !showAllNotes && !showCompletedNotes);
   upcomingButton.setAttribute('aria-pressed', String(!showAllNotes && !showCompletedNotes));
@@ -376,19 +390,25 @@ if (completedButton) {
 }
 
   if(!shown.length){
-    grid.innerHTML = '<div class="empty">' + (
-      q || activeFilter !== 'Усе'
+  grid.innerHTML = '<div class="empty">' + (
+    q || activeFilter !== 'Усе'
+      ? (appLanguage === 'ru'
+          ? 'Ничего не найдено.\nПопробуй другой запрос.'
+          : 'Нічого не знайдено.\nСпробуй інший запит.')
+      : showCompletedNotes
         ? (appLanguage === 'ru'
-            ? 'Ничего не найдено.\\nПопробуй другой запрос.'
-            : 'Нічого не знайдено.\\nСпробуй інший запит.')
+            ? 'Завершённых записей пока нет.'
+            : 'Завершених записів поки немає.')
         : showAllNotes
-          ? (appLanguage === 'ru' ? 'Записей пока нет.' : 'Записів поки немає.')
+          ? (appLanguage === 'ru'
+              ? 'Незавершённых напоминаний пока нет.'
+              : 'Незавершених нагадувань поки немає.')
           : (appLanguage === 'ru'
-              ? 'Нет предстоящих напоминаний.\\nОткрой все записи или добавь новое напоминание.'
-              : 'Немає майбутніх нагадувань.\\nВідкрий усі записи або додай нове нагадування.')
-    ) + '</div>';
-    return;
-  }
+              ? 'Нет предстоящих напоминаний.\nОткрой все записи или добавь новое напоминание.'
+              : 'Немає майбутніх нагадувань.\nВідкрий усі записи або додай нове нагадування.')
+  ) + '</div>';
+  return;
+}
 
   grid.innerHTML=shown.map(n=>
     `<article class="note">
