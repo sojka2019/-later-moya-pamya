@@ -618,38 +618,6 @@ function parseVoiceReminder(transcript) {
     hasDate = true;
   }
 
- // 3. Через один, два або три календарні роки
-const relativeYearMatch = text.match(
-  /(?<![\p{L}\p{N}])через\s+(?:(один|одна|одну|два|дві|три|1|2|3)\s+)?(рік|роки|років|року)(?![\p{L}\p{N}])/iu
-);
-
-if (relativeYearMatch) {
-  const word = (relativeYearMatch[1] || '1').toLowerCase();
-
-  const yearsToAdd = ({
-    'один': 1, 'одна': 1, 'одну': 1, '1': 1,
-    'два': 2, 'дві': 2, '2': 2,
-    'три': 3, '3': 3
-  })[word];
-
-  const day = date.getDate();
-  const month = date.getMonth();
-  const targetYear = date.getFullYear() + yearsToAdd;
-
-  date = new Date(targetYear, month, 1);
-
-  const lastDay = new Date(
-    targetYear,
-    month + 1,
-    0
-  ).getDate();
-
-  date.setDate(Math.min(day, lastDay));
-
-  hasDate = true;
-  text = text.replace(relativeYearMatch[0], ' ');
-}
-  // 3. Через один, два або три календарні місяці
 // 3. Додавання календарних місяців і років
 
 const relativeNumbers = {
