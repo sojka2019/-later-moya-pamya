@@ -311,27 +311,23 @@ jobs:
                   const eventTime = new Date(note.date).getTime();
                   if (!Number.isFinite(eventTime) || eventTime <= now) continue;
 
-                  const eventDay = dayKey(eventTime);
-                  const createdDay = note.created ? dayKey(note.created) : dayKey(now);
-
-                  const reminders = createdDay === eventDay
-                    ? [{
-                        key: 'twoHours',
-                        time: eventTime - 2 * 60 * 60 * 1000,
-                        message: 'Через дві години: ' + note.text
-                      }]
-                    : [
-                        {
-                          key: 'oneDay',
-                          time: eventTime - 24 * 60 * 60 * 1000,
-                          message: 'Завтра: ' + note.text
-                        },
-                        {
-                          key: 'oneHour',
-                          time: eventTime - 60 * 60 * 1000,
-                          message: 'Через годину: ' + note.text
-                         }
-                       ];
+                    const reminders = [
+                    {
+                      key: 'oneDay',
+                      time: eventTime - 24 * 60 * 60 * 1000,
+                      message: 'Попередження: за добу! ' + note.text
+                    },
+                    {
+                      key: 'twoHours',
+                      time: eventTime - 2 * 60 * 60 * 1000,
+                      message: 'Попередження: за 2 години! ' + note.text
+                    },
+                    {
+                      key: 'event',
+                      time: eventTime,
+                      message: 'Час події: ' + note.text
+                    }
+                  ];
 
                    for (const reminder of reminders) {
                      if (reminder.time <= now) continue;
@@ -358,6 +354,7 @@ jobs:
                  for (const note of notes) {
                    knownIds.add(notificationId(note.id));
                    knownIds.add(notificationId(String(note.id) + ':twoHours'));
+                   knownIds.add(notificationId(String(note.id) + ':event'));
                    knownIds.add(notificationId(String(note.id) + ':oneDay'));
                    knownIds.add(notificationId(String(note.id) + ':oneHour'));
                  }
