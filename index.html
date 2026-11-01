@@ -650,36 +650,79 @@ if (relativeYearMatch) {
   text = text.replace(relativeYearMatch[0], ' ');
 }
   // 3. Через один, два або три календарні місяці
-const relativeMonthMatch = text.match(
-  /(?<![\p{L}\p{N}])через\s+(?:(один|одна|одну|два|дві|три|1|2|3)\s+)?місяц(?:ь|я|і|ів)(?![\p{L}\p{N}])/iu
-);
+// 3. Додавання календарних місяців і років
 
-if (relativeMonthMatch) {
- const word = (relativeMonthMatch[1] || '1').toLowerCase();
+const relativeNumbers = {
+  'один': 1, 'одна': 1, 'одну': 1, '1': 1,
+  'два': 2, 'дві': 2, 'две': 2, '2': 2,
+  'три': 3, '3': 3,
+  'чотири': 4, 'четыре': 4, '4': 4,
+  'п’ять': 5, "п'ять": 5, 'пять': 5, '5': 5,
+  'шість': 6, 'шесть': 6, '6': 6,
+  '7': 7, '8': 8, '9': 9,
+  '10': 10, '11': 11, '12': 12
+};
 
-  const monthsToAdd = ({
-    'один': 1, 'одна': 1, 'одну': 1, '1': 1,
-    'два': 2, 'дві': 2, '2': 2,
-    'три': 3, '3': 3
-  })[word];
+// Правильне додавання календарних місяців
+function addCalendarMonths(baseDate, monthsToAdd) {
+  const result = new Date(baseDate);
+  const originalDay = result.getDate();
 
-  const day = date.getDate();
-
-  // Спочатку переходимо на перше число місяця,
-  // щоб правильно обробляти кінець місяця.
-  date.setDate(1);
-  date.setMonth(date.getMonth() + monthsToAdd);
+  result.setDate(1);
+  result.setMonth(result.getMonth() + monthsToAdd);
 
   const lastDay = new Date(
-    date.getFullYear(),
-    date.getMonth() + 1,
+    result.getFullYear(),
+    result.getMonth() + 1,
     0
   ).getDate();
 
-  date.setDate(Math.min(day, lastDay));
+  result.setDate(Math.min(originalDay, lastDay));
 
+  return result;
+}
+
+// Через один, два, три та інші роки
+const relativeYearMatch = text.match(
+  /(?<![\p{L}\p{N}])через\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|1|2|3|4|5|6|7|8|9|10|11|12)\s+)?(рік|роки|років|року|год|года|лет)(?![\p{L}\p{N}])/iu
+);
+
+if (relativeYearMatch) {
+  const word = (relativeYearMatch[1] || '1').toLowerCase();
+  const yearsToAdd = relativeNumbers[word];
+
+  if (yearsToAdd) {
+    date = addCalendarMonths(date, yearsToAdd * 12);
+    hasDate = true;
+    text = text.replace(relativeYearMatch[0], ' ');
+  }
+}
+
+// Через пів року або полгода
+const halfYearMatch = text.match(
+  /(?<![\p{L}\p{N}])через\s+(?:пів\s+року|півроку|полгода|пол\s+года)(?![\p{L}\p{N}])/iu
+);
+
+if (halfYearMatch) {
+  date = addCalendarMonths(date, 6);
   hasDate = true;
-  text = text.replace(relativeMonthMatch[0], ' ');
+  text = text.replace(halfYearMatch[0], ' ');
+}
+
+// Через один, два, три та інші місяці
+const relativeMonthMatch = text.match(
+  /(?<![\p{L}\p{N}])через\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|1|2|3|4|5|6|7|8|9|10|11|12)\s+)?(місяць|місяця|місяці|місяців|месяц|месяца|месяцев)(?![\p{L}\p{N}])/iu
+);
+
+if (relativeMonthMatch) {
+  const word = (relativeMonthMatch[1] || '1').toLowerCase();
+  const monthsToAdd = relativeNumbers[word];
+
+  if (monthsToAdd) {
+    date = addCalendarMonths(date, monthsToAdd);
+    hasDate = true;
+    text = text.replace(relativeMonthMatch[0], ' ');
+  }
 }
 
   // 4. Назви місяців
