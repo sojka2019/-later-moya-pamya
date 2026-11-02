@@ -1426,13 +1426,21 @@ if ("Notification" in window && "serviceWorker" in navigator) {
     if (!button) return;
 
     if (Notification.permission === "denied") {
-      button.textContent = "Сповіщення заблоковано";
+      button.textContent = appLanguage === 'ru'
+        ? 'Уведомления заблокированы'
+        : 'Сповіщення заблоковано';
     } else if (localStorage.getItem("reminders-enabled") === "false") {
-      button.textContent = "🔕 Сповіщення вимкнено";
+      button.textContent = appLanguage === 'ru'
+        ? '🔕 Уведомления выключены'
+        : '🔕 Сповіщення вимкнено';
     } else if (Notification.permission === "granted") {
-      button.textContent = "🔔 Сповіщення ввімкнено";
+      button.textContent = appLanguage === 'ru'
+        ? '🔔 Уведомления включены'
+        : '🔔 Сповіщення ввімкнено';
     } else {
-      button.textContent = "🔔 Увімкнути сповіщення";
+      button.textContent = appLanguage === 'ru'
+        ? '🔔 Включить уведомления'
+        : '🔔 Увімкнути сповіщення';
     }
 
     button.addEventListener("click", async () => {
@@ -1446,21 +1454,27 @@ if ("Notification" in window && "serviceWorker" in navigator) {
         return;
       }
 
-      if (Notification.permission === "granted") {
-        localStorage.setItem("reminders-enabled", "true");
-        button.textContent = "🔔 Сповіщення ввімкнено";
-        checkReminders();
-        return;
-      }
+       if (Notification.permission === "granted") {
+         localStorage.setItem("reminders-enabled", "true");
+         button.textContent = appLanguage === 'ru'
+           ? '🔔 Уведомления включены'
+           : '🔔 Сповіщення ввімкнено';
+         checkReminders();
+         return;
+       }
 
       const permission = await Notification.requestPermission();
 
       if (permission === "granted") {
         localStorage.setItem("reminders-enabled", "true");
-        button.textContent = "🔔 Сповіщення ввімкнено";
+        button.textContent = appLanguage === 'ru'
+          ? '🔔 Уведомления включены'
+          : '🔔 Сповіщення ввімкнено';
         checkReminders();
       } else {
-        button.textContent = "Сповіщення не дозволено";
+        button.textContent = appLanguage === 'ru'
+          ? 'Уведомления не разрешены'
+          : 'Сповіщення не дозволено';
       }
     });
 
