@@ -372,7 +372,20 @@ $('langRu').addEventListener('click', () => setAppLanguage('ru'));
 $('settingsBtn').addEventListener('click', () => {
 $('settingsPanel').style.display = 'block';
 });
+$('helpBtn').addEventListener('click', () => {
+  $('helpPanel').style.display = 'block';
+});
 
+$('closeHelp').addEventListener('click', () => {
+  $('helpPanel').style.display = 'none';
+});
+
+$('helpPanel').addEventListener('click', e => {
+  if (e.target === $('helpPanel')) {
+    $('helpPanel').style.display = 'none';
+  }
+});
+  
 $('closeSettings').addEventListener('click', () => {
   $('settingsPanel').style.display = 'none';
 });
