@@ -1574,7 +1574,7 @@ if ("Notification" in window && "serviceWorker" in navigator) {
       if (permission === "granted") {
         localStorage.setItem("reminders-enabled", "true");
         button.textContent = appLanguage === 'ru'
-          ? '🔔 Уведомления включены'
+          ? '🔔 Уведомления включены' 
           : '🔔 Сповіщення ввімкнено';
         checkReminders();
       } else {
