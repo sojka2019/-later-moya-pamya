@@ -1355,10 +1355,14 @@ if ("Notification" in window && "serviceWorker" in navigator) {
 
 const button = $("notificationToggle");
 
-if (Notification.permission === "granted") {
-  button.textContent = "🔔 Сповіщення ввімкнено";
-} else if (Notification.permission === "denied") {
+if (Notification.permission === "denied") {
   button.textContent = "Сповіщення заблоковано";
+} else if (localStorage.getItem("reminders-enabled") === "false") {
+  button.textContent = "🔕 Сповіщення вимкнено";
+} else if (Notification.permission === "granted") {
+  button.textContent = "🔔 Сповіщення ввімкнено";
+} else {
+  button.textContent = "🔔 Увімкнути сповіщення";
 }
 
 button.addEventListener("click", async () => {
