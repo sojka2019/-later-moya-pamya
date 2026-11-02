@@ -147,6 +147,11 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
     🔔 Увімкнути сповіщення
   </button>
 </div>
+ <div style="margin-top:24px">
+  <button class="secondary" id="feedbackBtn" type="button" style="width:100%">
+    ✉️ Повідомити про помилку / Поділитися ідеєю
+  </button>
+</div>
   </div>
 </div>
   <section class="hero"> 
@@ -457,6 +462,11 @@ $('helpPanel').addEventListener('click', e => {
   
 $('closeSettings').addEventListener('click', () => {
   $('settingsPanel').style.display = 'none';
+});
+$('feedbackBtn').addEventListener('click', () => {
+  const subject = encodeURIComponent('Відгук про застосунок Нагадування');
+  const body = encodeURIComponent('Повідомлення або пропозиція:\n\n');
+  window.location.href = `mailto:vol.velikogo@gmail.com?subject=${subject}&body=${body}`;
 });
 
 $('settingsPanel').addEventListener('click', e => {
