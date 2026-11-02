@@ -604,7 +604,6 @@ function parseVoiceReminder(transcript) {
 
   if (relativeDayMatch) {
     const word = (relativeDayMatch[1] || '1').toLowerCase();
-    console.log('РОЗПІЗНАНО ДНІ:', word);
    
     const daysToAdd = ({
       'один': 1, 'одна': 1, 'одну': 1, '1': 1,
