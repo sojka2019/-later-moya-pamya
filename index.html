@@ -1331,67 +1331,120 @@ load();
 <script>
 if ("Notification" in window && "serviceWorker" in navigator) {
   let reminderRegistration = null;
- function checkReminders() {
-  if (
-    !reminderRegistration ||
-    Notification.permission !== "granted" ||
-    localStorage.getItem("reminders-enabled") === "false"
-  ) return;
-  now >= item.time &&
-  now < item.time + 5 * 60 * 1000 &&
-  !note[marker]
-) {
-  reminderRegistration.showNotification("Нагадування 🔔", {
-    body: item.message,
-    icon: "./icon-192.png",
-    badge: "./icon-192.png"
-  }).then(() => {
-    note[marker] = true;
-    persist();
-  }).catch(error => console.log("Помилка сповіщення:", error));
-} }); }); if (changed) persist(); }
+
+  function checkReminders() {
+    if (
+      !reminderRegistration ||
+      Notification.permission !== "granted" ||
+      localStorage.getItem("reminders-enabled") === "false"
+    ) return;
+
+    const now = Date.now();
+
+    const dayKey = value => {
+      const d = new Date(value);
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    };
+
+    notes.forEach(note => {
+      if (!note.date || note.done) return;
+
+      const eventTime = new Date(note.date).getTime();
+      if (!Number.isFinite(eventTime) || eventTime <= now) return;
+
+      const eventDay = dayKey(eventTime);
+      const createdDay = note.created ? dayKey(note.created) : dayKey(now);
+      const createdForToday = createdDay === eventDay;
+
+      const schedules = createdForToday
+        ? [
+            {
+              key: "twoHours",
+              time: eventTime - 2 * 60 * 60 * 1000,
+              message: `Через дві години: ${note.text}`
+            }
+          ]
+        : [
+            {
+              key: "oneDay",
+              time: eventTime - 24 * 60 * 60 * 1000,
+              message: `Завтра: ${note.text}`
+            },
+            {
+              key: "oneHour",
+              time: eventTime - 60 * 60 * 1000,
+              message: `Через годину: ${note.text}`
+            }
+          ];
+
+      schedules.forEach(item => {
+        const marker = `notified_${item.key}_${note.date}`;
+
+        if (
+          now >= item.time &&
+          now < item.time + 5 * 60 * 1000 &&
+          !note[marker]
+        ) {
+          reminderRegistration.showNotification("Нагадування 🔔", {
+            body: item.message,
+            icon: "./icon-192.png",
+            badge: "./icon-192.png"
+          }).then(() => {
+            note[marker] = true;
+            persist();
+          }).catch(error => console.log("Помилка сповіщення:", error));
+        }
+      });
+    });
+  }
+
   navigator.serviceWorker.register("./sw.js").then(registration => {
     reminderRegistration = registration;
 
-const button = $("notificationToggle");
+    const button = $("notificationToggle");
 
-if (Notification.permission === "denied") {
-  button.textContent = "Сповіщення заблоковано";
-} else if (localStorage.getItem("reminders-enabled") === "false") {
-  button.textContent = "🔕 Сповіщення вимкнено";
-} else if (Notification.permission === "granted") {
-  button.textContent = "🔔 Сповіщення ввімкнено";
-} else {
-  button.textContent = "🔔 Увімкнути сповіщення";
-}
+    if (!button) return;
 
-button.addEventListener("click", async () => {
-  const enabled = localStorage.getItem("reminders-enabled") !== "false";
+    if (Notification.permission === "denied") {
+      button.textContent = "Сповіщення заблоковано";
+    } else if (localStorage.getItem("reminders-enabled") === "false") {
+      button.textContent = "🔕 Сповіщення вимкнено";
+    } else if (Notification.permission === "granted") {
+      button.textContent = "🔔 Сповіщення ввімкнено";
+    } else {
+      button.textContent = "🔔 Увімкнути сповіщення";
+    }
 
-  if (enabled) {
-    localStorage.setItem("reminders-enabled", "false");
-    button.textContent = "🔕 Сповіщення вимкнено";
-    return;
-  }
+    button.addEventListener("click", async () => {
+      const enabled = localStorage.getItem("reminders-enabled") !== "false";
 
-  if (Notification.permission === "granted") {
-    localStorage.setItem("reminders-enabled", "true");
-    button.textContent = "🔔 Сповіщення ввімкнено";
+      if (enabled) {
+        localStorage.setItem("reminders-enabled", "false");
+        button.textContent = "🔕 Сповіщення вимкнено";
+        return;
+      }
+
+      if (Notification.permission === "granted") {
+        localStorage.setItem("reminders-enabled", "true");
+        button.textContent = "🔔 Сповіщення ввімкнено";
+        checkReminders();
+        return;
+      }
+
+      const permission = await Notification.requestPermission();
+
+      if (permission === "granted") {
+        localStorage.setItem("reminders-enabled", "true");
+        button.textContent = "🔔 Сповіщення ввімкнено";
+        checkReminders();
+      } else {
+        button.textContent = "Сповіщення не дозволено";
+      }
+    });
+
     checkReminders();
-    return;
-  }
+    setInterval(checkReminders, 15000);
 
-  const permission = await Notification.requestPermission();
-
-  if (permission === "granted") {
-    localStorage.setItem("reminders-enabled", "true");
-    button.textContent = "🔔 Сповіщення ввімкнено";
-    checkReminders();
-  } else {
-    button.textContent = "Сповіщення не дозволено";
-  }
-});
-    checkReminders();setInterval(checkReminders,15000);
   }).catch(error => console.log("Помилка:", error));
 }
 </script>
