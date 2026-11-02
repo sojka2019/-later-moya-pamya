@@ -310,6 +310,26 @@ function setAppLanguage(language) {
       }
     });
   }
+    text('#settingsTitle', russian ? '⚙️ Настройки' : '⚙️ Налаштування');
+  text('#backupSettingsTitle', russian ? 'Резервная копия' : 'Резервна копія');
+  text('#notificationSettingsTitle', russian ? 'Системные уведомления' : 'Системні сповіщення');
+  text('#notificationSettingsText', russian
+    ? 'Здесь можно управлять системными уведомлениями.'
+    : 'Тут можна керувати системними сповіщеннями.');
+
+  const notificationButton = $('notificationToggle');
+
+  if (notificationButton) {
+    if (Notification.permission === 'denied') {
+      notificationButton.textContent = russian ? 'Уведомления заблокированы' : 'Сповіщення заблоковано';
+    } else if (localStorage.getItem('reminders-enabled') === 'false') {
+      notificationButton.textContent = russian ? '🔕 Уведомления выключены' : '🔕 Сповіщення вимкнено';
+    } else if (Notification.permission === 'granted') {
+      notificationButton.textContent = russian ? '🔔 Уведомления включены' : '🔔 Сповіщення ввімкнено';
+    } else {
+      notificationButton.textContent = russian ? '🔔 Включить уведомления' : '🔔 Увімкнути сповіщення';
+    }
+  }
   const ukButton = $('langUk');
   const ruButton = $('langRu');
 
