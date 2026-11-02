@@ -262,12 +262,12 @@ function setAppLanguage(language) {
   });
  text('.capture-card .eyebrow', russian ? 'Твоя вторая память' : "Твоя друга пам'ять");
 
-  const slogan = document.querySelector('.capture-card h2');
-  if (slogan) {
-    slogan.innerHTML = russian
-      ? 'Меньше забывай.<br>Больше живи.'
-      : 'Менше забувай.<br>Більше живи.';
-  }
+ const slogan = document.querySelector('.capture-card h2');
+if (slogan) {
+  slogan.innerHTML = russian
+    ? '📱 Как пользоваться приложением'
+    : '📱 Як користуватися застосунком';
+}
 
   text('.capture-card p', russian
     ? 'Идея, покупка, рекомендация или небольшая мысль — сохрани её здесь, а «Напоминания» помогут вернуться к ней вовремя.'
