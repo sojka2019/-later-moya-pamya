@@ -1440,7 +1440,9 @@ if ("Notification" in window && "serviceWorker" in navigator) {
 
       if (enabled) {
         localStorage.setItem("reminders-enabled", "false");
-        button.textContent = "🔕 Сповіщення вимкнено";
+        button.textContent = appLanguage === 'ru'
+          ? '🔕 Уведомления выключены'
+          : '🔕 Сповіщення вимкнено';
         return;
       }
 
