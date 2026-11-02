@@ -269,7 +269,32 @@ function setAppLanguage(language) {
     if (statNames[index]) element.textContent = statNames[index];
   });
  text('.capture-card .eyebrow', russian ? 'Твоя вторая память' : "Твоя друга пам'ять");
+ text('#howToTitle', russian ? '📱 Как пользоваться?' : '📱 Як користуватися?');
 
+  text('#helpTitle', russian ? '📱 Как пользоваться?' : '📱 Як користуватися?');
+
+  const helpContent = $('helpContent');
+  if (helpContent) {
+    helpContent.innerHTML = russian
+      ? `
+        <p>🎙️ <b>Голосом:</b> скажи, что нужно сделать.</p>
+        <p>✍️ <b>Вручную:</b> создай запись самостоятельно.</p>
+        <p>📅 <b>Дата и время:</b> установи нужный момент.</p>
+        <p>🔔 <b>Уведомления:</b> получай напоминания о делах.</p>
+        <p>🔍 <b>Поиск:</b> быстро находи нужные записи.</p>
+        <p>💾 <b>Резервная копия:</b> сохраняй и восстанавливай записи.</p>
+      `
+      : `
+        <p>🎙️ <b>Голосом:</b> скажи, що потрібно зробити.</p>
+        <p>✍️ <b>Вручну:</b> створи запис самостійно.</p>
+        <p>📅 <b>Дата й час:</b> встанови потрібний момент.</p>
+        <p>🔔 <b>Сповіщення:</b> отримуй нагадування про справи.</p>
+        <p>🔍 <b>Пошук:</b> швидко знаходь потрібні записи.</p>
+        <p>💾 <b>Резервна копія:</b> зберігай і відновлюй записи.</p>
+      `;
+  }
+
+  text('#helpBtn', russian ? 'Узнать больше' : 'Дізнатися більше');
  const slogan = document.querySelector('.capture-card h2');
 if (slogan) {
   slogan.innerHTML = russian
