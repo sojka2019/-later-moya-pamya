@@ -109,6 +109,26 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
     style="border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--panel);color:var(--text);font-size:18px;cursor:pointer">⚙️</button>
   <div class="avatar" title="Профіль">✦</div>
 </div></header>
+ <div id="settingsPanel" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.6);padding:20px;overflow-y:auto">
+  <div style="max-width:420px;margin:60px auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 id="settingsTitle" style="margin:0">⚙️ Налаштування</h2>
+      <button id="closeSettings" type="button" class="secondary">✕</button>
+    </div>
+
+    <h3 id="backupSettingsTitle">Резервна копія</h3>
+    <div style="display:grid;gap:10px;margin-bottom:24px">
+      <button class="secondary" id="exportBackup">⬇ Резервна копія</button>
+      <button class="secondary" id="importBackup">⬆ Імпорт записів</button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </div>
+
+    <h3 id="notificationSettingsTitle">Системні сповіщення</h3>
+    <div id="notificationSettings">
+      <p id="notificationSettingsText">Тут можна буде керувати системними сповіщеннями.</p>
+    </div>
+  </div>
+</div>
   <section class="hero"> 
     <div class="card">
       <div class="eyebrow">Швидкий запис</div> 
@@ -146,7 +166,7 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
   
   <section class="stats">
     <div class="stat"><strong id="totalStat">0</strong><span>Збережено записів</span></div><div class="stat"><strong id="reminderStat">0</strong><span>Мають нагадування</span></div><div class="stat"><strong id="categoryStat">0</strong><span>Категорій використано</span></div></section>
-  <div class="section-head"><div><h2>Твоя пам'ять</h2><p>Усе важливе — в одному місці.</p></div><div class="section-actions"><button class="secondary" id="exportBackup">⬇ Резервна копія</button><button class="secondary" id="importBackup">⬆ Імпорт записів</button><input type="file" id="importFile" accept="application/json,.json" hidden><button class="secondary" id="addDetailed">＋ Новий запис</button></div></div>
+ <div class="section-head"><div><h2>Твоя пам'ять</h2><p>Усе важливе — в одному місці.</p></div><div class="section-actions"><button class="secondary" id="addDetailed">＋ Новий запис</button></div></div>
  <div class="toolbar" id="filters">
   <input class="field" id="search" placeholder="⌕ Пошук за змістом…">
 </div>
@@ -302,7 +322,20 @@ function setAppLanguage(language) {
 
 $('langUk').addEventListener('click', () => setAppLanguage('uk'));
 $('langRu').addEventListener('click', () => setAppLanguage('ru'));
-setAppLanguage(appLanguage);
+$('settingsBtn').addEventListener('click', () => {
+$('settingsPanel').style.display = 'block';
+});
+
+$('closeSettings').addEventListener('click', () => {
+  $('settingsPanel').style.display = 'none';
+});
+
+$('settingsPanel').addEventListener('click', e => {
+  if (e.target === $('settingsPanel')) {
+    $('settingsPanel').style.display = 'none';
+  }
+});
+  setAppLanguage(appLanguage);
 const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Зустрічі':'🩺','Здоров’я':'💊','Нотатки':'📝','Їжа та кафе':'🍽️','Інше':'✦'};
 function load(){try{notes=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(notes))notes=[]}catch(e){notes=[]}render()}
 function persist(){localStorage.setItem(KEY,JSON.stringify(notes));render()}
