@@ -95,6 +95,29 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
     box-shadow: 0 0 0 14px rgba(232, 117, 127, 0.12), 0 0 42px rgba(232, 117, 127, 0.75);
   }
 }
+@media (max-width: 600px) {
+  .top {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .top > div:first-child {
+    min-width: 0;
+    flex: 1 1 100%;
+  }
+
+  .brand {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    font-size: clamp(20px, 6vw, 25px);
+  }
+
+  .top > div:last-child {
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+}
 </style>
 </head>
 <body>
