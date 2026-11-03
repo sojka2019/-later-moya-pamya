@@ -887,9 +887,9 @@ text('#helpBtn', hu[2]);
   `
 };
 
-const helpContent = $('helpContent');
-if (helpContent) {
-  helpContent.innerHTML = helpContentTexts[language] || helpContentTexts.uk;
+const helpContentElement = $('helpContent');
+if (helpContentElement) {
+  helpContentElement.innerHTML = helpContentTexts[language] || helpContentTexts.uk;
 }
   text('#addDetailed', russian ? '＋ Новая запись' : '＋ Новий запис');
 
