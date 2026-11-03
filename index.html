@@ -546,6 +546,18 @@ const backupLabels = backupLanguageTexts[language] || backupLanguageTexts.uk;
 
 text('#exportBackup', backupLabels[0]);
 text('#importBackup', backupLabels[1]);
+ const feedbackButtonTexts = {
+  uk: '✉️ Повідомити про помилку / Поділитися ідеєю',
+  ru: '✉️ Сообщить об ошибке / Поделиться идеей',
+  de: '✉️ Fehler melden / Idee teilen',
+  fr: '✉️ Signaler un problème / Partager une idée',
+  it: '✉️ Segnala un errore / Condividi un’idea',
+  en: '✉️ Report a bug / Share an idea',
+  pl: '✉️ Zgłoś błąd / Podziel się pomysłem',
+  es: '✉️ Informar de un error / Compartir una idea'
+};
+
+text('#feedbackBtn', feedbackButtonTexts[language] || feedbackButtonTexts.uk);
   text('#addDetailed', russian ? '＋ Новая запись' : '＋ Новий запис');
 
   const search = $('search');
