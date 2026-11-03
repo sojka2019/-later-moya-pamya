@@ -499,21 +499,15 @@ if (slogan) {
       notificationButton.textContent = russian ? '🔔 Включить уведомления' : '🔔 Увімкнути сповіщення';
     }
   }
-  const ukButton = $('langUk');
-  const ruButton = $('langRu');
-
-  if (ukButton) {
-    ukButton.style.background = russian ? 'transparent' : '#a99aff';
-    ukButton.style.color = russian ? 'var(--muted)' : '#111';
-  }
-  if (ruButton) {
-    ruButton.style.background = russian ? '#a99aff' : 'transparent';
-    ruButton.style.color = russian ? '#111' : 'var(--muted)';
+   const languageSelect = $('languageSelect');
+  if (languageSelect) {
+    languageSelect.value = language;
   }
 }
 
-$('langUk').addEventListener('click', () => setAppLanguage('uk'));
-$('langRu').addEventListener('click', () => setAppLanguage('ru'));
+$('languageSelect').addEventListener('change', (event) => {
+  setAppLanguage(event.target.value);
+});
 $('settingsBtn').addEventListener('click', () => {
 $('settingsPanel').style.display = 'block';
 });
