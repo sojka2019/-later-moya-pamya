@@ -635,9 +635,21 @@ function categoryFor(text) {
   return 'Інше';
 }
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function add(text,category='Автоматично',date=''){text=text.trim();if(!text)return;const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false});persist();$('quickStatus').textContent=appLanguage === 'ru'
-  ? 'Сохранено. Продолжай заниматься своими делами.'
-  : 'Збережено. Продовжуй займатися своїми справами.';setTimeout(()=>$('quickStatus').textContent='',3500)}
+function add(text,category='Автоматично',date=''){text=text.trim();if(!text)return;const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false});persist();
+const savedMessages = {
+  uk: 'Збережено. Продовжуй займатися своїми справами.',
+  ru: 'Сохранено. Продолжай заниматься своими делами.',
+  de: 'Gespeichert. Du kannst mit deinen Aufgaben weitermachen.',
+  fr: 'Enregistré. Tu peux continuer tes activités.',
+  it: 'Salvato. Puoi continuare con le tue attività.',
+  en: 'Saved. You can carry on with your day.',
+  pl: 'Zapisano. Możesz zająć się swoimi sprawami.',
+  es: 'Guardado. Puedes seguir con tus tareas.'
+};
+
+$('quickStatus').textContent =
+  savedMessages[appLanguage] || savedMessages.uk;
+  setTimeout(()=>$('quickStatus').textContent='',3500)}
 function fmtDate(d) {
   if (!d) return '';
   const dt = new Date(d);
