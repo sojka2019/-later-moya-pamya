@@ -806,23 +806,26 @@ function render(){
     ? filtered.filter(n => !n.done)
     : upcoming.slice(0, 3);
 
- const upcomingButton = $('showUpcomingNotes');
- const allButton = $('showAllNotes');
- const completedButton = $('showCompletedNotes');
-if (upcomingButton) {
-  upcomingButton.textContent =
-   appLanguage === 'ru' ? 'Ближайшие — три' : 'Найближчі — три';
-}
+const upcomingButton = $('showUpcomingNotes');
+const allButton = $('showAllNotes');
+const completedButton = $('showCompletedNotes');
 
-if (allButton) {
-  allButton.textContent =
-    appLanguage === 'ru' ? 'Все незавершённые' : 'Усі незавершені';
-}
+const viewTexts = {
+  uk: ['Найближчі — три', 'Усі незавершені', '✓ Завершені'],
+  ru: ['Ближайшие — три', 'Все незавершённые', '✓ Завершённые'],
+  de: ['Nächste 3', 'Alle unerledigten', '✓ Erledigt'],
+  fr: ['3 prochaines', 'Toutes les tâches ouvertes', '✓ Terminées'],
+  it: ['Prossime 3', 'Tutti i promemoria attivi', '✓ Completati'],
+  en: ['Next 3', 'All unfinished', '✓ Completed'],
+  pl: ['3 najbliższe', 'Wszystkie niewykonane', '✓ Ukończone'],
+  es: ['Próximos 3', 'Todos los pendientes', '✓ Completadas']
+};
 
-if (completedButton) {
-  completedButton.textContent =
-    appLanguage === 'ru' ? '✓ Завершённые' : '✓ Завершені';
-}
+const labels = viewTexts[appLanguage] || viewTexts.uk;
+
+if (upcomingButton) upcomingButton.textContent = labels[0];
+if (allButton) allButton.textContent = labels[1];
+if (completedButton) completedButton.textContent = labels[2];
   
 if (upcomingButton) {
   upcomingButton.classList.toggle('active', !showAllNotes && !showCompletedNotes);
