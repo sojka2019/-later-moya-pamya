@@ -566,12 +566,23 @@ if (slogan) {
       }
     });
   }
-    text('#settingsTitle', russian ? '⚙️ Настройки' : '⚙️ Налаштування');
-  text('#backupSettingsTitle', russian ? 'Резервная копия' : 'Резервна копія');
-  text('#notificationSettingsTitle', russian ? 'Системные уведомления' : 'Системні сповіщення');
-  text('#notificationSettingsText', russian
-    ? 'Здесь можно управлять системными уведомлениями.'
-    : 'Тут можна керувати системними сповіщеннями.');
+ const settingsLabels = {
+  uk: ['⚙️ Налаштування', 'Резервна копія', 'Системні сповіщення', 'Тут можна керувати системними сповіщеннями.'],
+  ru: ['⚙️ Настройки', 'Резервная копия', 'Системные уведомления', 'Здесь можно управлять системными уведомлениями.'],
+  de: ['⚙️ Einstellungen', 'Datensicherung', 'Systembenachrichtigungen', 'Hier kannst du die Systembenachrichtigungen verwalten.'],
+  fr: ['⚙️ Paramètres', 'Sauvegarde', 'Notifications système', 'Ici, vous pouvez gérer les notifications système.'],
+  it: ['⚙️ Impostazioni', 'Backup', 'Notifiche di sistema', 'Qui puoi gestire le notifiche di sistema.'],
+  en: ['⚙️ Settings', 'Backup', 'System notifications', 'Here you can manage system notifications.'],
+  pl: ['⚙️ Ustawienia', 'Kopia zapasowa', 'Powiadomienia systemowe', 'Tutaj możesz zarządzać powiadomieniami systemowymi.'],
+  es: ['⚙️ Configuración', 'Copia de seguridad', 'Notificaciones del sistema', 'Aquí puedes gestionar las notificaciones del sistema.']
+};
+
+const sl = settingsLabels[language] || settingsLabels.uk;
+
+text('#settingsTitle', sl[0]);
+text('#backupSettingsTitle', sl[1]);
+text('#notificationSettingsTitle', sl[2]);
+text('#notificationSettingsText', sl[3]);
 
   const notificationButton = $('notificationToggle');
 
