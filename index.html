@@ -669,6 +669,228 @@ const hu = helpUiTexts[language] || helpUiTexts.uk;
 text('#memoryEyebrow', hu[0]);
 text('#howToTitle', hu[1]);
 text('#helpBtn', hu[2]);
+  const helpContentTexts = {
+  uk: `
+    <p><b>🧠 Твоя друга пам'ять</b></p>
+    <p>«Нагадування» допомагає зберігати важливі справи та вчасно згадувати про них. Просто додай запис — усе потрібне буде під рукою.</p>
+
+    <p><b>🎙️ 1. Створюй записи голосом</b></p>
+    <p>Натисни кнопку з мікрофоном і скажи, що потрібно зробити та коли. Застосунок розпізнає мовлення й підготує запис. Перевір текст, дату й час перед збереженням.</p>
+
+    <p><b>🔔 2. Отримуй автоматичні нагадування</b></p>
+    <p>Якщо сповіщення ввімкнені й дозволені на пристрої, застосунок нагадає про заплановану справу:</p>
+    <ul><li>За добу до події.</li><li>За годину до події.</li><li>Якщо справа запланована на сьогодні — за дві години до неї.</li></ul>
+    <p>Не потрібно вручну створювати кілька будильників.</p>
+
+    <p><b>✍️ 3. Додавай записи вручну</b></p>
+    <p>Можна самостійно написати справу, вибрати категорію, дату й час нагадування.</p>
+
+    <p><b>🔍 4. Швидко знаходь потрібне</b></p>
+    <p>Користуйся пошуком і категоріями, щоб знаходити збережені записи.</p>
+
+    <p><b>💾 5. Зберігай резервну копію</b></p>
+    <p>У налаштуваннях можна експортувати записи у файл, а потім імпортувати їх назад на пристрій.</p>
+
+    <p><b>✅ 6. Позначай виконані справи</b></p>
+    <p>Коли завершиш справу, познач її як виконану. Так легше стежити за тим, що ще потрібно зробити.</p>
+
+    <p><b>Твоя пам'ять вільна для важливого, а потрібні справи завжди під рукою!</b></p>
+  `,
+
+  ru: `
+    <p><b>🧠 Твоя вторая память</b></p>
+    <p>«Напоминания» помогает сохранять важные дела и вовремя вспоминать о них. Просто добавь запись — всё нужное будет под рукой.</p>
+
+    <p><b>🎙️ 1. Создавай записи голосом</b></p>
+    <p>Нажми кнопку с микрофоном и скажи, что нужно сделать и когда. Приложение распознает речь и подготовит запись. Проверь текст, дату и время перед сохранением.</p>
+
+    <p><b>🔔 2. Получай автоматические напоминания</b></p>
+    <p>Если уведомления включены и разрешены на устройстве, приложение напомнит о запланированном деле:</p>
+    <ul><li>За сутки до события.</li><li>За час до события.</li><li>Если дело запланировано на сегодня — за два часа до него.</li></ul>
+    <p>Не нужно вручную создавать несколько будильников.</p>
+
+    <p><b>✍️ 3. Добавляй записи вручную</b></p>
+    <p>Можно самостоятельно написать дело, выбрать категорию, дату и время напоминания.</p>
+
+    <p><b>🔍 4. Быстро находи нужное</b></p>
+    <p>Используй поиск и категории, чтобы находить сохранённые записи.</p>
+
+    <p><b>💾 5. Сохраняй резервную копию</b></p>
+    <p>В настройках можно экспортировать записи в файл, а затем импортировать их обратно на устройство.</p>
+
+    <p><b>✅ 6. Отмечай выполненные дела</b></p>
+    <p>Когда закончишь дело, отметь его как выполненное. Так легче следить за тем, что ещё нужно сделать.</p>
+
+    <p><b>Твоя память свободна для важного, а нужные дела всегда под рукой!</b></p>
+  `,
+
+  de: `
+    <p><b>🧠 Dein zweites Gedächtnis</b></p>
+    <p>„Erinnerungen“ hilft dir, wichtige Aufgaben zu speichern und rechtzeitig an sie zu denken. Füge einfach einen Eintrag hinzu – alles Wichtige ist griffbereit.</p>
+
+    <p><b>🎙️ 1. Erstelle Einträge mit deiner Stimme</b></p>
+    <p>Drücke die Mikrofontaste und sage, was du erledigen möchtest und wann. Die App erkennt deine Sprache und erstellt einen Eintrag. Überprüfe den Text, das Datum und die Uhrzeit vor dem Speichern.</p>
+
+    <p><b>🔔 2. Erhalte automatische Erinnerungen</b></p>
+    <p>Wenn Benachrichtigungen auf deinem Gerät aktiviert und erlaubt sind, erinnert dich die App an geplante Aufgaben:</p>
+    <ul><li>Einen Tag vor dem Ereignis.</li><li>Eine Stunde vor dem Ereignis.</li><li>Wenn die Aufgabe für heute geplant ist – zwei Stunden vorher.</li></ul>
+    <p>Du musst nicht mehrere Wecker manuell einstellen.</p>
+
+    <p><b>✍️ 3. Füge Einträge manuell hinzu</b></p>
+    <p>Du kannst eine Aufgabe selbst eingeben und eine Kategorie, ein Datum und eine Erinnerungszeit auswählen.</p>
+
+    <p><b>🔍 4. Finde schnell, was du suchst</b></p>
+    <p>Nutze die Suche und Kategorien, um gespeicherte Einträge zu finden.</p>
+
+    <p><b>💾 5. Erstelle eine Sicherungskopie</b></p>
+    <p>In den Einstellungen kannst du deine Einträge als Datei exportieren und später wieder auf dein Gerät importieren.</p>
+
+    <p><b>✅ 6. Markiere erledigte Aufgaben</b></p>
+    <p>Wenn du eine Aufgabe erledigt hast, markiere sie als erledigt. So behältst du leichter den Überblick über alles, was noch zu tun ist.</p>
+
+    <p><b>Dein Gedächtnis bleibt frei für Wichtiges und deine Aufgaben sind immer griffbereit!</b></p>
+  `,
+
+  fr: `
+    <p><b>🧠 Ta deuxième mémoire</b></p>
+    <p>« Rappels » t'aide à conserver tes tâches importantes et à t'en souvenir au bon moment. Ajoute simplement une note : tout ce dont tu as besoin sera à portée de main.</p>
+
+    <p><b>🎙️ 1. Crée des notes avec ta voix</b></p>
+    <p>Appuie sur le bouton du microphone et dis ce que tu dois faire et quand. L'application reconnaît ta voix et prépare une note. Vérifie le texte, la date et l'heure avant de l'enregistrer.</p>
+
+    <p><b>🔔 2. Reçois des rappels automatiques</b></p>
+    <p>Si les notifications sont activées et autorisées sur ton appareil, l'application te rappellera les tâches prévues :</p>
+    <ul><li>Un jour avant l'événement.</li><li>Une heure avant l'événement.</li><li>Si la tâche est prévue pour aujourd'hui, deux heures avant.</li></ul>
+    <p>Pas besoin de créer plusieurs alarmes manuellement.</p>
+
+    <p><b>✍️ 3. Ajoute des notes manuellement</b></p>
+    <p>Tu peux écrire une tâche, choisir une catégorie, une date et une heure de rappel.</p>
+
+    <p><b>🔍 4. Trouve rapidement ce que tu cherches</b></p>
+    <p>Utilise la recherche et les catégories pour retrouver tes notes enregistrées.</p>
+
+    <p><b>💾 5. Enregistre une sauvegarde</b></p>
+    <p>Dans les paramètres, tu peux exporter tes notes dans un fichier, puis les importer à nouveau sur ton appareil.</p>
+
+    <p><b>✅ 6. Marque les tâches terminées</b></p>
+    <p>Lorsque tu as terminé une tâche, marque-la comme terminée. Tu peux ainsi suivre plus facilement ce qu'il te reste à faire.</p>
+
+    <p><b>Ta mémoire reste libre pour l'essentiel et tes tâches importantes sont toujours à portée de main !</b></p>
+  `,
+
+  it: `
+    <p><b>🧠 La tua seconda memoria</b></p>
+    <p>« Promemoria » ti aiuta a conservare le attività importanti e a ricordarle al momento giusto. Aggiungi semplicemente una nota: tutto ciò che ti serve sarà a portata di mano.</p>
+
+    <p><b>🎙️ 1. Crea note con la voce</b></p>
+    <p>Premi il pulsante del microfono e di' cosa devi fare e quando. L'app riconosce la tua voce e prepara una nota. Controlla il testo, la data e l'ora prima di salvare.</p>
+
+    <p><b>🔔 2. Ricevi promemoria automatici</b></p>
+    <p>Se le notifiche sono attivate e autorizzate sul dispositivo, l'app ti ricorderà le attività programmate:</p>
+    <ul><li>Un giorno prima dell'evento.</li><li>Un'ora prima dell'evento.</li><li>Se l'attività è prevista per oggi, due ore prima.</li></ul>
+    <p>Non è necessario creare manualmente più sveglie.</p>
+
+    <p><b>✍️ 3. Aggiungi note manualmente</b></p>
+    <p>Puoi scrivere un'attività, scegliere una categoria, una data e l'ora del promemoria.</p>
+
+    <p><b>🔍 4. Trova rapidamente ciò che cerchi</b></p>
+    <p>Usa la ricerca e le categorie per trovare le note salvate.</p>
+
+    <p><b>💾 5. Crea una copia di backup</b></p>
+    <p>Nelle impostazioni puoi esportare le note in un file e poi importarle nuovamente sul dispositivo.</p>
+
+    <p><b>✅ 6. Segna le attività completate</b></p>
+    <p>Quando hai terminato un'attività, contrassegnala come completata. Così sarà più facile controllare cosa resta da fare.</p>
+
+    <p><b>La tua memoria resta libera per le cose importanti e le attività necessarie sono sempre a portata di mano!</b></p>
+  `,
+
+  en: `
+    <p><b>🧠 Your second memory</b></p>
+    <p>“Reminders” helps you save important tasks and remember them at the right time. Just add an entry – everything you need will be close at hand.</p>
+
+    <p><b>🎙️ 1. Create entries with your voice</b></p>
+    <p>Press the microphone button and say what needs to be done and when. The app recognizes your speech and prepares an entry. Check the text, date and time before saving.</p>
+
+    <p><b>🔔 2. Get automatic reminders</b></p>
+    <p>If notifications are enabled and allowed on your device, the app will remind you about planned tasks:</p>
+    <ul><li>One day before the event.</li><li>One hour before the event.</li><li>If the task is scheduled for today, two hours beforehand.</li></ul>
+    <p>There is no need to create several alarms manually.</p>
+
+    <p><b>✍️ 3. Add entries manually</b></p>
+    <p>You can write a task yourself and choose a category, date and reminder time.</p>
+
+    <p><b>🔍 4. Find what you need quickly</b></p>
+    <p>Use search and categories to find your saved entries.</p>
+
+    <p><b>💾 5. Save a backup</b></p>
+    <p>In Settings, you can export your entries to a file and then import them back onto your device.</p>
+
+    <p><b>✅ 6. Mark completed tasks</b></p>
+    <p>When you finish a task, mark it as completed. This makes it easier to keep track of what still needs to be done.</p>
+
+    <p><b>Your memory stays free for what matters, and your important tasks are always close at hand!</b></p>
+  `,
+
+  pl: `
+    <p><b>🧠 Twoja druga pamięć</b></p>
+    <p>„Przypomnienia” pomagają zapisywać ważne sprawy i pamiętać o nich we właściwym czasie. Wystarczy dodać wpis – wszystko, czego potrzebujesz, będzie pod ręką.</p>
+
+    <p><b>🎙️ 1. Twórz wpisy głosowo</b></p>
+    <p>Naciśnij przycisk mikrofonu i powiedz, co trzeba zrobić i kiedy. Aplikacja rozpozna mowę i przygotuje wpis. Przed zapisaniem sprawdź tekst, datę i godzinę.</p>
+
+    <p><b>🔔 2. Otrzymuj automatyczne przypomnienia</b></p>
+    <p>Jeśli powiadomienia są włączone i dozwolone na urządzeniu, aplikacja przypomni Ci o zaplanowanym zadaniu:</p>
+    <ul><li>Dzień przed wydarzeniem.</li><li>Godzinę przed wydarzeniem.</li><li>Jeśli zadanie jest zaplanowane na dziś – dwie godziny wcześniej.</li></ul>
+    <p>Nie musisz ręcznie ustawiać kilku alarmów.</p>
+
+    <p><b>✍️ 3. Dodawaj wpisy ręcznie</b></p>
+    <p>Możesz samodzielnie wpisać zadanie i wybrać kategorię, datę oraz godzinę przypomnienia.</p>
+
+    <p><b>🔍 4. Szybko znajduj potrzebne informacje</b></p>
+    <p>Korzystaj z wyszukiwarki i kategorii, aby znajdować zapisane wpisy.</p>
+
+    <p><b>💾 5. Zapisuj kopię zapasową</b></p>
+    <p>W ustawieniach możesz wyeksportować wpisy do pliku, a następnie zaimportować je ponownie na urządzenie.</p>
+
+    <p><b>✅ 6. Oznaczaj wykonane zadania</b></p>
+    <p>Po zakończeniu zadania oznacz je jako wykonane. Dzięki temu łatwiej sprawdzisz, co jeszcze trzeba zrobić.</p>
+
+    <p><b>Twoja pamięć pozostaje wolna na ważne rzeczy, a potrzebne zadania są zawsze pod ręką!</b></p>
+  `,
+
+  es: `
+    <p><b>🧠 Tu segunda memoria</b></p>
+    <p>«Recordatorios» te ayuda a guardar tareas importantes y recordarlas en el momento adecuado. Simplemente añade una nota: todo lo que necesitas estará a mano.</p>
+
+    <p><b>🎙️ 1. Crea notas con tu voz</b></p>
+    <p>Pulsa el botón del micrófono y di qué tienes que hacer y cuándo. La aplicación reconoce tu voz y prepara una nota. Comprueba el texto, la fecha y la hora antes de guardarla.</p>
+
+    <p><b>🔔 2. Recibe recordatorios automáticos</b></p>
+    <p>Si las notificaciones están activadas y permitidas en tu dispositivo, la aplicación te recordará las tareas programadas:</p>
+    <ul><li>Un día antes del evento.</li><li>Una hora antes del evento.</li><li>Si la tarea está programada para hoy, dos horas antes.</li></ul>
+    <p>No necesitas crear varias alarmas manualmente.</p>
+
+    <p><b>✍️ 3. Añade notas manualmente</b></p>
+    <p>Puedes escribir una tarea, elegir una categoría, una fecha y la hora del recordatorio.</p>
+
+    <p><b>🔍 4. Encuentra rápidamente lo que necesitas</b></p>
+    <p>Usa la búsqueda y las categorías para encontrar las notas guardadas.</p>
+
+    <p><b>💾 5. Guarda una copia de seguridad</b></p>
+    <p>En los ajustes puedes exportar las notas a un archivo y después importarlas de nuevo en tu dispositivo.</p>
+
+    <p><b>✅ 6. Marca las tareas completadas</b></p>
+    <p>Cuando termines una tarea, márcala como completada. Así será más fácil controlar lo que todavía tienes que hacer.</p>
+
+    <p><b>Tu memoria queda libre para lo importante y tus tareas siempre están a mano.</b></p>
+  `
+};
+
+const helpContent = $('helpContent');
+if (helpContent) {
+  helpContent.innerHTML = helpContentTexts[language] || helpContentTexts.uk;
+}
   text('#addDetailed', russian ? '＋ Новая запись' : '＋ Новий запис');
 
   const search = $('search');
