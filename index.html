@@ -300,7 +300,7 @@ let appLanguage = localStorage.getItem('app-language') || 'uk';
 
 function setAppLanguage(language) {
   appLanguage = language;
-   document.documentElement.lang = language === 'ru' ? 'ru' : 'uk';
+   document.documentElement.lang = language;
   localStorage.setItem('app-language', language);
 
   const russian = language === 'ru';
@@ -309,10 +309,21 @@ function setAppLanguage(language) {
     if (element) element.textContent = value;
   };
 
-  text('header .brand', russian ? 'Твои напоминания' : 'Твої нагадування');
-  text('header .tag', russian
-    ? 'Сохраняй важное и получай напоминания вовремя'
-    : 'Зберігай важливе й отримуй нагадування вчасно');
+const headerTranslations = {
+  uk: ['Твої нагадування', 'Зберігай важливе й отримуй нагадування вчасно'],
+  ru: ['Твои напоминания', 'Сохраняй важное и получай напоминания вовремя'],
+  de: ['Deine Erinnerungen', 'Bewahre Wichtiges auf und lass dich rechtzeitig erinnern'],
+  fr: ['Tes rappels', 'Garde les choses importantes et souviens-t’en à temps'],
+  it: ['I tuoi promemoria', 'Conserva ciò che è importante e ricordalo al momento giusto'],
+  en: ['Your reminders', 'Save what matters and get reminded at the right time'],
+  pl: ['Twoje przypomnienia', 'Zapisuj ważne sprawy i pamiętaj o nich na czas'],
+  es: ['Tus recordatorios', 'Guarda lo importante y recibe recordatorios a tiempo']
+};
+
+const headerText = headerTranslations[language] || headerTranslations.uk;
+
+text('header .brand', headerText[0]);
+text('header .tag', headerText[1]);
 
   text('.hero .card:first-child .eyebrow', russian ? 'Быстрая запись' : 'Швидкий запис');
   text('.hero .card:first-child h1', russian ? 'Что и когда напомнить?' : 'Що і коли нагадати?');
