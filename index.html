@@ -363,21 +363,7 @@ text('#micHint', micText[1]);
   text('#quickAdd', russian ? '＋ Сохранить' : '＋ Зберегти');
   text('#showUpcomingNotes', russian ? '3 ближайших' : '3 найближчі');
   text('#showAllNotes', russian ? 'Все напоминания' : 'Усі нагадування');
-  const categoryNames = russian
-    ? ['Всё', 'Покупки', 'Встречи', 'Здоровье', 'Дела', 'Места', 'Заметки', 'Еда и кафе']
-    : ['Усе', 'Покупки', 'Зустрічі', 'Здоров’я', 'Справи', 'Місця', 'Нотатки', 'Їжа та кафе'];
-
-  document.querySelectorAll('.categories .category-box span').forEach((element, index) => {
-    if (categoryNames[index]) element.textContent = categoryNames[index];
-  });
-
-  const statNames = russian
-    ? ['Сохранено записей', 'Есть напоминания', 'Использовано категорий']
-    : ['Збережено записів', 'Мають нагадування', 'Категорій використано'];
-
-  document.querySelectorAll('.stats .stat span').forEach((element, index) => {
-    if (statNames[index]) element.textContent = statNames[index];
-  });
+ 
  text('.capture-card .eyebrow', russian ? 'Твоя вторая память' : "Твоя друга пам'ять");
  text('#howToTitle', russian ? '📱 Как пользоваться?' : '📱 Як користуватися?');
 
