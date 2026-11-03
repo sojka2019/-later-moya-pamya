@@ -492,18 +492,84 @@ if (slogan) {
     const categorySelect = $('noteCategory');
   if (categorySelect) {
     const categories = [
-      { value: 'Автоматично', uk: 'Автоматично', ru: 'Автоматически' },
-      { value: 'Покупки', uk: 'Покупки', ru: 'Покупки' },
-      { value: 'Ідеї', uk: 'Ідеї', ru: 'Идеи' },
-      { value: 'Місця', uk: 'Місця', ru: 'Места' },
-      { value: 'Рекомендації', uk: 'Рекомендації', ru: 'Рекомендации' },
-      { value: 'Зустрічі', uk: 'Зустрічі', ru: 'Встречи' },
-      { value: 'Здоров’я', uk: 'Здоров’я', ru: 'Здоровье' },
-      { value: 'Нотатки', uk: 'Нотатки', ru: 'Заметки' },
-      { value: 'Справи', uk: 'Справи', ru: 'Дела' },
-      { value: 'Їжа та кафе', uk: 'Їжа та кафе', ru: 'Еда и кафе' },
-      { value: 'Інше', uk: 'Інше', ru: 'Другое' }
-    ];
+  {
+    value: 'Автоматично',
+    uk: 'Автоматично', ru: 'Автоматически',
+    de: 'Automatisch', fr: 'Automatique',
+    it: 'Automatico', en: 'Automatic',
+    pl: 'Automatycznie', es: 'Automático'
+  },
+  {
+    value: 'Покупки',
+    uk: 'Покупки', ru: 'Покупки',
+    de: 'Einkäufe', fr: 'Achats',
+    it: 'Acquisti', en: 'Shopping',
+    pl: 'Zakupy', es: 'Compras'
+  },
+  {
+    value: 'Ідеї',
+    uk: 'Ідеї', ru: 'Идеи',
+    de: 'Ideen', fr: 'Idées',
+    it: 'Idee', en: 'Ideas',
+    pl: 'Pomysły', es: 'Ideas'
+  },
+  {
+    value: 'Місця',
+    uk: 'Місця', ru: 'Места',
+    de: 'Orte', fr: 'Lieux',
+    it: 'Luoghi', en: 'Places',
+    pl: 'Miejsca', es: 'Lugares'
+  },
+  {
+    value: 'Рекомендації',
+    uk: 'Рекомендації', ru: 'Рекомендации',
+    de: 'Empfehlungen', fr: 'Recommandations',
+    it: 'Consigli', en: 'Recommendations',
+    pl: 'Polecenia', es: 'Recomendaciones'
+  },
+  {
+    value: 'Зустрічі',
+    uk: 'Зустрічі', ru: 'Встречи',
+    de: 'Termine', fr: 'Rendez-vous',
+    it: 'Appuntamenti', en: 'Appointments',
+    pl: 'Spotkania', es: 'Citas'
+  },
+  {
+    value: 'Здоров’я',
+    uk: 'Здоров’я', ru: 'Здоровье',
+    de: 'Gesundheit', fr: 'Santé',
+    it: 'Salute', en: 'Health',
+    pl: 'Zdrowie', es: 'Salud'
+  },
+  {
+    value: 'Нотатки',
+    uk: 'Нотатки', ru: 'Заметки',
+    de: 'Notizen', fr: 'Notes',
+    it: 'Note', en: 'Notes',
+    pl: 'Notatki', es: 'Notas'
+  },
+  {
+    value: 'Справи',
+    uk: 'Справи', ru: 'Дела',
+    de: 'Aufgaben', fr: 'Tâches',
+    it: 'Attività', en: 'Tasks',
+    pl: 'Zadania', es: 'Tareas'
+  },
+  {
+    value: 'Їжа та кафе',
+    uk: 'Їжа та кафе', ru: 'Еда и кафе',
+    de: 'Essen und Cafés', fr: 'Repas et cafés',
+    it: 'Cibo e caffè', en: 'Food and cafés',
+    pl: 'Jedzenie i kawiarnie', es: 'Comida y cafés'
+  },
+  {
+    value: 'Інше',
+    uk: 'Інше', ru: 'Другое',
+    de: 'Sonstiges', fr: 'Autres',
+    it: 'Altro', en: 'Other',
+    pl: 'Inne', es: 'Otros'
+  }
+];
 
     categories.forEach((category, index) => {
       const option = categorySelect.options[index];
