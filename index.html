@@ -653,6 +653,22 @@ if (feedbackMessage) feedbackMessage.placeholder = fl[5];
 
 const sendFeedbackButton = $('sendFeedback');
 if (sendFeedbackButton) sendFeedbackButton.textContent = fl[6];
+  const helpUiTexts = {
+  uk: ["Твоя друга пам'ять", "📱 Як користуватися?", "Дізнатися більше"],
+  ru: ["Твоя вторая память", "📱 Как пользоваться?", "Узнать больше"],
+  de: ["Dein zweites Gedächtnis", "📱 So verwendest du die App", "Mehr erfahren"],
+  fr: ["Ta deuxième mémoire", "📱 Comment utiliser l’application ?", "En savoir plus"],
+  it: ["La tua seconda memoria", "📱 Come usare l’app", "Scopri di più"],
+  en: ["Your second memory", "📱 How to use the app", "Learn more"],
+  pl: ["Twoja druga pamięć", "📱 Jak korzystać z aplikacji", "Dowiedz się więcej"],
+  es: ["Tu segunda memoria", "📱 Cómo usar la aplicación", "Más información"]
+};
+
+const hu = helpUiTexts[language] || helpUiTexts.uk;
+
+text('#memoryEyebrow', hu[0]);
+text('#howToTitle', hu[1]);
+text('#helpBtn', hu[2]);
   text('#addDetailed', russian ? '＋ Новая запись' : '＋ Новий запис');
 
   const search = $('search');
