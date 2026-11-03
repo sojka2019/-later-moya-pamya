@@ -342,9 +342,21 @@ text('.hero .card:first-child .eyebrow', quickText[0]);
 text('.hero .card:first-child h1', quickText[1]);
 text('.hero .card:first-child p', quickText[2]);
 
-  text('#micTitle', russian ? 'Сказать напоминание' : 'Сказати нагадування');
-  text('#micHint', russian ? 'Нажми и продиктуй дело и время' : 'Натисни й продиктуй справу та час');
+ const micTranslations = {
+  uk: ['Сказати нагадування', 'Натисни й продиктуй справу та час'],
+  ru: ['Сказать напоминание', 'Нажми и продиктуй дело и время'],
+  de: ['Erinnerung sprechen', 'Tippe und sprich deine Aufgabe und die Uhrzeit'],
+  fr: ['Dicter un rappel', 'Appuie et dicte ta tâche et l’heure'],
+  it: ['Detta un promemoria', 'Premi e detta l’attività e l’ora'],
+  en: ['Speak a reminder', 'Tap and dictate your task and time'],
+  pl: ['Powiedz przypomnienie', 'Naciśnij i podyktuj zadanie oraz godzinę'],
+  es: ['Dictar un recordatorio', 'Pulsa y dicta la tarea y la hora']
+};
 
+const micText = micTranslations[language] || micTranslations.uk;
+
+text('#micTitle', micText[0]);
+text('#micHint', micText[1]);
   const input = $('quickInput');
   if (input) input.placeholder = russian ? 'Или напиши здесь…' : 'Або напиши тут…';
 
