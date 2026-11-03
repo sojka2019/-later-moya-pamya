@@ -154,6 +154,29 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
 </div>
   </div>
 </div>
+  <div id="feedbackPanel" style="display:none;position:fixed;inset:0;z-index:1002;background:rgba(0,0,0,.6);padding:20px;overflow-y:auto">
+  <div style="max-width:420px;margin:60px auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 style="margin:0">💬 Відгук та пропозиції</h2>
+      <button id="closeFeedback" type="button" class="secondary">✕</button>
+    </div>
+
+    <label for="feedbackType">Що хочеш повідомити?</label>
+    <select id="feedbackType" style="width:100%;margin:10px 0 16px;padding:12px;border-radius:10px">
+      <option value="Помилка">🐞 Повідомити про помилку</option>
+      <option value="Ідея">💡 Запропонувати покращення</option>
+      <option value="Відгук">💬 Залишити відгук</option>
+    </select>
+
+    <textarea id="feedbackMessage" placeholder="Напиши своє повідомлення..." style="width:100%;min-height:130px;box-sizing:border-box;padding:12px;border-radius:10px;resize:vertical"></textarea>
+
+    <button id="sendFeedback" type="button" style="width:100%;margin-top:14px">
+      Надіслати
+    </button>
+
+  </div>
+</div>
   <section class="hero"> 
     <div class="card">
       <div class="eyebrow">Швидкий запис</div> 
@@ -464,13 +487,17 @@ $('closeSettings').addEventListener('click', () => {
   $('settingsPanel').style.display = 'none';
 });
 $('feedbackBtn').addEventListener('click', () => {
-  const subject = encodeURIComponent('Відгук про застосунок Нагадування');
-  const body = encodeURIComponent('Повідомлення або пропозиція:\n\n');
+  $('feedbackPanel').style.display = 'block';
+});
 
-  window.open(
-    `https://mail.google.com/mail/?view=cm&fs=1&to=vol.velikogo@gmail.com&su=${subject}&body=${body}`,
-    '_blank'
-  );
+$('closeFeedback').addEventListener('click', () => {
+  $('feedbackPanel').style.display = 'none';
+});
+
+$('feedbackPanel').addEventListener('click', e => {
+  if (e.target === $('feedbackPanel')) {
+    $('feedbackPanel').style.display = 'none';
+  }
 });
 
 $('settingsPanel').addEventListener('click', e => {
