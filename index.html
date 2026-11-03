@@ -586,17 +586,30 @@ text('#notificationSettingsText', sl[3]);
 
   const notificationButton = $('notificationToggle');
 
-  if (notificationButton) {
-    if (Notification.permission === 'denied') {
-      notificationButton.textContent = russian ? 'Уведомления заблокированы' : 'Сповіщення заблоковано';
-    } else if (localStorage.getItem('reminders-enabled') === 'false') {
-      notificationButton.textContent = russian ? '🔕 Уведомления выключены' : '🔕 Сповіщення вимкнено';
-    } else if (Notification.permission === 'granted') {
-      notificationButton.textContent = russian ? '🔔 Уведомления включены' : '🔔 Сповіщення ввімкнено';
-    } else {
-      notificationButton.textContent = russian ? '🔔 Включить уведомления' : '🔔 Увімкнути сповіщення';
-    }
+const notificationTexts = {
+  uk: ['Сповіщення заблоковано', '🔕 Сповіщення вимкнено', '🔔 Сповіщення ввімкнено', '🔔 Увімкнути сповіщення'],
+  ru: ['Уведомления заблокированы', '🔕 Уведомления выключены', '🔔 Уведомления включены', '🔔 Включить уведомления'],
+  de: ['Benachrichtigungen blockiert', '🔕 Benachrichtigungen ausgeschaltet', '🔔 Benachrichtigungen aktiviert', '🔔 Benachrichtigungen aktivieren'],
+  fr: ['Notifications bloquées', '🔕 Notifications désactivées', '🔔 Notifications activées', '🔔 Activer les notifications'],
+  it: ['Notifiche bloccate', '🔕 Notifiche disattivate', '🔔 Notifiche attivate', '🔔 Attiva le notifiche'],
+  en: ['Notifications blocked', '🔕 Notifications turned off', '🔔 Notifications enabled', '🔔 Enable notifications'],
+  pl: ['Powiadomienia zablokowane', '🔕 Powiadomienia wyłączone', '🔔 Powiadomienia włączone', '🔔 Włącz powiadomienia'],
+  es: ['Notificaciones bloqueadas', '🔕 Notificaciones desactivadas', '🔔 Notificaciones activadas', '🔔 Activar notificaciones']
+};
+
+const nTexts = notificationTexts[language] || notificationTexts.uk;
+
+if (notificationButton) {
+  if (Notification.permission === 'denied') {
+    notificationButton.textContent = nTexts[0];
+  } else if (localStorage.getItem('reminders-enabled') === 'false') {
+    notificationButton.textContent = nTexts[1];
+  } else if (Notification.permission === 'granted') {
+    notificationButton.textContent = nTexts[2];
+  } else {
+    notificationButton.textContent = nTexts[3];
   }
+}
 const languageSelect = $('languageSelect');
 if (languageSelect) {
   languageSelect.value = language;
