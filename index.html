@@ -607,11 +607,53 @@ document.querySelectorAll('.category-box').forEach(button => {
 
   if (category === 'Усе') {
     span.textContent = allCategories[language] || allCategories.uk;
-  } else {
-    const item = categories.find(c => c.value === category);
-    if (item) {
-      span.textContent = item[language] || item.uk;
-    }
+   } else {
+    const categoryTranslations = {
+      'Покупки': {
+        de: 'Einkäufe', fr: 'Achats', it: 'Acquisti',
+        en: 'Shopping', pl: 'Zakupy', es: 'Compras'
+      },
+      'Зустрічі': {
+        de: 'Termine', fr: 'Rendez-vous', it: 'Appuntamenti',
+        en: 'Appointments', pl: 'Spotkania', es: 'Citas'
+      },
+      'Здоров’я': {
+        de: 'Gesundheit', fr: 'Santé', it: 'Salute',
+        en: 'Health', pl: 'Zdrowie', es: 'Salud'
+      },
+      'Справи': {
+        de: 'Aufgaben', fr: 'Tâches', it: 'Attività',
+        en: 'Tasks', pl: 'Zadania', es: 'Tareas'
+      },
+      'Місця': {
+        de: 'Orte', fr: 'Lieux', it: 'Luoghi',
+        en: 'Places', pl: 'Miejsca', es: 'Lugares'
+      },
+      'Нотатки': {
+        de: 'Notizen', fr: 'Notes', it: 'Note',
+        en: 'Notes', pl: 'Notatki', es: 'Notas'
+      },
+      'Їжа та кафе': {
+        de: 'Essen und Cafés', fr: 'Repas et cafés', it: 'Cibo e caffè',
+        en: 'Food and cafés', pl: 'Jedzenie i kawiarnie', es: 'Comida y cafés'
+      }
+    };
+
+    const russianNames = {
+      'Покупки': 'Покупки',
+      'Зустрічі': 'Встречи',
+      'Здоров’я': 'Здоровье',
+      'Справи': 'Дела',
+      'Місця': 'Места',
+      'Нотатки': 'Заметки',
+      'Їжа та кафе': 'Еда и кафе'
+    };
+
+    span.textContent = language === 'uk'
+      ? category
+      : language === 'ru'
+        ? (russianNames[category] || category)
+        : (categoryTranslations[category]?.[language] || category);
   }
 });
 render();
