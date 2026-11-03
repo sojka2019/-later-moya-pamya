@@ -325,11 +325,22 @@ const headerText = headerTranslations[language] || headerTranslations.uk;
 text('header .brand', headerText[0]);
 text('header .tag', headerText[1]);
 
-  text('.hero .card:first-child .eyebrow', russian ? 'Быстрая запись' : 'Швидкий запис');
-  text('.hero .card:first-child h1', russian ? 'Что и когда напомнить?' : 'Що і коли нагадати?');
-  text('.hero .card:first-child p', russian
-    ? 'Нажми 🎙 и скажи, что и когда напомнить. Проверь данные и нажми «Сохранить».'
-    : 'Натисни 🎙 і скажи, що та коли нагадати. Перевір дані й натисни «Зберегти».');
+const quickTranslations = {
+  uk: ['Швидкий запис', 'Що і коли нагадати?', 'Натисни 🎙 і скажи, що та коли нагадати. Перевір дані й натисни «Зберегти».'],
+  ru: ['Быстрая запись', 'Что и когда напомнить?', 'Нажми 🎙 и скажи, что и когда напомнить. Проверь данные и нажми «Сохранить».'],
+  de: ['Schnelle Notiz', 'Woran und wann erinnern?', 'Drücke 🎙 und sage, woran und wann du erinnert werden möchtest. Prüfe die Angaben und tippe auf «Speichern».'],
+  fr: ['Note rapide', 'À quoi et quand te rappeler ?', 'Appuie sur 🎙 et indique quoi et quand te rappeler. Vérifie les informations et appuie sur «Enregistrer».'],
+  it: ['Nota rapida', 'Cosa ricordare e quando?', 'Premi 🎙 e indica cosa ricordare e quando. Controlla i dati e premi «Salva».'],
+  en: ['Quick note', 'What should I remind you about, and when?', 'Tap 🎙 and say what to remember and when. Check the details and tap «Save».'],
+  pl: ['Szybki zapis', 'O czym i kiedy przypomnieć?', 'Naciśnij 🎙 i powiedz, o czym i kiedy przypomnieć. Sprawdź dane i naciśnij «Zapisz».'],
+  es: ['Nota rápida', '¿Qué recordar y cuándo?', 'Pulsa 🎙 y di qué quieres recordar y cuándo. Comprueba los datos y pulsa «Guardar».']
+};
+
+const quickText = quickTranslations[language] || quickTranslations.uk;
+
+text('.hero .card:first-child .eyebrow', quickText[0]);
+text('.hero .card:first-child h1', quickText[1]);
+text('.hero .card:first-child p', quickText[2]);
 
   text('#micTitle', russian ? 'Сказать напоминание' : 'Сказати нагадування');
   text('#micHint', russian ? 'Нажми и продиктуй дело и время' : 'Натисни й продиктуй справу та час');
