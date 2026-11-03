@@ -558,6 +558,101 @@ text('#importBackup', backupLabels[1]);
 };
 
 text('#feedbackBtn', feedbackButtonTexts[language] || feedbackButtonTexts.uk);
+ const feedbackFormTexts = {
+  uk: [
+    '💬 Відгук та пропозиції',
+    'Що хочеш повідомити?',
+    '🐞 Повідомити про помилку',
+    '💡 Запропонувати покращення',
+    '💬 Залишити відгук',
+    'Напиши своє повідомлення...',
+    'Надіслати'
+  ],
+  ru: [
+    '💬 Отзыв и предложения',
+    'Что хочешь сообщить?',
+    '🐞 Сообщить об ошибке',
+    '💡 Предложить улучшение',
+    '💬 Оставить отзыв',
+    'Напиши своё сообщение...',
+    'Отправить'
+  ],
+  de: [
+    '💬 Feedback und Vorschläge',
+    'Was möchtest du mitteilen?',
+    '🐞 Fehler melden',
+    '💡 Verbesserung vorschlagen',
+    '💬 Feedback geben',
+    'Schreibe deine Nachricht...',
+    'Senden'
+  ],
+  fr: [
+    '💬 Avis et suggestions',
+    'Que souhaitez-vous nous signaler ?',
+    '🐞 Signaler un problème',
+    '💡 Proposer une amélioration',
+    '💬 Laisser un avis',
+    'Écrivez votre message...',
+    'Envoyer'
+  ],
+  it: [
+    '💬 Feedback e suggerimenti',
+    'Cosa vuoi comunicarci?',
+    '🐞 Segnala un errore',
+    '💡 Suggerisci un miglioramento',
+    '💬 Lascia un feedback',
+    'Scrivi il tuo messaggio...',
+    'Invia'
+  ],
+  en: [
+    '💬 Feedback and suggestions',
+    'What would you like to tell us?',
+    '🐞 Report a bug',
+    '💡 Suggest an improvement',
+    '💬 Leave feedback',
+    'Write your message...',
+    'Send'
+  ],
+  pl: [
+    '💬 Opinie i sugestie',
+    'Co chcesz zgłosić?',
+    '🐞 Zgłoś błąd',
+    '💡 Zaproponuj ulepszenie',
+    '💬 Dodaj opinię',
+    'Napisz swoją wiadomość...',
+    'Wyślij'
+  ],
+  es: [
+    '💬 Comentarios y sugerencias',
+    '¿Qué quieres comunicarnos?',
+    '🐞 Informar de un error',
+    '💡 Sugerir una mejora',
+    '💬 Dejar un comentario',
+    'Escribe tu mensaje...',
+    'Enviar'
+  ]
+};
+
+const fl = feedbackFormTexts[language] || feedbackFormTexts.uk;
+
+const feedbackTitle = document.querySelector('#feedbackPanel h2');
+if (feedbackTitle) feedbackTitle.textContent = fl[0];
+
+const feedbackQuestion = document.querySelector('#feedbackPanel label');
+if (feedbackQuestion) feedbackQuestion.textContent = fl[1];
+
+const feedbackTypeSelect = $('feedbackType');
+if (feedbackTypeSelect && feedbackTypeSelect.options.length >= 3) {
+  feedbackTypeSelect.options[0].textContent = fl[2];
+  feedbackTypeSelect.options[1].textContent = fl[3];
+  feedbackTypeSelect.options[2].textContent = fl[4];
+}
+
+const feedbackMessage = $('feedbackMessage');
+if (feedbackMessage) feedbackMessage.placeholder = fl[5];
+
+const sendFeedbackButton = $('sendFeedback');
+if (sendFeedbackButton) sendFeedbackButton.textContent = fl[6];
   text('#addDetailed', russian ? '＋ Новая запись' : '＋ Новий запис');
 
   const search = $('search');
