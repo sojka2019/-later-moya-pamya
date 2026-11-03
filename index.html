@@ -805,6 +805,18 @@ function render(){
   : showAllNotes
     ? filtered.filter(n => !n.done)
     : upcoming.slice(0, 3);
+const noteTexts = {
+  uk: ['Додано', 'Змінити нагадування', '＋ Нагадати', 'Повернути', '✓ Готово'],
+  ru: ['Добавлено', 'Изменить напоминание', '＋ Напомнить', 'Вернуть', '✓ Готово'],
+  de: ['Hinzugefügt', 'Erinnerung ändern', '＋ Erinnern', 'Wiederherstellen', '✓ Erledigt'],
+  fr: ['Ajouté', 'Modifier le rappel', '＋ Rappeler', 'Restaurer', '✓ Terminé'],
+  it: ['Aggiunto', 'Modifica promemoria', '＋ Ricorda', 'Ripristina', '✓ Completato'],
+  en: ['Added', 'Change reminder', '＋ Remind me', 'Restore', '✓ Done'],
+  pl: ['Dodano', 'Zmień przypomnienie', '＋ Przypomnij', 'Przywróć', '✓ Gotowe'],
+  es: ['Añadido', 'Cambiar recordatorio', '＋ Recordar', 'Restaurar', '✓ Hecho']
+};
+
+const nt = noteTexts[appLanguage] || noteTexts.uk;
 
 const upcomingButton = $('showUpcomingNotes');
 const allButton = $('showAllNotes');
@@ -873,10 +885,12 @@ if (completedButton) {
       </div>
       <h3>${escapeHtml(n.text.length>54?n.text.slice(0,54)+'…':n.text)}</h3>
       ${n.text.length>54?`<p>${escapeHtml(n.text)}</p>`:''}
-      <div class="meta">${n.date ? '⏰ ' + escapeHtml(fmtDate(n.date)) + ' · ' : ''}${appLanguage === 'ru' ? 'Добавлено ' : 'Додано '}${escapeHtml(new Date(n.created).toLocaleDateString(appLanguage === 'ru' ? 'ru-RU' : 'uk-UA'))}</div>
+      <div class="meta">${n.date ? '⏰ ' + escapeHtml(fmtDate(n.date)) + ' · ' : ''}
+      ${nt[0] + ' '}
+      ${escapeHtml(new Date(n.created).toLocaleDateString(appLanguage === 'ru' ? 'ru-RU' : 'uk-UA'))}</div>
       <div class="note-actions">
-        <button class="secondary" data-action="remind" data-id="${n.id}">${n.date ? (appLanguage === 'ru' ? 'Изменить напоминание' : 'Змінити нагадування') : (appLanguage === 'ru' ? '＋ Напомнить' : '＋ Нагадати')}</button>
-        <button class="secondary" data-action="done" data-id="${n.id}">${n.done ? (appLanguage === 'ru' ? 'Вернуть' : 'Повернути') : '✓ Готово'}</button>
+        <button class="secondary" data-action="remind" data-id="${n.id}">${n.date ? nt[1] : nt[2]}</button>
+        <button class="secondary" data-action="done" data-id="${n.id}">${n.done ? nt[3] : nt[4]}</button>
         <button class="secondary" data-action="delete" data-id="${n.id}">✕</button>
       </div>
     </article>`
