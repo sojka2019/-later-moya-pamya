@@ -775,7 +775,21 @@ function fmtDate(d) {
   if (!d) return '';
   const dt = new Date(d);
   if (Number.isNaN(dt.getTime())) return '';
-  return dt.toLocaleString(appLanguage === 'ru' ? 'ru-RU' : 'uk-UA', {
+
+  const dateLocales = {
+    uk: 'uk-UA',
+    ru: 'ru-RU',
+    de: 'de-DE',
+    fr: 'fr-FR',
+    it: 'it-IT',
+    en: 'en-GB',
+    pl: 'pl-PL',
+    es: 'es-ES'
+  };
+
+  const locale = dateLocales[appLanguage] || 'uk-UA';
+
+  return dt.toLocaleString(locale, {
     day: 'numeric',
     month: 'short',
     hour: '2-digit',
@@ -818,7 +832,28 @@ const noteTexts = {
 };
 
 const nt = noteTexts[appLanguage] || noteTexts.uk;
-
+const statusTexts = {
+  uk: ['Виконано', 'Не виконано'],
+  ru: ['Выполнено', 'Не выполнено'],
+  de: ['Erledigt', 'Nicht erledigt'],
+  fr: ['Terminé', 'Non terminé'],
+  it: ['Completato', 'Non completato'],
+  en: ['Completed', 'Not done'],
+  pl: ['Ukończono', 'Niewykonane'],
+  es: ['Completado', 'Sin completar']
+};
+const st = statusTexts[appLanguage] || statusTexts.uk;
+const dateLocales = {
+  uk: 'uk-UA',
+  ru: 'ru-RU',
+  de: 'de-DE',
+  fr: 'fr-FR',
+  it: 'it-IT',
+  en: 'en-GB',
+  pl: 'pl-PL',
+  es: 'es-ES'
+};
+const dateLocale = dateLocales[appLanguage] || 'uk-UA';
 const upcomingButton = $('showUpcomingNotes');
 const allButton = $('showAllNotes');
 const completedButton = $('showCompletedNotes');
@@ -882,13 +917,15 @@ if (completedButton) {
 <span class="kind">${icons[n.category]||'✦'} ${escapeHtml(
   categories.find(c => c.value === n.category)?.[appLanguage] || n.category
 )}</span>
-        <span class="meta">${n.done ? (appLanguage === 'ru' ? '<span style="color:green;font-weight:bold">✓ Выполнено</span>' : '<span style="color:green;font-weight:bold">✓ Виконано</span>') : (appLanguage === 'ru' ? '<span style="color:red;font-weight:bold">● Не выполнено</span>' : '<span style="color:red;font-weight:bold">● Не виконано</span>')}</span>
+<span class="meta">${n.done
+  ? `<span style="color:green;font-weight:bold">✓ ${st[0]}</span>`
+  : `<span style="color:red;font-weight:bold">● ${st[1]}</span>`}</span>
       </div>
       <h3>${escapeHtml(n.text.length>54?n.text.slice(0,54)+'…':n.text)}</h3>
       ${n.text.length>54?`<p>${escapeHtml(n.text)}</p>`:''}
       <div class="meta">${n.date ? '⏰ ' + escapeHtml(fmtDate(n.date)) + ' · ' : ''}
       ${nt[0] + ' '}
-      ${escapeHtml(new Date(n.created).toLocaleDateString(appLanguage === 'ru' ? 'ru-RU' : 'uk-UA'))}</div>
+      ${escapeHtml(new Date(n.created).toLocaleDateString(dateLocale))}</div>
       <div class="note-actions">
         <button class="secondary" data-action="remind" data-id="${n.id}">${n.date ? nt[1] : nt[2]}</button>
         <button class="secondary" data-action="done" data-id="${n.id}">${n.done ? nt[3] : nt[4]}</button>
