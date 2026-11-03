@@ -603,7 +603,31 @@ const languageSelect = $('languageSelect');
 if (languageSelect) {
   languageSelect.value = language;
 }
+const allCategories = {
+  uk: 'Усе',
+  ru: 'Всё',
+  de: 'Alle',
+  fr: 'Tout',
+  it: 'Tutte',
+  en: 'All',
+  pl: 'Wszystkie',
+  es: 'Todas'
+};
 
+document.querySelectorAll('.category-box').forEach(button => {
+  const category = button.dataset.filter;
+  const span = button.querySelector('span');
+  if (!span) return;
+
+  if (category === 'Усе') {
+    span.textContent = allCategories[language] || allCategories.uk;
+  } else {
+    const item = categories.find(c => c.value === category);
+    if (item) {
+      span.textContent = item[language] || item.uk;
+    }
+  }
+});
 render();
 }
 
