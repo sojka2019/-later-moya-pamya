@@ -531,8 +531,21 @@ if (slogan) {
 
   text('.section-head h2', russian ? 'Твои напоминания' : "Твоя пам'ять");
   text('.section-head p', russian ? 'Всё важное — в одном месте.' : 'Усе важливе — в одному місці.');
-  text('#exportBackup', russian ? '⬇ Резервная копия' : '⬇ Резервна копія');
-  text('#importBackup', russian ? '⬆ Импорт записей' : '⬆ Імпорт записів');
+const backupLanguageTexts = {
+  uk: ['⬇ Резервна копія', '⬆ Імпорт записів'],
+  ru: ['⬇ Резервная копия', '⬆ Импорт записей'],
+  de: ['⬇ Sicherung exportieren', '⬆ Sicherung importieren'],
+  fr: ['⬇ Exporter la sauvegarde', '⬆ Importer les données'],
+  it: ['⬇ Esporta backup', '⬆ Importa dati'],
+  en: ['⬇ Export backup', '⬆ Import records'],
+  pl: ['⬇ Eksportuj kopię', '⬆ Importuj wpisy'],
+  es: ['⬇ Exportar copia', '⬆ Importar registros']
+};
+
+const backupLabels = backupLanguageTexts[language] || backupLanguageTexts.uk;
+
+text('#exportBackup', backupLabels[0]);
+text('#importBackup', backupLabels[1]);
   text('#addDetailed', russian ? '＋ Новая запись' : '＋ Новий запис');
 
   const search = $('search');
