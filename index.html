@@ -439,7 +439,18 @@ text('#micHint', micText[1]);
   const input = $('quickInput');
   if (input) input.placeholder = russian ? 'Или напиши здесь…' : 'Або напиши тут…';
 
-  text('#quickAdd', russian ? '＋ Сохранить' : '＋ Зберегти');
+  const quickAddTexts = {
+  uk: '＋ Зберегти',
+  ru: '＋ Сохранить',
+  de: '＋ Speichern',
+  fr: '＋ Enregistrer',
+  it: '＋ Salva',
+  en: '＋ Save',
+  pl: '＋ Zapisz',
+  es: '＋ Guardar'
+};
+
+text('#quickAdd', quickAddTexts[language] || quickAddTexts.uk);
   text('#showUpcomingNotes', russian ? '3 ближайших' : '3 найближчі');
   text('#showAllNotes', russian ? 'Все напоминания' : 'Усі нагадування');
  
