@@ -599,10 +599,12 @@ if (slogan) {
       notificationButton.textContent = russian ? '🔔 Включить уведомления' : '🔔 Увімкнути сповіщення';
     }
   }
-   const languageSelect = $('languageSelect');
-  if (languageSelect) {
-    languageSelect.value = language;
-  }
+const languageSelect = $('languageSelect');
+if (languageSelect) {
+  languageSelect.value = language;
+}
+
+render();
 }
 
 $('languageSelect').addEventListener('change', (event) => {
