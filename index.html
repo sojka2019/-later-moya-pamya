@@ -809,20 +809,9 @@ if (completedButton) {
   grid.innerHTML=shown.map(n=>
     `<article class="note">
       <div class="note-top">
-        <span class="kind">${icons[n.category]||'✦'} ${escapeHtml(appLanguage === 'ru'
-  ? ({
-      'Покупки': 'Покупки',
-      'Зустрічі': 'Встречи',
-      'Здоров’я': 'Здоровье',
-      'Справи': 'Дела',
-      'Місця': 'Места',
-      'Нотатки': 'Заметки',
-      'Ідеї': 'Идеи',
-      'Рекомендації': 'Рекомендации',
-      'Їжа та кафе': 'Еда и кафе',
-      'Інше': 'Другое'
-    }[n.category] || n.category)
-  : n.category)}</span>
+<span class="kind">${icons[n.category]||'✦'} ${escapeHtml(
+  categories.find(c => c.value === n.category)?.[appLanguage] || n.category
+)}</span>
         <span class="meta">${n.done ? (appLanguage === 'ru' ? '<span style="color:green;font-weight:bold">✓ Выполнено</span>' : '<span style="color:green;font-weight:bold">✓ Виконано</span>') : (appLanguage === 'ru' ? '<span style="color:red;font-weight:bold">● Не выполнено</span>' : '<span style="color:red;font-weight:bold">● Не виконано</span>')}</span>
       </div>
       <h3>${escapeHtml(n.text.length>54?n.text.slice(0,54)+'…':n.text)}</h3>
