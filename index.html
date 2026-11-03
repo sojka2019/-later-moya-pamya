@@ -466,7 +466,11 @@ $('closeSettings').addEventListener('click', () => {
 $('feedbackBtn').addEventListener('click', () => {
   const subject = encodeURIComponent('Відгук про застосунок Нагадування');
   const body = encodeURIComponent('Повідомлення або пропозиція:\n\n');
-  window.location.href = `mailto:vol.velikogo@gmail.com?subject=${subject}&body=${body}`;
+
+  window.open(
+    `https://mail.google.com/mail/?view=cm&fs=1&to=vol.velikogo@gmail.com&su=${subject}&body=${body}`,
+    '_blank'
+  );
 });
 
 $('settingsPanel').addEventListener('click', e => {
