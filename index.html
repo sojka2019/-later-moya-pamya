@@ -1197,8 +1197,9 @@ $('sendFeedback').addEventListener('click', async () => {
     $('settingsPanel').style.display = 'none';
   }
 });
-  setAppLanguage(appLanguage);
+  
 const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Зустрічі':'🩺','Здоров’я':'💊','Нотатки':'📝','Їжа та кафе':'🍽️','Інше':'✦'};
+setAppLanguage(appLanguage);
 function load(){try{notes=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(notes))notes=[]}catch(e){notes=[]}render()}
 function persist(){localStorage.setItem(KEY,JSON.stringify(notes));render()}
 function categoryFor(text) {
