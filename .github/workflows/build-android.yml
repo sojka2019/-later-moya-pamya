@@ -81,7 +81,7 @@ jobs:
           EOF_VITE
           cat > native-app/capacitor.config.json <<'EOF_CAP'
           {
-           "appId": "ch.pamyatai.remember.test73",
+           "appId": "ch.pamyatai.remember.test74",
            "appName": "Нагадування",
            "webDir": "dist"
           }
@@ -311,26 +311,31 @@ jobs:
                   const eventTime = new Date(note.date).getTime();
                   if (!Number.isFinite(eventTime) || eventTime <= now) continue;
 
-                    const reminders = [
-                    {
-                      key: 'oneDay',
-                      title: 'Попередження: за добу!',
-                      time: eventTime - 24 * 60 * 60 * 1000,
-                      message: String(note.text || 'У тебе є нагадування!')
-                    },
-                    {
-                      key: 'twoHours',
-                      title: 'Попередження: за 2 години!',
-                      time: eventTime - 2 * 60 * 60 * 1000,
-                      message: String(note.text || 'У тебе є нагадування!')
-                    },
-                    {
-                      key: 'event',
-                      title: 'Час події 🔔',
-                      time: eventTime,
-                      message: String(note.text || 'У тебе є нагадування!')
-                    }
-                  ];
+                   const eventIsToday = dayKey(eventTime) === dayKey(now);
+
+                   const reminders = eventIsToday
+                     ? [
+                         {
+                           key: 'twoHours',
+                           title: 'Нагадування: за 2 години',
+                           time: eventTime - 2 * 60 * 60 * 1000,
+                           message: String(note.text || 'У тебе є нагадування!')
+                         }
+                       ]
+                     : [
+                         {
+                           key: 'oneDay',
+                           title: 'Нагадування: за добу',
+                           time: eventTime - 24 * 60 * 60 * 1000,
+                           message: String(note.text || 'У тебе є нагадування!')
+                         },
+                         {
+                           key: 'oneHour',
+                           title: 'Нагадування: за годину',
+                           time: eventTime - 60 * 60 * 1000,
+                           message: String(note.text || 'У тебе є нагадування!')
+                         }
+                        ];
 
                    for (const reminder of reminders) {
                      if (reminder.time <= now) continue;
@@ -478,7 +483,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: Nagaduvannya_test73
+          name: Nagaduvannya_test74
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
