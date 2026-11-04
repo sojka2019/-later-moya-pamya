@@ -1395,7 +1395,29 @@ if (completedButton) {
     </article>`
   ).join('');
 }
-function openModal(n=null){editingId=n?n.id:null;$('modalTitle').textContent=n?'Редагувати запис':'Новий запис';$('noteText').value=n?n.text:'';$('noteCategory').value=n?n.category:'Автоматично';$('noteDate').value=n&&n.date?n.date:'';$('modal').classList.add('open');$('noteText').focus()}
+function openModal(n = null) {
+  editingId = n ? n.id : null;
+
+  const modalTitles = {
+    uk: ['Новий запис', 'Редагувати запис'],
+    ru: ['Новая запись', 'Редактировать запись'],
+    de: ['Neuer Eintrag', 'Eintrag bearbeiten'],
+    fr: ['Nouvelle note', 'Modifier la note'],
+    it: ['Nuova nota', 'Modifica nota'],
+    en: ['New entry', 'Edit entry'],
+    pl: ['Nowy wpis', 'Edytuj wpis'],
+    es: ['Nueva nota', 'Editar nota']
+  };
+
+  const titles = modalTitles[appLanguage] || modalTitles.uk;
+
+  $('modalTitle').textContent = n ? titles[1] : titles[0];
+  $('noteText').value = n ? n.text : '';
+  $('noteCategory').value = n ? n.category : 'Автоматично';
+  $('noteDate').value = n && n.date ? n.date : '';
+  $('modal').classList.add('open');
+  $('noteText').focus();
+}
 function closeModal(){$('modal').classList.remove('open')}
 window.openReminderNote = function(noteId) {
   const note = notes.find(n => String(n.id) === String(noteId));
