@@ -81,7 +81,7 @@ jobs:
           EOF_VITE
           cat > native-app/capacitor.config.json <<'EOF_CAP'
           {
-           "appId": "ch.pamyatai.remember.test74",
+           "appId": "ch.pamyatai.remember.test75",
            "appName": "Нагадування",
            "webDir": "dist"
           }
@@ -204,10 +204,19 @@ jobs:
                     const merged = getNotes();
                     const fingerprints = new Set(merged.map(n => [String(n.text || '').trim().toLowerCase(), String(n.category || ''), String(n.date || ''), String(n.created || '')].join('\u241f')));
                     const ids = new Set(merged.map(n => String(n.id)));
-                    let added = 0;
-                    let skipped = 0;
+                     let added = 0;
+                    let duplicates = 0;
+                    let invalid = 0;
+
+                    const incomingCount = incoming.length;
+                    const existingCountBefore = merged.length;
+
                     for (const raw of incoming) {
-                      if (!raw || typeof raw.text !== 'string' || !raw.text.trim()) { skipped++; continue; }
+                      if (!raw || typeof raw.text !== 'string' || !raw.text.trim()) {
+                        invalid++;
+                        continue;
+                      }
+
                       const item = {
                         ...raw,
                         text: raw.text.trim(),
@@ -216,17 +225,49 @@ jobs:
                         created: typeof raw.created === 'string' ? raw.created : new Date().toISOString(),
                         done: Boolean(raw.done)
                       };
-                      const fingerprint = [item.text.toLowerCase(), String(item.category), item.date, item.created].join('\u241f');
-                      if (fingerprints.has(fingerprint)) { skipped++; continue; }
-                      if (item.id === undefined || item.id === null || ids.has(String(item.id))) item.id = Date.now() + Math.random();
+
+                      const fingerprint = [
+                        item.text.toLowerCase(),
+                        String(item.category),
+                        item.date,
+                        item.created
+                      ].join('\u241f');
+
+                      if (fingerprints.has(fingerprint)) {
+                        duplicates++;
+                        continue;
+                      }
+
+                      if (item.id === undefined || item.id === null || ids.has(String(item.id))) {
+                        item.id = Date.now() + Math.random();
+                      }
+
                       ids.add(String(item.id));
                       fingerprints.add(fingerprint);
                       merged.push(item);
                       added++;
                     }
-                    if (added > 0) localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
-                    if (quickStatus) quickStatus.textContent = 'Імпорт завершено. Додано: ' + added + '. Пропущено повторів або некоректних записів: ' + skipped + '. Оновлюю список…';
-                    if (added > 0) setTimeout(() => window.location.reload(), 1200);
+
+                    if (added > 0) {
+                      localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+                    }
+
+                    const savedAfter = getNotes();
+
+                    if (quickStatus) {
+                      quickStatus.textContent =
+                        'Діагностика імпорту: ' +
+                        'У файлі: ' + incomingCount +
+                        '. Було в застосунку: ' + existingCountBefore +
+                        '. Додано: ' + added +
+                        '. Дублікатів: ' + duplicates +
+                        '. Некоректних: ' + invalid +
+                        '. У сховищі після імпорту: ' + savedAfter.length + '.';
+                    }
+
+                    if (added > 0) {
+                      setTimeout(() => window.location.reload(), 1200);
+                    }
                   } catch (error) {
                     console.error('Native backup import error:', error);
                     const quickStatus = document.getElementById('quickStatus');
@@ -483,7 +524,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: Nagaduvannya_test74
+          name: Nagaduvannya_test75
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
