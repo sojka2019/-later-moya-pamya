@@ -437,8 +437,21 @@ const micText = micTranslations[language] || micTranslations.uk;
 text('#micTitle', micText[0]);
 text('#micHint', micText[1]);
   const input = $('quickInput');
-  if (input) input.placeholder = russian ? 'Или напиши здесь…' : 'Або напиши тут…';
 
+const quickInputTexts = {
+  uk: 'Або напиши тут…',
+  ru: 'Или напиши здесь…',
+  de: 'Oder schreibe hier…',
+  fr: 'Ou écris ici…',
+  it: 'Oppure scrivi qui…',
+  en: 'Or type here…',
+  pl: 'Lub napisz tutaj…',
+  es: 'O escribe aquí…'
+};
+
+if (input) {
+  input.placeholder = quickInputTexts[language] || quickInputTexts.uk;
+}
   const quickAddTexts = {
   uk: '＋ Зберегти',
   ru: '＋ Сохранить',
