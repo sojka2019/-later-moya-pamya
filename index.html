@@ -968,31 +968,41 @@ const footerTexts = {
 };
 
 text('.footer', footerTexts[language] || footerTexts.uk);
-  text('#modalTitle', russian ? 'Новая запись' : 'Новий запис');
-  text('label[for="noteText"]', russian ? 'Что хочешь запомнить?' : "Що хочеш запам'ятати?");
-  text('label[for="noteCategory"]', russian ? 'Категория' : 'Категорія');
-  text('label[for="noteDate"]', russian ? 'Напомнить (необязательно)' : "Нагадати (необов'язково)");
-  text('#cancelModal', russian ? 'Отмена' : 'Скасувати');
-  text('#saveNote', russian ? 'Сохранить запись' : 'Зберегти запис');
+ const modalTexts = {
+  uk: ['Новий запис', "Що хочеш запам'ятати?", 'Категорія', "Нагадати (необов'язково)", 'Скасувати', 'Зберегти запис', 'Напиши думку, ідею або річ…'],
+  ru: ['Новая запись', 'Что хочешь запомнить?', 'Категория', 'Напомнить (необязательно)', 'Отмена', 'Сохранить запись', 'Напиши мысль, идею или дело…'],
+  de: ['Neuer Eintrag', 'Was möchtest du dir merken?', 'Kategorie', 'Erinnerung (optional)', 'Abbrechen', 'Eintrag speichern', 'Schreibe einen Gedanken, eine Idee oder eine Aufgabe…'],
+  fr: ['Nouvelle note', 'Que souhaites-tu retenir ?', 'Catégorie', 'Rappel (facultatif)', 'Annuler', 'Enregistrer la note', 'Écris une pensée, une idée ou une tâche…'],
+  it: ['Nuova nota', 'Cosa vuoi ricordare?', 'Categoria', 'Promemoria (facoltativo)', 'Annulla', 'Salva nota', 'Scrivi un pensiero, un’idea o un’attività…'],
+  en: ['New entry', 'What would you like to remember?', 'Category', 'Reminder (optional)', 'Cancel', 'Save entry', 'Write a thought, an idea or a task…'],
+  pl: ['Nowy wpis', 'Co chcesz zapamiętać?', 'Kategoria', 'Przypomnienie (opcjonalnie)', 'Anuluj', 'Zapisz wpis', 'Napisz myśl, pomysł lub zadanie…'],
+  es: ['Nueva nota', '¿Qué quieres recordar?', 'Categoría', 'Recordatorio (opcional)', 'Cancelar', 'Guardar nota', 'Escribe un pensamiento, una idea o una tarea…']
+};
 
-  const noteText = $('noteText');
-  if (noteText) {
-    noteText.placeholder = russian
-      ? 'Напиши мысль, идею или дело…'
-      : 'Напиши думку, ідею або річ…';
-  }
-    const categorySelect = $('noteCategory');
-  if (categorySelect) {
-   
+const mt = modalTexts[language] || modalTexts.uk;
 
-    categories.forEach((category, index) => {
-      const option = categorySelect.options[index];
-      if (option) {
-        option.value = category.value;
-        option.textContent = russian ? category.ru : category.uk;
-      }
-    });
-  }
+text('#modalTitle', mt[0]);
+text('label[for="noteText"]', mt[1]);
+text('label[for="noteCategory"]', mt[2]);
+text('label[for="noteDate"]', mt[3]);
+text('#cancelModal', mt[4]);
+text('#saveNote', mt[5]);
+
+const noteText = $('noteText');
+if (noteText) {
+  noteText.placeholder = mt[6];
+}
+
+const categorySelect = $('noteCategory');
+if (categorySelect) {
+  categories.forEach((category, index) => {
+    const option = categorySelect.options[index];
+    if (option) {
+      option.value = category.value;
+      option.textContent = category[language] || category.uk;
+    }
+  });
+}
  const settingsLabels = {
   uk: ['⚙️ Налаштування', 'Резервна копія', 'Системні сповіщення', 'Тут можна керувати системними сповіщеннями.'],
   ru: ['⚙️ Настройки', 'Резервная копия', 'Системные уведомления', 'Здесь можно управлять системными уведомлениями.'],
