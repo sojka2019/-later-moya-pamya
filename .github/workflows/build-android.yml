@@ -81,7 +81,7 @@ jobs:
           EOF_VITE
           cat > native-app/capacitor.config.json <<'EOF_CAP'
           {
-           "appId": "ch.pamyatai.remember.test75",
+           "appId": "ch.pamyatai.remember.test76",
            "appName": "Нагадування",
            "webDir": "dist"
           }
@@ -265,9 +265,7 @@ jobs:
                         '. У сховищі після імпорту: ' + savedAfter.length + '.';
                     }
 
-                    if (added > 0) {
-                      setTimeout(() => window.location.reload(), 1200);
-                    }
+                    setTimeout(() => window.location.reload(), 1200);
                   } catch (error) {
                     console.error('Native backup import error:', error);
                     const quickStatus = document.getElementById('quickStatus');
@@ -524,7 +522,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: Nagaduvannya_test75
+          name: Nagaduvannya_test76
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
