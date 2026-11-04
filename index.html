@@ -956,9 +956,18 @@ if (search) {
   search.placeholder = searchTexts[language] || searchTexts.uk;
 }
 
-  text('.footer', russian
-    ? 'Прототип LATER · Данные хранятся локально на этом устройстве. Регулярно создавай резервную копию.'
-    : 'Прототип LATER · Дані зберігаються локально на цьому пристрої. Регулярно роби резервну копію.');
+const footerTexts = {
+  uk: 'Прототип LATER · Дані зберігаються локально на цьому пристрої. Регулярно роби резервну копію.',
+  ru: 'Прототип LATER · Данные хранятся локально на этом устройстве. Регулярно создавай резервную копию.',
+  de: 'LATER-Prototyp · Die Daten werden lokal auf diesem Gerät gespeichert. Erstelle regelmäßig eine Sicherungskopie.',
+  fr: 'Prototype LATER · Les données sont stockées localement sur cet appareil. Effectuez régulièrement une sauvegarde.',
+  it: 'Prototipo LATER · I dati sono salvati localmente su questo dispositivo. Crea regolarmente una copia di backup.',
+  en: 'LATER prototype · Data is stored locally on this device. Make regular backups.',
+  pl: 'Prototyp LATER · Dane są przechowywane lokalnie na tym urządzeniu. Regularnie twórz kopię zapasową.',
+  es: 'Prototipo LATER · Los datos se guardan localmente en este dispositivo. Crea copias de seguridad con regularidad.'
+};
+
+text('.footer', footerTexts[language] || footerTexts.uk);
   text('#modalTitle', russian ? 'Новая запись' : 'Новий запис');
   text('label[for="noteText"]', russian ? 'Что хочешь запомнить?' : "Що хочеш запам'ятати?");
   text('label[for="noteCategory"]', russian ? 'Категория' : 'Категорія');
