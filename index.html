@@ -939,8 +939,22 @@ if (helpContentElement) {
   helpContentElement.innerHTML = helpContentTexts[language] || helpContentTexts.uk;
 }
  
-  const search = $('search');
-  if (search) search.placeholder = russian ? '⌕ Поиск по содержимому…' : '⌕ Пошук за змістом…';
+ const search = $('search');
+
+const searchTexts = {
+  uk: '⌕ Пошук за змістом…',
+  ru: '⌕ Поиск по содержимому…',
+  de: '⌕ Nach Inhalt suchen…',
+  fr: '⌕ Rechercher dans le contenu…',
+  it: '⌕ Cerca nel contenuto…',
+  en: '⌕ Search by content…',
+  pl: '⌕ Szukaj w treści…',
+  es: '⌕ Buscar por contenido…'
+};
+
+if (search) {
+  search.placeholder = searchTexts[language] || searchTexts.uk;
+}
 
   text('.footer', russian
     ? 'Прототип LATER · Данные хранятся локально на этом устройстве. Регулярно создавай резервную копию.'
