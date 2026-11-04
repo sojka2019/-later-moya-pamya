@@ -268,9 +268,12 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
     </section>
   
   <section class="stats">
-    <div class="stat"><strong id="totalStat">0</strong><span>Збережено записів</span></div><div class="stat"><strong id="reminderStat">0</strong><span>Мають нагадування</span></div><div class="stat"><strong id="categoryStat">0</strong><span>Категорій використано</span></div></section>
- <div class="section-head"><div><h2>Твоя пам'ять</h2><p>Усе важливе — в одному місці.</p></div><div class="section-actions"><button class="secondary" id="addDetailed">＋ Новий запис</button></div></div>
- <div class="toolbar" id="filters">
+    <div class="stat"><strong id="totalStat">0</strong><span id="totalStatLabel">Збережено записів</span></div>
+    <div class="stat"><strong id="reminderStat">0</strong><span id="reminderStatLabel">Мають нагадування</span></div>
+    <div class="stat"><strong id="categoryStat">0</strong><span id="categoryStatLabel">Категорій використано</span></div></section>
+    <div class="section-head"><div><h2 id="memoryTitle">Твоя пам'ять</h2>
+<p id="memorySubtitle">Усе важливе — в одному місці.</p></div><div class="section-actions"><button class="secondary" id="addDetailed">＋ Новий запис</button></div></div>
+    <div class="toolbar" id="filters">
   <input class="field" id="search" placeholder="⌕ Пошук за змістом…">
 </div>
  <div class="note-view-switch" role="group" aria-label="Показ записів">
@@ -693,6 +696,25 @@ const hu = helpUiTexts[language] || helpUiTexts.uk;
 text('#memoryEyebrow', hu[0]);
 text('#howToTitle', hu[1]);
 text('#helpTitle', hu[1]);
+  const dashboardTexts = {
+  uk: ['Збережено записів', 'Мають нагадування', 'Категорій використано', 'Твоя пам’ять', 'Усе важливе — в одному місці.', '＋ Новий запис'],
+  ru: ['Сохранено записей', 'С напоминаниями', 'Использовано категорий', 'Твоя память', 'Всё важное — в одном месте.', '＋ Новая запись'],
+  de: ['Einträge gespeichert', 'Mit Erinnerungen', 'Kategorien verwendet', 'Dein Gedächtnis', 'Alles Wichtige an einem Ort.', '＋ Neuer Eintrag'],
+  fr: ['Notes enregistrées', 'Avec rappels', 'Catégories utilisées', 'Ta mémoire', 'Tout ce qui compte au même endroit.', '＋ Nouvelle note'],
+  it: ['Note salvate', 'Con promemoria', 'Categorie utilizzate', 'La tua memoria', 'Tutto ciò che conta in un unico posto.', '＋ Nuova nota'],
+  en: ['Saved entries', 'With reminders', 'Categories used', 'Your memory', 'Everything important in one place.', '＋ New entry'],
+  pl: ['Zapisane wpisy', 'Z przypomnieniami', 'Użyte kategorie', 'Twoja pamięć', 'Wszystko, co ważne, w jednym miejscu.', '＋ Nowy wpis'],
+  es: ['Registros guardados', 'Con recordatorios', 'Categorías utilizadas', 'Tu memoria', 'Todo lo importante en un solo lugar.', '＋ Nueva nota']
+};
+
+const dashboardLabels = dashboardTexts[language] || dashboardTexts.uk;
+
+text('#totalStatLabel', dashboardLabels[0]);
+text('#reminderStatLabel', dashboardLabels[1]);
+text('#categoryStatLabel', dashboardLabels[2]);
+text('#memoryTitle', dashboardLabels[3]);
+text('#memorySubtitle', dashboardLabels[4]);
+text('#addDetailed', dashboardLabels[5]);
   text('#helpBtn', hu[2]);
   const helpContentTexts = {
   uk: `
