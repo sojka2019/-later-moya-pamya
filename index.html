@@ -1942,7 +1942,7 @@ const monthNames = Object.keys(months) .sort((a, b) => b.length - a.length) .map
   dayWordNames +
   ')(?:\\s+de)?\\s+(' +
   monthNames +
-  ')(?:\\s+(\\d{4})(?:\\s+року)?)?(?![\\p{L}])',
+  ')(?:\\s+(\\d{4})(?:\\s+(?:року|Jahr))?)?(?![\\p{L}])',
   'iu'
 );
 
@@ -2287,13 +2287,13 @@ if (monthMatch || monthFirstMatch) {
     const period = (timeMatch[3] || '').toLowerCase();
 
     if (
-      ['дня', 'днем', 'днём', 'після обіду', 'после обеда', 'вечора', 'вечір', 'вечер', 'увечері', 'ввечері', 'вечором', 'вечером'].includes(period) &&
+      ['дня', 'днем', 'днём', 'після обіду', 'после обеда', 'вечора', 'вечір', 'вечер', 'увечері', 'ввечері', 'вечором', 'вечером', 'nachmittags', 'abends', 'mittags'].includes(period) &&
       hour < 12
     ) {
       hour += 12;
     }
 
-    if (['ночі', 'ночи', 'ночью'].includes(period) && hour === 12) {
+    if (['ночі', 'ночи', 'ночью', 'nachts'].includes(period) && hour === 12) {
       hour = 0;
     }
 
