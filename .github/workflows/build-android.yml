@@ -351,8 +351,20 @@ jobs:
                   return;
                 }
 
-                const permission = await LocalNotifications.checkPermissions();
-                if (permission.display !== 'granted') return;
+                 const permission = await LocalNotifications.checkPermissions();
+
+                if (permission.display !== 'granted') {
+                  status.textContent = 'Спочатку дозволь сповіщення в Android.';
+                  return;
+                }
+
+                const exactPermission = await LocalNotifications.checkExactNotificationSetting();
+
+                if (exactPermission.exact_alarm !== 'granted') {
+                  status.textContent = 'Потрібно дозволити точні нагадування в налаштуваннях Android.';
+                  await LocalNotifications.changeExactNotificationSetting();
+                  return;
+                }
                 const notes = getNotes();
                 const now = Date.now();
 
