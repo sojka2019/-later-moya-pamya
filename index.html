@@ -2377,7 +2377,7 @@ if (Notification.permission === "denied") {
 }
 
     button.addEventListener("click", async () => {
-  const enabled = localStorage.getItem("reminders-enabled") !== "false";
+  const enabled = localStorage.getItem("reminders-enabled") === "true";
 
   if (enabled) {
     localStorage.setItem("reminders-enabled", "false");
