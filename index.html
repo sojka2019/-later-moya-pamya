@@ -1666,7 +1666,7 @@ function parseVoiceReminder(transcript) {
     hasDate = true;
     text = text.replace(weekMatch[0], ' ');
   } else if (
-    removePhrase(/(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:неділю|тиждень|неделю|Woche|week|semaine|settimana|tydzień|semana)(?![\p{L}\p{N}])/iu)
+    removePhrase(/(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:неділю|тиждень|неделю|Woche|week|semaine|settimana|tydzień|semana)(?![\p{L}\p{N}])|(?<![\p{L}\p{N}])nächste\s+Woche(?![\p{L}\p{N}])/iu)
   ) {
     date.setDate(date.getDate() + 7);
     hasDate = true;
