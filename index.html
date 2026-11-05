@@ -1126,6 +1126,10 @@ render();
 
 $('languageSelect').addEventListener('change', (event) => {
   setAppLanguage(event.target.value);
+
+  if (window.updateNativeReminderButtonLanguage) {
+    window.updateNativeReminderButtonLanguage();
+  }
 });
 $('settingsBtn').addEventListener('click', () => {
 $('settingsPanel').style.display = 'block';
