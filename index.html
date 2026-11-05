@@ -1035,13 +1035,16 @@ const notificationTexts = {
 };
 
 const nTexts = notificationTexts[language] || notificationTexts.uk;
+const notificationPermission = ('Notification' in window)
+  ? Notification.permission
+  : 'unsupported';
 
 if (notificationButton) {
-  if (Notification.permission === 'denied') {
+  if (notificationPermission === 'denied') {
     notificationButton.textContent = nTexts[0];
   } else if (localStorage.getItem('reminders-enabled') === 'false') {
     notificationButton.textContent = nTexts[1];
-  } else if (Notification.permission === 'granted') {
+  } else if (notificationPermission === 'granted') {
     notificationButton.textContent = nTexts[2];
   } else {
     notificationButton.textContent = nTexts[3];
