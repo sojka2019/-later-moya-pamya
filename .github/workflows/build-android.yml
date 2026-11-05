@@ -118,8 +118,17 @@ jobs:
                   if (micTitle) micTitle.textContent = 'Слухаю тебе…';
                   if (micHint) micHint.textContent = 'Скажи думку у вікні розпізнавання голосу';
                   if (voiceStatus) voiceStatus.textContent = '';
-                  const result = await SpeechRecognition.start({
-                    language: 'uk-UA',
+                  const result = await SpeechRecognition.start({          
+                    language: ({
+                      uk: 'uk-UA',
+                      ru: 'ru-RU',
+                      de: 'de-DE',
+                      en: 'en-US',
+                      fr: 'fr-FR',
+                      it: 'it-IT',
+                      pl: 'pl-PL',
+                      es: 'es-ES'
+                    })[appLanguage] || 'uk-UA',
                     maxResults: 1,
                     prompt: 'Скажіть, що потрібно запам’ятати',
                     popup: false,
