@@ -1536,7 +1536,7 @@ function parseVoiceReminder(transcript) {
     text = text.replace(oneHourMatch[0], ' ');
   }
    const relativeTimeMatch = text.match(
-     /(?<![\p{L}\p{N}])(?:через|за)\s+(?:(одну|одна|один|одну|дві|два|три|1|2|3|30|20|15|10|5)\s+)?(годину|години|годин|год|хвилину|хвилини|хвилин|хв)(?![\p{L}\p{N}])/iu
+    /(?<![\p{L}\p{N}])(?:через|за|in|dans|tra|fra|dentro de|en)\s+(?:(одну|одна|один|дві|два|три|eine|ein|einen|one|two|three|une|deux|trois|una|uno|due|tre|jedną|jedna|dwie|trzy|dos|tres|1|2|3|5|10|15|20|30)\s+)?(годину|години|годин|год|хвилину|хвилини|хвилин|хв|stunde|stunden|hour|hours|hr|heure|heures|ora|ore|godzinę|godzina|godziny|godzin|minute|minutes|min|minuten|minuti|minuta|minuty|minut|minuto|minutos)(?![\p{L}\p{N}])/iu
   );
 
   if (relativeTimeMatch) {
@@ -1548,6 +1548,12 @@ function parseVoiceReminder(transcript) {
     const amounts = {
       'одну': 1, 'один': 1, 'одна': 1,
       'дві': 2, 'два': 2, 'три': 3,
+      'eine': 1, 'ein': 1, 'einen': 1,
+      'one': 1, 'two': 2, 'three': 3,
+      'une': 1, 'deux': 2, 'trois': 3,
+      'una': 1, 'uno': 1, 'due': 2, 'tre': 3,
+      'jedną': 1, 'jedna': 1, 'dwie': 2, 'trzy': 3,
+      'dos': 2, 'tres': 3,
       '1': 1, '2': 2, '3': 3,
       '5': 5, '10': 10, '15': 15, '20': 20, '30': 30
     };
@@ -1555,7 +1561,10 @@ function parseVoiceReminder(transcript) {
     const amount = amounts[amountWord];
 
     const isMinutes = [
-      'хвилину', 'хвилини', 'хвилин', 'хв'
+      'хвилину', 'хвилини', 'хвилин', 'хв',
+      'minute', 'minutes', 'min', 'minuten',
+      'minuti', 'minuta', 'minuty', 'minut',
+      'minuto', 'minutos'
     ].includes(unit);
 
     const milliseconds = amount *
@@ -1568,7 +1577,7 @@ function parseVoiceReminder(transcript) {
 
     text = text.replace(relativeTimeMatch[0], ' ');
   }
-  // 1. Відносні дати українською та російською
+  // 1. Відносні дати всіма підтримуваними мовами
   if (removePhrase(/(?<![\p{L}\p{N}])(?:післязавтра|послезавтра|übermorgen|the day after tomorrow|après-demain|dopodomani|pojutrze|pasado mañana)(?![\p{L}\p{N}])/iu)) {
     date.setDate(date.getDate() + 2);
     hasDate = true;
@@ -1629,22 +1638,27 @@ function parseVoiceReminder(transcript) {
     }
   }
   const weekMatch = text.match(
-    /(?<![\p{L}\p{N}])через\s+(одну|один|дві|две|два|три|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели)(?![\p{L}\p{N}])/iu
+    /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(одну|один|дві|две|два|три|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели|Woche|Wochen|week|weeks|semaine|semaines|settimana|settimane|tydzień|tygodnie|tygodni|semana|semanas)(?![\p{L}\p{N}])/iu
   );
 
   if (weekMatch) {
     const word = weekMatch[1].toLowerCase();
     const weeks = ({
       'одну': 1, 'один': 1, '1': 1,
-      'дві': 2, 'две': 2, 'два': 2,
-      'три': 3, '3': 3
+      'дві': 2, 'две': 2, 'два': 2, '2': 2,
+      'три': 3, '3': 3,
+      'eine': 1, 'ein': 1, 'one': 1,
+      'une': 1, 'deux': 2, 'two': 2,
+      'tre': 3, 'due': 2,
+      'jedną': 1, 'jedna': 1, 'dwie': 2, 'trzy': 3,
+      'una': 1, 'uno': 1, 'dos': 2, 'tres': 3
     })[word];
 
     date.setDate(date.getDate() + weeks * 7);
     hasDate = true;
     text = text.replace(weekMatch[0], ' ');
   } else if (
-    removePhrase(/(?<![\p{L}\p{N}])через\s+(?:неділю|тиждень|неделю)(?![\p{L}\p{N}])/iu)
+    removePhrase(/(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:неділю|тиждень|неделю|Woche|week|semaine|settimana|tydzień|semana)(?![\p{L}\p{N}])/iu)
   ) {
     date.setDate(date.getDate() + 7);
     hasDate = true;
@@ -1660,7 +1674,27 @@ const relativeNumbers = {
   'п’ять': 5, "п'ять": 5, 'пять': 5, '5': 5,
   'шість': 6, 'шесть': 6, '6': 6,
   '7': 7, '8': 8, '9': 9,
-  '10': 10, '11': 11, '12': 12
+  '10': 10, '11': 11, '12': 12,
+  'eine': 1, 'ein': 1, 'einen': 1,
+  'one': 1, 'two': 2, 'three': 3, 'four': 4,
+  'five': 5, 'six': 6, 'seven': 7,
+  'eight': 8, 'nine': 9, 'ten': 10,
+  'eleven': 11, 'twelve': 12,
+  'une': 1, 'un': 1, 'deux': 2, 'trois': 3,
+  'quatre': 4, 'cinq': 5, 'six': 6,
+  'sept': 7, 'huit': 8, 'neuf': 9,
+  'dix': 10, 'onze': 11, 'douze': 12,
+  'una': 1, 'uno': 1, 'due': 2, 'tre': 3,
+  'quattro': 4, 'cinque': 5, 'sette': 7,
+  'otto': 8, 'nove': 9, 'dieci': 10,
+  'undici': 11, 'dodici': 12,
+  'jedna': 1, 'jedną': 1, 'dwie': 2, 'trzy': 3,
+  'cztery': 4, 'pięć': 5, 'sześć': 6,
+  'siedem': 7, 'osiem': 8, 'dziewięć': 9,
+  'dziesięć': 10, 'jedenaście': 11, 'dwanaście': 12,
+  'dos': 2, 'tres': 3, 'cuatro': 4, 'cinco': 5,
+  'seis': 6, 'siete': 7, 'ocho': 8, 'nueve': 9,
+  'diez': 10, 'once': 11, 'doce': 12
 };
 
 // Правильне додавання календарних місяців
