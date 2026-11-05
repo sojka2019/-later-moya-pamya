@@ -1667,6 +1667,19 @@ function parseVoiceReminder(transcript) {
 // 3. Додавання календарних місяців і років
 
 const relativeNumbers = {
+   // Німецькі числа
+  'eins': 1, 'ein': 1, 'eine': 1, 'einen': 1,
+  'zwei': 2,
+  'drei': 3,
+  'vier': 4,
+  'fünf': 5,
+  'sechs': 6,
+  'sieben': 7,
+  'acht': 8,
+  'neun': 9,
+  'zehn': 10,
+  'elf': 11,
+  'zwölf': 12,
   'один': 1, 'одна': 1, 'одну': 1, '1': 1,
   'два': 2, 'дві': 2, 'две': 2, '2': 2,
   'три': 3, '3': 3,
@@ -1675,7 +1688,6 @@ const relativeNumbers = {
   'шість': 6, 'шесть': 6, '6': 6,
   '7': 7, '8': 8, '9': 9,
   '10': 10, '11': 11, '12': 12,
-  'eine': 1, 'ein': 1, 'einen': 1,
   'one': 1, 'two': 2, 'three': 3, 'four': 4,
   'five': 5, 'six': 6, 'seven': 7,
   'eight': 8, 'nine': 9, 'ten': 10,
@@ -1718,7 +1730,7 @@ function addCalendarMonths(baseDate, monthsToAdd) {
 
 // Через один, два, три та інші роки
 const relativeYearMatch = text.match(
-  /(?<![\p{L}\p{N}])через\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|1|2|3|4|5|6|7|8|9|10|11|12)\s+)?(рік|роки|років|року|год|года|лет)(?![\p{L}\p{N}])/iu
+   /(?<![\p{L}\p{N}])(?:через|in)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)\s+)?(рік|роки|років|року|год|года|лет|Jahr|Jahren)(?![\p{L}\p{N}])/iu
 );
 
 if (relativeYearMatch) {
@@ -1745,7 +1757,7 @@ if (halfYearMatch) {
 
 // Через один, два, три та інші місяці
 const relativeMonthMatch = text.match(
-  /(?<![\p{L}\p{N}])через\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|1|2|3|4|5|6|7|8|9|10|11|12)\s+)?(місяць|місяця|місяці|місяців|месяц|месяца|месяцев)(?![\p{L}\p{N}])/iu
+   /(?<![\p{L}\p{N}])(?:через|in)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)\s+)?(місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten)(?![\p{L}\p{N}])/iu
 );
 
 if (relativeMonthMatch) {
