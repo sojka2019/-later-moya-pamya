@@ -1849,7 +1849,7 @@ const dayWords = {
   'дванадцятого': 12,
   'тринадцятого': 13,
   'чотирнадцятого': 14,
-  'п’ятнадцятого': 15, "п'ятнадцятого": 15, 'пятнадцатого': 15, 'пятнадцятого': 15,
+  'п’ятнадцятого': 15, "п'ятнадцятого": 15, 'пятнадцатого': 15,
   'шістнадцятого': 16,
   'сімнадцятого': 17,
   'вісімнадцятого': 18,
@@ -1902,23 +1902,51 @@ const dayWords = {
  const escapeDateRegex = value =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-const monthNames = Object.keys(months) .sort((a, b) => b.length - a.length) .map(escapeDateRegex) .join('|'); const dayWordNames = Object.keys(dayWords) .sort((a, b) => b.length - a.length) .map(escapeDateRegex) .join('|'); const monthDateRegex = new RegExp( '(?<![\\p{L}\\p{N}])(' + '\\d{1,2}|' + dayWordNames + ')\\s+(' + monthNames + ')(?:\\s+(\\d{4})(?:\\s+року)?)?(?![\\p{L}])', 'iu' );
+const monthNames = Object.keys(months) .sort((a, b) => b.length - a.length) .map(escapeDateRegex) .join('|'); const dayWordNames = Object.keys(dayWords) .sort((a, b) => b.length - a.length) .map(escapeDateRegex) .join('|'); const monthDateRegex = new RegExp(
+  '(?<![\\p{L}\\p{N}])(' +
+  '\\d{1,2}|' +
+  dayWordNames +
+  ')(?:\\s+de)?\\s+(' +
+  monthNames +
+  ')(?:\\s+(\\d{4})(?:\\s+року)?)?(?![\\p{L}])',
+  'iu'
+);
 
 const monthMatch = text.match(monthDateRegex);
+const monthFirstRegex = new RegExp(
+  '(?<![\\p{L}\\p{N}])(' +
+  monthNames +
+  ')\\s+(\\d{1,2})(?:,?\\s+(\\d{4}))?(?![\\p{L}\\p{N}])',
+  'iu'
+);
 
-if (monthMatch) {
-  const dayText = monthMatch[1].toLowerCase();
+const monthFirstMatch = text.match(monthFirstRegex);
+
+if (monthMatch || monthFirstMatch) {
+  const matched = monthMatch || monthFirstMatch;
+
+  const dayText = monthMatch
+    ? matched[1].toLowerCase()
+    : matched[2];
+
+  const monthText = monthMatch
+    ? matched[2].toLowerCase()
+    : matched[1].toLowerCase();
+
   const day = dayWords[dayText] ?? Number(dayText);
-  const month = months[monthMatch[2].toLowerCase()];
-  let year = monthMatch[3]
-    ? Number(monthMatch[3])
+  const month = months[monthText];
+
+  const yearText = matched[3];
+
+  let year = yearText
+    ? Number(yearText)
     : now.getFullYear();
 
   let candidate = new Date(year, month, day);
 
   // Якщо дата без року вже минула, беремо наступний рік
   if (
-    !monthMatch[3] &&
+    !yearText &&
     candidate < new Date(
       now.getFullYear(),
       now.getMonth(),
@@ -1937,7 +1965,7 @@ if (monthMatch) {
   ) {
     date = candidate;
     hasDate = true;
-    text = text.replace(monthMatch[0], ' ');
+    text = text.replace(matched[0], ' ');
   }
 }
   const numericDateRegex =
