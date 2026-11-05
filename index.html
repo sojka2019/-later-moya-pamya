@@ -1760,7 +1760,8 @@ if (relativeMonthMatch) {
 }
 
   // 4. Назви місяців
-  const months = {
+   const months = {
+    // Українська
     'січня': 0, 'січень': 0,
     'лютого': 1, 'лютий': 1,
     'березня': 2, 'березень': 2,
@@ -1772,7 +1773,65 @@ if (relativeMonthMatch) {
     'вересня': 8, 'вересень': 8,
     'жовтня': 9, 'жовтень': 9,
     'листопада': 10, 'листопад': 10,
-    'грудня': 11, 'грудень': 11
+    'грудня': 11, 'грудень': 11,
+
+    // Російська
+    'января': 0, 'январь': 0,
+    'февраля': 1, 'февраль': 1,
+    'марта': 2, 'март': 2,
+    'апреля': 3, 'апрель': 3,
+    'мая': 4, 'май': 4,
+    'июня': 5, 'июнь': 5,
+    'июля': 6, 'июль': 6,
+    'августа': 7, 'август': 7,
+    'сентября': 8, 'сентябрь': 8,
+    'октября': 9, 'октябрь': 9,
+    'ноября': 10, 'ноябрь': 10,
+    'декабря': 11, 'декабрь': 11,
+
+    // Німецька
+    'januar': 0, 'februar': 1, 'märz': 2,
+    'april': 3, 'mai': 4, 'juni': 5,
+    'juli': 6, 'august': 7, 'september': 8,
+    'oktober': 9, 'november': 10, 'dezember': 11,
+
+    // Англійська
+    'january': 0, 'february': 1, 'march': 2,
+    'april': 3, 'may': 4, 'june': 5,
+    'july': 6, 'august': 7, 'september': 8,
+    'october': 9, 'november': 10, 'december': 11,
+
+    // Французька
+    'janvier': 0, 'février': 1, 'mars': 2,
+    'avril': 3, 'mai': 4, 'juin': 5,
+    'juillet': 6, 'août': 7, 'septembre': 8,
+    'octobre': 9, 'novembre': 10, 'décembre': 11,
+
+    // Італійська
+    'gennaio': 0, 'febbraio': 1, 'marzo': 2,
+    'aprile': 3, 'maggio': 4, 'giugno': 5,
+    'luglio': 6, 'agosto': 7, 'settembre': 8,
+    'ottobre': 9, 'novembre': 10, 'dicembre': 11,
+
+    // Польська
+    'stycznia': 0, 'styczeń': 0,
+    'lutego': 1, 'luty': 1,
+    'marca': 2, 'marzec': 2,
+    'kwietnia': 3, 'kwiecień': 3,
+    'maja': 4, 'maj': 4,
+    'czerwca': 5, 'czerwiec': 5,
+    'lipca': 6, 'lipiec': 6,
+    'sierpnia': 7, 'sierpień': 7,
+    'września': 8, 'wrzesień': 8,
+    'października': 9, 'październik': 9,
+    'listopada': 10, 'listopad': 10,
+    'grudnia': 11, 'grudzień': 11,
+
+    // Іспанська
+    'enero': 0, 'febrero': 1, 'marzo': 2,
+    'abril': 3, 'mayo': 4, 'junio': 5,
+    'julio': 6, 'agosto': 7, 'septiembre': 8,
+    'octubre': 9, 'noviembre': 10, 'diciembre': 11
   };
 // Дні місяця, сказані словами
 const dayWords = {
@@ -1806,7 +1865,39 @@ const dayWords = {
   'двадцять восьмого': 28,
   'двадцять дев’ятого': 29, "двадцять дев'ятого": 29,
   'тридцятого': 30,
-  'тридцять першого': 31
+  'тридцять першого': 31,
+   
+  // Німецька
+  'ersten': 1, 'zweiten': 2, 'dritten': 3,
+  'vierten': 4, 'fünften': 5, 'sechsten': 6,
+  'siebten': 7, 'achten': 8, 'neunten': 9,
+  'zehnten': 10, 'elften': 11, 'zwölften': 12,
+
+  // Французька
+  'premier': 1, 'première': 1, 'deuxième': 2,
+  'troisième': 3, 'quatrième': 4, 'cinquième': 5,
+  'sixième': 6, 'septième': 7, 'huitième': 8,
+  'neuvième': 9, 'dixième': 10, 'onzième': 11,
+  'douzième': 12,
+
+  // Італійська
+  'primo': 1, 'secondo': 2, 'terzo': 3,
+  'quarto': 4, 'quinto': 5, 'sesto': 6,
+  'settimo': 7, 'ottavo': 8, 'nono': 9,
+  'decimo': 10, 'undicesimo': 11, 'dodicesimo': 12,
+
+  // Польська
+  'pierwszego': 1, 'drugiego': 2, 'trzeciego': 3,
+  'czwartego': 4, 'piątego': 5, 'szóstego': 6,
+  'siódmego': 7, 'ósmego': 8, 'dziewiątego': 9,
+  'dziesiątego': 10, 'jedenastego': 11,
+  'dwunastego': 12,
+
+  // Іспанська
+  'uno de': 1, 'dos de': 2, 'tres de': 3,
+  'cuatro de': 4, 'cinco de': 5, 'seis de': 6,
+  'siete de': 7, 'ocho de': 8, 'nueve de': 9,
+  'diez de': 10, 'once de': 11, 'doce de': 12
 };
  const escapeDateRegex = value =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
