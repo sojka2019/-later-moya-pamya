@@ -174,7 +174,12 @@ jobs:
                 es: '🔔 Activar recordatorios del sistema'
               };
 
-              button.textContent = reminderButtonTexts[appLanguage] || reminderButtonTexts.uk;
+               window.updateNativeReminderButtonLanguage = () => {
+                const language = localStorage.getItem('app-language') || 'uk';
+                button.textContent = reminderButtonTexts[language] || reminderButtonTexts.uk;
+              };
+
+              window.updateNativeReminderButtonLanguage();
               button.style.width = '100%';
               button.style.margin = '0 0 6px';
               sectionHead.insertAdjacentElement('afterend', button);
