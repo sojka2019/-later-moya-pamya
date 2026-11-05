@@ -1638,7 +1638,7 @@ function parseVoiceReminder(transcript) {
     }
   }
   const weekMatch = text.match(
-    /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(одну|один|дві|две|два|три|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели|Woche|Wochen|week|weeks|semaine|semaines|settimana|settimane|tydzień|tygodnie|tygodni|semana|semanas)(?![\p{L}\p{N}])/iu
+    /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(одну|один|дві|две|два|три|eine|einen|ein|zwei|drei|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели|Woche|Wochen|week|weeks|semaine|semaines|settimana|settimane|tydzień|tygodnie|tygodni|semana|semanas)(?![\p{L}\p{N}])/iu
   );
 
   if (weekMatch) {
