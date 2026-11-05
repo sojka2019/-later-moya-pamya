@@ -2326,13 +2326,14 @@ if (monthMatch || monthFirstMatch) {
     const weekdayText = weekdayMatch[2].toLowerCase();
     const ordinalText = (weekdayMatch[1] || '').toLowerCase();
 
-    const weekday =
-      weekdayText.startsWith('понеділ') || weekdayText.startsWith('понедельник') ? 1
-      : weekdayText.startsWith('вівтор') || weekdayText.startsWith('вторник') ? 2
-      : weekdayText.startsWith('серед') || weekdayText.startsWith('сред') ? 3
-      : weekdayText.startsWith('четвер') ? 4
-      : weekdayText.includes('ятниц') || weekdayText.startsWith('пятниц') ? 5 
-      : weekdayText.startsWith('субот') || weekdayText.startsWith('суббот') ? 6
+     const weekday =
+      weekdayText.startsWith('понеділ') || weekdayText.startsWith('понедельник') || weekdayText === 'montag' ? 1
+      : weekdayText.startsWith('вівтор') || weekdayText.startsWith('вторник') || weekdayText === 'dienstag' ? 2
+      : weekdayText.startsWith('серед') || weekdayText.startsWith('сред') || weekdayText === 'mittwoch' ? 3
+      : weekdayText.startsWith('четвер') || weekdayText === 'donnerstag' ? 4
+      : weekdayText.includes('ятниц') || weekdayText.startsWith('пятниц') || weekdayText === 'freitag' ? 5
+      : weekdayText.startsWith('субот') || weekdayText.startsWith('суббот') || weekdayText === 'samstag' ? 6
+      : weekdayText === 'sonntag' || weekdayText.startsWith('неділ') || weekdayText.startsWith('воскресень') ? 0
       : 0;
 
     const ordinal =
@@ -2342,7 +2343,7 @@ if (monthMatch || monthFirstMatch) {
       : ordinalText.startsWith('четверт') || ordinalText.startsWith('четвёрт') ? 4
       : 0;
     const isNextWeekWord =
-      ordinalText === 'наступного' || ordinalText === 'следующий';
+      ['наступного', 'следующий', 'nächsten', 'nächste'].includes(ordinalText);
     if (ordinal) {
       let year = now.getFullYear();
       let month = now.getMonth();
@@ -2402,22 +2403,22 @@ if (monthMatch || monthFirstMatch) {
     },
     {
       // Обід — 12:00
-      regex: /(?<![\p{L}\p{N}])(?:(?:в|у|во)\s+)?(?:обід|обідом|обіді|опівдні|обед|обедом|обеде|полдень)(?![\p{L}\p{N}])/iu,
+       regex: /(?<![\p{L}\p{N}])(?:(?:в|у|во|am)\s+)?(?:обід|обідом|обіді|опівдні|обед|обедом|обеде|полдень|mittag|mittags)(?![\p{L}\p{N}])/iu,
       hour: 12
     },
     {
       // Ранок — 09:00
-      regex: /(?<![\p{L}\p{N}])(?:(?:в|у|с)\s+)?(?:ранок|ранком|зранку|вранці|утро|утром)(?![\p{L}\p{N}])/iu,
+       regex: /(?<![\p{L}\p{N}])(?:(?:в|у|с)\s+)?(?:ранок|ранком|зранку|вранці|утро|утром|morgens|vormittags)(?![\p{L}\p{N}])/iu,
       hour: 9
     },
     {
       // Вечір — 19:00
-      regex: /(?:^|\s)(?:(?:в|у)\s+)?(?:вечір|вечором|вечері|ввечері|увечері|вечер|вечером|вечера)(?=$|\s|[,.!?])/iu,
+      regex: /(?:^|\s)(?:(?:в|у|am)\s+)?(?:вечір|вечором|вечері|ввечері|увечері|вечер|вечером|вечера|abend|abends)(?=$|\s|[,.!?])/iu,
       hour: 19
     },
     {
       // Після обіду — 14:00
-      regex: /(?<![\p{L}\p{N}])(?:після\s+обіду|после\s+обеда)(?![\p{L}\p{N}])/iu,
+       regex: /(?<![\p{L}\p{N}])(?:після\s+обіду|после\s+обеда|nachmittags|nach dem Mittagessen)(?![\p{L}\p{N}])/iu,
       hour: 14
     }
   ];
