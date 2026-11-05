@@ -1766,7 +1766,7 @@ if (halfYearMatch) {
 
 // Через один, два, три та інші місяці
 const relativeMonthMatch = text.match(
-   /(?<![\p{L}\p{N}])(?:через|in)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)\s+)?(місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten)(?![\p{L}\p{N}])/iu
+   /(?<![\p{L}\p{N}])(?:(?:через|in)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)\s+)?|(?:im\s+)?(?:nächsten|nächste)\s+)(місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten)(?![\p{L}\p{N}])/iu
 );
 
 if (relativeMonthMatch) {
