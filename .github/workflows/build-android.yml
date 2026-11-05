@@ -574,19 +574,44 @@ jobs:
 
                 updateSettingsNotificationButton();
               }
-              button.addEventListener('click', async () => {
+               button.addEventListener('click', async () => {
                 try {
                   let permission = await LocalNotifications.checkPermissions();
-                  if (permission.display !== 'granted') permission = await LocalNotifications.requestPermissions();
+
+                  if (permission.display !== 'granted') {
+                    permission = await LocalNotifications.requestPermissions();
+                  }
+
                   if (permission.display !== 'granted') {
                     status.textContent = 'Дозволь сповіщення для застосунку в налаштуваннях Android.';
+                    await window.updateNativeReminderButtonLanguage();
                     return;
                   }
+
+                  let exactPermission = await LocalNotifications.checkExactNotificationSetting();
+
+                  if (exactPermission.exact_alarm !== 'granted') {
+                    status.textContent = 'Дозволь точні нагадування в налаштуваннях Android.';
+                    await LocalNotifications.changeExactNotificationSetting();
+
+                    exactPermission = await LocalNotifications.checkExactNotificationSetting();
+
+                    if (exactPermission.exact_alarm !== 'granted') {
+                      await window.updateNativeReminderButtonLanguage();
+                      return;
+                    }
+                  }
+
+                  localStorage.setItem('reminders-enabled', 'true');
                   status.textContent = 'Перевіряю та планую нагадування…';
+
                   await syncReminders();
+                  await window.updateNativeReminderButtonLanguage();
+
                 } catch (error) {
-                  console.error(error);
+                  console.error('Enable reminders error:', error);
                   status.textContent = 'Не вдалося ввімкнути сповіщення.';
+                  await window.updateNativeReminderButtonLanguage();
                 }
               });
               LocalNotifications.addListener('localNotificationActionPerformed', action => {
