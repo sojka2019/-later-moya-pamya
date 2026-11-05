@@ -1617,6 +1617,12 @@ function parseVoiceReminder(transcript) {
     const word = (relativeDayMatch[1] || '1').toLowerCase();
    
     const daysToAdd = ({
+      'ein': 1, 'eine': 1, 'einen': 1,
+      'einem': 1, 'einer': 1, 'eins': 1,
+      'zwei': 2, 'drei': 3, 'vier': 4,
+      'fünf': 5, 'sechs': 6, 'sieben': 7,
+      'acht': 8, 'neun': 9, 'zehn': 10,
+      'elf': 11, 'zwölf': 12,
       'один': 1, 'одна': 1, 'одну': 1, '1': 1,
       'два': 2, 'дві': 2, 'две': 2, 'двоє': 2, 'двое': 2, '2': 2,
       'три': 3, 'троє': 3, 'трое': 3, '3': 3,
@@ -2096,6 +2102,7 @@ if (monthMatch || monthFirstMatch) {
 
   const minuteWords = {
      // Німецькі хвилини
+    'null': 0,
     'fünf': 5,
     'zehn': 10,
     'fünfzehn': 15,
@@ -2240,6 +2247,7 @@ if (monthMatch || monthFirstMatch) {
       new RegExp(
         '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|um)\\s*(\\d{1,2})' +
         '(?:\\s*(?:[:,.]\\s*|\\s+)(\\d{1,2}))?' +
+        '(?:\\s+Uhr)?' +
         '(?:\\s+(' + periodPattern + '))?' +
         '(?![\\p{L}\\p{N}])',
         'iu'
