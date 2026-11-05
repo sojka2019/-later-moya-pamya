@@ -174,9 +174,93 @@ jobs:
                 es: '🔔 Activar recordatorios del sistema'
               };
 
-               window.updateNativeReminderButtonLanguage = () => {
+                window.updateNativeReminderButtonLanguage = async () => {
                 const language = localStorage.getItem('app-language') || 'uk';
-                button.textContent = reminderButtonTexts[language] || reminderButtonTexts.uk;
+
+                const texts = {
+                  uk: {
+                    enabled: '✅ Системні нагадування увімкнені',
+                    disabled: '🔔 Увімкнути системні нагадування',
+                    off: '🔕 Системні нагадування вимкнені',
+                    exact: '⚠️ Дозволь точні нагадування в Android',
+                    blocked: '🚫 Сповіщення заблоковано'
+                  },
+                  ru: {
+                    enabled: '✅ Системные напоминания включены',
+                    disabled: '🔔 Включить системные напоминания',
+                    off: '🔕 Системные напоминания выключены',
+                    exact: '⚠️ Разреши точные напоминания в Android',
+                    blocked: '🚫 Уведомления заблокированы'
+                  },
+                  de: {
+                    enabled: '✅ Systemerinnerungen aktiviert',
+                    disabled: '🔔 Systemerinnerungen aktivieren',
+                    off: '🔕 Systemerinnerungen ausgeschaltet',
+                    exact: '⚠️ Genaue Erinnerungen erlauben',
+                    blocked: '🚫 Benachrichtigungen blockiert'
+                  },
+                  fr: {
+                    enabled: '✅ Rappels système activés',
+                    disabled: '🔔 Activer les rappels système',
+                    off: '🔕 Rappels système désactivés',
+                    exact: '⚠️ Autoriser les rappels exacts',
+                    blocked: '🚫 Notifications bloquées'
+                  },
+                  it: {
+                    enabled: '✅ Promemoria di sistema attivati',
+                    disabled: '🔔 Attiva promemoria di sistema',
+                    off: '🔕 Promemoria disattivati',
+                    exact: '⚠️ Consenti promemoria esatti',
+                    blocked: '🚫 Notifiche bloccate'
+                  },
+                  en: {
+                    enabled: '✅ System reminders enabled',
+                    disabled: '🔔 Enable system reminders',
+                    off: '🔕 System reminders disabled',
+                    exact: '⚠️ Allow exact reminders',
+                    blocked: '🚫 Notifications blocked'
+                  },
+                  pl: {
+                    enabled: '✅ Przypomnienia systemowe włączone',
+                    disabled: '🔔 Włącz przypomnienia systemowe',
+                    off: '🔕 Przypomnienia wyłączone',
+                    exact: '⚠️ Zezwól na dokładne przypomnienia',
+                    blocked: '🚫 Powiadomienia zablokowane'
+                  },
+                  es: {
+                    enabled: '✅ Recordatorios del sistema activados',
+                    disabled: '🔔 Activar recordatorios del sistema',
+                    off: '🔕 Recordatorios desactivados',
+                    exact: '⚠️ Permitir recordatorios exactos',
+                    blocked: '🚫 Notificaciones bloqueadas'
+                  }
+                };
+
+                const t = texts[language] || texts.uk;
+
+                try {
+                  const permission = await LocalNotifications.checkPermissions();
+
+                  if (permission.display !== 'granted') {
+                    button.textContent = t.blocked;
+                    return;
+                  }
+
+                  if (localStorage.getItem('reminders-enabled') === 'false') {
+                    button.textContent = t.off;
+                    return;
+                  }
+
+                  const exactPermission = await LocalNotifications.checkExactNotificationSetting();
+
+                  button.textContent = exactPermission.exact_alarm === 'granted'
+                    ? t.enabled
+                    : t.exact;
+
+                } catch (error) {
+                  console.error('Reminder button status error:', error);
+                  button.textContent = t.disabled;
+                }
               };
 
               window.updateNativeReminderButtonLanguage();
@@ -428,13 +512,20 @@ jobs:
                  }
                  await LocalNotifications.cancelAll();
                  
+                 let scheduleWarning = null;
+
                  if (schedules.length) {
-                   await LocalNotifications.schedule({ notifications: schedules });
+                   const scheduleResult = await LocalNotifications.schedule({
+                     notifications: schedules
+                   });
+                   scheduleWarning = scheduleResult.warning || null;
                  }
 
-                 status.textContent = schedules.length
-                   ? 'Заплановано сповіщень: ' + schedules.length + '.'
-                   : 'Немає майбутніх сповіщень, які ще потрібно запланувати.';
+                 status.textContent = scheduleWarning
+                   ? 'Увага: Android не дозволив точний час. ' + scheduleWarning.message
+                   : schedules.length
+                     ? 'Заплановано сповіщень: ' + schedules.length + '.'
+                     : 'Немає майбутніх сповіщень, які ще потрібно запланувати.';
 
                 } catch (error) {
                   console.error('Local reminder error:', error);
