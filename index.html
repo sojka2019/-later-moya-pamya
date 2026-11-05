@@ -1581,7 +1581,10 @@ function parseVoiceReminder(transcript) {
   if (removePhrase(/(?<![\p{L}\p{N}])(?:післязавтра|послезавтра|übermorgen|the day after tomorrow|après-demain|dopodomani|pojutrze|pasado mañana)(?![\p{L}\p{N}])/iu)) {
     date.setDate(date.getDate() + 2);
     hasDate = true;
-  } else if (removePhrase(/(?<![\p{L}\p{N}])(?:завтра|morgen|tomorrow|demain|domani|jutro|mañana)(?![\p{L}\p{N}])/iu)) {
+  } else if (
+    removePhrase(/(?<![\p{L}\p{N}])(?:завтра|morgen|tomorrow|demain|domani|jutro|mañana)(?![\p{L}\p{N}])/iu) ||
+    removePhrase(/(?<![\p{L}\p{N}])am\s+nächsten\s+Tag(?![\p{L}\p{N}])/iu)
+  ) {
     date.setDate(date.getDate() + 1);
     hasDate = true;
   } else if (removePhrase(/(?<![\p{L}\p{N}])(?:сьогодні|сегодня|heute|today|aujourd'hui|oggi|dzisiaj|hoy)(?![\p{L}\p{N}])/iu)) {
@@ -1739,7 +1742,7 @@ function addCalendarMonths(baseDate, monthsToAdd) {
 
 // Через один, два, три та інші роки
 const relativeYearMatch = text.match(
-   /(?<![\p{L}\p{N}])(?:через|in)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)\s+)?(рік|роки|років|року|год|года|лет|Jahr|Jahren)(?![\p{L}\p{N}])/iu
+   /(?<![\p{L}\p{N}])(?:(?:через|in)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)\s+)?|(?:im\s+nächsten|nächstes)\s+)(рік|роки|років|року|год|года|лет|Jahr|Jahren)(?![\p{L}\p{N}])/iu
 );
 
 if (relativeYearMatch) {
@@ -1755,7 +1758,7 @@ if (relativeYearMatch) {
 
 // Через пів року або полгода
 const halfYearMatch = text.match(
-  /(?<![\p{L}\p{N}])через\s+(?:пів\s+року|півроку|полгода|пол\s+года)(?![\p{L}\p{N}])/iu
+  /(?<![\p{L}\p{N}])(?:через\s+(?:пів\s+року|півроку|полгода|пол\s+года)|in\s+einem\s+halben\s+Jahr)(?![\p{L}\p{N}])/iu
 );
 
 if (halfYearMatch) {
@@ -2336,11 +2339,11 @@ if (monthMatch || monthFirstMatch) {
       : weekdayText === 'sonntag' || weekdayText.startsWith('неділ') || weekdayText.startsWith('воскресень') ? 0
       : 0;
 
-    const ordinal =
-      ordinalText.startsWith('перш') || ordinalText.startsWith('перв') ? 1
-      : ordinalText.startsWith('друг') || ordinalText.startsWith('втор') ? 2
-      : ordinalText.startsWith('трет') || ordinalText.startsWith('треть') ? 3
-      : ordinalText.startsWith('четверт') || ordinalText.startsWith('четвёрт') ? 4
+     const ordinal =
+      ordinalText.startsWith('перш') || ordinalText.startsWith('перв') || ordinalText === 'ersten' ? 1
+      : ordinalText.startsWith('друг') || ordinalText.startsWith('втор') || ordinalText === 'zweiten' ? 2
+      : ordinalText.startsWith('трет') || ordinalText.startsWith('треть') || ordinalText === 'dritten' ? 3
+      : ordinalText.startsWith('четверт') || ordinalText.startsWith('четвёрт') || ordinalText === 'vierten' ? 4
       : 0;
     const isNextWeekWord =
       ['наступного', 'следующий', 'nächsten', 'nächste'].includes(ordinalText);
@@ -2393,7 +2396,7 @@ if (monthMatch || monthFirstMatch) {
     },
    {
       // Опівночі — 00:00
-      regex: /(?<![\p{L}\p{N}])(?:опівночі|полночь|полуночи|полуночью)(?![\p{L}\p{N}])/iu,
+      regex: /(?<![\p{L}\p{N}])(?:опівночі|полночь|полуночи|полуночью|um\s+Mitternacht)(?![\p{L}\p{N}])/iu,
       hour: 0
     },
     {
@@ -2410,6 +2413,11 @@ if (monthMatch || monthFirstMatch) {
       // Ранок — 09:00
        regex: /(?<![\p{L}\p{N}])(?:(?:в|у|с)\s+)?(?:ранок|ранком|зранку|вранці|утро|утром|morgens|vormittags)(?![\p{L}\p{N}])/iu,
       hour: 9
+    },
+    {
+      // Ніч — 23:00
+      regex: /(?<![\p{L}\p{N}])nachts(?![\p{L}\p{N}])/iu,
+      hour: 23
     },
     {
       // Вечір — 19:00
