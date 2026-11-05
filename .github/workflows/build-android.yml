@@ -444,9 +444,8 @@ jobs:
 
                 const exactPermission = await LocalNotifications.checkExactNotificationSetting();
 
-                if (exactPermission.exact_alarm !== 'granted') {
-                  status.textContent = 'Потрібно дозволити точні нагадування в налаштуваннях Android.';
-                  await LocalNotifications.changeExactNotificationSetting();
+               if (exactPermission.exact_alarm !== 'granted') {
+                  status.textContent = 'Потрібно дозволити точні нагадування в налаштуваннях Android. Натисни кнопку ввімкнення.';
                   return;
                 }
                 const notes = getNotes();
