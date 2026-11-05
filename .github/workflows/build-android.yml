@@ -329,9 +329,14 @@ jobs:
               }
             async function syncReminders() {
               try {
+                if (localStorage.getItem('reminders-enabled') === 'false') {
+                  await LocalNotifications.cancelAll();
+                  status.textContent = 'Сповіщення вимкнено.';
+                  return;
+                }
+
                 const permission = await LocalNotifications.checkPermissions();
                 if (permission.display !== 'granted') return;
-
                 const notes = getNotes();
                 const now = Date.now();
 
