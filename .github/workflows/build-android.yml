@@ -408,6 +408,48 @@ jobs:
                   status.textContent = 'Не вдалося запланувати нагадування. Перевір дозволи сповіщень.';
                 }
                 }
+               const settingsNotificationButton = document.getElementById('notificationToggle');
+
+              if (settingsNotificationButton) {
+                async function updateSettingsNotificationButton() {
+                  const permission = await LocalNotifications.checkPermissions();
+                  const enabled = localStorage.getItem('reminders-enabled') !== 'false';
+
+                  if (permission.display === 'denied') {
+                    settingsNotificationButton.textContent = 'Сповіщення заблоковано';
+                  } else if (!enabled) {
+                    settingsNotificationButton.textContent = '🔕 Сповіщення вимкнено';
+                  } else if (permission.display === 'granted') {
+                    settingsNotificationButton.textContent = '🔔 Сповіщення ввімкнено';
+                  } else {
+                    settingsNotificationButton.textContent = '🔔 Увімкнути сповіщення';
+                  }
+                }
+
+                settingsNotificationButton.addEventListener('click', async () => {
+                  const enabled = localStorage.getItem('reminders-enabled') !== 'false';
+
+                  if (enabled) {
+                    localStorage.setItem('reminders-enabled', 'false');
+                    await LocalNotifications.cancelAll();
+                  } else {
+                    let permission = await LocalNotifications.checkPermissions();
+                    if (permission.display !== 'granted') {
+                      permission = await LocalNotifications.requestPermissions();
+                    }
+                    if (permission.display !== 'granted') {
+                      settingsNotificationButton.textContent = 'Сповіщення заблоковано';
+                      return;
+                    }
+                    localStorage.setItem('reminders-enabled', 'true');
+                    await syncReminders();
+                  }
+
+                  await updateSettingsNotificationButton();
+                });
+
+                updateSettingsNotificationButton();
+              }
               button.addEventListener('click', async () => {
                 try {
                   let permission = await LocalNotifications.checkPermissions();
