@@ -163,7 +163,18 @@ jobs:
             if (sectionHead) {
               const button = document.createElement('button');
               button.className = 'secondary';
-              button.textContent = '🔔 Увімкнути системні нагадування';
+              const reminderButtonTexts = {
+                uk: '🔔 Увімкнути системні нагадування',
+                ru: '🔔 Включить системные напоминания',
+                de: '🔔 Systemerinnerungen aktivieren',
+                fr: '🔔 Activer les rappels système',
+                it: '🔔 Attiva promemoria di sistema',
+                en: '🔔 Enable system reminders',
+                pl: '🔔 Włącz przypomnienia systemowe',
+                es: '🔔 Activar recordatorios del sistema'
+              };
+
+              button.textContent = reminderButtonTexts[appLanguage] || reminderButtonTexts.uk;
               button.style.width = '100%';
               button.style.margin = '0 0 6px';
               sectionHead.insertAdjacentElement('afterend', button);
