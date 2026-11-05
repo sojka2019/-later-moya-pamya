@@ -1516,7 +1516,7 @@ function parseVoiceReminder(transcript) {
  // Відносний час: через годину, дві години або кілька хвилин
    // Через пів години / полчаса
   const halfHourMatch = text.match(
-    /(?<![\p{L}\p{N}])через\s+(?:пів\s+години|півгодини|полчаса)(?![\p{L}\p{N}])/iu
+   /(?<![\p{L}\p{N}])(?:через\s+(?:пів\s+години|півгодини|полчаса)|in einer halben Stunde|in half an hour|dans une demi-heure|tra mezz'ora|fra mezz'ora|za pół godziny|en media hora)(?![\p{L}\p{N}])/iu
   );
 
   if (halfHourMatch) {
@@ -1525,8 +1525,18 @@ function parseVoiceReminder(transcript) {
     hasTime = true;
     text = text.replace(halfHourMatch[0], ' ');
   }
-  const relativeTimeMatch = text.match(
-    /(?<![\p{L}\p{N}])(?:через|за)\s+(?:(одну|одна|один|одну|дві|два|три|1|2|3|30|20|15|10|5)\s+)?(годину|години|годин|год|хвилину|хвилини|хвилин|хв)(?![\p{L}\p{N}])/iu
+  const oneHourMatch = text.match(
+    /(?<![\p{L}\p{N}])(?:in einer Stunde|in one hour|dans une heure|tra un'ora|za godzinę|dentro de una hora)(?![\p{L}\p{N}])/iu
+  );
+
+  if (oneHourMatch) {
+    date = new Date(now.getTime() + 60 * 60 * 1000);
+    hasDate = true;
+    hasTime = true;
+    text = text.replace(oneHourMatch[0], ' ');
+  }
+   const relativeTimeMatch = text.match(
+     /(?<![\p{L}\p{N}])(?:через|за)\s+(?:(одну|одна|один|одну|дві|два|три|1|2|3|30|20|15|10|5)\s+)?(годину|години|годин|год|хвилину|хвилини|хвилин|хв)(?![\p{L}\p{N}])/iu
   );
 
   if (relativeTimeMatch) {
@@ -1559,13 +1569,13 @@ function parseVoiceReminder(transcript) {
     text = text.replace(relativeTimeMatch[0], ' ');
   }
   // 1. Відносні дати українською та російською
-  if (removePhrase(/(?<![\p{L}\p{N}])(?:післязавтра|послезавтра)(?![\p{L}\p{N}])/iu)) {
+  if (removePhrase(/(?<![\p{L}\p{N}])(?:післязавтра|послезавтра|übermorgen|the day after tomorrow|après-demain|dopodomani|pojutrze|pasado mañana)(?![\p{L}\p{N}])/iu)) {
     date.setDate(date.getDate() + 2);
     hasDate = true;
-  } else if (removePhrase(/(?<![\p{L}\p{N}])завтра(?![\p{L}\p{N}])/iu)) {
+  } else if (removePhrase(/(?<![\p{L}\p{N}])(?:завтра|morgen|tomorrow|demain|domani|jutro|mañana)(?![\p{L}\p{N}])/iu)) {
     date.setDate(date.getDate() + 1);
     hasDate = true;
-  } else if (removePhrase(/(?<![\p{L}\p{N}])(?:сьогодні|сегодня)(?![\p{L}\p{N}])/iu)) {
+  } else if (removePhrase(/(?<![\p{L}\p{N}])(?:сьогодні|сегодня|heute|today|aujourd'hui|oggi|dzisiaj|hoy)(?![\p{L}\p{N}])/iu)) {
     hasDate = true;
   }
 
