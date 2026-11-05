@@ -1610,7 +1610,7 @@ function parseVoiceReminder(transcript) {
   
   // Через один, два, три та інші дні, доби або сутки
   const relativeDayMatch = text.match(
-    /(?<![\p{L}\p{N}])через\s+(?:(один|одна|одну|два|дві|две|двоє|двое|три|троє|трое|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12)\s+)?(день|дня|днів|дні|доба|добу|доби|діб|дней|сутки|суток)(?![\p{L}\p{N}])/iu
+   /(?<![\p{L}\p{N}])(?:через|in)\s+(?:(один|одна|одну|два|дві|две|двоє|двое|три|троє|трое|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|1|2|3|4|5|6|7|8|9|10|11|12)\s+)?(день|дня|днів|дні|доба|добу|доби|діб|дней|сутки|суток|Tag|Tage|Tagen)(?![\p{L}\p{N}])/iu
   );
 
   if (relativeDayMatch) {
@@ -1638,7 +1638,7 @@ function parseVoiceReminder(transcript) {
     }
   }
   const weekMatch = text.match(
-    /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(одну|один|дві|две|два|три|eine|einen|ein|zwei|drei|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели|Woche|Wochen|week|weeks|semaine|semaines|settimana|settimane|tydzień|tygodnie|tygodni|semana|semanas)(?![\p{L}\p{N}])/iu
+    /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(одну|один|дві|две|два|три|eine|einen|einer|ein|zwei|drei|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели|Woche|Wochen|week|weeks|semaine|semaines|settimana|settimane|tydzień|tygodnie|tygodni|semana|semanas)(?![\p{L}\p{N}])/iu
   );
 
   if (weekMatch) {
@@ -1647,7 +1647,9 @@ function parseVoiceReminder(transcript) {
       'одну': 1, 'один': 1, '1': 1,
       'дві': 2, 'две': 2, 'два': 2, '2': 2,
       'три': 3, '3': 3,
-      'eine': 1, 'ein': 1, 'one': 1,
+      'eine': 1, 'ein': 1, 'einen': 1, 'einer': 1,
+      'zwei': 2, 'drei': 3,
+      'one': 1,
       'une': 1, 'deux': 2, 'two': 2,
       'tre': 3, 'due': 2,
       'jedną': 1, 'jedna': 1, 'dwie': 2, 'trzy': 3,
@@ -1669,6 +1671,7 @@ function parseVoiceReminder(transcript) {
 const relativeNumbers = {
    // Німецькі числа
   'eins': 1, 'ein': 1, 'eine': 1, 'einen': 1,
+  'einem': 1, 'einer': 1,
   'zwei': 2,
   'drei': 3,
   'vier': 4,
@@ -1884,7 +1887,26 @@ const dayWords = {
   'vierten': 4, 'fünften': 5, 'sechsten': 6,
   'siebten': 7, 'achten': 8, 'neunten': 9,
   'zehnten': 10, 'elften': 11, 'zwölften': 12,
-
+  'dreizehnten': 13,
+  'vierzehnten': 14,
+  'fünfzehnten': 15,
+  'sechzehnten': 16,
+  'siebzehnten': 17,
+  'achtzehnten': 18,
+  'neunzehnten': 19,
+  'zwanzigsten': 20,
+  'einundzwanzigsten': 21,
+  'zweiundzwanzigsten': 22,
+  'dreiundzwanzigsten': 23,
+  'vierundzwanzigsten': 24,
+  'fünfundzwanzigsten': 25,
+  'sechsundzwanzigsten': 26,
+  'siebenundzwanzigsten': 27,
+  'achtundzwanzigsten': 28,
+  'neunundzwanzigsten': 29,
+  'dreißigsten': 30,
+  'einunddreißigsten': 31,
+  
   // Французька
   'premier': 1, 'première': 1, 'deuxième': 2,
   'troisième': 3, 'quatrième': 4, 'cinquième': 5,
