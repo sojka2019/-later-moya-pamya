@@ -1698,7 +1698,12 @@ const relativeNumbers = {
   'чотири': 4, 'четыре': 4, '4': 4,
   'п’ять': 5, "п'ять": 5, 'пять': 5, '5': 5,
   'шість': 6, 'шесть': 6, '6': 6,
-  '7': 7, '8': 8, '9': 9,
+  'сім': 7, 'семь': 7, '7': 7,
+  'вісім': 8, 'восемь': 8, '8': 8,
+  'дев’ять': 9, "дев'ять": 9, 'девять': 9, '9': 9,
+  'десять': 10, '10': 10,
+  'одинадцять': 11, 'одиннадцать': 11, '11': 11,
+  'дванадцять': 12, 'двенадцать': 12, '12': 12,
   '10': 10, '11': 11, '12': 12,
   'one': 1, 'two': 2, 'three': 3, 'four': 4,
   'five': 5, 'six': 6, 'seven': 7,
@@ -1742,7 +1747,7 @@ function addCalendarMonths(baseDate, monthsToAdd) {
 
 // Через один, два, три та інші роки
 const relativeYearMatch = text.match(
-   /(?<![\p{L}\p{N}])(?:(?:через|in)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)\s+)?|(?:im\s+nächsten|nächstes)\s+)(рік|роки|років|року|год|года|лет|Jahr|Jahren)(?![\p{L}\p{N}])/iu
+  /(?<![\p{L}\p{N}])(?:(?:через|in)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)\s+)?|(?:im\s+(?:nächsten|kommenden)|nächstes|kommendes)\s+)(рік|роки|років|року|год|года|лет|Jahr|Jahren)(?![\p{L}\p{N}])/iu
 );
 
 if (relativeYearMatch) {
@@ -1769,7 +1774,7 @@ if (halfYearMatch) {
 
 // Через один, два, три та інші місяці
 const relativeMonthMatch = text.match(
-   /(?<![\p{L}\p{N}])(?:(?:через|in)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)\s+)?|(?:im\s+)?(?:nächsten|nächste)\s+)(місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten)(?![\p{L}\p{N}])/iu
+  /(?<![\p{L}\p{N}])(?:(?:через|in)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)\s+)?|(?:im\s+)?(?:nächsten|nächste|kommenden)\s+)(місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten)(?![\p{L}\p{N}])/iu
 );
 
 if (relativeMonthMatch) {
@@ -1814,7 +1819,7 @@ if (relativeMonthMatch) {
     'декабря': 11, 'декабрь': 11,
 
     // Німецька
-    'januar': 0, 'februar': 1, 'märz': 2,
+     'januar': 0, 'februar': 1, 'märz': 2,
     'april': 3, 'mai': 4, 'juni': 5,
     'juli': 6, 'august': 7, 'september': 8,
     'oktober': 9, 'november': 10, 'dezember': 11,
