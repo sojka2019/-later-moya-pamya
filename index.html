@@ -2531,7 +2531,12 @@ if (monthMatch || monthFirstMatch) {
 })[appLanguage] || 'uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;$('micTitle').textContent = appLanguage === 'ru' ? 'Слушаю тебя…' : 'Слухаю тебе…';$('micHint').textContent = appLanguage === 'ru'
   ? 'Говори после запроса браузера на доступ к микрофону'
   : 'Говори після запиту браузера на доступ до мікрофона';$('voiceStatus').textContent='';;recognition.onresult = e => {
+  if (!e.results || !e.results.length || !e.results[0][0].transcript.trim()) {
+    $('voiceStatus').textContent = 'Текст не розпізнано. Спробуй ще раз.';
+    return;
+  }
   const spokenText = e.results[0][0].transcript;
+  console.log('Мікрофон розпізнав:', spokenText);
   const result = parseVoiceReminder(spokenText);
  
   $('noteText').value = result.text;
@@ -2554,6 +2559,7 @@ if (monthMatch || monthFirstMatch) {
 };
 
 recognition.onerror = e => {
+  console.log('Помилка мікрофона:', e.error);
   clearTimeout(recognitionTimer);
   recognitionTimer = null;
   $('micBtn').classList.remove('listening');
