@@ -1612,6 +1612,7 @@ function parseVoiceReminder(transcript) {
   }
   
   // Через один, два, три та інші дні, доби або сутки
+  
   const relativeDayMatch = text.match(
    /(?<![\p{L}\p{N}])(?:через|in)\s+(?:(один|одна|одну|два|дві|две|двоє|двое|три|троє|трое|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|1|2|3|4|5|6|7|8|9|10|11|12)\s+)?(день|дня|днів|дні|доба|добу|доби|діб|дней|сутки|суток|Tag|Tage|Tagen)(?![\p{L}\p{N}])/iu
   );
@@ -2633,7 +2634,7 @@ const dayPeriods = [
   },
   {
     // До обіду — 11:00
-    regex: /(?<![\p{L}\p{N}])до\s+(?:обіду|обеда)(?![\p{L}\p{N}])/iu,
+    regex: /(?<![\p{L}\p{N}])(?:до\s+(?:обіду|обеда)|vormittags|am\s+Vormittag)(?![\p{L}\p{N}])/iu,
     hour: 11
   },
   {
@@ -2643,7 +2644,7 @@ const dayPeriods = [
   },
   {
     // Ранок — 09:00
-    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|с|am)\s+)?(?:ранок|ранком|зранку|вранці|утро|утром|morgens|vormittags|vormittag)(?![\p{L}\p{N}])/iu,
+    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|с|am)\s+)?(?:ранок|ранком|зранку|вранці|утро|утром|morgens|vormittags|vormittag|morgen\s+früh|morgen\s+frueh)(?![\p{L}\p{N}])/iu,
     hour: 9
   },
   {
@@ -2653,7 +2654,7 @@ const dayPeriods = [
   },
   {
     // Після обіду — 14:00
-    regex: /(?<![\p{L}\p{N}])(?:після\s+обіду|после\s+обеда|nachmittags|nach\s+dem\s+Mittagessen|am\s+Nachmittag)(?![\p{L}\p{N}])/iu,
+    regex: /(?<![\p{L}\p{N}])(?:після\s+обіду|после\s+обеда|nachmittags|nach\s+dem\s+Mittagessen|nach\s+dem\s+Mittag|am\s+Nachmittag)(?![\p{L}\p{N}])/iu,
     hour: 14
   }
 ];
