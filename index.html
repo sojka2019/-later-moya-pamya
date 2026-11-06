@@ -2193,6 +2193,15 @@ const numericDateMatch = text.match(numericDateRegex);
     'сорок п’ять': 45, "сорок п'ять": 45, 'сорок пять': 45,
     'п’ятдесят': 50, "п'ятдесят": 50, 'пятдесят': 50, 'пятьдесят': 50,
     'п’ятдесят п’ять': 55, "п'ятдесят п'ять": 55, 'пятдесят пять': 55, 'пятьдесят пять': 55,
+   // Російські хвилини
+    'двадцать': 20,
+    'двадцать пять': 25,
+    'тридцать': 30,
+    'тридцать пять': 35,
+    'сорок': 40,
+    'сорок пять': 45,
+    'пятьдесят': 50,
+    'пятьдесят пять': 55,
   };
 
   const periodPattern =
@@ -2398,7 +2407,7 @@ const numericDateMatch = text.match(numericDateRegex);
     /(?<![\p{L}\p{N}])(?:о|об|на|в|у|um)\s*(\d{1,2})[.\s]+\s*40\s+(?:п’ять|п'ять|пять)(?![\p{L}\p{N}])/iu
   );
 
-  if (splitMinuteMatch && !timeMatch) {
+  if (splitMinuteMatch) {
     timeMatch = splitMinuteMatch;
     hour = Number(splitMinuteMatch[1]);
     minute = 45;
