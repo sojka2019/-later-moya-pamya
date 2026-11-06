@@ -1536,7 +1536,7 @@ function parseVoiceReminder(transcript) {
     text = text.replace(oneHourMatch[0], ' ');
   }
    const relativeTimeMatch = text.match(
-    /(?<![\p{L}\p{N}])(?:через|за|in|dans|tra|fra|dentro de|en)\s+(?:(одну|одна|один|дві|два|три|eine|ein|einen|zwei|one|two|three|une|deux|trois|una|uno|due|tre|jedną|jedna|dwie|trzy|dos|tres|1|2|3|5|10|15|20|30)\s+)?(годину|години|годин|год|хвилину|хвилини|хвилин|хв|stunde|stunden|hour|hours|hr|heure|heures|ora|ore|godzinę|godzina|godziny|godzin|minute|minutes|min|minuten|minuti|minuta|minuty|minut|minuto|minutos)(?![\p{L}\p{N}])/iu
+    /(?<![\p{L}\p{N}])(?:через|за|in|dans|tra|fra|dentro de|en)\s+(?:(одну|одна|один|дві|два|три|eine|ein|einen|zwei|one|two|three|une|deux|trois|una|uno|due|tre|jedną|jedna|dwie|trzy|dos|tres|(?:[1-9]|1\d|2\d|30))\s+)?(годину|години|годин|год|хвилину|хвилини|хвилин|хв|stunde|stunden|hour|hours|hr|heure|heures|ora|ore|godzinę|godzina|godziny|godzin|minute|minutes|min|minuten|minuti|minuta|minuty|minut|minuto|minutos)(?![\p{L}\p{N}])/iu
   );
 
   if (relativeTimeMatch) {
@@ -1545,20 +1545,110 @@ function parseVoiceReminder(transcript) {
 
     const unit = relativeTimeMatch[2].toLowerCase();
 
-    const amounts = {
-      'одну': 1, 'один': 1, 'одна': 1,
-      'дві': 2, 'два': 2, 'три': 3,
-      'eine': 1, 'ein': 1, 'einen': 1, 'zwei': 2,
-      'one': 1, 'two': 2, 'three': 3,
-      'une': 1, 'deux': 2, 'trois': 3,
-      'una': 1, 'uno': 1, 'due': 2, 'tre': 3,
-      'jedną': 1, 'jedna': 1, 'dwie': 2, 'trzy': 3,
-      'dos': 2, 'tres': 3,
-      '1': 1, '2': 2, '3': 3,
-      '5': 5, '10': 10, '15': 15, '20': 20, '30': 30
-    };
+   const amounts = {
+  // Українська
+  'один':1,'одна':1,'одне':1,'одну':1,
+  'два':2,'дві':2,'три':3,'чотири':4,'п’ять':5,'п'ять':5,
+  'шість':6,'сім':7,'вісім':8,'дев’ять':9,'дев'ять':9,
+  'десять':10,'одинадцять':11,'дванадцять':12,
+  'тринадцять':13,'чотирнадцять':14,'п’ятнадцять':15,
+  'п'ятнадцять':15,'шістнадцять':16,'сімнадцять':17,
+  'вісімнадцять':18,'дев’ятнадцять':19,'дев'ятнадцять':19,
+  'двадцять':20,
+  'двадцять один':21,'двадцять два':22,'двадцять три':23,
+  'двадцять чотири':24,'двадцять п’ять':25,'двадцять п'ять':25,
+  'двадцять шість':26,'двадцять сім':27,'двадцять вісім':28,
+  'двадцять дев’ять':29,'двадцять дев'ять':29,'тридцять':30,
 
-    const amount = amounts[amountWord];
+  // Російська
+  'один':1,'одна':1,'одно':1,'одну':1,
+  'два':2,'две':2,'три':3,'четыре':4,'пять':5,'шесть':6,
+  'семь':7,'восемь':8,'девять':9,'десять':10,
+  'одиннадцать':11,'двенадцать':12,'тринадцать':13,
+  'четырнадцать':14,'пятнадцать':15,'шестнадцать':16,
+  'семнадцать':17,'восемнадцать':18,'девятнадцать':19,
+  'двадцать':20,
+  'двадцать один':21,'двадцать два':22,'двадцать три':23,
+  'двадцать четыре':24,'двадцать пять':25,'двадцать шесть':26,
+  'двадцать семь':27,'двадцать восемь':28,'двадцать девять':29,
+  'тридцать':30,
+
+  // Німецька
+  'eins':1,'ein':1,'eine':1,'einen':1,'zwei':2,'drei':3,
+  'vier':4,'fünf':5,'sechs':6,'sieben':7,'acht':8,'neun':9,
+  'zehn':10,'elf':11,'zwölf':12,'dreizehn':13,'vierzehn':14,
+  'fünfzehn':15,'sechzehn':16,'siebzehn':17,'achtzehn':18,
+  'neunzehn':19,'zwanzig':20,
+  'einundzwanzig':21,'zweiundzwanzig':22,'dreiundzwanzig':23,
+  'vierundzwanzig':24,'fünfundzwanzig':25,'sechsundzwanzig':26,
+  'siebenundzwanzig':27,'achtundzwanzig':28,'neunundzwanzig':29,
+  'dreißig':30,
+
+  // Англійська
+  'one':1,'two':2,'three':3,'four':4,'five':5,'six':6,
+  'seven':7,'eight':8,'nine':9,'ten':10,'eleven':11,'twelve':12,
+  'thirteen':13,'fourteen':14,'fifteen':15,'sixteen':16,
+  'seventeen':17,'eighteen':18,'nineteen':19,'twenty':20,
+  'twenty-one':21,'twenty one':21,'twenty-two':22,'twenty two':22,
+  'twenty-three':23,'twenty three':23,'twenty-four':24,'twenty four':24,
+  'twenty-five':25,'twenty five':25,'twenty-six':26,'twenty six':26,
+  'twenty-seven':27,'twenty seven':27,'twenty-eight':28,'twenty eight':28,
+  'twenty-nine':29,'twenty nine':29,'thirty':30,
+
+  // Французька
+  'un':1,'une':1,'deux':2,'trois':3,'quatre':4,'cinq':5,
+  'six':6,'sept':7,'huit':8,'neuf':9,'dix':10,'onze':11,
+  'douze':12,'treize':13,'quatorze':14,'quinze':15,
+  'seize':16,'dix-sept':17,'dix-huit':18,'dix-neuf':19,
+  'vingt':20,'vingt et un':21,'vingt-et-un':21,
+  'vingt et une':21,'vingt-deux':22,'vingt-trois':23,
+  'vingt-quatre':24,'vingt-cinq':25,'vingt-six':26,
+  'vingt-sept':27,'vingt-huit':28,'vingt-neuf':29,'trente':30,
+
+  // Італійська
+  'uno':1,'una':1,'due':2,'tre':3,'quattro':4,'cinque':5,
+  'sei':6,'sette':7,'otto':8,'nove':9,'dieci':10,'undici':11,
+  'dodici':12,'tredici':13,'quattordici':14,'quindici':15,
+  'sedici':16,'diciassette':17,'diciotto':18,'diciannove':19,
+  'venti':20,'ventuno':21,'ventidue':22,'ventitré':23,
+  'ventiquattro':24,'venticinque':25,'ventisei':26,
+  'ventisette':27,'ventotto':28,'ventinove':29,'trenta':30,
+
+  // Польська
+  'jeden':1,'jedna':1,'jedno':1,'jedną':1,
+  'dwa':2,'dwie':2,'trzy':3,'cztery':4,'pięć':5,'sześć':6,
+  'siedem':7,'osiem':8,'dziewięć':9,'dziesięć':10,
+  'jedenaście':11,'dwanaście':12,'trzynaście':13,
+  'czternaście':14,'piętnaście':15,'szesnaście':16,
+  'siedemnaście':17,'osiemnaście':18,'dziewiętnaście':19,
+  'dwadzieścia':20,
+  'dwadzieścia jeden':21,'dwadzieścia dwa':22,
+  'dwadzieścia trzy':23,'dwadzieścia cztery':24,
+  'dwadzieścia pięć':25,'dwadzieścia sześć':26,
+  'dwadzieścia siedem':27,'dwadzieścia osiem':28,
+  'dwadzieścia dziewięć':29,'trzydzieści':30,
+
+  // Іспанська
+  'uno':1,'una':1,'un':1,'dos':2,'tres':3,'cuatro':4,
+  'cinco':5,'seis':6,'siete':7,'ocho':8,'nueve':9,'diez':10,
+  'once':11,'doce':12,'trece':13,'catorce':14,'quince':15,
+  'dieciséis':16,'diecisiete':17,'dieciocho':18,
+  'diecinueve':19,'veinte':20,'veintiuno':21,'veintiún':21,
+  'veintidós':22,'veintitrés':23,'veinticuatro':24,
+  'veinticinco':25,'veintiséis':26,'veintisiete':27,
+  'veintiocho':28,'veintinueve':29,'treinta':30,
+
+  // Цифри
+  '1':1,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,
+  '10':10,'11':11,'12':12,'13':13,'14':14,'15':15,
+  '16':16,'17':17,'18':18,'19':19,'20':20,'21':21,
+  '22':22,'23':23,'24':24,'25':25,'26':26,'27':27,
+  '28':28,'29':29,'30':30
+};
+
+    const amount = /^\d+$/.test(amountWord)
+      ? Number(amountWord)
+      : amounts[amountWord];
 
     const isMinutes = [
       'хвилину', 'хвилини', 'хвилин', 'хв',
