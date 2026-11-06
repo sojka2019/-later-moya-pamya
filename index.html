@@ -2153,6 +2153,10 @@ if (monthMatch || monthFirstMatch) {
   let hour;
   let minute = 0;
   // Розмовний час: "п'ять по восьмій" = 08:05
+  // Німецький розмовний час: nach, vor, halb, Viertel
+  const germanTimeMatch = text.match(
+    /(?<![\p{L}\p{N}])(?:(\d{1,2}|fünf|zehn|zwanzig|fünfundzwanzig|dreißig|fünfunddreißig|vierzig|fünfundvierzig|fünfzig|fünfundfünfzig)\s+nach\s+(\d{1,2}|eins|ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)|(?:(\d{1,2}|fünf|zehn|zwanzig|fünfundzwanzig|dreißig|fünfunddreißig|vierzig|fünfundvierzig|fünfzig|fünfundfünfzig)\s+vor\s+(\d{1,2}|eins|ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf))|halb\s+(\d{1,2}|eins|ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)|viertel\s+(nach|vor)\s+(\d{1,2}|eins|ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf))(?![\p{L}\p{N}])/iu
+  );
   const colloquialPastMatch = text.match(
      /(?<![\p{L}\p{N}])(5|10|15|20|п’ять|п'ять|пять|десять|десят|п’ятнадцять|п'ятнадцять|пятнадцать|двадцять)\s+по\s+(1[0-2]|[1-9]|першій|другій|третій|четвертій|п’ятій|п'ятій|пятой|шостій|сьомій|восьмій|дев’ятій|дев'ятій|десятій|одинадцятій|дванадцятій)(?![\p{L}\p{N}])/iu
   );
