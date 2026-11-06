@@ -2157,6 +2157,42 @@ if (monthMatch || monthFirstMatch) {
   const germanTimeMatch = text.match(
     /(?<![\p{L}\p{N}])(?:(\d{1,2}|fünf|zehn|zwanzig|fünfundzwanzig|dreißig|fünfunddreißig|vierzig|fünfundvierzig|fünfzig|fünfundfünfzig)\s+nach\s+(\d{1,2}|eins|ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)|(?:(\d{1,2}|fünf|zehn|zwanzig|fünfundzwanzig|dreißig|fünfunddreißig|vierzig|fünfundvierzig|fünfzig|fünfundfünfzig)\s+vor\s+(\d{1,2}|eins|ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf))|halb\s+(\d{1,2}|eins|ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)|viertel\s+(nach|vor)\s+(\d{1,2}|eins|ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf))(?![\p{L}\p{N}])/iu
   );
+   if (germanTimeMatch) {
+    const germanNumbers = {
+      'eins': 1, 'ein': 1,
+      'zwei': 2, 'drei': 3, 'vier': 4,
+      'fünf': 5, 'sechs': 6, 'sieben': 7,
+      'acht': 8, 'neun': 9, 'zehn': 10,
+      'elf': 11, 'zwölf': 12
+    };
+
+    const getGermanNumber = value =>
+      /^\d+$/.test(value)
+        ? Number(value)
+        : germanNumbers[value.toLowerCase()];
+
+    if (germanTimeMatch[1]) {
+      minute = getGermanNumber(germanTimeMatch[1]);
+      hour = getGermanNumber(germanTimeMatch[2]);
+    } else if (germanTimeMatch[3]) {
+      minute = 60 - getGermanNumber(germanTimeMatch[3]);
+      hour = getGermanNumber(germanTimeMatch[4]) - 1;
+    } else if (germanTimeMatch[5]) {
+      minute = 30;
+      hour = getGermanNumber(germanTimeMatch[5]) - 1;
+    } else {
+      minute = germanTimeMatch[6] === 'nach' ? 15 : 45;
+      hour = getGermanNumber(germanTimeMatch[7]);
+
+      if (germanTimeMatch[6] === 'vor') {
+        hour--;
+      }
+    }
+
+    if (hour < 0) hour = 23;
+
+    timeMatch = germanTimeMatch;
+  }
   const colloquialPastMatch = text.match(
      /(?<![\p{L}\p{N}])(5|10|15|20|п’ять|п'ять|пять|десять|десят|п’ятнадцять|п'ятнадцять|пятнадцать|двадцять)\s+по\s+(1[0-2]|[1-9]|першій|другій|третій|четвертій|п’ятій|п'ятій|пятой|шостій|сьомій|восьмій|дев’ятій|дев'ятій|десятій|одинадцятій|дванадцятій)(?![\p{L}\p{N}])/iu
   );
@@ -2293,7 +2329,7 @@ if (monthMatch || monthFirstMatch) {
     /(?<![\p{L}\p{N}])(?:о|об|на|в|у|um)\s*(\d{1,2})[.\s]+\s*40\s+(?:п’ять|п'ять|пять)(?![\p{L}\p{N}])/iu
   );
 
-  if (splitMinuteMatch) {
+  if (splitMinuteMatch && !timeMatch) {
     timeMatch = splitMinuteMatch;
     hour = Number(splitMinuteMatch[1]);
     minute = 45;
