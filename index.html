@@ -2570,6 +2570,10 @@ recognition.onstart = () => {
   $('micBtn').classList.add('listening');
 };
 
+recognition.onnomatch = () => {
+  console.log('Мікрофон почув голос, але не розпізнав слова');
+  $('voiceStatus').textContent = 'Голос почуто, але слова не розпізнано.';
+};                      
 
 recognition.onend = () => {
   clearTimeout(recognitionTimer);
