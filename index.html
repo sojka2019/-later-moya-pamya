@@ -1693,28 +1693,38 @@ function parseVoiceReminder(transcript) {
       text = text.replace(relativeDayMatch[0], ' ');
     }
   }
-  const weekMatch = text.match(
-    /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(одну|один|дві|две|два|три|eine|einen|einer|ein|zwei|drei|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели|Woche|Wochen|week|weeks|semaine|semaines|settimana|settimane|tydzień|tygodnie|tygodni|semana|semanas)(?![\p{L}\p{N}])/iu
+   const weekMatch = text.match(
+    /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(одну|один|одна|дві|две|два|три|eine|einen|einer|ein|zwei|drei|one|two|three|un|une|deux|trois|una|uno|due|tre|jeden|jedna|jedną|dwa|dwie|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели|Woche|Wochen|week|weeks|semaine|semaines|settimana|settimane|tydzień|tygodnie|tygodni|semana|semanas)(?![\p{L}\p{N}])/iu
   );
 
   if (weekMatch) {
     const word = weekMatch[1].toLowerCase();
+
     const weeks = ({
-      'одну': 1, 'один': 1, '1': 1,
+      'одну': 1, 'один': 1, 'одна': 1, '1': 1,
       'дві': 2, 'две': 2, 'два': 2, '2': 2,
       'три': 3, '3': 3,
-      'eine': 1, 'ein': 1, 'einen': 1, 'einer': 1,
+
+      'eine': 1, 'einen': 1, 'einer': 1, 'ein': 1,
       'zwei': 2, 'drei': 3,
-      'one': 1,
-      'une': 1, 'deux': 2, 'two': 2,
-      'tre': 3, 'due': 2,
-      'jedną': 1, 'jedna': 1, 'dwie': 2, 'trzy': 3,
-      'una': 1, 'uno': 1, 'dos': 2, 'tres': 3
+
+      'one': 1, 'two': 2, 'three': 3,
+
+      'un': 1, 'une': 1, 'deux': 2, 'trois': 3,
+
+      'una': 1, 'uno': 1, 'due': 2, 'tre': 3,
+
+      'jeden': 1, 'jedna': 1, 'jedną': 1,
+      'dwa': 2, 'dwie': 2,
+
+      '1': 1, '2': 2, '3': 3
     })[word];
 
-    date.setDate(date.getDate() + weeks * 7);
-    hasDate = true;
-    text = text.replace(weekMatch[0], ' ');
+    if (weeks) {
+      date.setDate(date.getDate() + weeks * 7);
+      hasDate = true;
+      text = text.replace(weekMatch[0], ' ');
+   }
   } else if (
     removePhrase(/(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:неділю|тиждень|неделю|Woche|week|semaine|settimana|tydzień|semana)(?![\p{L}\p{N}])|(?<![\p{L}\p{N}])(?:nächste\s+Woche|in\s+der\s+nächsten\s+Woche|наступного\s+тижня|на\s+следующей\s+неделе)(?![\p{L}\p{N}])/iu)
   ) {
