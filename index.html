@@ -2575,6 +2575,10 @@ recognition.onnomatch = () => {
   $('voiceStatus').textContent = 'Голос почуто, але слова не розпізнано.';
 };                      
 
+recognition.onspeechend = () => {
+  console.log('Мікрофон завершив слухати мовлення');
+};
+
 recognition.onend = () => {
   clearTimeout(recognitionTimer);
   recognitionTimer = null;
