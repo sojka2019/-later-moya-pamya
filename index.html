@@ -2180,7 +2180,66 @@ const numericDateMatch = text.match(numericDateRegex);
     'одинадцятій': 11, 'одинадцяту': 11, 'одинадцять': 11,
     'дванадцятій': 12, 'дванадцяту': 12, 'дванадцять': 12,
     'девятнадцятій': 19, 'дев’ятнадцятій': 19, "дев'ятнадцятій": 19,
-     // Українські години 13–18 та 20–23
+     // Англійські години
+  'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+  'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
+  'eleven': 11, 'twelve': 12, 'thirteen': 13, 'fourteen': 14,
+  'fifteen': 15, 'sixteen': 16, 'seventeen': 17, 'eighteen': 18,
+  'nineteen': 19, 'twenty': 20, 'twenty one': 21,
+  'twenty-one': 21, 'twenty two': 22, 'twenty-two': 22,
+  'twenty three': 23, 'twenty-three': 23,
+
+  // Французькі години
+  'un': 1, 'une': 1, 'deux': 2, 'trois': 3, 'quatre': 4,
+  'cinq': 5, 'six': 6, 'sept': 7, 'huit': 8, 'neuf': 9,
+  'dix': 10, 'onze': 11, 'douze': 12, 'treize': 13,
+  'quatorze': 14, 'quinze': 15, 'seize': 16,
+  'dix-sept': 17, 'dix-huit': 18, 'dix-neuf': 19,
+  'vingt': 20, 'vingt et un': 21, 'vingt et une': 21, 'vingt-deux': 22,
+  'vingt-trois': 23,
+
+  // Італійські години
+  'uno': 1, 'una': 1, 'due': 2, 'tre': 3, 'quattro': 4,
+  'cinque': 5, 'sei': 6, 'sette': 7, 'otto': 8, 'nove': 9,
+  'dieci': 10, 'undici': 11, 'dodici': 12, 'tredici': 13,
+  'quattordici': 14, 'quindici': 15, 'sedici': 16,
+  'diciassette': 17, 'diciotto': 18, 'diciannove': 19,
+  'venti': 20, 'ventuno': 21, 'ventidue': 22, 'ventitré': 23,
+
+  // Польські години
+  'jeden': 1, 'jedna': 1, 'pierwszej': 1,
+  'dwa': 2, 'dwie': 2, 'drugiej': 2,
+  'trzy': 3, 'trzeciej': 3,
+  'cztery': 4, 'czwartej': 4,
+  'pięć': 5, 'piątej': 5,
+  'sześć': 6, 'szóstej': 6,
+  'siedem': 7, 'siódmej': 7,
+  'osiem': 8, 'ósmej': 8,
+  'dziewięć': 9, 'dziewiątej': 9,
+  'dziesięć': 10, 'dziesiątej': 10,
+  'jedenaście': 11, 'jedenastej': 11,
+  'dwanaście': 12, 'dwunastej': 12,
+  'trzynaście': 13, 'trzynastej': 13,
+  'czternaście': 14, 'czternastej': 14,
+  'piętnaście': 15, 'piętnastej': 15,
+  'szesnaście': 16, 'szesnastej': 16,
+  'siedemnaście': 17, 'siedemnastej': 17,
+  'osiemnaście': 18, 'osiemnastej': 18,
+  'dziewiętnaście': 19, 'dziewiętnastej': 19,
+  'dwadzieścia': 20, 'dwudziestej': 20,
+  'dwadzieścia pierwszej': 21, 'dwudziestej pierwszej': 21,
+  'dwadzieścia drugiej': 22, 'dwudziestej drugiej': 22,
+  'dwadzieścia trzeciej': 23, 'dwudziestej trzeciej': 23,
+
+  // Іспанські години
+  'uno': 1, 'una': 1, 'dos': 2, 'tres': 3, 'cuatro': 4,
+  'cinco': 5, 'seis': 6, 'siete': 7, 'ocho': 8, 'nueve': 9,
+  'diez': 10, 'once': 11, 'doce': 12, 'trece': 13,
+  'catorce': 14, 'quince': 15, 'dieciséis': 16,
+  'diecisiete': 17, 'dieciocho': 18, 'diecinueve': 19,
+  'veinte': 20, 'veintiuno': 21, 'veintiuna': 21, 'veintidós': 22,
+  'veintitrés': 23,
+    // Українські години 13–18 та 20–23
     'тринадцятій': 13, 'тринадцяту': 13, 'тринадцять': 13,
     'чотирнадцятій': 14, 'чотирнадцяту': 14, 'чотирнадцять': 14,
     'п’ятнадцятій': 15, "п'ятнадцятій": 15, 'пятнадцятій': 15,
@@ -2263,10 +2322,79 @@ const numericDateMatch = text.match(numericDateRegex);
     'сорок пять': 45,
     'пятьдесят': 50,
     'пятьдесят пять': 55,
+  // Англійські хвилини
+    'zero': 0,
+    'five': 5,
+    'ten': 10,
+    'fifteen': 15,
+    'twenty': 20,
+    'twenty-five': 25,
+    'thirty': 30,
+    'thirty-five': 35,
+    'forty': 40,
+    'forty-five': 45,
+    'fifty': 50,
+    'fifty-five': 55,
+
+    // Французькі хвилини
+    'zéro': 0,
+    'cinq': 5,
+    'dix': 10,
+    'quinze': 15,
+    'vingt': 20,
+    'vingt-cinq': 25,
+    'trente': 30,
+    'trente-cinq': 35,
+    'quarante': 40,
+    'quarante-cinq': 45,
+    'cinquante': 50,
+    'cinquante-cinq': 55,
+
+    // Італійські хвилини
+    'zero': 0,
+    'cinque': 5,
+    'dieci': 10,
+    'quindici': 15,
+    'venti': 20,
+    'venticinque': 25,
+    'trenta': 30,
+    'trentacinque': 35,
+    'quaranta': 40,
+    'quarantacinque': 45,
+    'cinquanta': 50,
+    'cinquantacinque': 55,
+
+    // Польські хвилини
+    'zero': 0,
+    'pięć': 5,
+    'dziesięć': 10,
+    'piętnaście': 15,
+    'dwadzieścia': 20,
+    'dwadzieścia pięć': 25,
+    'trzydzieści': 30,
+    'trzydzieści pięć': 35,
+    'czterdzieści': 40,
+    'czterdzieści pięć': 45,
+    'pięćdziesiąt': 50,
+    'pięćdziesiąt pięć': 55,
+
+    // Іспанські хвилини
+    'cero': 0,
+    'cinco': 5,
+    'diez': 10,
+    'quince': 15,
+    'veinte': 20,
+    'veinticinco': 25,
+    'treinta': 30,
+    'treinta y cinco': 35,
+    'cuarenta': 40,
+    'cuarenta y cinco': 45,
+    'cincuenta': 50,
+    'cincuenta y cinco': 55,
   };
 
   const periodPattern =
-   '(?:ранку|вранці|утра|утром|дня|днем|днём|до\\s+обіду|обідом|обіді|після\\s+обіду|после\\s+обеда|вечора|вечір|вечер|увечері|ввечері|вечором|вечером|ночі|ночи|ночью|опівночі|am\\s+Morgen|am\\s+Vormittag|am\\s+Nachmittag|am\\s+Abend|in\\s+der\\s+Nacht|morgens|vormittags|mittags|nachmittags|abends|nachts)';
+  '(?:ранку|вранці|утра|утром|дня|днем|днём|до\\s+обіду|обідом|обіді|після\\s+обіду|после\\s+обеда|вечора|вечір|вечер|увечері|ввечері|вечором|вечером|ночі|ночи|ночью|опівночі|am\\s+Morgen|am\\s+Vormittag|am\\s+Nachmittag|am\\s+Abend|in\\s+der\\s+Nacht|morgens|vormittags|mittags|nachmittags|abends|nachts|in\\s+the\\s+morning|in\\s+the\\s+afternoon|in\\s+the\\s+evening|at\\s+night|in\\s+the\\s+night|le\\s+matin|l’après-midi|l[’\']après-midi|le\\s+soir|la\\s+nuit|di\\s+mattina|di\\s+pomeriggio|di\\s+sera|di\\s+notte|rano|po\\s+południu|wieczorem|w\\s+nocy|por\\s+la\\s+mañana|por\\s+la\\s+tarde|por\\s+la\\s+noche|de\\s+noche)';
   const escapeRegex = word =>
     word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -2486,7 +2614,7 @@ const hoursTo = {
    if (!timeMatch) {
     timeMatch = text.match(
     new RegExp(
-      '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|um)\\s*(\\d{1,2})\\s*[,\\s.]+0\\s+([1-9])' +
+      '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\\s+las|a\\s+la)\\s*(\\d{1,2})\\s*[,\\s.]+0\\s+([1-9])' +
       '(?:\\s+(' + periodPattern + '))?' +
       '(?![\\p{L}\\p{N}])',
       'iu'
@@ -2502,7 +2630,7 @@ const hoursTo = {
   if (!timeMatch) {
     timeMatch = text.match(
       new RegExp(
-        '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|um)\\s*(\\d{1,2})\\s+(' +
+        '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\\s+las|a\\s+la)\\s*(\\d{1,2})\\s+(' +
         minutePattern +
         ')(?:\\s+(' + periodPattern + '))?(?![\\p{L}\\p{N}])',
         'iu'
@@ -2519,7 +2647,7 @@ const hoursTo = {
   if (!timeMatch) {
     timeMatch = text.match(
       new RegExp(
-        '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|um)\\s*(\\d{1,2})' +
+        '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\\s+las|a\\s+la)\\s*(\\d{1,2})' +
         '(?:\\s*(?:[:,.]\\s*|\\s+)(\\d{1,2}))?' +
         '(?:\\s+Uhr)?' +
         '(?:\\s+(' + periodPattern + '))?' +
@@ -2538,7 +2666,7 @@ const hoursTo = {
   if (!timeMatch) {
     timeMatch = text.match(
       new RegExp(
-        '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|um)?\\s*(' +
+        '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\\s+las|a\\s+la)?\\s*(' +
         hourPattern +
         '(?:\\s+Uhr)?' +
         '(?:\\s+(' + minutePattern + '))?' +
@@ -2557,7 +2685,7 @@ const hoursTo = {
   }
  // Виправляємо випадок, коли мікрофон розбиває 14:45 на "14 40 п'ять"
   const splitMinuteMatch = text.match(
-    /(?<![\p{L}\p{N}])(?:о|об|на|в|у|um)\s*(\d{1,2})[.\s]+\s*40\s+(?:п’ять|п'ять|пять)(?![\p{L}\p{N}])/iu
+    /(?<![\p{L}\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\s+las|a\s+la)\s*(\d{1,2})[.\s]+\s*40\s+(?:п’ять|п'ять|пять)(?![\p{L}\p{N}])/iu
   );
 
   if (splitMinuteMatch) {
@@ -2670,47 +2798,47 @@ const hoursTo = {
 const dayPeriods = [
   {
     // Наприкінці робочого дня — 17:00
-    regex: /(?<![\p{L}\p{N}])(?:наприкінці\s+робочого\s+дня|в\s+конце\s+рабочего\s+дня)(?![\p{L}\p{N}])/iu,
+    regex: /(?<![\p{L}\p{N}])(?:наприкінці\s+робочого\s+дня|в\s+конце\s+рабочего\s+дня|am\s+Ende\s+des\s+Arbeitstages|am\s+Ende\s+des\s+Arbeitstags|at\s+the\s+end\s+of\s+the\s+workday|à\s+la\s+fin\s+de\s+la\s+journée\s+de\s+travail|alla\s+fine\s+della\s+giornata\s+lavorativa|pod\s+koniec\s+dnia\s+pracy|al\s+final\s+de\s+la\s+jornada\s+laboral)(?![\p{L}\p{N}])/iu,
     hour: 17
   },
   {
     // Після школи — 15:00
-    regex: /(?<![\p{L}\p{N}])(?:після\s+школи|после\s+школы)(?![\p{L}\p{N}])/iu,
+   regex: /(?<![\p{L}\p{N}])(?:після\s+школи|после\s+школы|after\s+school|nach\s+der\s+Schule|après\s+l’école|après\s+école|dopo\s+la\s+scuola|po\s+szkole|después\s+de\s+la\s+escuela)(?![\p{L}\p{N}])/iu,
     hour: 15
   },
   {
     // Опівночі — 00:00
-    regex: /(?<![\p{L}\p{N}])(?:опівночі|полночь|полуночи|полуночью|um\s+Mitternacht)(?![\p{L}\p{N}])/iu,
+    regex: /(?<![\p{L}\p{N}])(?:опівночі|полночь|полуночи|полуночью|um\s+Mitternacht|at\s+midnight|à\s+minuit|a\s+mezzanotte|o\s+północy|a\s+medianoche)(?![\p{L}\p{N}])/iu,
     hour: 0
   },
   {
     // Ніч — 23:00
-    regex: /(?<![\p{L}\p{N}])(?:вночі|уночі|в\s+ночі|ночью|nachts|in\s+der\s+Nacht)(?![\p{L}\p{N}])/iu,
+    regex: /(?<![\p{L}\p{N}])(?:вночі|уночі|в\s+ночі|ночью|nachts|in\s+der\s+Nacht|at\s+night|in\s+the\s+night|la\s+nuit|de\s+nuit|di\s+notte|w\s+nocy|nocą|por\s+la\s+noche|de\s+noche)(?![\p{L}\p{N}])/iu,
     hour: 23
   },
   {
     // До обіду — 11:00
-    regex: /(?<![\p{L}\p{N}])(?:до\s+(?:обіду|обеда)|vormittags|am\s+Vormittag)(?![\p{L}\p{N}])/iu,
+    regex: /(?<![\p{L}\p{N}])(?:до\s+(?:обіду|обеда)|vormittags|am\s+Vormittag|before\s+noon|avant\s+midi|prima\s+di\s+mezzogiorno|przed\s+południem)(?![\p{L}\p{N}])/iu,
     hour: 11
   },
   {
     // Обід — 12:00
-    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|во|am)\s+)?(?:обід|обідом|обіді|опівдні|обед|обедом|обеде|полдень|mittag|mittags)(?![\p{L}\p{N}])/iu,
+    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|во|am|at|à|a|o|al|w)\s+)?(?:обід|обідом|обіді|опівдні|обед|обедом|обеде|полдень|mittag|mittags|noon|midday|midi|mezzogiorno|południe|mediodía)(?![\p{L}\p{N}])/iu,
     hour: 12
   },
   {
     // Ранок — 09:00
-    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|с|am)\s+)?(?:ранок|ранком|зранку|вранці|утро|утром|morgens|vormittags|vormittag|morgen\s+früh|morgen\s+frueh)(?![\p{L}\p{N}])/iu,
+    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|с|am|in\s+the|le|di|por\s+la)\s+)?(?:ранок|ранком|зранку|вранці|утро|утром|morgens|morgen\s+früh|morgen\s+frueh|morning|matin|mattina|rano|mañana)(?![\p{L}\p{N}])/iu,
     hour: 9
   },
   {
     // Вечір — 19:00
-    regex: /(?:^|\s)(?:(?:в|у|am)\s+)?(?:вечір|вечором|вечері|ввечері|увечері|вечер|вечером|вечера|abend|abends)(?=$|\s|[,.!?])/iu,
+    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|am|in\s+the|le|di|por\s+la)\s+)?(?:вечір|вечором|вечері|ввечері|увечері|вечер|вечером|вечера|abend|abends|evening|soir|sera|wieczorem)(?![\p{L}\p{N}])/iu,
     hour: 19
   },
   {
     // Після обіду — 14:00
-    regex: /(?<![\p{L}\p{N}])(?:після\s+обіду|после\s+обеда|nachmittags|nach\s+dem\s+Mittagessen|nach\s+dem\s+Mittag|am\s+Nachmittag)(?![\p{L}\p{N}])/iu,
+    regex: /(?<![\p{L}\p{N}])(?:після\s+обіду|после\s+обеда|nachmittags|nach\s+dem\s+Mittagessen|nach\s+dem\s+Mittag|am\s+Nachmittag|in\s+the\s+afternoon|après\s+le\s+déjeuner|l['’]après-midi|nel\s+pomeriggio|dopo\s+pranzo|po\s+południu|por\s+la\s+tarde|después\s+del\s+almuerzo)(?![\p{L}\p{N}])/iu,
     hour: 14
   }
 ];
