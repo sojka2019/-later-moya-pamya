@@ -1614,7 +1614,7 @@ function parseVoiceReminder(transcript) {
  
   
   const relativeDayMatch = text.match(
-    /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|двоє|двое|три|троє|трое|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|undici|dodici|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|jeden|jedną|jedna|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|1|2|3|4|5|6|7|8|9|10|11|12)\s+)?(день|дня|днів|дні|доба|добу|доби|діб|дней|сутки|суток|Tag|Tage|Tagen|day|days|jour|jours|giorno|giorni|dzień|dni|días|dias|día)(?![\p{L}\p{N}])/iu
+    /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|двоє|двое|три|троє|трое|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|undici|dodici|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|jeden|jedna|jedną|jedno|dwa|dwie|dwóch|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|jedenaście|dwanaście|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|1|2|3|4|5|6|7|8|9|10|11|12)\s+)?(день|дня|днів|дні|доба|добу|доби|діб|дней|сутки|суток|Tag|Tage|Tagen|day|days|jour|jours|giorno|giorni|dzień|dni|dnia|dniu|días|dias|día)(?![\p{L}\p{N}])/iu
   );
 
   if (relativeDayMatch) {
@@ -1666,12 +1666,14 @@ function parseVoiceReminder(transcript) {
 'nove': 9, 'dieci': 10, 'undici': 11, 'dodici': 12,
 
 // Польська
-'jeden': 1, 'jedną': 1, 'jedna': 1,
-'dwie': 2, 'trzy': 3, 'cztery': 4,
+'jeden': 1, 'jedna': 1, 'jedną': 1, 'jedno': 1,
+'dwa': 2, 'dwie': 2, 'dwóch': 2,
+'trzy': 3, 'cztery': 4,
 'pięć': 5, 'piec': 5,
 'sześć': 6, 'szesc': 6, 'siedem': 7,
 'osiem': 8, 'dziewięć': 9, 'dziewiec': 9,
 'dziesięć': 10, 'dziesiec': 10,
+'jedenaście': 11, 'dwanaście': 12,
 
 // Іспанська
 'uno': 1, 'una': 1, 'dos': 2,
