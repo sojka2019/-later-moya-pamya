@@ -1581,8 +1581,9 @@ function parseVoiceReminder(transcript) {
   if (removePhrase(/(?<![\p{L}\p{N}])(?:післязавтра|послезавтра|übermorgen|the day after tomorrow|après-demain|dopodomani|pojutrze|pasado mañana)(?![\p{L}\p{N}])/iu)) {
     date.setDate(date.getDate() + 2);
     hasDate = true;
-  } else if (
-    removePhrase(/(?<![\p{L}\p{N}])(?:завтра|morgen|tomorrow|demain|domani|jutro|mañana)(?![\p{L}\p{N}])/iu) ||
+ } else if (
+    removePhrase(/(?<![\p{L}\p{N}])(?:завтра|morgen|tomorrow|demain|domani|jutro)(?![\p{L}\p{N}])/iu) ||
+    removePhrase(/(?<![\p{L}\p{N}])mañana(?![\p{L}\p{N}])/iu) ||
     removePhrase(/(?<![\p{L}\p{N}])am\s+nächsten\s+Tag(?![\p{L}\p{N}])/iu)
   ) {
     date.setDate(date.getDate() + 1);
@@ -2859,8 +2860,8 @@ const dayPeriods = [
 
   // 8. Прибираємо початкові слова-команди та зайві пробіли
   text = text
-  .replace(/^\s*(?:нагадай(?:\s+мені)?|нагадаємо|нагадуй(?:\s+мені)?|напомни(?:\s+мне)?|напоминай(?:\s+мне)?|erinnere\s+mich|erinner\s+mich)\s*[,!:.]?\s*/iu, '')
-  .replace(/^\s*(?:будь\s+ласка|пожалуйста|bitte)\s*[,!:.]?\s*/iu, '')
+  .replace(/^\s*(?:нагадай(?:\s+мені)?|нагадаємо|нагадуй(?:\s+мені)?|напомни(?:\s+мне)?|напоминай(?:\s+мне)?|erinnere\s+mich|erinner\s+mich|remind\s+me|rappelle[-\s]?moi|ricordami|przypomnij\s+mi|recuérdame|recuerdame)\s*[,!:.]?\s*/iu, '')
+  .replace(/^\s*(?:будь\s+ласка|пожалуйста|bitte|please|s'il\s+vous\s+plaît|s’il\s+vous\s+plaît|s'il\s+te\s+plaît|s’il\s+te\s+plaît|per\s+favore|proszę|por\s+favor)\s*[,!:.]?\s*/iu, '')
   .replace(/\s+/g, ' ')
   .replace(/^[,.\s]+|[,.\s]+$/g, '')
   .trim();
