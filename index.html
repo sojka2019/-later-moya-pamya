@@ -1611,44 +1611,79 @@ function parseVoiceReminder(transcript) {
     text = text.replace(beforeWeekendMatch[0], ' ');
   }
   
-  // Через один, два, три та інші дні, доби або сутки
-  // Німецьке "morgen" та "morgen früh" — завтра
-  const germanTomorrowMatch = text.match(
-    /(?<![\p{L}\p{N}])morgen(?:\s+(?:früh|frueh))?(?![\p{L}\p{N}])/iu
-  );
-
-  if (germanTomorrowMatch) {
-    date.setDate(date.getDate() + 1);
-    hasDate = true;
-    text = text.replace(germanTomorrowMatch[0], ' ');
-  }
+ 
+  
   const relativeDayMatch = text.match(
-   /(?<![\p{L}\p{N}])(?:через|in)\s+(?:(один|одна|одну|два|дві|две|двоє|двое|три|троє|трое|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|1|2|3|4|5|6|7|8|9|10|11|12)\s+)?(день|дня|днів|дні|доба|добу|доби|діб|дней|сутки|суток|Tag|Tage|Tagen)(?![\p{L}\p{N}])/iu
+    /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|двоє|двое|три|троє|трое|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|undici|dodici|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|jeden|jedną|jedna|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|1|2|3|4|5|6|7|8|9|10|11|12)\s+)?(день|дня|днів|дні|доба|добу|доби|діб|дней|сутки|суток|Tag|Tage|Tagen|day|days|jour|jours|giorno|giorni|dzień|dni|días|dias|día)(?![\p{L}\p{N}])/iu
   );
 
   if (relativeDayMatch) {
     const word = (relativeDayMatch[1] || '1').toLowerCase();
    
     const daysToAdd = ({
-      'ein': 1, 'eine': 1, 'einen': 1,
-      'einem': 1, 'einer': 1, 'eins': 1,
-      'zwei': 2, 'drei': 3, 'vier': 4,
-      'fünf': 5, 'sechs': 6, 'sieben': 7,
-      'acht': 8, 'neun': 9, 'zehn': 10,
-      'elf': 11, 'zwölf': 12,
-      'один': 1, 'одна': 1, 'одну': 1, '1': 1,
-      'два': 2, 'дві': 2, 'две': 2, 'двоє': 2, 'двое': 2, '2': 2,
-      'три': 3, 'троє': 3, 'трое': 3, '3': 3,
-      'чотири': 4, 'четыре': 4, '4': 4,
-      'п’ять': 5, "п'ять": 5, 'пять': 5, '5': 5,
-      'шість': 6, 'шесть': 6, '6': 6,
-      'сім': 7, 'семь': 7, '7': 7,
-      'вісім': 8, 'восемь': 8, '8': 8,
-      'дев’ять': 9, 'девять': 9, '9': 9,
-      'десять': 10, '10': 10,
-      'одинадцять': 11, 'одиннадцать': 11, '11': 11,
-      'дванадцять': 12, 'двенадцать': 12, '12': 12
-    })[word];
+// Українська
+'один': 1, 'одна': 1, 'одну': 1,
+'два': 2, 'дві': 2,
+'три': 3, 'чотири': 4,
+'п’ять': 5, "п'ять": 5,
+'шість': 6, 'сім': 7, 'вісім': 8,
+'дев’ять': 9, "дев'ять": 9,
+'десять': 10, 'одинадцять': 11, 'дванадцять': 12,
+
+// Російська
+'одна': 1, 'одну': 1,
+'два': 2, 'две': 2, 'двое': 2, 'двоє': 2,
+'три': 3, 'трое': 3, 'троє': 3,
+'четыре': 4, 'пять': 5,
+'шесть': 6, 'семь': 7, 'восемь': 8,
+'девять': 9, 'десять': 10,
+'одиннадцать': 11, 'двенадцать': 12,
+
+// Німецька
+'ein': 1, 'eine': 1, 'einen': 1,
+'einem': 1, 'einer': 1, 'eins': 1,
+'zwei': 2, 'drei': 3, 'vier': 4,
+'fünf': 5, 'sechs': 6, 'sieben': 7,
+'acht': 8, 'neun': 9, 'zehn': 10,
+'elf': 11, 'zwölf': 12,
+
+// Англійська
+'one': 1, 'two': 2, 'three': 3,
+'four': 4, 'five': 5, 'six': 6,
+'seven': 7, 'eight': 8, 'nine': 9,
+'ten': 10, 'eleven': 11, 'twelve': 12,
+
+// Французька
+'un': 1, 'une': 1, 'deux': 2,
+'trois': 3, 'quatre': 4, 'cinq': 5,
+'six': 6, 'sept': 7, 'huit': 8,
+'neuf': 9, 'dix': 10, 'onze': 11, 'douze': 12,
+
+// Італійська
+'uno': 1, 'una': 1, 'due': 2,
+'tre': 3, 'quattro': 4, 'cinque': 5,
+'sei': 6, 'sette': 7, 'otto': 8,
+'nove': 9, 'dieci': 10, 'undici': 11, 'dodici': 12,
+
+// Польська
+'jeden': 1, 'jedną': 1, 'jedna': 1,
+'dwie': 2, 'trzy': 3, 'cztery': 4,
+'pięć': 5, 'piec': 5,
+'sześć': 6, 'szesc': 6, 'siedem': 7,
+'osiem': 8, 'dziewięć': 9, 'dziewiec': 9,
+'dziesięć': 10, 'dziesiec': 10,
+
+// Іспанська
+'uno': 1, 'una': 1, 'dos': 2,
+'tres': 3, 'cuatro': 4, 'cinco': 5,
+'seis': 6, 'siete': 7, 'ocho': 8,
+'nueve': 9, 'diez': 10, 'once': 11, 'doce': 12,
+
+// Цифри
+'1': 1, '2': 2, '3': 3, '4': 4,
+'5': 5, '6': 6, '7': 7, '8': 8,
+'9': 9, '10': 10, '11': 11, '12': 12
+})[word];
 
     if (daysToAdd) {
       date.setDate(date.getDate() + daysToAdd);
