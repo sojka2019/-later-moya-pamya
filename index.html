@@ -1612,7 +1612,16 @@ function parseVoiceReminder(transcript) {
   }
   
   // Через один, два, три та інші дні, доби або сутки
-  
+  // Німецьке "morgen" та "morgen früh" — завтра
+  const germanTomorrowMatch = text.match(
+    /(?<![\p{L}\p{N}])morgen(?:\s+(?:früh|frueh))?(?![\p{L}\p{N}])/iu
+  );
+
+  if (germanTomorrowMatch) {
+    date.setDate(date.getDate() + 1);
+    hasDate = true;
+    text = text.replace(germanTomorrowMatch[0], ' ');
+  }
   const relativeDayMatch = text.match(
    /(?<![\p{L}\p{N}])(?:через|in)\s+(?:(один|одна|одну|два|дві|две|двоє|двое|три|троє|трое|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|1|2|3|4|5|6|7|8|9|10|11|12)\s+)?(день|дня|днів|дні|доба|добу|доби|діб|дней|сутки|суток|Tag|Tage|Tagen)(?![\p{L}\p{N}])/iu
   );
