@@ -1698,6 +1698,17 @@ const relativeTimeMatch = text.match(
 
     text = text.replace(relativeTimeMatch[0], ' ');
   }
+  // Іспанською: por la mañana — вранці, а не завтра
+  const spanishMorningMatch = text.match(
+    /(?<![\p{L}\p{N}])por\s+la\s+mañana(?![\p{L}\p{N}])/iu
+  );
+
+  if (spanishMorningMatch) {
+    text = text.replace(spanishMorningMatch[0], ' ');
+    defaultHour = 9;
+    hasDate = true;
+  }
+  
   // 1. Відносні дати всіма підтримуваними мовами
   if (removePhrase(/(?<![\p{L}\p{N}])(?:післязавтра|послезавтра|übermorgen|the day after tomorrow|après-demain|dopodomani|pojutrze|pasado mañana)(?![\p{L}\p{N}])/iu)) {
     date.setDate(date.getDate() + 2);
@@ -1902,7 +1913,94 @@ const relativeNumbers = {
   'dziesięć': 10, 'jedenaście': 11, 'dwanaście': 12,
   'dos': 2, 'tres': 3, 'cuatro': 4, 'cinco': 5,
   'seis': 6, 'siete': 7, 'ocho': 8, 'nueve': 9,
-  'diez': 10, 'once': 11, 'doce': 12
+  'diez': 10, 'once': 11, 'doce': 12,
+
+// Німецькі числа 13–31
+'dreizehn': 13, 'vierzehn': 14, 'fünfzehn': 15,
+'sechzehn': 16, 'siebzehn': 17, 'achtzehn': 18,
+'neunzehn': 19, 'zwanzig': 20, 'einundzwanzig': 21,
+'zweiundzwanzig': 22, 'dreiundzwanzig': 23,
+'vierundzwanzig': 24, 'fünfundzwanzig': 25,
+'sechsundzwanzig': 26, 'siebenundzwanzig': 27,
+'achtundzwanzig': 28, 'neunundzwanzig': 29,
+'dreißig': 30, 'einunddreißig': 31,
+
+// Англійські числа 13–31
+'thirteen': 13, 'fourteen': 14, 'fifteen': 15,
+'sixteen': 16, 'seventeen': 17, 'eighteen': 18,
+'nineteen': 19, 'twenty': 20, 'twenty-one': 21,
+'twenty one': 21, 'twenty-two': 22, 'twenty two': 22,
+'twenty-three': 23, 'twenty three': 23,
+'twenty-four': 24, 'twenty four': 24,
+'twenty-five': 25, 'twenty five': 25,
+'twenty-six': 26, 'twenty six': 26,
+'twenty-seven': 27, 'twenty seven': 27,
+'twenty-eight': 28, 'twenty eight': 28,
+'twenty-nine': 29, 'twenty nine': 29,
+'thirty': 30, 'thirty-one': 31, 'thirty one': 31,
+
+// Французькі числа 13–31
+'treize': 13, 'quatorze': 14, 'quinze': 15,
+'seize': 16, 'dix-sept': 17, 'dix-sept': 17,
+'dix-huit': 18, 'dix-neuf': 19, 'vingt': 20,
+'vingt et un': 21, 'vingt et une': 21,
+'vingt-deux': 22, 'vingt trois': 23, 'vingt-trois': 23,
+'vingt-quatre': 24, 'vingt-cinq': 25,
+'vingt-six': 26, 'vingt-sept': 27,
+'vingt-huit': 28, 'vingt-neuf': 29,
+'trente': 30, 'trente et un': 31, 'trente et une': 31,
+
+// Італійські числа 13–31
+'tredici': 13, 'quattordici': 14, 'quindici': 15,
+'sedici': 16, 'diciassette': 17, 'diciotto': 18,
+'diciannove': 19, 'venti': 20, 'ventuno': 21,
+'ventidue': 22, 'ventitré': 23, 'ventiquattro': 24,
+'venticinque': 25, 'ventisei': 26, 'ventisette': 27,
+'ventotto': 28, 'ventinove': 29, 'trenta': 30,
+'trentuno': 31,
+
+// Польські числа 13–31
+'trzynaście': 13, 'czternaście': 14, 'piętnaście': 15,
+'szesnaście': 16, 'siedemnaście': 17, 'osiemnaście': 18,
+'dziewiętnaście': 19, 'dwadzieścia': 20,
+'dwadzieścia jeden': 21, 'dwadzieścia dwa': 22,
+'dwadzieścia trzy': 23, 'dwadzieścia cztery': 24,
+'dwadzieścia pięć': 25, 'dwadzieścia sześć': 26,
+'dwadzieścia siedem': 27, 'dwadzieścia osiem': 28,
+'dwadzieścia dziewięć': 29, 'trzydzieści': 30,
+'trzydzieści jeden': 31,
+
+// Іспанські числа 13–31
+'trece': 13, 'catorce': 14, 'quince': 15,
+'dieciséis': 16, 'diecisiete': 17, 'dieciocho': 18,
+'diecinueve': 19, 'veinte': 20, 'veintiuno': 21,
+'veintidós': 22, 'veintitrés': 23, 'veinticuatro': 24,
+'veinticinco': 25, 'veintiséis': 26, 'veintisiete': 27,
+'veintiocho': 28, 'veintinueve': 29, 'treinta': 30,
+'treinta y uno': 31,
+
+// Українські числа 13–31
+'тринадцять': 13, 'чотирнадцять': 14, 'п’ятнадцять': 15,
+"п'ятнадцять": 15, 'шістнадцять': 16, 'сімнадцять': 17,
+'вісімнадцять': 18, 'дев’ятнадцять': 19,
+"дев'ятнадцять": 19, 'двадцять': 20,
+'двадцять один': 21, 'двадцять два': 22,
+'двадцять три': 23, 'двадцять чотири': 24,
+'двадцять п’ять': 25, "двадцять п'ять": 25,
+'двадцять шість': 26, 'двадцять сім': 27,
+'двадцять вісім': 28, 'двадцять дев’ять': 29,
+'тридцять': 30, 'тридцять один': 31,
+
+// Російські числа 13–31
+'тринадцать': 13, 'четырнадцать': 14, 'пятнадцать': 15,
+'шестнадцать': 16, 'семнадцать': 17, 'восемнадцать': 18,
+'девятнадцать': 19, 'двадцать': 20,
+'двадцать один': 21, 'двадцать два': 22,
+'двадцать три': 23, 'двадцать четыре': 24,
+'двадцать пять': 25, 'двадцать шесть': 26,
+'двадцать семь': 27, 'двадцать восемь': 28,
+'двадцать девять': 29, 'тридцать': 30,
+'тридцать один': 31
 };
 
 // Правильне додавання календарних місяців
@@ -2927,31 +3025,42 @@ const hoursTo = {
   
   // Дні тижня українською та російською
    const weekdayMatch = text.match(
-    /(?:(?:у|в|во|на|am)\s+)?(?:(наступного|следующий|nächsten|nächste|ersten|zweiten|dritten|vierten|перш(?:ий|ого|у|а)|перв(?:ый|ого|ую|ая)|друг(?:ий|ого|у|а)|втор(?:ой|ого|ую|ая)|трет(?:ій|ього|ю|я)|треть(?:ий|его|ю|я)|четверт(?:ий|ого|у|а|ый|ую|ая)|четвёрт(?:ый|ого|ую|ая))\s+)?(понеділ(?:ок|ка|ку)|понедельник(?:а|у)?|вівтор(?:ок|ка|ку)|вторник(?:а|у)?|серед(?:а|и|у)|сред(?:а|ы|у|е)|четвер(?:г|га|гу)|п[’'ʼ]?ятниц(?:я|і|ю)|пятниц(?:а|ы|у|е)|субот(?:а|и|у)|суббот(?:а|ы|у|е)|неділ(?:я|і|ю)|воскресень(?:е|я|ю)|montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)(?![\p{L}\p{N}])/iu
+    /(?:(?:у|в|во|на|am)\s+)?(?:(наступного|следующий|nächsten|nächste|next|prochain|prochaine|prossimo|prossima|następny|następna|następne|przyszły|przyszła|przyszłe|próximo|próxima|ersten|zweiten|dritten|vierten|first|second|third|fourth|premier|première|deuxième|troisième|quatrième|primo|prima|secondo|seconda|terzo|terza|quarto|quarta|pierwszy|pierwsza|drugi|druga|trzeci|trzecia|czwarty|czwarta|primero|primera|segundo|segunda|tercero|tercera|cuarto|cuarta|перш(?:ий|ого|у|а)|перв(?:ый|ого|ую|ая)|друг(?:ий|ого|у|а)|втор(?:ой|ого|ую|ая)|трет(?:ій|ього|ю|я)|треть(?:ий|его|ю|я)|четверт(?:ий|ого|у|а|ый|ую|ая)|четвёрт(?:ый|ого|ую|ая))\s+)?(понеділ(?:ок|ка|ку)|понедельник(?:а|у)?|вівтор(?:ок|ка|ку)|вторник(?:а|у)?|серед(?:а|и|у)|сред(?:а|ы|у|е)|четвер(?:г|га|гу)|п[’'ʼ]?ятниц(?:я|і|ю)|пятниц(?:а|ы|у|е)|субот(?:а|и|у)|суббот(?:а|ы|у|е)|неділ(?:я|і|ю)|воскресень(?:е|я|ю)|montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag
+     |monday|tuesday|wednesday|thursday|friday|saturday|sunday
+     |lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche
+     |lunedì|martedì|mercoledì|giovedì|venerdì|sabato|domenica
+     |poniedziałek|wtorek|środa|czwartek|piątek|sobota|niedziela
+     |lunes|martes|miércoles|jueves|viernes|sábado|domingo)(?![\p{L}\p{N}])/iu
   );
 
   if (weekdayMatch) {
     const weekdayText = weekdayMatch[2].toLowerCase();
     const ordinalText = (weekdayMatch[1] || '').toLowerCase();
 
-     const weekday =
-      weekdayText.startsWith('понеділ') || weekdayText.startsWith('понедельник') || weekdayText === 'montag' ? 1
-      : weekdayText.startsWith('вівтор') || weekdayText.startsWith('вторник') || weekdayText === 'dienstag' ? 2
-      : weekdayText.startsWith('серед') || weekdayText.startsWith('сред') || weekdayText === 'mittwoch' ? 3
-      : weekdayText.startsWith('четвер') || weekdayText === 'donnerstag' ? 4
-      : weekdayText.includes('ятниц') || weekdayText.startsWith('пятниц') || weekdayText === 'freitag' ? 5
-      : weekdayText.startsWith('субот') || weekdayText.startsWith('суббот') || weekdayText === 'samstag' ? 6
-      : weekdayText === 'sonntag' || weekdayText.startsWith('неділ') || weekdayText.startsWith('воскресень') ? 0
+    const weekday =
+      weekdayText.startsWith('понеділ') || weekdayText.startsWith('понедельник') || weekdayText === 'montag' || weekdayText === 'monday' || weekdayText === 'lundi' || weekdayText === 'lunedì' || weekdayText === 'poniedziałek' || weekdayText === 'lunes' ? 1
+      : weekdayText.startsWith('вівтор') || weekdayText.startsWith('вторник') || weekdayText === 'dienstag' || weekdayText === 'tuesday' || weekdayText === 'mardi' || weekdayText === 'martedì' || weekdayText === 'wtorek' || weekdayText === 'martes' ? 2
+      : weekdayText.startsWith('серед') || weekdayText.startsWith('сред') || weekdayText === 'mittwoch' || weekdayText === 'wednesday' || weekdayText === 'mercredi' || weekdayText === 'mercoledì' || weekdayText === 'środa' || weekdayText === 'miércoles' ? 3
+      : weekdayText.startsWith('четвер') || weekdayText === 'donnerstag' || weekdayText === 'thursday' || weekdayText === 'jeudi' || weekdayText === 'giovedì' || weekdayText === 'czwartek' || weekdayText === 'jueves' ? 4
+      : weekdayText.includes('ятниц') || weekdayText.startsWith('пятниц') || weekdayText === 'freitag' || weekdayText === 'friday' || weekdayText === 'vendredi' || weekdayText === 'venerdì' || weekdayText === 'piątek' || weekdayText === 'viernes' ? 5
+      : weekdayText.startsWith('субот') || weekdayText.startsWith('суббот') || weekdayText === 'samstag' || weekdayText === 'saturday' || weekdayText === 'samedi' || weekdayText === 'sabato' || weekdayText === 'sobota' || weekdayText === 'sábado' ? 6
+      : weekdayText === 'sonntag' || weekdayText.startsWith('неділ') || weekdayText.startsWith('воскресень') || weekdayText === 'sunday' || weekdayText === 'dimanche' || weekdayText === 'domenica' || weekdayText === 'niedziela' || weekdayText === 'domingo' ? 0
       : 0;
 
-     const ordinal =
-      ordinalText.startsWith('перш') || ordinalText.startsWith('перв') || ordinalText === 'ersten' ? 1
-      : ordinalText.startsWith('друг') || ordinalText.startsWith('втор') || ordinalText === 'zweiten' ? 2
-      : ordinalText.startsWith('трет') || ordinalText.startsWith('треть') || ordinalText === 'dritten' ? 3
-      : ordinalText.startsWith('четверт') || ordinalText.startsWith('четвёрт') || ordinalText === 'vierten' ? 4
-      : 0;
+   const ordinal =
+     ordinalText.startsWith('перш') || ordinalText.startsWith('перв') || ordinalText === 'ersten' || ordinalText === 'first' || ordinalText === 'premier' || ordinalText === 'première' || ordinalText === 'primo' || ordinalText === 'prima' || ordinalText === 'pierwszy' || ordinalText === 'pierwsza' || ordinalText === 'primero' || ordinalText === 'primera' ? 1
+     : ordinalText.startsWith('друг') || ordinalText.startsWith('втор') || ordinalText === 'zweiten' || ordinalText === 'second' || ordinalText === 'deuxième' || ordinalText === 'secondo' || ordinalText === 'seconda' || ordinalText === 'drugi' || ordinalText === 'druga' || ordinalText === 'segundo' || ordinalText === 'segunda' ? 2
+     : ordinalText.startsWith('трет') || ordinalText.startsWith('треть') || ordinalText === 'dritten' || ordinalText === 'third' || ordinalText === 'troisième' || ordinalText === 'terzo' || ordinalText === 'terza' || ordinalText === 'trzeci' || ordinalText === 'trzecia' || ordinalText === 'tercero' || ordinalText === 'tercera' ? 3
+     : ordinalText.startsWith('четверт') || ordinalText.startsWith('четвёрт') || ordinalText === 'vierten' || ordinalText === 'fourth' || ordinalText === 'quatrième' || ordinalText === 'quarto' || ordinalText === 'quarta' || ordinalText === 'czwarty' || ordinalText === 'czwarta' || ordinalText === 'cuarto' || ordinalText === 'cuarta' ? 4
+     : 0;
     const isNextWeekWord =
-      ['наступного', 'следующий', 'nächsten', 'nächste'].includes(ordinalText);
+      [
+        'наступного', 'следующий', 'nächsten', 'nächste',
+        'next', 'prochain', 'prochaine', 'prossimo', 'prossima',
+        'następny', 'następna', 'następne',
+        'przyszły', 'przyszła', 'przyszłe',
+        'próximo', 'próxima'
+      ].includes(ordinalText);
     if (ordinal) {
       let year = now.getFullYear();
       let month = now.getMonth();
