@@ -1669,7 +1669,7 @@ function parseVoiceReminder(transcript) {
     hasDate = true;
     text = text.replace(weekMatch[0], ' ');
   } else if (
-    removePhrase(/(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:неділю|тиждень|неделю|Woche|week|semaine|settimana|tydzień|semana)(?![\p{L}\p{N}])|(?<![\p{L}\p{N}])nächste\s+Woche(?![\p{L}\p{N}])/iu)
+    removePhrase(/(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:неділю|тиждень|неделю|Woche|week|semaine|settimana|tydzień|semana)(?![\p{L}\p{N}])|(?<![\p{L}\p{N}])(?:nächste\s+Woche|in\s+der\s+nächsten\s+Woche|наступного\s+тижня|на\s+следующей\s+неделе)(?![\p{L}\p{N}])/iu)
   ) {
     date.setDate(date.getDate() + 7);
     hasDate = true;
@@ -2369,15 +2369,28 @@ const numericDateMatch = text.match(numericDateRegex);
     const period = (timeMatch[3] || '').toLowerCase();
 
     if (
-      ['дня', 'днем', 'днём', 'після обіду', 'после обеда', 'вечора', 'вечір', 'вечер', 'увечері', 'ввечері', 'вечором', 'вечером', 'nachmittags', 'abends', 'mittags'].includes(period) &&
-      hour < 12
-    ) {
-      hour += 12;
-    }
+  [
+    'дня', 'днем', 'днём',
+    'після обіду', 'после обеда',
+    'вечора', 'вечір', 'вечер',
+    'увечері', 'ввечері', 'вечором', 'вечером',
+    'nachmittags', 'abends', 'mittags',
+    'am nachmittag', 'am abend'
+  ].includes(period) &&
+  hour < 12
+) {
+  hour += 12;
+}
 
-    if (['ночі', 'ночи', 'ночью', 'nachts'].includes(period) && hour === 12) {
-      hour = 0;
-    }
+   if (
+  ['ночі', 'ночи', 'ночью', 'nachts', 'in der nacht'].includes(period)
+) {
+  if (hour === 12) {
+    hour = 0;
+  } else if (hour === 11) {
+    hour = 23;
+  }
+}
 
     if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) {
       date.setHours(hour, minute, 0, 0);
@@ -2453,54 +2466,54 @@ const numericDateMatch = text.match(numericDateRegex);
     text = text.replace(weekdayMatch[0], ' ');
   }
  
-  // 7. Періоди дня без конкретної години
- const dayPeriods = [
-     {
-      // Наприкінці робочого дня — 17:00
-      regex: /(?<![\p{L}\p{N}])(?:наприкінці\s+робочого\s+дня|в\s+конце\s+рабочего\s+дня)(?![\p{L}\p{N}])/iu,
-      hour: 17
-    },
-   {
-      // Після школи — 15:00
-      regex: /(?<![\p{L}\p{N}])(?:після\s+школи|после\s+школы)(?![\p{L}\p{N}])/iu,
-      hour: 15
-    },
-   {
-      // Опівночі — 00:00
-      regex: /(?<![\p{L}\p{N}])(?:опівночі|полночь|полуночи|полуночью|um\s+Mitternacht)(?![\p{L}\p{N}])/iu,
-      hour: 0
-    },
-    {
-      // До обіду — 11:00
-      regex: /(?<![\p{L}\p{N}])до\s+(?:обіду|обеда)(?![\p{L}\p{N}])/iu,
-      hour: 11
-    },
-    {
-      // Обід — 12:00
-       regex: /(?<![\p{L}\p{N}])(?:(?:в|у|во|am)\s+)?(?:обід|обідом|обіді|опівдні|обед|обедом|обеде|полдень|mittag|mittags)(?![\p{L}\p{N}])/iu,
-      hour: 12
-    },
-    {
-      // Ранок — 09:00
-       regex: /(?<![\p{L}\p{N}])(?:(?:в|у|с)\s+)?(?:ранок|ранком|зранку|вранці|утро|утром|morgens|vormittags)(?![\p{L}\p{N}])/iu,
-      hour: 9
-    },
-    {
-      // Ніч — 23:00
-      regex: /(?<![\p{L}\p{N}])nachts(?![\p{L}\p{N}])/iu,
-      hour: 23
-    },
-    {
-      // Вечір — 19:00
-      regex: /(?:^|\s)(?:(?:в|у|am)\s+)?(?:вечір|вечором|вечері|ввечері|увечері|вечер|вечером|вечера|abend|abends)(?=$|\s|[,.!?])/iu,
-      hour: 19
-    },
-    {
-      // Після обіду — 14:00
-       regex: /(?<![\p{L}\p{N}])(?:після\s+обіду|после\s+обеда|nachmittags|nach dem Mittagessen)(?![\p{L}\p{N}])/iu,
-      hour: 14
-    }
-  ];
+ // 7. Періоди дня без конкретної години
+const dayPeriods = [
+  {
+    // Наприкінці робочого дня — 17:00
+    regex: /(?<![\p{L}\p{N}])(?:наприкінці\s+робочого\s+дня|в\s+конце\s+рабочего\s+дня)(?![\p{L}\p{N}])/iu,
+    hour: 17
+  },
+  {
+    // Після школи — 15:00
+    regex: /(?<![\p{L}\p{N}])(?:після\s+школи|после\s+школы)(?![\p{L}\p{N}])/iu,
+    hour: 15
+  },
+  {
+    // Опівночі — 00:00
+    regex: /(?<![\p{L}\p{N}])(?:опівночі|полночь|полуночи|полуночью|um\s+Mitternacht)(?![\p{L}\p{N}])/iu,
+    hour: 0
+  },
+  {
+    // Ніч — 23:00
+    regex: /(?<![\p{L}\p{N}])(?:вночі|уночі|в\s+ночі|ночью|nachts|in\s+der\s+Nacht)(?![\p{L}\p{N}])/iu,
+    hour: 23
+  },
+  {
+    // До обіду — 11:00
+    regex: /(?<![\p{L}\p{N}])до\s+(?:обіду|обеда)(?![\p{L}\p{N}])/iu,
+    hour: 11
+  },
+  {
+    // Обід — 12:00
+    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|во|am)\s+)?(?:обід|обідом|обіді|опівдні|обед|обедом|обеде|полдень|mittag|mittags)(?![\p{L}\p{N}])/iu,
+    hour: 12
+  },
+  {
+    // Ранок — 09:00
+    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|с|am)\s+)?(?:ранок|ранком|зранку|вранці|утро|утром|morgens|vormittags|morgen|vormittag)(?![\p{L}\p{N}])/iu,
+    hour: 9
+  },
+  {
+    // Вечір — 19:00
+    regex: /(?:^|\s)(?:(?:в|у|am)\s+)?(?:вечір|вечором|вечері|ввечері|увечері|вечер|вечером|вечера|abend|abends)(?=$|\s|[,.!?])/iu,
+    hour: 19
+  },
+  {
+    // Після обіду — 14:00
+    regex: /(?<![\p{L}\p{N}])(?:після\s+обіду|после\s+обеда|nachmittags|nach\s+dem\s+Mittagessen|am\s+Nachmittag)(?![\p{L}\p{N}])/iu,
+    hour: 14
+  }
+];
   if (!hasTime) {
     for (const period of dayPeriods) {
       if (period.regex.test(text)) {
