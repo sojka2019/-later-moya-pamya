@@ -1529,22 +1529,12 @@ function parseVoiceReminder(transcript) {
     /(?<![\p{L}\p{N}])(?:in einer Stunde|in one hour|dans une heure|tra un'ora|za godzinę|dentro de una hora)(?![\p{L}\p{N}])/iu
   );
 
-  if (oneHourMatch) {
+  if (oneHourMatch && !halfHourMatch) {
     date = new Date(now.getTime() + 60 * 60 * 1000);
     hasDate = true;
     hasTime = true;
     text = text.replace(oneHourMatch[0], ' ');
   }
-   const relativeTimeMatch = text.match(
-    /(?<![\p{L}\p{N}])(?:через|за|in|dans|tra|fra|dentro de|en)\s+(?:(одну|одна|один|дві|два|три|eine|ein|einen|zwei|one|two|three|une|deux|trois|una|uno|due|tre|jedną|jedna|dwie|trzy|dos|tres|(?:[1-9]|1\d|2\d|30))\s+)?(годину|години|годин|год|хвилину|хвилини|хвилин|хв|stunde|stunden|hour|hours|hr|heure|heures|ora|ore|godzinę|godzina|godziny|godzin|minute|minutes|min|minuten|minuti|minuta|minuty|minut|minuto|minutos)(?![\p{L}\p{N}])/iu
-  );
-
-  if (relativeTimeMatch) {
-    const amountWord = (relativeTimeMatch[1] || '1')
-      .toLowerCase();
-
-    const unit = relativeTimeMatch[2].toLowerCase();
-
    const amounts = {
   // Українська
   'один':1,'одна':1,'одне':1,'одну':1,
@@ -1645,17 +1635,58 @@ function parseVoiceReminder(transcript) {
   '22':22,'23':23,'24':24,'25':25,'26':26,'27':27,
   '28':28,'29':29,'30':30
 };
+  
+ const amountPattern = Object.keys(amounts)
+  .sort((a, b) => b.length - a.length)
+  .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  .join('|');
+
+const relativeTimeMatch = text.match(
+  new RegExp(
+    '(?<![\\p{L}\\p{N}])(?:через|за|in|dans|tra|fra|dentro de|en)\\s+(?:(' +
+    amountPattern +
+    ')\\s+)?(годину|години|годин|год|час|часа|часов|stunde|stunden|hour|hours|hr|heure|heures|ora|ore|hora|horas|godzinę|godzina|godziny|godzin|хвилину|хвилини|хвилин|хв|минуту|минуты|минут|минута|minute|minutes|min|minuten|minuti|minuta|minuty|minuto|minutos)(?![\\p{L}\\p{N}])',
+    'iu'
+  )
+);
+
+  if (relativeTimeMatch && !halfHourMatch && !oneHourMatch) {
+    const amountWord = (relativeTimeMatch[1] || '1')
+      .toLowerCase();
+
+    const unit = relativeTimeMatch[2].toLowerCase();
+
+   
 
     const amount = /^\d+$/.test(amountWord)
       ? Number(amountWord)
       : amounts[amountWord];
 
     const isMinutes = [
-      'хвилину', 'хвилини', 'хвилин', 'хв',
-      'minute', 'minutes', 'min', 'minuten',
-      'minuti', 'minuta', 'minuty', 'minut',
-      'minuto', 'minutos'
-    ].includes(unit);
+  // Українська
+  'хвилину', 'хвилини', 'хвилин', 'хв',
+
+  // Російська
+  'минуту', 'минуты', 'минут', 'минута',
+
+  // Німецька
+  'minute', 'minuten',
+
+  // Англійська
+  'minute', 'minutes', 'min',
+
+  // Французька
+  'minute', 'minutes',
+
+  // Італійська
+  'minuto', 'minuti',
+
+  // Польська
+  'minuta', 'minuty', 'minut',
+
+  // Іспанська
+  'minuto', 'minutos'
+].includes(unit);
 
     const milliseconds = amount *
       (isMinutes ? 60 * 1000 : 60 * 60 * 1000);
@@ -1713,7 +1744,7 @@ function parseVoiceReminder(transcript) {
    
     const daysToAdd = ({
 // Українська
-'один': 1, 'одна': 1, 'одну': 1,
+'один': 1, 'одна': 1, 'одну': 1, 'одного': 1,
 'два': 2, 'дві': 2,
 'три': 3, 'чотири': 4,
 'п’ять': 5, "п'ять": 5,
@@ -1722,7 +1753,7 @@ function parseVoiceReminder(transcript) {
 'десять': 10, 'одинадцять': 11, 'дванадцять': 12,
 
 // Російська
-'одна': 1, 'одну': 1,
+'одна': 1, 'одну': 1, 'один': 1,
 'два': 2, 'две': 2, 'двое': 2, 'двоє': 2,
 'три': 3, 'трое': 3, 'троє': 3,
 'четыре': 4, 'пять': 5,
@@ -1817,7 +1848,7 @@ function parseVoiceReminder(transcript) {
       text = text.replace(weekMatch[0], ' ');
    }
   } else if (
-    removePhrase(/(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:неділю|тиждень|неделю|Woche|week|semaine|settimana|tydzień|semana)(?![\p{L}\p{N}])|(?<![\p{L}\p{N}])(?:nächste\s+Woche|in\s+der\s+nächsten\s+Woche|наступного\s+тижня|на\s+следующей\s+неделе)(?![\p{L}\p{N}])/iu)
+    removePhrase(/(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:неділю|тиждень|неделю|Woche|week|semaine|settimana|tydzień|semana)(?![\p{L}\p{N}])|(?<![\p{L}\p{N}])(?:nächste\s+Woche|in\s+der\s+nächsten\s+Woche|наступного\s+тижня|на\s+следующей\s+неделе|next\s+week|la\s+semaine\s+prochaine|la\s+settimana\s+prossima|w\s+przyszłym\s+tygodniu|w\s+przyszlym\s+tygodniu|la\s+próxima\s+semana|la\s+proxima\s+semana)(?![\p{L}\p{N}])/iu)
   ) {
     date.setDate(date.getDate() + 7);
     hasDate = true;
@@ -1862,10 +1893,10 @@ const relativeNumbers = {
   'sept': 7, 'huit': 8, 'neuf': 9,
   'dix': 10, 'onze': 11, 'douze': 12,
   'una': 1, 'uno': 1, 'due': 2, 'tre': 3,
-  'quattro': 4, 'cinque': 5, 'sette': 7,
+  'quattro': 4, 'cinque': 5, 'sei': 6, 'sette': 7,
   'otto': 8, 'nove': 9, 'dieci': 10,
   'undici': 11, 'dodici': 12,
-  'jedna': 1, 'jedną': 1, 'dwie': 2, 'trzy': 3,
+  'jeden': 1, 'jedna': 1, 'jedną': 1, 'dwa': 2, 'dwie': 2, 'trzy': 3,
   'cztery': 4, 'pięć': 5, 'sześć': 6,
   'siedem': 7, 'osiem': 8, 'dziewięć': 9,
   'dziesięć': 10, 'jedenaście': 11, 'dwanaście': 12,
@@ -1919,10 +1950,9 @@ if (halfYearMatch) {
   hasDate = true;
   text = text.replace(halfYearMatch[0], ' ');
 }
-
 // Через один, два, три та інші місяці
 const relativeMonthMatch = text.match(
-  /(?<![\p{L}\p{N}])(?:(?:через|in)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)\s+)?|(?:im\s+)?(?:nächsten|nächste|kommenden)\s+)(місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten)(?![\p{L}\p{N}])/iu
+ /(?<![\p{L}\p{N}])(?:(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|sept|huit|neuf|dix|onze|douze|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|jeden|jedna|jedną|dwa|dwie|trzy|cztery|pięć|sześć|siedem|osiem|dziewięć|dziesięć|jedenaście|dwanaście|dos|tres|cuatro|siete|ocho|nueve|diez|once|doce)\s+)?(?:місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten|month|months|mois|mese|mesi|miesiąc|miesiąca|miesiącu|miesięcy|miesiące|mes|meses)|(?:(?:im\s+)?(?:nächsten|nächste|kommenden)\s+Monat|next\s+month|the\s+coming\s+month|le\s+mois\s+prochain|dans\s+le\s+mois\s+prochain|il\s+prossimo\s+mese|nel\s+prossimo\s+mese|w\s+przyszłym\s+miesiącu|w\s+przyszlym\s+miesiacu|el\s+próximo\s+mes|el\s+proximo\s+mes|próximo\s+mes|proximo\s+mes))(?![\p{L}\p{N}])/iu
 );
 
 if (relativeMonthMatch) {
@@ -1993,8 +2023,8 @@ if (relativeMonthMatch) {
     // Польська
     'stycznia': 0, 'styczeń': 0,
     'lutego': 1, 'luty': 1,
-    'marca': 2, 'marzec': 2,
-    'kwietnia': 3, 'kwiecień': 3,
+    'marca': 2, 'marzec': 2, 'marcu': 2,
+    'kwietnia': 3, 'kwiecień': 3, 'kwietniu': 3,
     'maja': 4, 'maj': 4,
     'czerwca': 5, 'czerwiec': 5,
     'lipca': 6, 'lipiec': 6,
@@ -2101,6 +2131,26 @@ const dayWords = {
   'neunundzwanzigsten': 29,
   'dreißigsten': 30,
   'einunddreißigsten': 31,
+
+  // Англійська
+'first': 1, 'second': 2, 'third': 3,
+'fourth': 4, 'fifth': 5, 'sixth': 6,
+'seventh': 7, 'eighth': 8, 'ninth': 9,
+'tenth': 10, 'eleventh': 11, 'twelfth': 12,
+'thirteenth': 13, 'fourteenth': 14,
+'fifteenth': 15, 'sixteenth': 16,
+'seventeenth': 17, 'eighteenth': 18,
+'nineteenth': 19, 'twentieth': 20,
+'twenty-first': 21, 'twenty first': 21,
+'twenty-second': 22, 'twenty second': 22,
+'twenty-third': 23, 'twenty third': 23,
+'twenty-fourth': 24, 'twenty fourth': 24,
+'twenty-fifth': 25, 'twenty fifth': 25,
+'twenty-sixth': 26, 'twenty sixth': 26,
+'twenty-seventh': 27, 'twenty seventh': 27,
+'twenty-eighth': 28, 'twenty eighth': 28,
+'twenty-ninth': 29, 'twenty ninth': 29,
+'thirtieth': 30, 'thirty-first': 31, 'thirty first': 31,
   
   // Французька
   'premier': 1, 'première': 1, 'deuxième': 2,
@@ -2108,25 +2158,75 @@ const dayWords = {
   'sixième': 6, 'septième': 7, 'huitième': 8,
   'neuvième': 9, 'dixième': 10, 'onzième': 11,
   'douzième': 12,
+  'treizième': 13,
+  'quatorzième': 14,
+  'quinzième': 15,
+  'seizième': 16,
+  'dix-septième': 17,
+  'dix-huitième': 18,
+  'dix-neuvième': 19,
+  'vingtième': 20,
+  'vingt et unième': 21,
+  'vingt-deuxième': 22,
+  'vingt-troisième': 23,
+  'vingt-quatrième': 24,
+  'vingt-cinquième': 25,
+  'vingt-sixième': 26,
+  'vingt-septième': 27,
+  'vingt-huitième': 28,
+  'vingt-neuvième': 29,
+  'trentième': 30,
+  'trente et unième': 31,
 
   // Італійська
-  'primo': 1, 'secondo': 2, 'terzo': 3,
-  'quarto': 4, 'quinto': 5, 'sesto': 6,
-  'settimo': 7, 'ottavo': 8, 'nono': 9,
-  'decimo': 10, 'undicesimo': 11, 'dodicesimo': 12,
+'primo': 1, 'secondo': 2, 'terzo': 3,
+'quarto': 4, 'quinto': 5, 'sesto': 6,
+'settimo': 7, 'ottavo': 8, 'nono': 9,
+'decimo': 10, 'undicesimo': 11, 'dodicesimo': 12,
+'tredicesimo': 13, 'quattordicesimo': 14,
+'quindicesimo': 15, 'sedicesimo': 16,
+'diciassettesimo': 17, 'diciottesimo': 18,
+'diciannovesimo': 19, 'ventesimo': 20,
+'ventunesimo': 21, 'ventiduesimo': 22,
+'ventitreesimo': 23, 'ventiquattresimo': 24,
+'venticinquesimo': 25, 'ventiseiesimo': 26,
+'ventisettesimo': 27, 'ventottesimo': 28,
+'ventinovesimo': 29, 'trentesimo': 30,
+'trentunesimo': 31,
 
   // Польська
   'pierwszego': 1, 'drugiego': 2, 'trzeciego': 3,
   'czwartego': 4, 'piątego': 5, 'szóstego': 6,
   'siódmego': 7, 'ósmego': 8, 'dziewiątego': 9,
   'dziesiątego': 10, 'jedenastego': 11,
-  'dwunastego': 12,
+  'dwunastego': 12, 'trzynastego': 13,
+  'czternastego': 14, 'piętnastego': 15,
+  'szesnastego': 16, 'siedemnastego': 17,
+  'osiemnastego': 18, 'dziewiętnastego': 19,
+  'dwudziestego': 20, 'dwudziestego pierwszego': 21,
+  'dwudziestego drugiego': 22,
+  'dwudziestego trzeciego': 23,
+  'dwudziestego czwartego': 24,
+  'dwudziestego piątego': 25,
+  'dwudziestego szóstego': 26,
+  'dwudziestego siódmego': 27,
+  'dwudziestego ósmego': 28,
+  'dwudziestego dziewiątego': 29,
+  'trzydziestego': 30,
+  'trzydziestego pierwszego': 31,
 
-  // Іспанська
-  'uno de': 1, 'dos de': 2, 'tres de': 3,
-  'cuatro de': 4, 'cinco de': 5, 'seis de': 6,
-  'siete de': 7, 'ocho de': 8, 'nueve de': 9,
-  'diez de': 10, 'once de': 11, 'doce de': 12
+ // Іспанська
+'primero': 1, 'uno': 1,
+'dos': 2, 'tres': 3, 'cuatro': 4, 'cinco': 5,
+'seis': 6, 'siete': 7, 'ocho': 8, 'nueve': 9,
+'diez': 10, 'once': 11, 'doce': 12,
+'trece': 13, 'catorce': 14, 'quince': 15,
+'dieciséis': 16, 'diecisiete': 17, 'dieciocho': 18,
+'diecinueve': 19, 'veinte': 20,
+'veintiuno': 21, 'veintidós': 22, 'veintitrés': 23,
+'veinticuatro': 24, 'veinticinco': 25, 'veintiséis': 26,
+'veintisiete': 27, 'veintiocho': 28, 'veintinueve': 29,
+'treinta': 30, 'treinta y uno': 31,
 };
  const escapeDateRegex = value =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -2145,7 +2245,9 @@ const monthMatch = text.match(monthDateRegex);
 const monthFirstRegex = new RegExp(
   '(?<![\\p{L}\\p{N}])(' +
   monthNames +
-  ')\\s+(\\d{1,2})(?:,?\\s+(\\d{4}))?(?![\\p{L}\\p{N}])',
+  ')\\s+(' +
+  dayWordNames +
+  '|\\d{1,2})(?:,?\\s+(\\d{4}))?(?![\\p{L}\\p{N}])',
   'iu'
 );
 
@@ -2155,8 +2257,8 @@ if (monthMatch || monthFirstMatch) {
   const matched = monthMatch || monthFirstMatch;
 
   const dayText = monthMatch
-    ? matched[1].toLowerCase()
-    : matched[2];
+  ? matched[1].toLowerCase()
+  : matched[2].toLowerCase();
 
   const monthText = monthMatch
     ? matched[2].toLowerCase()
