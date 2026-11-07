@@ -1591,7 +1591,9 @@ function parseVoiceReminder(transcript) {
   'douze':12,'treize':13,'quatorze':14,'quinze':15,
   'seize':16,'dix-sept':17,'dix-huit':18,'dix-neuf':19,
   'vingt':20,'vingt et un':21,'vingt-et-un':21,
-  'vingt et une':21,'vingt-deux':22,'vingt-trois':23,
+  'vingt et une':21,'vingt une':21,'vingt deux':22,'vingt trois':23,
+  'vingt quatre':24,'vingt cinq':25,'vingt six':26,
+  'vingt sept':27,'vingt huit':28,'vingt neuf':29, 'vingt-deux':22,'vingt-trois':23,
   'vingt-quatre':24,'vingt-cinq':25,'vingt-six':26,
   'vingt-sept':27,'vingt-huit':28,'vingt-neuf':29,'trente':30,
 
@@ -1606,8 +1608,8 @@ function parseVoiceReminder(transcript) {
 
   // Польська
   'jeden':1,'jedna':1,'jedno':1,'jedną':1,
-  'dwa':2,'dwie':2,'trzy':3,'cztery':4,'pięć':5,'sześć':6,
-  'siedem':7,'osiem':8,'dziewięć':9,'dziesięć':10,
+  'dwa':2,'dwie':2,'trzy':3,'cztery':4,'pięć':5,'piec':5,'sześć':6,'szesc':6,
+  'siedem':7,'osiem':8,'dziewięć':9,'dziewiec':9,'dziesięć':10,'dziesiec':10,
   'jedenaście':11,'dwanaście':12,'trzynaście':13,
   'czternaście':14,'piętnaście':15,'szesnaście':16,
   'siedemnaście':17,'osiemnaście':18,'dziewiętnaście':19,
@@ -1645,7 +1647,7 @@ const relativeTimeMatch = text.match(
   new RegExp(
     '(?<![\\p{L}\\p{N}])(?:через|за|in|dans|tra|fra|dentro de|en)\\s+(?:(' +
     amountPattern +
-    ')\\s+)?(годину|години|годин|год|час|часа|часов|stunde|stunden|hour|hours|hr|heure|heures|ora|ore|hora|horas|godzinę|godzina|godziny|godzin|хвилину|хвилини|хвилин|хв|минуту|минуты|минут|минута|minute|minutes|min|minuten|minuti|minuta|minuty|minuto|minutos)(?![\\p{L}\\p{N}])',
+    ')\\s+)?(годину|години|годин|год|час|часа|часов|stunde|stunden|hour|hours|hr|heure|heures|ora|ore|hora|horas|godzinę|godzina|godziny|godzin|minutę|хвилину|хвилини|хвилин|хв|минуту|минуты|минут|минута|minute|minutes|min|minuten|minuti|minuta|minuty|minuto|minutos)(?![\\p{L}\\p{N}])',
     'iu'
   )
 );
@@ -1682,7 +1684,7 @@ const relativeTimeMatch = text.match(
   'minuto', 'minuti',
 
   // Польська
-  'minuta', 'minuty', 'minut',
+  'minuta', 'minutę', 'minuty', 'minut',
 
   // Іспанська
   'minuto', 'minutos'
@@ -1977,7 +1979,7 @@ function addCalendarMonths(baseDate, monthsToAdd) {
 
 // Через один, два, три та інші роки
 const relativeYearMatch = text.match(
-  /(?<![\p{L}\p{N}])(?:(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|jeden|jedna|jedną|dwa|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce)\s+)?|(?:im\s+(?:nächsten|kommenden)|nächstes|kommendes)\s+)(рік|роки|років|року|год|года|лет|Jahr|Jahren)(?![\p{L}\p{N}])/iu
+  /(?<![\p{L}\p{N}])(?:(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|jeden|jedna|jedną|dwa|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce)\s+)?|(?:im\s+(?:nächsten|kommenden)|nächstes|kommendes)\s+)(рік|роки|років|року|год|года|лет|Jahr|Jahren|year|years|an|ans|année|années|anno|anni|rok|roku|lata|lat|año|años)(?![\p{L}\p{N}])/iu
 );
 
 if (relativeYearMatch) {
@@ -1993,7 +1995,7 @@ if (relativeYearMatch) {
 
 // Через пів року або полгода
 const halfYearMatch = text.match(
-  /(?<![\p{L}\p{N}])(?:через\s+(?:пів\s+року|півроку|полгода|пол\s+года)|in\s+einem\s+halben\s+Jahr)(?![\p{L}\p{N}])/iu
+  /(?<![\p{L}\p{N}])(?:через\s+(?:пів\s+року|півроку|полгода|пол\s+года)|in\s+einem\s+halben\s+Jahr|in\s+half\s+a\s+year|dans\s+six\s+mois|tra\s+sei\s+mesi|za\s+pół\s+roku|en\s+seis\s+meses)(?![\p{L}\p{N}])/iu
 );
 
 if (halfYearMatch) {
@@ -2646,7 +2648,7 @@ const numericDateMatch = text.match(numericDateRegex);
   };
 
   const periodPattern =
-  '(?:ранку|вранці|утра|утром|дня|днем|днём|до\\s+обіду|обідом|обіді|після\\s+обіду|после\\s+обеда|вечора|вечір|вечер|увечері|ввечері|вечором|вечером|ночі|ночи|ночью|опівночі|am\\s+Morgen|am\\s+Vormittag|am\\s+Nachmittag|am\\s+Abend|in\\s+der\\s+Nacht|morgens|vormittags|mittags|nachmittags|abends|nachts|in\\s+the\\s+morning|in\\s+the\\s+afternoon|in\\s+the\\s+evening|at\\s+night|in\\s+the\\s+night|le\\s+matin|l’après-midi|l[’\']après-midi|le\\s+soir|la\\s+nuit|di\\s+mattina|di\\s+pomeriggio|di\\s+sera|di\\s+notte|rano|po\\s+południu|wieczorem|w\\s+nocy|por\\s+la\\s+mañana|por\\s+la\\s+tarde|por\\s+la\\s+noche|de\\s+noche)';
+  '(?:ранку|вранці|вдень|утра|утром|дня|днем|днём|до\\s+обіду|обідом|обіді|після\\s+обіду|после\\s+обеда|вечора|вечір|вечер|увечері|ввечері|вечором|вечером|ночі|ночи|ночью|опівночі|am\\s+Morgen|am\\s+Vormittag|am\\s+Nachmittag|am\\s+Abend|in\\s+der\\s+Nacht|morgens|vormittags|mittags|nachmittags|abends|nachts|in\\s+the\\s+morning|in\\s+the\\s+afternoon|in\\s+the\\s+evening|at\\s+night|in\\s+the\\s+night|le\\s+matin|l’après-midi|l[’\']après-midi|le\\s+soir|la\\s+nuit|di\\s+mattina|di\\s+pomeriggio|di\\s+sera|di\\s+notte|rano|po\\s+południu|wieczorem|w\\s+nocy|por\\s+la\\s+mañana|por\\s+la\\s+tarde|por\\s+la\\s+noche|de\\s+noche)';
   const escapeRegex = word =>
     word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -2803,7 +2805,7 @@ const hoursTo = {
     timeMatch = colloquialToMatch;
   }
 
-    // Російський розмовний час:
+  // Російський розмовний час:
   // "без пяти девять" = 08:55
   // "десять минут двенадцатого" = 11:10
   // "двадцать минут третьего" = 02:20
@@ -2937,40 +2939,89 @@ const hoursTo = {
   }
  // Виправляємо випадок, коли мікрофон розбиває 14:45 на "14 40 п'ять"
   const splitMinuteMatch = text.match(
-    /(?<![\p{L}\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\s+las|a\s+la)\s*(\d{1,2})[.\s]+\s*40\s+(?:п’ять|п'ять|пять)(?![\p{L}\p{N}])/iu
+    /(?<![\p{L}\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\s+las|a\s+la)\s*(\d{1,2})[.\s]+\s*40\s+(?:п’ять|п'ять|пять|five|fünf|cinq|cinque|pięć|piec|cinco)(?![\p{L}\p{N}])/iu
   );
 
-  if (splitMinuteMatch) {
+  if (!timeMatch && splitMinuteMatch) {
     timeMatch = splitMinuteMatch;
     hour = Number(splitMinuteMatch[1]);
     minute = 45;
   }
   if (!relativeTimeMatch && timeMatch && Number.isFinite(hour)) {
-    const period = (timeMatch[3] || '').toLowerCase();
+    const periodMatch = timeMatch[0].match(
+    new RegExp('(?:' + periodPattern + ')$', 'iu')
+    );
+    const period = periodMatch ? periodMatch[0].toLowerCase() : '';
 
     if (
-  [
-    'дня', 'днем', 'днём',
-    'після обіду', 'после обеда',
-    'вечора', 'вечір', 'вечер',
-    'увечері', 'ввечері', 'вечором', 'вечером',
-    'nachmittags', 'abends', 'mittags',
-    'am nachmittag', 'am abend'
-  ].includes(period) &&
+[
+  // Українська
+  'дня', 'днем', 'днём',
+  'після обіду', 'обідом', 'обіді',
+  'вечора', 'вечір', 'увечері', 'ввечері', 'вечором',
+
+  // Російська
+  'после обеда', 'вечер', 'вечером',
+
+  // Німецька
+  'nachmittags', 'abends', 'mittags',
+  'am nachmittag', 'am abend',
+
+  // Англійська
+  'afternoon', 'evening',
+  'in the afternoon', 'in the evening',
+
+  // Французька
+  'après-midi', 'l’après-midi', "l'après-midi",
+  'après le déjeuner', 'le soir',
+
+  // Італійська
+  'pomeriggio', 'di pomeriggio', 'sera', 'di sera',
+
+  // Польська
+  'po południu', 'wieczorem',
+
+  // Іспанська
+ 'tarde', 'por la tarde'
+].includes(period) &&
   hour < 12
 ) {
   hour += 12;
 }
 
    if (
-  ['ночі', 'ночи', 'ночью', 'nachts', 'in der nacht'].includes(period)
-) {
-  if (hour === 12) {
+ [
+  // Українська
+  'ночі',
+
+  // Російська
+  'ночи', 'ночью',
+
+  // Німецька
+  'nachts', 'in der nacht',
+
+  // Англійська
+  'night', 'at night', 'in the night',
+
+  // Французька
+  'la nuit', 'de nuit',
+
+  // Італійська
+  'notte', 'di notte',
+
+  // Польська
+  'w nocy', 'nocą',
+
+  // Іспанська
+  'noche', 'de noche', 'por la noche'
+  ].includes(period)
+  ) {
+   if (hour === 12) {
     hour = 0;
-  } else if (hour === 11) {
-    hour = 23;
+  } else if (hour >= 1 && hour <= 11) {
+    hour += 12;
   }
-}
+  }
 
     if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) {
       date.setHours(hour, minute, 0, 0);
