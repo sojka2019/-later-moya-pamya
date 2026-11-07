@@ -1716,7 +1716,7 @@ const relativeTimeMatch = text.match(
     date.setDate(date.getDate() + 2);
     hasDate = true;
  } else if (
-    removePhrase(/(?<![\p{L}\p{N}])(?:завтра|morgen|tomorrow|demain|domani|jutro)(?![\p{L}\p{N}])/iu) ||
+    removePhrase(/(?<![\p{L}\p{N}])(?:завтра|morgen(?:\s+(?:früh|frueh))?|tomorrow|demain|domani|jutro)(?![\p{L}\p{N}])/iu) ||
     removePhrase(/(?<![\p{L}\p{N}])mañana(?![\p{L}\p{N}])/iu) ||
     removePhrase(/(?<![\p{L}\p{N}])am\s+nächsten\s+Tag(?![\p{L}\p{N}])/iu)
   ) {
@@ -3117,7 +3117,7 @@ const dayPeriods = [
   },
   {
     // Після школи — 15:00
-   regex: /(?<![\p{L}\p{N}])(?:після\s+школи|после\s+школы|after\s+school|nach\s+der\s+Schule| l’école|dopo\s+la\s+scuola|po\s+szkole|después\s+de\s+la\s+escuela)(?![\p{L}\p{N}])/iu,
+   regex: /(?<![\p{L}\p{N}])(?:після\s+школи|после\s+школы|after\s+school|nach\s+der\s+Schule|après\s+l’école|après\s+l'école|après\s+école|dopo\s+la\s+scuola|po\s+szkole|después\s+de\s+la\s+escuela)(?![\p{L}\p{N}])/iu,
     hour: 15
   },
   {
@@ -3132,7 +3132,7 @@ const dayPeriods = [
   },
   {
     // До обіду — 11:00
-    regex: /(?<![\p{L}\p{N}])(?:до\s+(?:обіду|обеда)|vormittags|am\s+Vormittag|before\s+noon|avant\s+midi|prima\s+di\s+mezzogiorno|przed\s+południem)(?![\p{L}\p{N}])/iu,
+    regex: /(?<![\p{L}\p{N}])(?:до\s+(?:обіду|обеда)|vormittags|am\s+Vormittag|before\s+noon|avant\s+midi|prima\s+di\s+mezzogiorno|przed\s+południem|antes\s+del\s+mediodía|antes\s+del\s+mediodia)(?![\p{L}\p{N}])/iu,
     hour: 11
   },
   {
@@ -3142,7 +3142,7 @@ const dayPeriods = [
   },
   {
     // Ранок — 09:00
-    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|с|am|in\s+the|le|di|por\s+la)\s+)?(?:ранок|ранком|зранку|вранці|утро|утром|morgens|morgen\s+früh|morgen\s+frueh|morning|matin|mattina|rano|mañana)(?![\p{L}\p{N}])/iu,
+    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|с|am|in\s+the|le|di|por\s+la)\s+)?(?:ранок|ранком|зранку|вранці|утро|утром|morgens|morgen\s+früh|morgen\s+frueh|morning|matin|le\s+matin|mattina|di\s+mattina|rano|mañana)(?![\p{L}\p{N}])/iu,
     hour: 9
   },
   {
