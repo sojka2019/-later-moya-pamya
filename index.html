@@ -1526,7 +1526,7 @@ function parseVoiceReminder(transcript) {
     text = text.replace(halfHourMatch[0], ' ');
   }
   const oneHourMatch = text.match(
-    /(?<![\p{L}\p{N}])(?:in einer Stunde|in one hour|dans une heure|tra un'ora|za godzinę|dentro de una hora)(?![\p{L}\p{N}])/iu
+    /(?<![\p{L}\p{N}])(?:через\s+годину|через\s+один\s+час|через\s+час|через\s+одну\s+годину|in einer Stunde|in one hour|dans une heure|tra un'ora|fra un'ora|za godzinę|za jedną godzinę|dentro de una hora|en una hora)(?![\p{L}\p{N}])/iu
   );
 
   if (oneHourMatch && !halfHourMatch) {
@@ -2031,7 +2031,7 @@ if (halfYearMatch) {
 }
 // Через один, два, три та інші місяці
 const relativeMonthMatch = text.match(
- /(?<![\p{L}\p{N}])(?:(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|sept|huit|neuf|dix|onze|douze|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|jeden|jedna|jedną|dwa|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|jedenaście|jedenascie|dwanaście|dwanascie|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce)\s+)?(?:місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten|month|months|mois|mese|mesi|miesiąc|miesiąca|miesiącu|miesięcy|miesiące|mes|meses)|(?:(?:im\s+)?(?:nächsten|nächste|kommenden)\s+Monat|next\s+month|the\s+coming\s+month|le\s+mois\s+prochain|dans\s+le\s+mois\s+prochain|il\s+prossimo\s+mese|nel\s+prossimo\s+mese|w\s+przyszłym\s+miesiącu|w\s+przyszlym\s+miesiacu|el\s+próximo\s+mes|el\s+proximo\s+mes|próximo\s+mes|proximo\s+mes))(?![\p{L}\p{N}])/iu
+ /(?<![\p{L}\p{N}])(?:(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|jeden|jedna|jedną|dwa|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|jedenaście|jedenascie|dwanaście|dwanascie|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce)\s+)?(?:місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten|month|months|mois|mese|mesi|miesiąc|miesiąca|miesiącu|miesięcy|miesiące|mes|meses)|(?:(?:im\s+)?(?:nächsten|nächste|kommenden)\s+Monat|next\s+month|the\s+coming\s+month|le\s+mois\s+prochain|dans\s+le\s+mois\s+prochain|il\s+prossimo\s+mese|nel\s+prossimo\s+mese|w\s+przyszłym\s+miesiącu|w\s+przyszlym\s+miesiacu|el\s+próximo\s+mes|el\s+proximo\s+mes|próximo\s+mes|proximo\s+mes))(?![\p{L}\p{N}])/iu
 );
 
 if (relativeMonthMatch) {
@@ -2565,7 +2565,7 @@ const numericDateMatch = text.match(numericDateRegex);
     'два': 2, 'две': 2, 'второй': 2, 'вторую': 2,
     'три': 3, 'третий': 3, 'третью': 3,
     'четыре': 4, 'четвертый': 4, 'четвертую': 4, 'четвёртый': 4, 'четвёртую': 4,
-    'пять': 5, 'пятой': 5, 'пятую': 5,
+    'пять': 5, 'пятой': 5, 'пятую': 5, 
     'шесть': 6, 'шестой': 6, 'шестую': 6,
     'семь': 7, 'седьмой': 7, 'седьмую': 7,
     'восемь': 8, 'восьмой': 8, 'восьмую': 8,
@@ -2606,7 +2606,7 @@ const numericDateMatch = text.match(numericDateRegex);
     'ноль': 0,
     'ноль 5': 5, 'нуль 5': 5,
     'ноль пять': 5,
-    'нуль п’ять': 5,
+    'нуль п’ять': 5, "нуль п'ять": 5,
     'п’ять': 5, "п'ять": 5, 'пять': 5,
     'десять': 10,
     'п’ятнадцять': 15, "п'ятнадцять": 15, 'пятнадцять': 15,
@@ -2846,7 +2846,7 @@ const hoursTo = {
   'третьего': 3, 'третья': 3, 'третью': 3,
   'четвертого': 4, 'четвёртого': 4,
   'четвертая': 4, 'четвёртая': 4, 'четвертую': 4, 'четвёртую': 4,
-  'пятого': 5, 'пятая': 5, 'пятую': 5,
+  'пятого': 5, 'пятая': 5, 'пятую': 5, 'пятой': 5,
   'шестого': 6, 'шестая': 6, 'шестую': 6,
   'седьмого': 7, 'седьмая': 7, 'седьмую': 7,
   'восьмого': 8, 'восьмая': 8, 'восьмую': 8,
@@ -2976,7 +2976,8 @@ const hoursTo = {
     timeMatch = text.match(
       new RegExp(
         '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\\s+las|a\\s+la)?\\s*(' +
-        hourPattern +
+         hourPattern +
+        ')' +
         '(?:\\s+Uhr)?' +
         '(?:\\s+(' + minutePattern + '))?' +
         '(?:\\s+(' + periodPattern + '))?' +
@@ -2997,7 +2998,7 @@ const hoursTo = {
     /(?<![\p{L}\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\s+las|a\s+la)\s*(\d{1,2})[.\s]+\s*40\s+(?:п’ять|п'ять|пять|five|fünf|cinq|cinque|pięć|piec|cinco)(?![\p{L}\p{N}])/iu
   );
 
-  if (!timeMatch && splitMinuteMatch) {
+  if (splitMinuteMatch) {
     timeMatch = splitMinuteMatch;
     hour = Number(splitMinuteMatch[1]);
     minute = 45;
@@ -3092,7 +3093,7 @@ const hoursTo = {
   
   // Дні тижня українською та російською
    const weekdayMatch = text.match(
-    /(?:(?:у|в|во|на|am)\s+)?(?:(наступного|следующий|nächsten|nächste|next|prochain|prochaine|prossimo|prossima|następny|następna|następne|przyszły|przyszła|przyszłe|próximo|próxima|ersten|zweiten|dritten|vierten|first|second|third|fourth|premier|première|deuxième|troisième|quatrième|primo|prima|secondo|seconda|terzo|terza|quarto|quarta|pierwszy|pierwsza|drugi|druga|trzeci|trzecia|czwarty|czwarta|primer|primero|primera|segundo|segunda|tercero|tercera|cuarto|cuarta|перш(?:ий|ого|у|а)|перв(?:ый|ого|ую|ая)|друг(?:ий|ого|у|а)|втор(?:ой|ого|ую|ая)|трет(?:ій|ього|ю|я)|треть(?:ий|его|ю|я)|четверт(?:ий|ого|у|а|ый|ую|ая)|четвёрт(?:ый|ого|ую|ая))\s+)?(понеділ(?:ок|ка|ку)|понедельник(?:а|у)?|вівтор(?:ок|ка|ку)|вторник(?:а|у)?|серед(?:а|и|у)|сред(?:а|ы|у|е)|четвер(?:г|га|гу)|п[’'ʼ]?ятниц(?:я|і|ю)|пятниц(?:а|ы|у|е)|субот(?:а|и|у)|суббот(?:а|ы|у|е)|неділ(?:я|і|ю)|воскресень(?:е|я|ю)|montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag
+    /(?:(?:у|в|во|на|am|on|le|il|el|di|w)\s+)?(?:(наступного|следующий|nächsten|nächste|next|prochain|prochaine|prossimo|prossima|następny|następna|następne|przyszły|przyszła|przyszłe|próximo|próxima|ersten|zweiten|dritten|vierten|first|second|third|fourth|premier|première|deuxième|troisième|quatrième|primo|prima|secondo|seconda|terzo|terza|quarto|quarta|pierwszy|pierwsza|drugi|druga|trzeci|trzecia|czwarty|czwarta|primer|primero|primera|segundo|segunda|tercero|tercera|cuarto|cuarta|перш(?:ий|ого|у|а)|перв(?:ый|ого|ую|ая)|друг(?:ий|ого|у|а)|втор(?:ой|ого|ую|ая)|трет(?:ій|ього|ю|я)|треть(?:ий|его|ю|я)|четверт(?:ий|ого|у|а|ый|ую|ая)|четвёрт(?:ый|ого|ую|ая))\s+)?(понеділ(?:ок|ка|ку)|понедельник(?:а|у)?|вівтор(?:ок|ка|ку)|вторник(?:а|у)?|серед(?:а|и|у)|сред(?:а|ы|у|е)|четвер(?:г|га|гу)|п[’'ʼ]?ятниц(?:я|і|ю)|пятниц(?:а|ы|у|е)|субот(?:а|и|у)|суббот(?:а|ы|у|е)|неділ(?:я|і|ю)|воскресень(?:е|я|ю)|montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag
      |monday|tuesday|wednesday|thursday|friday|saturday|sunday
      |lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche
      |lunedì|martedì|mercoledì|giovedì|venerdì|sabato|domenica
@@ -3252,9 +3253,20 @@ const dayPeriods = [
 
   let recognition=null;
   let recognitionTimer = null;
-  $('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('voiceStatus').textContent = appLanguage === 'ru'
-  ? 'Голосовой ввод не поддерживается этим браузером. Попробуй Chrome или введи текст.'
-  : 'Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.';return}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang = ({
+  $('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if (!SpeechRecognition) {
+  const unsupportedMessages = {
+    uk: 'Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.',
+    ru: 'Голосовой ввод не поддерживается этим браузером. Попробуй Chrome или введи текст.',
+    de: 'Spracheingabe wird von diesem Browser nicht unterstützt. Versuche Chrome oder gib den Text ein.',
+    en: 'Voice input is not supported by this browser. Try Chrome or enter the text.',
+    fr: 'La saisie vocale n’est pas prise en charge par ce navigateur. Essaie Chrome ou saisis le texte.',
+    it: 'La digitazione vocale non è supportata da questo browser. Prova Chrome o inserisci il testo.',
+    pl: 'Wprowadzanie głosowe nie jest obsługiwane przez tę przeglądarkę. Spróbuj użyć Chrome lub wpisz tekst.',
+    es: 'Este navegador no admite la entrada de voz. Prueba Chrome o escribe el texto.'
+  };
+  $('voiceStatus').textContent = unsupportedMessages[appLanguage] || unsupportedMessages.uk;
+  return;
+}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang = ({
   uk: 'uk-UA',
   ru: 'ru-RU',
   de: 'de-DE',
@@ -3263,11 +3275,36 @@ const dayPeriods = [
   it: 'it-IT',
   pl: 'pl-PL',
   es: 'es-ES'
-})[appLanguage] || 'uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;$('micTitle').textContent = appLanguage === 'ru' ? 'Слушаю тебя…' : 'Слухаю тебе…';$('micHint').textContent = appLanguage === 'ru'
-  ? 'Говори после запроса браузера на доступ к микрофону'
-  : 'Говори після запиту браузера на доступ до мікрофона';$('voiceStatus').textContent='';;recognition.onresult = e => {
+})[appLanguage] || 'uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;const micListeningLabels = {
+  uk: ['Слухаю тебе…', 'Говори після запиту браузера на доступ до мікрофона'],
+  ru: ['Слушаю тебя…', 'Говори после запроса браузера на доступ к микрофону'],
+  de: ['Ich höre zu…', 'Sprich, nachdem der Browser dich um Mikrofonzugriff gebeten hat'],
+  en: ['Listening…', 'Speak after the browser asks for microphone access'],
+  fr: ['Je t’écoute…', 'Parle après que le navigateur a demandé l’accès au microphone'],
+  it: ['Ti ascolto…', 'Parla dopo che il browser ha richiesto l’accesso al microfono'],
+  pl: ['Słucham…', 'Mów, gdy przeglądarka poprosi o dostęp do mikrofonu'],
+  es: ['Te escucho…', 'Habla después de que el navegador solicite acceso al micrófono']
+};
+
+const micLabels = micListeningLabels[appLanguage] || micListeningLabels.uk;
+$('micTitle').textContent = micLabels[0];
+$('micHint').textContent = micLabels[1];
+$('voiceStatus').textContent = '';
+recognition.onresult = e => {
   if (!e.results || !e.results.length || !e.results[0][0].transcript.trim()) {
-    $('voiceStatus').textContent = 'Текст не розпізнано. Спробуй ще раз.';
+   const recognitionMessages = {
+  uk: 'Текст не розпізнано. Спробуй ще раз.',
+  ru: 'Текст не распознан. Попробуй ещё раз.',
+  de: 'Text wurde nicht erkannt. Bitte versuche es erneut.',
+  en: 'Speech was not recognized. Please try again.',
+  fr: 'Le texte n’a pas été reconnu. Réessaie.',
+  it: 'Il testo non è stato riconosciuto. Riprova.',
+  pl: 'Nie rozpoznano tekstu. Spróbuj ponownie.',
+  es: 'No se reconoció el texto. Inténtalo de nuevo.'
+};
+
+$('voiceStatus').textContent =
+  recognitionMessages[appLanguage] || recognitionMessages.uk;
     return;
   }
   const spokenText = e.results[0][0].transcript;
@@ -3279,18 +3316,78 @@ const dayPeriods = [
   $('noteDate').value = result.date || '';
   editingId = null;
 
-  $('modalTitle').textContent = appLanguage === 'ru'
-    ? 'Проверь голосовое напоминание'
-    : 'Перевір голосове нагадування';
-  $('modal').classList.add('open');
+ const voiceResultLabels = {
+  uk: {
+    title: 'Перевір голосове нагадування',
+    recognized: 'Розпізнано: ',
+    date: ' · Дата: ',
+    noDate: ' · Укажи дату й час, якщо вони потрібні.'
+  },
+  ru: {
+    title: 'Проверь голосовое напоминание',
+    recognized: 'Распознано: ',
+    date: ' · Дата: ',
+    noDate: ' · Укажи дату и время, если они нужны.'
+  },
+  de: {
+    title: 'Spracherinnerung überprüfen',
+    recognized: 'Erkannt: ',
+    date: ' · Datum: ',
+    noDate: ' · Gib bei Bedarf Datum und Uhrzeit an.'
+  },
+  en: {
+    title: 'Check voice reminder',
+    recognized: 'Recognized: ',
+    date: ' · Date: ',
+    noDate: ' · Enter a date and time if needed.'
+  },
+  fr: {
+    title: 'Vérifier le rappel vocal',
+    recognized: 'Reconnu : ',
+    date: ' · Date : ',
+    noDate: ' · Indique la date et l’heure si nécessaire.'
+  },
+  it: {
+    title: 'Controlla il promemoria vocale',
+    recognized: 'Riconosciuto: ',
+    date: ' · Data: ',
+    noDate: ' · Indica la data e l’ora, se necessario.'
+  },
+  pl: {
+    title: 'Sprawdź przypomnienie głosowe',
+    recognized: 'Rozpoznano: ',
+    date: ' · Data: ',
+    noDate: ' · Podaj datę i godzinę, jeśli są potrzebne.'
+  },
+  es: {
+    title: 'Revisa el recordatorio de voz',
+    recognized: 'Reconocido: ',
+    date: ' · Fecha: ',
+    noDate: ' · Indica la fecha y la hora si es necesario.'
+  }
+};
 
-  $('voiceStatus').textContent =
-    (appLanguage === 'ru' ? 'Распознано: ' : 'Розпізнано: ') + result.text +
-    (result.hasDate
-      ? ' · Дата: ' + new Date(result.date).toLocaleString(appLanguage === 'ru' ? 'ru-RU' : 'uk-UA')
-      : appLanguage === 'ru'
-        ? ' · Укажи дату и время, если они нужны.'
-        : ' · Укажи дату й час, якщо вони потрібні.');
+const voiceLabels = voiceResultLabels[appLanguage] || voiceResultLabels.uk;
+
+$('modalTitle').textContent = voiceLabels.title;
+$('modal').classList.add('open');
+
+$('voiceStatus').textContent =
+  voiceLabels.recognized + result.text +
+  (result.hasDate
+    ? voiceLabels.date + new Date(result.date).toLocaleString(
+        ({
+          uk: 'uk-UA',
+          ru: 'ru-RU',
+          de: 'de-DE',
+          en: 'en-US',
+          fr: 'fr-FR',
+          it: 'it-IT',
+          pl: 'pl-PL',
+          es: 'es-ES'
+        })[appLanguage] || 'uk-UA'
+      )
+    : voiceLabels.noDate);
 };
 
 recognition.onerror = e => {
@@ -3298,8 +3395,19 @@ recognition.onerror = e => {
   clearTimeout(recognitionTimer);
   recognitionTimer = null;
   $('micBtn').classList.remove('listening');
-  $('voiceStatus').textContent =
-    (appLanguage === 'ru' ? 'Не удалось записать голос: ' : 'Не вдалося записати голос: ') + e.error;
+ const voiceErrorMessages = {
+  uk: 'Не вдалося записати голос: ',
+  ru: 'Не удалось записать голос: ',
+  de: 'Sprache konnte nicht aufgenommen werden: ',
+  en: 'Could not record voice: ',
+  fr: 'Impossible d’enregistrer la voix : ',
+  it: 'Impossibile registrare la voce: ',
+  pl: 'Nie udało się nagrać głosu: ',
+  es: 'No se pudo grabar la voz: '
+};
+
+$('voiceStatus').textContent =
+  (voiceErrorMessages[appLanguage] || voiceErrorMessages.uk) + e.error;
 };
 recognition.onstart = () => {
   $('micBtn').classList.add('listening');
@@ -3307,7 +3415,19 @@ recognition.onstart = () => {
 
 recognition.onnomatch = () => {
   console.log('Мікрофон почув голос, але не розпізнав слова');
-  $('voiceStatus').textContent = 'Голос почуто, але слова не розпізнано.';
+  const noMatchMessages = {
+  uk: 'Голос почуто, але слова не розпізнано.',
+  ru: 'Голос услышан, но слова не распознаны.',
+  de: 'Sprache gehört, aber keine Wörter erkannt.',
+  en: 'Speech was heard, but no words were recognized.',
+  fr: 'La voix a été entendue, mais aucun mot n’a été reconnu.',
+  it: 'La voce è stata udita, ma non sono state riconosciute parole.',
+  pl: 'Głos został usłyszany, ale nie rozpoznano żadnych słów.',
+  es: 'Se oyó la voz, pero no se reconocieron las palabras.'
+};
+
+$('voiceStatus').textContent =
+  noMatchMessages[appLanguage] || noMatchMessages.uk;
 };                      
 
 recognition.onspeechend = () => {
@@ -3318,10 +3438,20 @@ recognition.onend = () => {
   clearTimeout(recognitionTimer);
   recognitionTimer = null;
   $('micBtn').classList.remove('listening');
-  $('micTitle').textContent = appLanguage === 'ru' ? 'Сказать напоминание' : 'Сказати нагадування';
-  $('micHint').textContent = appLanguage === 'ru'
-    ? 'Нажми и продиктуй дело и время'
-    : 'Натисни й продиктуй справу та час';
+ const micReadyLabels = {
+  uk: ['Сказати нагадування', 'Натисни й продиктуй справу та час'],
+  ru: ['Сказать напоминание', 'Нажми и продиктуй дело и время'],
+  de: ['Erinnerung sprechen', 'Tippe und sprich die Aufgabe und die Zeit'],
+  en: ['Speak a reminder', 'Tap and dictate the task and time'],
+  fr: ['Dicter un rappel', 'Appuie et dicte la tâche et l’heure'],
+  it: ['Pronuncia un promemoria', 'Tocca e detta l’attività e l’ora'],
+  pl: ['Powiedz przypomnienie', 'Naciśnij i podyktuj zadanie oraz godzinę'],
+  es: ['Dictar un recordatorio', 'Pulsa y dicta la tarea y la hora']
+};
+
+const readyLabels = micReadyLabels[appLanguage] || micReadyLabels.uk;
+$('micTitle').textContent = readyLabels[0];
+$('micHint').textContent = readyLabels[1];
   recognition = null;
 };
 
