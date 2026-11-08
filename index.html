@@ -1710,6 +1710,17 @@ const relativeTimeMatch = text.match(
     defaultHour = 9;
     hasDate = true;
   }
+
+  // Німецькою: am Morgen — вранці, а не завтра
+  const germanMorningMatch = text.match(
+    /(?<![\p{L}\p{N}])am\s+Morgen(?![\p{L}\p{N}])/iu
+  );
+
+  if (germanMorningMatch) {
+    text = text.replace(germanMorningMatch[0], ' ');
+    defaultHour = 9;
+    hasDate = true;
+  }
   
   // 1. Відносні дати всіма підтримуваними мовами
   if (removePhrase(/(?<![\p{L}\p{N}])(?:післязавтра|послезавтра|übermorgen|the day after tomorrow|après-demain|dopodomani|pojutrze|pasado mañana)(?![\p{L}\p{N}])/iu)) {
