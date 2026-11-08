@@ -1746,65 +1746,8 @@ const relativeTimeMatch = text.match(
     hasTime = true;
     text = text.replace(beforeWeekendMatch[0], ' ');
   }
-  
- 
-  
- const relativeDayMatch = text.match(
-  /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|одного|два|дві|две|двоє|двое|три|троє|трое|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|тринадцять|тринадцать|чотирнадцять|четырнадцать|п’ятнадцять|п'ятнадцять|пятнадцать|шістнадцять|шестнадцать|сімнадцять|семнадцать|вісімнадцять|восемнадцать|дев’ятнадцять|дев'ятнадцять|девятнадцать|двадцять|тридцять|двадцять\s+(?:один|два|три|чотири|п’ять|п'ять|шість|сім|вісім|дев’ять)|двадцать\s+(?:один|два|три|четыре|пять|шесть|семь|восемь|девять)|тридцять\s+один|тридцать\s+один|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|dreizehn|vierzehn|fünfzehn|sechzehn|siebzehn|achtzehn|neunzehn|zwanzig|einundzwanzig|zweiundzwanzig|dreiundzwanzig|vierundzwanzig|fünfundzwanzig|sechsundzwanzig|siebenundzwanzig|achtundzwanzig|neunundzwanzig|dreißig|einunddreißig|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|twenty[-\s](?:one|two|three|four|five|six|seven|eight|nine)|thirty|thirty[-\s]one|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|dix[-\s]sept|dix[-\s]huit|dix[-\s]neuf|vingt|vingt(?:[-\s]et)?[-\s](?:un|une)|vingt[-\s](?:deux|trois|quatre|cinq|six|sept|huit|neuf)|trente|trente(?:[-\s]et)?[-\s]un|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|tredici|quattordici|quindici|sedici|diciassette|diciotto|diciannove|venti|ventuno|ventidue|ventitré|ventiquattro|venticinque|ventisei|ventisette|ventotto|ventinove|trenta|trentuno|jeden|jedna|jedną|jedno|dwa|dwie|dwóch|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|jedenaście|dwanaście|trzynaście|czternaście|piętnaście|szesnaście|siedemnaście|osiemnaście|dziewiętnaście|dwadzieścia|dwadzieścia\s+(?:jeden|dwa|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec)|trzydzieści|trzydzieści\s+jeden|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|diecisiete|dieciocho|diecinueve|veinte|veintiuno|veintidós|veintitrés|veinticuatro|veinticinco|veintiséis|veintisiete|veintiocho|veintinueve|treinta|treinta\s+y\s+uno|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31)\s+)?(день|дня|днів|дні|доба|добу|доби|діб|дней|сутки|суток|Tag|Tage|Tagen|day|days|jour|jours|giorno|giorni|dzień|dni|dnia|dniu|días|dias|día)(?![\p{L}\p{N}])/iu
- );
-
-  if (relativeDayMatch) {
-    const word = (relativeDayMatch[1] || '1').toLowerCase();
-   
-    const daysToAdd = relativeNumbers[word];
-
-    if (daysToAdd) {
-      date.setDate(date.getDate() + daysToAdd);
-      hasDate = true;
-      text = text.replace(relativeDayMatch[0], ' ');
-    }
-  }
-   const weekMatch = text.match(
-    /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(одну|один|одна|дві|две|два|три|eine|einen|einer|ein|zwei|drei|one|two|three|un|une|deux|trois|una|uno|due|tre|dos|tres|jeden|jedna|jedną|dwa|dwie|trzy|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели|Woche|Wochen|week|weeks|semaine|semaines|settimana|settimane|tydzień|tygodnie|tygodni|semana|semanas)(?![\p{L}\p{N}])/iu
-  );
-
-  if (weekMatch) {
-    const word = weekMatch[1].toLowerCase();
-
-   const weeks = ({
-  'одну': 1, 'один': 1, 'одна': 1, '1': 1,
-  'дві': 2, 'две': 2, 'два': 2, '2': 2,
-  'три': 3, '3': 3,
-
-  'eine': 1, 'einen': 1, 'einer': 1, 'ein': 1,
-  'zwei': 2, 'drei': 3,
-
-  'one': 1, 'two': 2, 'three': 3,
-
-  'un': 1, 'une': 1, 'deux': 2, 'trois': 3,
-
-  'una': 1, 'uno': 1, 'due': 2, 'tre': 3,
-  'dos': 2, 'tres': 3,
-
-  'jeden': 1, 'jedna': 1, 'jedną': 1,
-  'dwa': 2, 'dwie': 2, 'trzy': 3
-})[word];
-
-    if (weeks) {
-      date.setDate(date.getDate() + weeks * 7);
-      hasDate = true;
-      text = text.replace(weekMatch[0], ' ');
-   }
-  } else if (
-    removePhrase(/(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:неділю|тиждень|неделю|Woche|week|semaine|settimana|tydzień|semana)(?![\p{L}\p{N}])|(?<![\p{L}\p{N}])(?:nächste\s+Woche|in\s+der\s+nächsten\s+Woche|kommende\s+Woche|in\s+der\s+kommenden\s+Woche|наступного\s+тижня|на\s+наступному\s+тижні|на\s+следующей\s+неделе|next\s+week|the\s+following\s+week|la\s+semaine\s+prochaine|la\s+settimana\s+prossima|w\s+przyszłym\s+tygodniu|w\s+przyszlym\s+tygodniu|w\s+następnym\s+tygodniu|w\s+nastepnym\s+tygodniu|la\s+próxima\s+semana|la\s+proxima\s+semana)(?![\p{L}\p{N}])/iu)
-  ) {
-    date.setDate(date.getDate() + 7);
-    hasDate = true;
-  }
-
-// 3. Додавання календарних місяців і років
-
-const relativeNumbers = {
+  // 3. Додавання календарних місяців і років
+ const relativeNumbers = {
    // Німецькі числа
   'eins': 1, 'ein': 1, 'eine': 1, 'einen': 1,
   'einem': 1, 'einer': 1,
@@ -1847,7 +1790,8 @@ const relativeNumbers = {
   'dwa': 2, 'dwie': 2, 'trzy': 3, 
   'cztery': 4, 'pięć': 5, 'sześć': 6,
   'siedem': 7, 'osiem': 8, 'dziewięć': 9,
-  'dziesięć': 10, 'jedenaście': 11, 'dwanaście': 12,
+  'dziesięć': 10, 'jedenaście': 11, 'jedenascie': 11,
+  'dwanaście': 12, 'dwanascie': 12,
   'dos': 2, 'tres': 3, 'cuatro': 4, 'cinco': 5,
   'seis': 6, 'siete': 7, 'ocho': 8, 'nueve': 9,
   'diez': 10, 'once': 11, 'doce': 12,
@@ -1896,7 +1840,7 @@ const relativeNumbers = {
 'vingt-six': 26, 'vingt-sept': 27,
 'vingt-huit': 28, 'vingt-neuf': 29,
 'trente': 30, 'trente et un': 31, 
-'trente-et-un': 31, 'trente-et-une': 31,
+'trente-et-un': 31, 
 'trente-un': 31, 'trente un': 31,
 
 // Італійські числа 13–31
@@ -1921,17 +1865,30 @@ const relativeNumbers = {
 
 // Польські числа без діакритики
 'piec': 5, 'szesc': 6, 'dziewiec': 9, 'dziesiec': 10,
-'dwadzieścia piec': 25,
-'dwadzieścia szesc': 26,
-'dwadzieścia dziewiec': 29,
+'jedenascie': 11, 'dwanascie': 12,
+'trzynascie': 13, 'czternascie': 14, 'pietnascie': 15,
+'szesnascie': 16, 'siedemnascie': 17, 'osiemnascie': 18,
+'dziewietnascie': 19,
+'dwadziescia': 20,
+'dwadziescia jeden': 21, 'dwadziescia dwa': 22,
+'dwadziescia trzy': 23, 'dwadziescia cztery': 24,
+'dwadziescia pięć': 25, 'dwadziescia piec': 25,
+'dwadziescia sześć': 26, 'dwadziescia szesc': 26,
+'dwadziescia siedem': 27, 'dwadziescia osiem': 28,
+'dwadziescia dziewięć': 29, 'dwadziescia dziewiec': 29,
+'trzydziesci': 30, 'trzydziesci jeden': 31,
 
 // Іспанські числа 13–31
 'trece': 13, 'catorce': 14, 'quince': 15,
-'dieciséis': 16, 'diecisiete': 17, 'dieciocho': 18,
+'dieciséis': 16, 'dieciseis': 16,
+'diecisiete': 17, 'dieciocho': 18,
 'diecinueve': 19, 'veinte': 20, 'veintiuno': 21,
-'veintidós': 22, 'veintitrés': 23, 'veinticuatro': 24,
-'veinticinco': 25, 'veintiséis': 26, 'veintisiete': 27,
-'veintiocho': 28, 'veintinueve': 29, 'treinta': 30,
+'veintidós': 22, 'veintidos': 22,
+'veintitrés': 23, 'veintitres': 23,
+'veinticuatro': 24, 'veinticinco': 25,
+'veintiséis': 26, 'veintiseis': 26,
+'veintisiete': 27, 'veintiocho': 28,
+'veintinueve': 29, 'treinta': 30,
 'treinta y uno': 31,
 
 // Українські числа 13–31
@@ -1941,10 +1898,11 @@ const relativeNumbers = {
 "дев'ятнадцять": 19, 'двадцять': 20,
 'двадцять один': 21, 'двадцять два': 22,
 'двадцять три': 23, 'двадцять чотири': 24,
-'двадцять п’ять': 25, "двадцять п'ять": 25,
+'двадцять п’ять': 25, "двадцять п'ять": 25, 'двадцять пять': 25,
 'двадцять шість': 26, 'двадцять сім': 27,
-'двадцять вісім': 28, 'двадцять дев’ять': 29,
+'двадцять вісім': 28, 'двадцять дев’ять': 29, 'двадцять девять': 29,
 'тридцять': 30, 'тридцять один': 31,
+
 
 // Російські числа 13–31
 'тринадцать': 13, 'четырнадцать': 14, 'пятнадцать': 15,
@@ -1957,6 +1915,61 @@ const relativeNumbers = {
 'двадцать девять': 29, 'тридцать': 30,
 'тридцать один': 31
 };
+  
+ const relativeDayMatch = text.match(
+  /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|одного|два|дві|две|двоє|двое|три|троє|трое|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|тринадцять|тринадцать|чотирнадцять|четырнадцать|п’ятнадцять|п'ятнадцять|пятнадцать|шістнадцять|шестнадцать|сімнадцять|семнадцать|вісімнадцять|восемнадцать|дев’ятнадцять|дев'ятнадцять|девятнадцать|двадцять|тридцять|двадцять\s+(?:один|два|три|чотири|п’ять|п'ять|шість|сім|вісім|дев’ять)|двадцать\s+(?:один|два|три|четыре|пять|шесть|семь|восемь|девять)|тридцять\s+один|тридцать\s+один|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|dreizehn|vierzehn|fünfzehn|sechzehn|siebzehn|achtzehn|neunzehn|zwanzig|einundzwanzig|zweiundzwanzig|dreiundzwanzig|vierundzwanzig|fünfundzwanzig|sechsundzwanzig|siebenundzwanzig|achtundzwanzig|neunundzwanzig|dreißig|einunddreißig|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|twenty[-\s](?:one|two|three|four|five|six|seven|eight|nine)|thirty|thirty[-\s]one|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|dix[-\s]sept|dix[-\s]huit|dix[-\s]neuf|vingt|vingt(?:[-\s]et)?[-\s](?:un|une)|vingt[-\s](?:deux|trois|quatre|cinq|six|sept|huit|neuf)|trente|trente(?:[-\s]et)?[-\s]un|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|tredici|quattordici|quindici|sedici|diciassette|diciotto|diciannove|venti|ventuno|ventidue|ventitré|ventiquattro|venticinque|ventisei|ventisette|ventotto|ventinove|trenta|trentuno|jeden|jedna|jedną|jedno|dwa|dwie|dwóch|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|jedenaście|jedenascie|dwanaście|dwanascie|trzynaście|trzynascie|czternaście|czternascie|piętnaście|pietnascie|szesnaście|szesnascie|siedemnaście|siedemnascie|osiemnaście|osiemnascie|dziewiętnaście|dziewietnascie|dwadzieścia|dwadziescia|dwadzieścia\s+(?:jeden|dwa|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec)|dwadziescia\s+(?:jeden|dwa|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec)|trzydzieści|trzydziesci|trzydzieści\s+jeden|trzydziesci\s+jeden|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|veinte|veintiuno|veintidós|veintidos|veintitrés|veintitres|veinticuatro|veinticinco|veintiséis|veintiseis|veintisiete|veintiocho|veintinueve|treinta|treinta\s+y\s+uno|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31)\s+)?(день|дня|днів|дні|доба|добу|доби|діб|дней|сутки|суток|Tag|Tage|Tagen|day|days|jour|jours|giorno|giorni|dzień|dni|dnia|dniu|días|dias|día)(?![\p{L}\p{N}])/iu
+ );
+
+  if (relativeDayMatch) {
+    const word = (relativeDayMatch[1] || '1').toLowerCase();
+   
+   const daysToAdd = /^\d+$/.test(word)
+  ? Number(word)
+  : relativeNumbers[word];
+
+    if (daysToAdd) {
+      date.setDate(date.getDate() + daysToAdd);
+      hasDate = true;
+      text = text.replace(relativeDayMatch[0], ' ');
+    }
+  }
+   const weekMatch = text.match(
+    /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(одну|один|одна|дві|две|два|три|eine|einen|einer|ein|zwei|drei|one|two|three|un|une|deux|trois|una|uno|due|tre|dos|tres|jeden|jedna|jedną|dwa|dwie|trzy|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели|Woche|Wochen|week|weeks|semaine|semaines|settimana|settimane|tydzień|tygodnie|tygodni|semana|semanas)(?![\p{L}\p{N}])/iu
+  );
+
+  if (weekMatch) {
+    const word = weekMatch[1].toLowerCase();
+
+   const weeks = ({
+  'одну': 1, 'один': 1, 'одна': 1, '1': 1,
+  'дві': 2, 'две': 2, 'два': 2, '2': 2,
+  'три': 3, '3': 3,
+
+  'eine': 1, 'einen': 1, 'einer': 1, 'ein': 1,
+  'zwei': 2, 'drei': 3,
+
+  'one': 1, 'two': 2, 'three': 3,
+
+  'un': 1, 'une': 1, 'deux': 2, 'trois': 3,
+
+  'una': 1, 'uno': 1, 'due': 2, 'tre': 3,
+  'dos': 2, 'tres': 3,
+
+  'jeden': 1, 'jedna': 1, 'jedną': 1,
+  'dwa': 2, 'dwie': 2, 'trzy': 3
+})[word];
+
+    if (weeks) {
+      date.setDate(date.getDate() + weeks * 7);
+      hasDate = true;
+      text = text.replace(weekMatch[0], ' ');
+   }
+  } else if (
+    removePhrase(/(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:неділю|тиждень|неделю|Woche|week|semaine|settimana|tydzień|semana)(?![\p{L}\p{N}])|(?<![\p{L}\p{N}])(?:nächste\s+Woche|in\s+der\s+nächsten\s+Woche|kommende\s+Woche|in\s+der\s+kommenden\s+Woche|наступного\s+тижня|на\s+наступному\s+тижні|на\s+следующей\s+неделе|next\s+week|the\s+following\s+week|la\s+semaine\s+prochaine|la\s+settimana\s+prossima|w\s+przyszłym\s+tygodniu|w\s+przyszlym\s+tygodniu|w\s+następnym\s+tygodniu|w\s+nastepnym\s+tygodniu|la\s+próxima\s+semana|la\s+proxima\s+semana)(?![\p{L}\p{N}])/iu)
+  ) {
+    date.setDate(date.getDate() + 7);
+    hasDate = true;
+  }
 
 // Правильне додавання календарних місяців
 function addCalendarMonths(baseDate, monthsToAdd) {
@@ -1977,14 +1990,27 @@ function addCalendarMonths(baseDate, monthsToAdd) {
   return result;
 }
 
+ // Французькою та італійською: наступного року
+const nextYearMatch = text.match(
+  /(?<![\p{L}\p{N}])(?:l['’]année\s+prochaine|l['’]anno\s+prossimo)(?![\p{L}\p{N}])/iu
+);
+
+if (nextYearMatch) {
+  date = addCalendarMonths(date, 12);
+  hasDate = true;
+  text = text.replace(nextYearMatch[0], ' ');
+} 
+
 // Через один, два, три та інші роки
 const relativeYearMatch = text.match(
-  /(?<![\p{L}\p{N}])(?:(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|jeden|jedna|jedną|dwa|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce)\s+)?|(?:im\s+(?:nächsten|kommenden)|nächstes|kommendes)\s+)(рік|роки|років|року|год|года|лет|Jahr|Jahren|year|years|an|ans|année|années|anno|anni|rok|roku|lata|lat|año|años)(?![\p{L}\p{N}])/iu
+  /(?<![\p{L}\p{N}])(?:(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|jeden|jedna|jedną|dwa|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce)\s+)?|(?:im\s+(?:nächsten|kommenden)|nächstes|kommendes|наступного|в\s+следующем|next|w\s+przyszłym|el\s+próximo)\s+)(рік|роки|років|року|год|года|году|лет|Jahr|Jahren|year|years|an|ans|année|années|anno|anni|rok|roku|lata|lat|año|años)(?![\p{L}\p{N}])/iu
 );
 
 if (relativeYearMatch) {
   const word = (relativeYearMatch[1] || '1').toLowerCase();
-  const yearsToAdd = relativeNumbers[word];
+  const yearsToAdd = /^\d+$/.test(word)
+   ? Number(word)
+   : relativeNumbers[word];
 
   if (yearsToAdd) {
     date = addCalendarMonths(date, yearsToAdd * 12);
@@ -2005,12 +2031,14 @@ if (halfYearMatch) {
 }
 // Через один, два, три та інші місяці
 const relativeMonthMatch = text.match(
- /(?<![\p{L}\p{N}])(?:(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|sept|huit|neuf|dix|onze|douze|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|jeden|jedna|jedną|dwa|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|jedenaście|dwanaście|un|uno|una|dos|tres|cuatro|siete|ocho|nueve|diez|once|doce)\s+)?(?:місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten|month|months|mois|mese|mesi|miesiąc|miesiąca|miesiącu|miesięcy|miesiące|mes|meses)|(?:(?:im\s+)?(?:nächsten|nächste|kommenden)\s+Monat|next\s+month|the\s+coming\s+month|le\s+mois\s+prochain|dans\s+le\s+mois\s+prochain|il\s+prossimo\s+mese|nel\s+prossimo\s+mese|w\s+przyszłym\s+miesiącu|w\s+przyszlym\s+miesiacu|el\s+próximo\s+mes|el\s+proximo\s+mes|próximo\s+mes|proximo\s+mes))(?![\p{L}\p{N}])/iu
+ /(?<![\p{L}\p{N}])(?:(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|sept|huit|neuf|dix|onze|douze|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|jeden|jedna|jedną|dwa|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|jedenaście|jedenascie|dwanaście|dwanascie|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce)\s+)?(?:місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten|month|months|mois|mese|mesi|miesiąc|miesiąca|miesiącu|miesięcy|miesiące|mes|meses)|(?:(?:im\s+)?(?:nächsten|nächste|kommenden)\s+Monat|next\s+month|the\s+coming\s+month|le\s+mois\s+prochain|dans\s+le\s+mois\s+prochain|il\s+prossimo\s+mese|nel\s+prossimo\s+mese|w\s+przyszłym\s+miesiącu|w\s+przyszlym\s+miesiacu|el\s+próximo\s+mes|el\s+proximo\s+mes|próximo\s+mes|proximo\s+mes))(?![\p{L}\p{N}])/iu
 );
 
 if (relativeMonthMatch) {
   const word = (relativeMonthMatch[1] || '1').toLowerCase();
-  const monthsToAdd = relativeNumbers[word];
+  const monthsToAdd = /^\d+$/.test(word)
+  ? Number(word)
+  : relativeNumbers[word];
 
   if (monthsToAdd) {
     date = addCalendarMonths(date, monthsToAdd);
@@ -2078,7 +2106,7 @@ if (relativeMonthMatch) {
     'lutego': 1, 'luty': 1,
     'marca': 2, 'marzec': 2, 'marcu': 2,
     'kwietnia': 3, 'kwiecień': 3, 'kwietniu': 3,
-    'maja': 4, 'maj': 4,
+    'maja': 4, 'maj': 4, 'maju': 4,
     'czerwca': 5, 'czerwiec': 5,
     'lipca': 6, 'lipiec': 6,
     'sierpnia': 7, 'sierpień': 7,
@@ -2237,8 +2265,10 @@ const dayWords = {
    'vingt sept': 27,
    'vingt huit': 28,
    'vingt neuf': 29,
-  
-  // Італійська
+   'vingt et deux': 22,
+   'vingt et trois': 23,
+ 
+// Італійська
 'primo': 1, 'secondo': 2, 'terzo': 3,
 'quarto': 4, 'quinto': 5, 'sesto': 6,
 'settimo': 7, 'ottavo': 8, 'nono': 9,
@@ -2359,6 +2389,30 @@ if (monthMatch || monthFirstMatch) {
     text = text.replace(matched[0], ' ');
   }
 }
+// Міжнародний формат дати: YYYY-MM-DD
+const isoDateRegex =
+  /(?<![\p{L}\p{N}])(\d{4})-(\d{2})-(\d{2})(?![\p{L}\p{N}])/u;
+
+const isoDateMatch = text.match(isoDateRegex);
+
+if (isoDateMatch) {
+  const year = Number(isoDateMatch[1]);
+  const month = Number(isoDateMatch[2]) - 1;
+  const day = Number(isoDateMatch[3]);
+
+  const candidate = new Date(year, month, day);
+
+  if (
+    candidate.getFullYear() === year &&
+    candidate.getMonth() === month &&
+    candidate.getDate() === day
+  ) {
+    date = candidate;
+    hasDate = true;
+    text = text.replace(isoDateMatch[0], ' ');
+  }
+}
+  
 const numericDateRegex =
   /(?<![\p{L}\p{N}])(\d{1,2})[./](\d{1,2})(?:[./](\d{4}))?(?![\p{L}\p{N}])/u;
 
