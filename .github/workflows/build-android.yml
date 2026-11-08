@@ -91,6 +91,7 @@ jobs:
           import { LocalNotifications } from '@capacitor/local-notifications';
           import { SpeechRecognition } from '@capgo/capacitor-speech-recognition';
           const STORAGE_KEY = 'later-prototype-v1';
+          const appLanguage = localStorage.getItem('app-language') || 'uk';
           if (Capacitor.isNativePlatform()) {
             const startupVoiceStatus = document.getElementById('voiceStatus');
             if (startupVoiceStatus) {
