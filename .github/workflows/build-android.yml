@@ -161,7 +161,7 @@ jobs:
                   }
                 } catch (error) {
                   console.error('Native speech recognition error:', error);
-                  if (voiceStatus) voiceStatus.textContent = 'Не вдалося використати мікрофон. Перевір дозвіл і сервіс голосового введення на телефоні.';
+                 if (voiceStatus) voiceStatus.textContent = 'Помилка: ' + (error?.message || String(error));
                 } finally {
                   if (micTitle) micTitle.textContent = 'Запам’ятати голосом';
                   if (micHint) micHint.textContent = 'Натисни та продиктуй думку';
