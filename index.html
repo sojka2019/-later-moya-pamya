@@ -2720,7 +2720,7 @@ const numericDateMatch = text.match(numericDateRegex);
   };
 
   const periodPattern =
-  '(?:ранку|вранці|вдень|утра|утром|дня|днем|днём|до\\s+обіду|обідом|обіді|після\\s+обіду|после\\s+обеда|вечора|вечір|вечер|увечері|ввечері|вечором|вечером|ночі|ночи|ночью|опівночі|am\\s+Morgen|am\\s+Vormittag|am\\s+Nachmittag|am\\s+Abend|in\\s+der\\s+Nacht|morgens|vormittags|mittags|nachmittags|abends|nachts|in\\s+the\\s+morning|in\\s+the\\s+afternoon|in\\s+the\\s+evening|at\\s+night|in\\s+the\\s+night|le\\s+matin|l’après-midi|l[’\']après-midi|le\\s+soir|la\\s+nuit|di\\s+mattina|di\\s+pomeriggio|di\\s+sera|di\\s+notte|rano|po\\s+południu|wieczorem|w\\s+nocy|por\\s+la\\s+mañana|por\\s+la\\s+tarde|por\\s+la\\s+noche|de\\s+noche)';
+  '(?:ранку|вранці|вдень|утра|утром|дня|днем|днём|до\\s+обіду|обідом|обіді|після\\s+обіду|после\\s+обеда|вечора|вечір|вечер|увечері|ввечері|вечором|вечером|ночі|ночи|ночью|опівночі|am\\s+Morgen|am\\s+Vormittag|am\\s+Nachmittag|am\\s+Abend|in\\s+der\\s+Nacht|morgens|vormittags|mittags|nachmittags|abends|nachts|am|a\\.?\\s*m\\.?|pm|p\\.?\\s*m\\.?|in\\s+the\\s+morning|in\\s+the\\s+afternoon|in\\s+the\\s+evening|at\\s+night|in\\s+the\\s+night|le\\s+matin|l’après-midi|l[’\']après-midi|le\\s+soir|la\\s+nuit|di\\s+mattina|di\\s+pomeriggio|di\\s+sera|di\\s+notte|rano|po\\s+południu|wieczorem|w\\s+nocy|por\\s+la\\s+mañana|por\\s+la\\s+tarde|por\\s+la\\s+noche|de\\s+noche)';
   const escapeRegex = word =>
     word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -3025,7 +3025,13 @@ const hoursTo = {
     new RegExp('(?:' + periodPattern + ')$', 'iu')
     );
     const period = periodMatch ? periodMatch[0].toLowerCase() : '';
-
+    // Англійський 12-годинний час AM/PM
+    if (/^p\.?\s*m\.?$/iu.test(period)) {
+      if (hour < 12) hour += 12;
+    } else if (/^a\.?\s*m\.?$/iu.test(period)) {
+      if (hour === 12) hour = 0;
+    }
+    
     if (
 [
   // Українська
