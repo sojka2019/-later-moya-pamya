@@ -1228,6 +1228,10 @@ function categoryFor(text) {
 }
 window.parseVoiceReminder = parseVoiceReminder;
 window.categoryFor = categoryFor;
+Object.defineProperty(window, 'editingId', {
+  get: () => editingId,
+  set: value => { editingId = value; }
+});
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function add(text,category='Автоматично',date=''){text=text.trim();if(!text)return;const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false});persist();
 const savedMessages = {
