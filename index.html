@@ -3109,14 +3109,17 @@ const hoursTo = {
   }
   
   // Дні тижня українською та російською
-   const weekdayMatch = text.match(
-    /(?:(?:у|в|во|на|am|on|le|il|el|di|w)\s+)?(?:(наступного|следующий|nächsten|nächste|next|prochain|prochaine|prossimo|prossima|następny|następna|następne|przyszły|przyszła|przyszłe|próximo|próxima|ersten|zweiten|dritten|vierten|first|second|third|fourth|premier|première|deuxième|troisième|quatrième|primo|prima|secondo|seconda|terzo|terza|quarto|quarta|pierwszy|pierwsza|drugi|druga|trzeci|trzecia|czwarty|czwarta|primer|primero|primera|segundo|segunda|tercero|tercera|cuarto|cuarta|перш(?:ий|ого|у|а)|перв(?:ый|ого|ую|ая)|друг(?:ий|ого|у|а)|втор(?:ой|ого|ую|ая)|трет(?:ій|ього|ю|я)|треть(?:ий|его|ю|я)|четверт(?:ий|ого|у|а|ый|ую|ая)|четвёрт(?:ый|ого|ую|ая))\s+)?(понеділ(?:ок|ка|ку)|понедельник(?:а|у)?|вівтор(?:ок|ка|ку)|вторник(?:а|у)?|серед(?:а|и|у)|сред(?:а|ы|у|е)|четвер(?:г|га|гу)|п[’'ʼ]?ятниц(?:я|і|ю)|пятниц(?:а|ы|у|е)|субот(?:а|и|у)|суббот(?:а|ы|у|е)|неділ(?:я|і|ю)|воскресень(?:е|я|ю)|montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag
+   const weekdayPattern = String.raw`
+    (?:(?:у|в|во|на|am|on|le|il|el|di|w)\s+)?(?:(наступного|следующий|nächsten|nächste|next|prochain|prochaine|prossimo|prossima|następny|następna|następne|przyszły|przyszła|przyszłe|próximo|próxima|ersten|zweiten|dritten|vierten|first|second|third|fourth|premier|première|deuxième|troisième|quatrième|primo|prima|secondo|seconda|terzo|terza|quarto|quarta|pierwszy|pierwsza|drugi|druga|trzeci|trzecia|czwarty|czwarta|primer|primero|primera|segundo|segunda|tercero|tercera|cuarto|cuarta|перш(?:ий|ого|у|а)|перв(?:ый|ого|ую|ая)|друг(?:ий|ого|у|а)|втор(?:ой|ого|ую|ая)|трет(?:ій|ього|ю|я)|треть(?:ий|его|ю|я)|четверт(?:ий|ого|у|а|ый|ую|ая)|четвёрт(?:ый|ого|ую|ая))\s+)?(понеділ(?:ок|ка|ку)|понедельник(?:а|у)?|вівтор(?:ок|ка|ку)|вторник(?:а|у)?|серед(?:а|и|у)|сред(?:а|ы|у|е)|четвер(?:г|га|гу)|п[’'ʼ]?ятниц(?:я|і|ю)|пятниц(?:а|ы|у|е)|субот(?:а|и|у)|суббот(?:а|ы|у|е)|неділ(?:я|і|ю)|воскресень(?:е|я|ю)|montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag
      |monday|tuesday|wednesday|thursday|friday|saturday|sunday
      |lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche
      |lunedì|martedì|mercoledì|giovedì|venerdì|sabato|domenica
      |poniedziałek|wtorek|środa|czwartek|piątek|sobota|niedziela
-     |lunes|martes|miércoles|jueves|viernes|sábado|domingo)(?![\p{L}\p{N}])/iu
-  );
+     |lunes|martes|miércoles|jueves|viernes|sábado|domingo)(?![\p{L}\p{N}])`;
+
+       const weekdayMatch = text.match(
+         new RegExp(weekdayPattern.replace(/\s*\n\s*/g, '').trim(), 'iu')
+       );
 
   if (weekdayMatch) {
     const weekdayText = weekdayMatch[2].toLowerCase();
