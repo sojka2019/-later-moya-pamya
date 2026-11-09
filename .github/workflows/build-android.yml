@@ -143,10 +143,10 @@ jobs:
                   const quickInput = document.getElementById('quickInput');
                   const quickAdd = document.getElementById('quickAdd');
                   if (quickInput && quickAdd) {
-                    const parsed = parseVoiceReminder(spokenText);
+                    const parsed = window.parseVoiceReminder(spokenText);
 
                     document.getElementById('noteText').value = parsed.text;
-                    document.getElementById('noteCategory').value = categoryFor(parsed.text);
+                    document.getElementById('noteCategory').value = window.categoryFor(parsed.text);
                     document.getElementById('noteDate').value = parsed.date || '';
 
                     editingId = null;
