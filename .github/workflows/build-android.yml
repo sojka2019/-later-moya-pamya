@@ -81,7 +81,7 @@ jobs:
           EOF_VITE
           cat > native-app/capacitor.config.json <<'EOF_CAP'
           {
-           "appId": "ch.pamyatai.remember.test95",
+           "appId": "ch.pamyatai.remember.test96",
            "appName": "Нагадування",
            "webDir": "dist"
           }
@@ -91,7 +91,7 @@ jobs:
           import { LocalNotifications } from '@capacitor/local-notifications';
           import { SpeechRecognition } from '@capgo/capacitor-speech-recognition';
           const STORAGE_KEY = 'later-prototype-v1';
-          const appLanguage = localStorage.getItem('app-language') || 'uk';
+          const getAppLanguage = () => localStorage.getItem('app-language') || 'uk';
           if (Capacitor.isNativePlatform()) {
             const startupVoiceStatus = document.getElementById('voiceStatus');
             if (startupVoiceStatus) {
@@ -129,7 +129,7 @@ jobs:
                       it: 'it-IT',
                       pl: 'pl-PL',
                       es: 'es-ES'
-                    })[appLanguage] || 'uk-UA',
+                   })[getAppLanguage()] || 'uk-UA',
                     maxResults: 1,
                     prompt: 'Скажіть, що потрібно запам’ятати',
                     popup: false,
@@ -149,7 +149,7 @@ jobs:
                     document.getElementById('noteCategory').value = window.categoryFor(parsed.text);
                     document.getElementById('noteDate').value = parsed.date || '';
 
-                    editingId = null;
+                    window.editingId = null;
                     document.getElementById('modalTitle').textContent = 'Перевір голосове нагадування';
                     document.getElementById('modal').classList.add('open');
 
@@ -734,7 +734,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: Nagaduvannya-4_test95
+          name: Nagaduvannya-4_test96
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
