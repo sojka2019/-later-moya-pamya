@@ -2948,10 +2948,12 @@ const hoursTo = {
     )
   );
 
-  if (timeMatch) {
+ if (timeMatch) {
     hour = Number(timeMatch[1]);
     minute = Number(timeMatch[2]);
   }
+
+  console.log('ПЕРЕВІРКА ЦИФРОВОГО ЧАСУ:', timeMatch && timeMatch[0], hour, minute);
 }
     // 1. Час цифрами та хвилинами словами: "о 7 п'ятнадцять"
   if (!timeMatch) {
