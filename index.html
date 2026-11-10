@@ -2340,7 +2340,7 @@ const dayWords = {
 
 const monthNames = Object.keys(months) .sort((a, b) => b.length - a.length) .map(escapeDateRegex) .join('|'); const dayWordNames = Object.keys(dayWords) .sort((a, b) => b.length - a.length) .map(escapeDateRegex) .join('|'); const monthDateRegex = new RegExp(
   '(?<![\\p{L}\\p{N}])(?:am\\s+)?(' +
-  '\\d{1,2}\\.\\s*|' +
+  '\\d{1,2}\\.|' +
   dayWordNames +
   ')(?:\\s+de)?\\s+(' +
   monthNames +
@@ -2349,6 +2349,7 @@ const monthNames = Object.keys(months) .sort((a, b) => b.length - a.length) .map
 );
 
 const monthMatch = text.match(monthDateRegex);
+console.log('Перевірка дати:', text, monthMatch);
 const monthFirstRegex = new RegExp(
   '(?<![\\p{L}\\p{N}])(' +
   monthNames +
