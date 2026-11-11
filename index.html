@@ -2991,6 +2991,18 @@ const hoursTo = {
     }
   }
 
+    // Цифровий час без прийменника: "22:00", "17:30"
+  if (!timeMatch) {
+    timeMatch = text.match(
+      /(?<![\p{L}\p{N}])(\d{1,2}):(\d{2})(?![\p{L}\p{N}]|:\d)/u
+    );
+
+    if (timeMatch) {
+      hour = Number(timeMatch[1]);
+      minute = Number(timeMatch[2]);
+    }
+  }
+  
   // 3. Час словами: "о сьомій п'ятнадцять"
   if (!timeMatch) {
     timeMatch = text.match(
