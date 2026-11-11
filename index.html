@@ -3002,18 +3002,20 @@ const hoursTo = {
       minute = Number(timeMatch[2]);
     }
   }
-  // Цифровий час без роздільника: "2015" = 20:15
-  // Не розпізнаємо числа, за якими йдуть назви валют
-  if (!timeMatch) {
-    timeMatch = text.match(
-      /(?<![\p{L}\p{N}])([01]\d|2[0-3])([0-5]\d)(?!\s*(?:гривень|гривні|гривня|гривню|гривнею|грн|франків|франки|франк|франка|франке|frank|franks|franc|francs|franken|євро|euro|euros|доларів|долари|долар|dollar|dollars|доллара|долларов|pound|pounds|руб|рублів|рублі|рубль|рубля|рублей|рублю|рублём|рублем)(?![\p{L}\p{N}]))(?![\p{L}\p{N}])/iu
-    );
+ // Не розпізнаємо числа як час, якщо перед ними вказано ціну
+const priceBeforeNumber = /(?:for|für)\s+(?:an?\s+)?(?:item|article|artikel)?\s*$/iu.test(text.slice(0, text.search(/\b2015\b/i) >= 0 ? text.search(/\b2015\b/i) : 0));
 
-    if (timeMatch) {
-      hour = Number(timeMatch[1]);
-      minute = Number(timeMatch[2]);
-    }
+// Не розпізнаємо числа, за якими йдуть назви валют
+if (!timeMatch && !priceBeforeNumber) {
+  timeMatch = text.match(
+    /(?<![\p{L}\p{N}])([01]\d|2[0-3])([0-5]\d)(?!\s*(?:гривень|гривні|гривня|гривню|гривнею|грн|франків|франки|франк|франка|франке|frank|franks|franc|francs|franken|євро|euro|euros|доларів|долари|долар|dollar|dollars|доллара|долларов|pound|pounds|руб|рублів|рублі|рубль|рубля|рублей|рублю|рублём|рублем)(?![\p{L}\p{N}]))(?![\p{L}\p{N}])/iu
+  );
+
+  if (timeMatch) {
+    hour = Number(timeMatch[1]);
+    minute = Number(timeMatch[2]);
   }
+}
   
   // 3. Час словами: "о сьомій п'ятнадцять"
   if (!timeMatch) {
