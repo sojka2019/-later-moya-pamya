@@ -1651,6 +1651,7 @@ if (oneHourMatch && !halfHourMatch) {
   .join('|');
 
   // Іспанською: півтори години — 90 хвилин
+console.log('ІСПАНСЬКИЙ ТЕКСТ:', JSON.stringify(text));
 const spanishHourAndHalfMatch = text.match(
   /(?<![\p{L}\p{N}])dentro\s+de\s+una\s+hora\s+y\s+media(?![\p{L}\p{N}])/iu
 );
