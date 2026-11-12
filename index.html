@@ -2430,7 +2430,7 @@ const monthFirstRegex = new RegExp(
 );
 
 const monthFirstMatch = text.match(monthFirstRegex);
-
+console.log('ПЕРЕВІРКА MONTH-FIRST:', monthFirstRegex, monthFirstMatch);
 if (monthMatch || monthFirstMatch) {
   const matched = monthMatch || monthFirstMatch;
 
