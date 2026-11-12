@@ -3067,6 +3067,7 @@ if (!timeMatch && !priceBeforeNumber) {
     new RegExp('(?:' + periodPattern + ')$', 'iu')
     );
     const period = periodMatch ? periodMatch[0].toLowerCase() : '';
+    console.log('ІСПАНСЬКИЙ ПЕРІОД:', period, 'TIME:', timeMatch[0]);
     // Англійський 12-годинний час AM/PM
     if (/^p\.?\s*m\.?$/iu.test(period)) {
       if (hour < 12) hour += 12;
