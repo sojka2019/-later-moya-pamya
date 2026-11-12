@@ -1523,14 +1523,18 @@ function parseVoiceReminder(transcript) {
 // Через пів години / полчаса
 // Іспанською: півтори години — 90 хвилин
   console.log('ПЕРЕВІРКА 90 ХВ:', JSON.stringify(text));
- const spanishHourAndHalfMatch = text.match(
-  /(?<![\p{L}\p{N}])dentro\s+de\s+(una\s+hora|dos\s+horas)\s+y\s+media(?![\p{L}\p{N}])/iu
+const spanishHourAndHalfMatch = text.match(
+  /(?<![\p{L}\p{N}])dentro\s+de\s+(una\s+hora|dos\s+horas|tres\s+horas)\s+y\s+media(?![\p{L}\p{N}])/iu
 );
 const halfHourMatch = text.match(
   /(?<![\p{L}\p{N}])(?:через\s+(?:пів\s+години|півгодини|полчаса|половину\s+часа)|in einer halben Stunde|in half an hour|dans une demi-heure|tra mezz'ora|fra mezz'ora|za pół godziny|dentro de media hora|en media hora)(?![\p{L}\p{N}])/iu
 );
 if (spanishHourAndHalfMatch) {
-  const spanishHours = spanishHourAndHalfMatch[1].startsWith('dos') ? 2 : 1;
+  const spanishHours = spanishHourAndHalfMatch[1].startsWith('tres')
+  ? 3
+  : spanishHourAndHalfMatch[1].startsWith('dos')
+    ? 2
+    : 1;
   const totalMinutes = spanishHours * 60 + 30;
 
   date = new Date(now.getTime() + totalMinutes * 60 * 1000);
