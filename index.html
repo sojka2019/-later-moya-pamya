@@ -2417,7 +2417,9 @@ const monthNames = Object.keys(months)
   ')(?:\\s+(\\d{4})(?:\\s+(?:року|Jahr))?)?(?![\\p{L}])',
   'iu'
 );
-
+const monthMatch = text.match(monthDateRegex);
+console.log('Перевірка дати:', text, monthMatch);
+  
 const monthFirstRegex = new RegExp(
   '(?<![\\p{L}\\p{N}])(?:on\\s+)?(' +
   monthNames +
