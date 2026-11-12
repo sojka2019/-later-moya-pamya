@@ -3291,9 +3291,10 @@ const dayPeriods = [
     }
   }
 
-  if (hasDate && !hasTime) {
+   if ((hasDate || defaultHour !== null) && !hasTime) {
     date.setHours(defaultHour === null ? 9 : defaultHour, 0, 0, 0);
   }
+  
 
   // 8. Прибираємо початкові слова-команди та зайві пробіли
   text = text
