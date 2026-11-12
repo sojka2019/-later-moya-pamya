@@ -1521,10 +1521,20 @@ function parseVoiceReminder(transcript) {
   }
 // Відносний час: через годину, дві години або кілька хвилин
 // Через пів години / полчаса
+// Іспанською: півтори години — 90 хвилин
+const spanishHourAndHalfMatch = text.match(
+  /(?<![\p{L}\p{N}])dentro\s+de\s+una\s+hora\s+y\s+media(?![\p{L}\p{N}])/iu
+);
 const halfHourMatch = text.match(
   /(?<![\p{L}\p{N}])(?:через\s+(?:пів\s+години|півгодини|полчаса|половину\s+часа)|in einer halben Stunde|in half an hour|dans une demi-heure|tra mezz'ora|fra mezz'ora|za pół godziny|dentro de media hora|en media hora)(?![\p{L}\p{N}])/iu
 );
-
+if (spanishHourAndHalfMatch) {
+  date = new Date(now.getTime() + 90 * 60 * 1000);
+  hasDate = true;
+  hasTime = true;
+  text = text.replace(spanishHourAndHalfMatch[0], ' ');
+}
+  
 if (halfHourMatch) {
   date = new Date(now.getTime() + 30 * 60 * 1000);
   hasDate = true;
@@ -1536,7 +1546,7 @@ const oneHourMatch = text.match(
   /(?<![\p{L}\p{N}])(?:через\s+годину|через\s+один\s+час|через\s+час|через\s+одну\s+годину|in einer Stunde|in one hour|dans une heure|tra un'ora|fra un'ora|za godzinę|za jedną godzinę|dentro de una hora|en una hora)(?![\p{L}\p{N}])/iu
 );
 
-if (oneHourMatch && !halfHourMatch) {
+if (oneHourMatch && !halfHourMatch && !spanishHourAndHalfMatch) {
   date = new Date(now.getTime() + 60 * 60 * 1000);
   hasDate = true;
   hasTime = true;
