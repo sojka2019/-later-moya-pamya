@@ -2405,7 +2405,10 @@ const dayWords = {
  const escapeDateRegex = value =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-const monthNames = Object.keys(months) .sort((a, b) => b.length - a.length) .map(escapeDateRegex) .join('|'); const dayWordNames = Object.keys(dayWords) .sort((a, b) => b.length - a.length) .map(escapeDateRegex) .join('|'); const monthDateRegex = new RegExp(
+const monthNames = Object.keys(months)
+  .sort((a, b) => b.length - a.length)
+  .map(name => escapeDateRegex(name) + '\\.?')
+  .join('|'); const dayWordNames = Object.keys(dayWords) .sort((a, b) => b.length - a.length) .map(escapeDateRegex) .join('|'); const monthDateRegex = new RegExp(
   '(?<![\\p{L}\\p{N}])(?:(?:am|el|on)\\s+)?(?:the\\s+)?(' +
   '\\d{1,2}(?:st|nd|rd|th)?\\.?[,]?|' +
   dayWordNames +
