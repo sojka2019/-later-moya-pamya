@@ -1650,6 +1650,17 @@ if (oneHourMatch && !halfHourMatch) {
   .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
   .join('|');
 
+  // Іспанською: півтори години — 90 хвилин
+const spanishHourAndHalfMatch = text.match(
+  /(?<![\p{L}\p{N}])dentro\s+de\s+una\s+hora\s+y\s+media(?![\p{L}\p{N}])/iu
+);
+
+if (spanishHourAndHalfMatch) {
+  date = new Date(now.getTime() + 90 * 60 * 1000);
+  hasDate = true;
+  hasTime = true;
+  text = text.replace(spanishHourAndHalfMatch[0], ' ');
+}
 const relativeTimeMatch = text.match(
   new RegExp(
     '(?<![\\p{L}\\p{N}])(?:через|за|in|dans|tra|fra|dentro de|en)\\s+(?:(' +
