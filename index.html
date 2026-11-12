@@ -2398,7 +2398,7 @@ const dayWords = {
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const monthNames = Object.keys(months) .sort((a, b) => b.length - a.length) .map(escapeDateRegex) .join('|'); const dayWordNames = Object.keys(dayWords) .sort((a, b) => b.length - a.length) .map(escapeDateRegex) .join('|'); const monthDateRegex = new RegExp(
-  '(?<![\\p{L}\\p{N}])(?:am\\s+)?(' +
+  '(?<![\\p{L}\\p{N}])(?:(?:am|el)\\s+)?(' +
   '\\d{1,2}\\.?|' +
   dayWordNames +
   ')(?:\\s+de)?\\s+(' +
