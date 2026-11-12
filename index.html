@@ -2401,7 +2401,7 @@ const monthNames = Object.keys(months) .sort((a, b) => b.length - a.length) .map
   '(?<![\\p{L}\\p{N}])(?:(?:am|el|on)\\s+)?(' +
   '\\d{1,2}\\.?|' +
   dayWordNames +
-  ')(?:\\s+de)?\\s+(' +
+  ')(?:\\s+(?:de|of))?\\s+(' +
   monthNames +
   ')(?:\\s+(\\d{4})(?:\\s+(?:року|Jahr))?)?(?![\\p{L}])',
   'iu'
