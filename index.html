@@ -2438,9 +2438,9 @@ if (monthMatch || monthFirstMatch) {
   ? matched[1].toLowerCase()
   : matched[2].toLowerCase();
 
-  const monthText = monthMatch
-    ? matched[2].toLowerCase()
-    : matched[1].toLowerCase();
+  const monthText = (monthMatch
+    ? matched[2]
+    : matched[1]).toLowerCase().replace(/\.$/, '');
 
   const day = dayWords[dayText] ?? Number(dayText.replace(/(?:st|nd|rd|th)?[,]?$/i, ''));
   const month = months[monthText];
