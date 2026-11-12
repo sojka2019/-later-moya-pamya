@@ -2972,6 +2972,19 @@ const hoursTo = {
     }
   }
 
+  // Французький цифровий час: "14h", "17h30"
+  if (!timeMatch) {
+    const frenchTimeMatch = text.match(
+      /(?<![\p{L}\p{N}])(?:à\s*)?(\d{1,2})\s*h\s*(\d{2})?(?![\p{L}\p{N}])/iu
+    );
+
+    if (frenchTimeMatch) {
+      hour = Number(frenchTimeMatch[1]);
+      minute = Number(frenchTimeMatch[2] || 0);
+      timeMatch = frenchTimeMatch;
+    }
+  }
+  
   // 2. Цифровий час: "о 7:15", "о 18:30"
   if (!timeMatch) {
     timeMatch = text.match(
