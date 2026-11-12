@@ -2414,7 +2414,7 @@ const monthNames = Object.keys(months)
   dayWordNames +
   ')(?:\\s+(?:de|of))?\\s+(' +
   monthNames +
-  ')(?:\\s+(\\d{4})(?:\\s+(?:року|Jahr))?)?(?![\\p{L}])',
+  ')(?:(?:\\s+(?:de|of))?\\s+(\\d{4})(?:\\s+(?:року|Jahr))?)?(?![\\p{L}])',
   'iu'
 );
 const monthMatch = text.match(monthDateRegex);
