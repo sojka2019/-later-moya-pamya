@@ -2418,8 +2418,6 @@ const monthNames = Object.keys(months)
   'iu'
 );
 
-const monthMatch = text.match(monthDateRegex);
-console.log('Перевірка дати:', text, monthMatch);
 const monthFirstRegex = new RegExp(
   '(?<![\\p{L}\\p{N}])(?:on\\s+)?(' +
   monthNames +
