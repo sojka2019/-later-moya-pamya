@@ -1519,28 +1519,29 @@ function parseVoiceReminder(transcript) {
     }
     return false;
   }
- // Відносний час: через годину, дві години або кілька хвилин
-   // Через пів години / полчаса
-  const halfHourMatch = text.match(
-   /(?<![\p{L}\p{N}])(?:через\s+(?:пів\s+години|півгодини|полчаса)|in einer halben Stunde|in half an hour|dans une demi-heure|tra mezz'ora|fra mezz'ora|za pół godziny|en media hora)(?![\p{L}\p{N}])/iu
-  );
+// Відносний час: через годину, дві години або кілька хвилин
+// Через пів години / полчаса
+const halfHourMatch = text.match(
+  /(?<![\p{L}\p{N}])(?:через\s+(?:пів\s+години|півгодини|полчаса|половину\s+часа)|in einer halben Stunde|in half an hour|dans une demi-heure|tra mezz'ora|fra mezz'ora|za pół godziny|dentro de media hora|en media hora)(?![\p{L}\p{N}])/iu
+);
 
-  if (halfHourMatch) {
-    date = new Date(now.getTime() + 30 * 60 * 1000);
-    hasDate = true;
-    hasTime = true;
-    text = text.replace(halfHourMatch[0], ' ');
-  }
-  const oneHourMatch = text.match(
-    /(?<![\p{L}\p{N}])(?:через\s+годину|через\s+один\s+час|через\s+час|через\s+одну\s+годину|in einer Stunde|in one hour|dans une heure|tra un'ora|fra un'ora|za godzinę|za jedną godzinę|dentro de una hora|en una hora)(?![\p{L}\p{N}])/iu
-  );
+if (halfHourMatch) {
+  date = new Date(now.getTime() + 30 * 60 * 1000);
+  hasDate = true;
+  hasTime = true;
+  text = text.replace(halfHourMatch[0], ' ');
+}
 
-  if (oneHourMatch && !halfHourMatch) {
-    date = new Date(now.getTime() + 60 * 60 * 1000);
-    hasDate = true;
-    hasTime = true;
-    text = text.replace(oneHourMatch[0], ' ');
-  }
+const oneHourMatch = text.match(
+  /(?<![\p{L}\p{N}])(?:через\s+годину|через\s+один\s+час|через\s+час|через\s+одну\s+годину|in einer Stunde|in one hour|dans une heure|tra un'ora|fra un'ora|za godzinę|za jedną godzinę|dentro de una hora|en una hora)(?![\p{L}\p{N}])/iu
+);
+
+if (oneHourMatch && !halfHourMatch) {
+  date = new Date(now.getTime() + 60 * 60 * 1000);
+  hasDate = true;
+  hasTime = true;
+  text = text.replace(oneHourMatch[0], ' ');
+}
    const amounts = {
   // Українська
   'один':1,'одна':1,'одне':1,'одну':1,
