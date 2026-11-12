@@ -1522,7 +1522,8 @@ function parseVoiceReminder(transcript) {
 // Відносний час: через годину, дві години або кілька хвилин
 // Через пів години / полчаса
 // Іспанською: півтори години — 90 хвилин
-const spanishHourAndHalfMatch = text.match(
+  console.log('ПЕРЕВІРКА 90 ХВ:', JSON.stringify(text));
+  const spanishHourAndHalfMatch = text.match(
   /(?<![\p{L}\p{N}])dentro\s+de\s+una\s+hora\s+y\s+media(?![\p{L}\p{N}])/iu
 );
 const halfHourMatch = text.match(
