@@ -2410,7 +2410,7 @@ const monthNames = Object.keys(months) .sort((a, b) => b.length - a.length) .map
 const monthMatch = text.match(monthDateRegex);
 console.log('Перевірка дати:', text, monthMatch);
 const monthFirstRegex = new RegExp(
-  '(?<![\\p{L}\\p{N}])(' +
+  '(?<![\\p{L}\\p{N}])(?:on\\s+)?(' +
   monthNames +
   ')\\s+(' +
   dayWordNames +
