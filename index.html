@@ -2426,7 +2426,11 @@ const dayWords = {
 'veintisiete': 27, 'veintiocho': 28, 'veintinueve': 29,
 'treinta': 30, 'treinta y uno': 31,
 };
- const escapeDateRegex = value =>
+
+  // Тимчасова перевірка
+  window.testDayWords = dayWords;
+  
+  const escapeDateRegex = value =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const monthNames = Object.keys(months)
