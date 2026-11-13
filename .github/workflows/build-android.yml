@@ -2,11 +2,11 @@ name: Build Android APK
 
 on:
   push:
-    branches: ["main"]
+   branches: ["main", "nagaduvannya-4"]
   workflow_dispatch:
-
+ 
 permissions:
-  contents: read
+  contents: read 
 
 jobs:
   build-android:
@@ -66,6 +66,7 @@ jobs:
             },
             "devDependencies": {
               "@capacitor/android": "^8.0.0",
+              "@capacitor/ios": "^8.0.0",
               "@capacitor/cli": "^8.0.0",
               "vite": "^7.1.12"
             }
@@ -80,7 +81,7 @@ jobs:
           EOF_VITE
           cat > native-app/capacitor.config.json <<'EOF_CAP'
           {
-           "appId": "ch.pamyatai.remember.test38",
+           "appId": "ch.pamyatai.remember.test113",
            "appName": "Нагадування",
            "webDir": "dist"
           }
@@ -90,6 +91,7 @@ jobs:
           import { LocalNotifications } from '@capacitor/local-notifications';
           import { SpeechRecognition } from '@capgo/capacitor-speech-recognition';
           const STORAGE_KEY = 'later-prototype-v1';
+          const getAppLanguage = () => localStorage.getItem('app-language') || 'uk';
           if (Capacitor.isNativePlatform()) {
             const startupVoiceStatus = document.getElementById('voiceStatus');
             if (startupVoiceStatus) {
@@ -117,11 +119,20 @@ jobs:
                   if (micTitle) micTitle.textContent = 'Слухаю тебе…';
                   if (micHint) micHint.textContent = 'Скажи думку у вікні розпізнавання голосу';
                   if (voiceStatus) voiceStatus.textContent = '';
-                  const result = await SpeechRecognition.start({
-                    language: 'uk-UA',
+                  const result = await SpeechRecognition.start({          
+                    language: ({
+                      uk: 'uk-UA',
+                      ru: 'ru-RU',
+                      de: 'de-DE',
+                      en: 'en-US',
+                      fr: 'fr-FR',
+                      it: 'it-IT',
+                      pl: 'pl-PL',
+                      es: 'es-ES'
+                   })[getAppLanguage()] || 'uk-UA',
                     maxResults: 1,
                     prompt: 'Скажіть, що потрібно запам’ятати',
-                    popup: true,
+                    popup: false,
                     partialResults: false
                   });
                   const spokenText = String(result?.matches?.[0] || '').trim();
@@ -132,13 +143,13 @@ jobs:
                   const quickInput = document.getElementById('quickInput');
                   const quickAdd = document.getElementById('quickAdd');
                   if (quickInput && quickAdd) {
-                    const parsed = parseVoiceReminder(spokenText);
+                    const parsed = window.parseVoiceReminder(spokenText);
 
                     document.getElementById('noteText').value = parsed.text;
-                    document.getElementById('noteCategory').value = categoryFor(parsed.text);
+                    document.getElementById('noteCategory').value = window.categoryFor(parsed.text);
                     document.getElementById('noteDate').value = parsed.date || '';
 
-                    editingId = null;
+                    window.editingId = null;
                     document.getElementById('modalTitle').textContent = 'Перевір голосове нагадування';
                     document.getElementById('modal').classList.add('open');
 
@@ -151,7 +162,7 @@ jobs:
                   }
                 } catch (error) {
                   console.error('Native speech recognition error:', error);
-                  if (voiceStatus) voiceStatus.textContent = 'Не вдалося використати мікрофон. Перевір дозвіл і сервіс голосового введення на телефоні.';
+                 if (voiceStatus) voiceStatus.textContent = 'Помилка: ' + (error?.message || String(error));
                 } finally {
                   if (micTitle) micTitle.textContent = 'Запам’ятати голосом';
                   if (micHint) micHint.textContent = 'Натисни та продиктуй думку';
@@ -162,7 +173,107 @@ jobs:
             if (sectionHead) {
               const button = document.createElement('button');
               button.className = 'secondary';
-              button.textContent = '🔔 Увімкнути системні нагадування';
+              const reminderButtonTexts = {
+                uk: '🔔 Увімкнути системні нагадування',
+                ru: '🔔 Включить системные напоминания',
+                de: '🔔 Systemerinnerungen aktivieren',
+                fr: '🔔 Activer les rappels système',
+                it: '🔔 Attiva promemoria di sistema',
+                en: '🔔 Enable system reminders',
+                pl: '🔔 Włącz przypomnienia systemowe',
+                es: '🔔 Activar recordatorios del sistema'
+              };
+
+                window.updateNativeReminderButtonLanguage = async () => {
+                const language = localStorage.getItem('app-language') || 'uk';
+
+                const texts = {
+                  uk: {
+                    enabled: '✅ Системні нагадування увімкнені',
+                    disabled: '🔔 Увімкнути системні нагадування',
+                    off: '🔕 Системні нагадування вимкнені',
+                    exact: '⚠️ Дозволь точні нагадування в Android',
+                    blocked: '🚫 Сповіщення заблоковано'
+                  },
+                  ru: {
+                    enabled: '✅ Системные напоминания включены',
+                    disabled: '🔔 Включить системные напоминания',
+                    off: '🔕 Системные напоминания выключены',
+                    exact: '⚠️ Разреши точные напоминания в Android',
+                    blocked: '🚫 Уведомления заблокированы'
+                  },
+                  de: {
+                    enabled: '✅ Systemerinnerungen aktiviert',
+                    disabled: '🔔 Systemerinnerungen aktivieren',
+                    off: '🔕 Systemerinnerungen ausgeschaltet',
+                    exact: '⚠️ Genaue Erinnerungen erlauben',
+                    blocked: '🚫 Benachrichtigungen blockiert'
+                  },
+                  fr: {
+                    enabled: '✅ Rappels système activés',
+                    disabled: '🔔 Activer les rappels système',
+                    off: '🔕 Rappels système désactivés',
+                    exact: '⚠️ Autoriser les rappels exacts',
+                    blocked: '🚫 Notifications bloquées'
+                  },
+                  it: {
+                    enabled: '✅ Promemoria di sistema attivati',
+                    disabled: '🔔 Attiva promemoria di sistema',
+                    off: '🔕 Promemoria disattivati',
+                    exact: '⚠️ Consenti promemoria esatti',
+                    blocked: '🚫 Notifiche bloccate'
+                  },
+                  en: {
+                    enabled: '✅ System reminders enabled',
+                    disabled: '🔔 Enable system reminders',
+                    off: '🔕 System reminders disabled',
+                    exact: '⚠️ Allow exact reminders',
+                    blocked: '🚫 Notifications blocked'
+                  },
+                  pl: {
+                    enabled: '✅ Przypomnienia systemowe włączone',
+                    disabled: '🔔 Włącz przypomnienia systemowe',
+                    off: '🔕 Przypomnienia wyłączone',
+                    exact: '⚠️ Zezwól na dokładne przypomnienia',
+                    blocked: '🚫 Powiadomienia zablokowane'
+                  },
+                  es: {
+                    enabled: '✅ Recordatorios del sistema activados',
+                    disabled: '🔔 Activar recordatorios del sistema',
+                    off: '🔕 Recordatorios desactivados',
+                    exact: '⚠️ Permitir recordatorios exactos',
+                    blocked: '🚫 Notificaciones bloqueadas'
+                  }
+                };
+
+                const t = texts[language] || texts.uk;
+
+                try {
+                  const permission = await LocalNotifications.checkPermissions();
+
+                  if (permission.display !== 'granted') {
+                    button.textContent = t.blocked;
+                    return;
+                  }
+
+                  if (localStorage.getItem('reminders-enabled') === 'false') {
+                    button.textContent = t.off;
+                    return;
+                  }
+
+                  const exactPermission = await LocalNotifications.checkExactNotificationSetting();
+
+                  button.textContent = exactPermission.exact_alarm === 'granted'
+                    ? t.enabled
+                    : t.exact;
+
+                } catch (error) {
+                  console.error('Reminder button status error:', error);
+                  button.textContent = t.disabled;
+                }
+              };
+
+              window.updateNativeReminderButtonLanguage();
               button.style.width = '100%';
               button.style.margin = '0 0 6px';
               sectionHead.insertAdjacentElement('afterend', button);
@@ -203,10 +314,19 @@ jobs:
                     const merged = getNotes();
                     const fingerprints = new Set(merged.map(n => [String(n.text || '').trim().toLowerCase(), String(n.category || ''), String(n.date || ''), String(n.created || '')].join('\u241f')));
                     const ids = new Set(merged.map(n => String(n.id)));
-                    let added = 0;
-                    let skipped = 0;
+                     let added = 0;
+                    let duplicates = 0;
+                    let invalid = 0;
+
+                    const incomingCount = incoming.length;
+                    const existingCountBefore = merged.length;
+
                     for (const raw of incoming) {
-                      if (!raw || typeof raw.text !== 'string' || !raw.text.trim()) { skipped++; continue; }
+                      if (!raw || typeof raw.text !== 'string' || !raw.text.trim()) {
+                        invalid++;
+                        continue;
+                      }
+
                       const item = {
                         ...raw,
                         text: raw.text.trim(),
@@ -215,17 +335,47 @@ jobs:
                         created: typeof raw.created === 'string' ? raw.created : new Date().toISOString(),
                         done: Boolean(raw.done)
                       };
-                      const fingerprint = [item.text.toLowerCase(), String(item.category), item.date, item.created].join('\u241f');
-                      if (fingerprints.has(fingerprint)) { skipped++; continue; }
-                      if (item.id === undefined || item.id === null || ids.has(String(item.id))) item.id = Date.now() + Math.random();
+
+                      const fingerprint = [
+                        item.text.toLowerCase(),
+                        String(item.category),
+                        item.date,
+                        item.created
+                      ].join('\u241f');
+
+                      if (fingerprints.has(fingerprint)) {
+                        duplicates++;
+                        continue;
+                      }
+
+                      if (item.id === undefined || item.id === null || ids.has(String(item.id))) {
+                        item.id = Date.now() + Math.random();
+                      }
+
                       ids.add(String(item.id));
                       fingerprints.add(fingerprint);
                       merged.push(item);
                       added++;
                     }
-                    if (added > 0) localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
-                    if (quickStatus) quickStatus.textContent = 'Імпорт завершено. Додано: ' + added + '. Пропущено повторів або некоректних записів: ' + skipped + '. Оновлюю список…';
-                    if (added > 0) setTimeout(() => window.location.reload(), 1200);
+
+                    if (added > 0) {
+                      localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+                    }
+
+                    const savedAfter = getNotes();
+
+                    if (quickStatus) {
+                      quickStatus.textContent =
+                        'Діагностика імпорту: ' +
+                        'У файлі: ' + incomingCount +
+                        '. Було в застосунку: ' + existingCountBefore +
+                        '. Додано: ' + added +
+                        '. Дублікатів: ' + duplicates +
+                        '. Некоректних: ' + invalid +
+                        '. У сховищі після імпорту: ' + savedAfter.length + '.';
+                    }
+
+                    setTimeout(() => window.location.reload(), 1200);
                   } catch (error) {
                     console.error('Native backup import error:', error);
                     const quickStatus = document.getElementById('quickStatus');
@@ -238,10 +388,17 @@ jobs:
               if (exportButton) {
                 exportButton.onclick = async () => {
                   const quickStatus = document.getElementById('quickStatus');
+                  let exportStage = 'початок';
                   try {
-                    if (quickStatus) quickStatus.textContent = 'Створюю резервну копію…';
-                    const { Filesystem, Directory } = await import('@capacitor/filesystem');
+                    if (quickStatus) quickStatus.textContent = 'Починаю експорт…';
+
+                    exportStage = 'завантаження Filesystem';
+                    const { Filesystem, Directory, Encoding } = await import('@capacitor/filesystem');
+
+                    exportStage = 'завантаження Share';
                     const { Share } = await import('@capacitor/share');
+
+                    exportStage = 'підготовка даних';
                     const payload = {
                       format: 'pamyatai-backup',
                       version: 1,
@@ -249,74 +406,239 @@ jobs:
                       notes: getNotes()
                     };
                     const fileName = 'pamyatai-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+
+                    exportStage = 'запис файлу';
                     const file = await Filesystem.writeFile({
                       path: fileName,
                       data: JSON.stringify(payload, null, 2),
+                      encoding: Encoding.UTF8,
                       directory: Directory.Cache,
                       recursive: true
                     });
+
+                    exportStage = 'відкриття меню Android';
                     await Share.share({
                       title: 'Резервна копія «Пам’ятай»',
                       text: 'Збережи цей файл у надійному місці.',
                       files: [file.uri],
                       dialogTitle: 'Зберегти резервну копію'
                     });
+
                     if (quickStatus) quickStatus.textContent = 'Вибери програму для збереження резервної копії.';
                   } catch (error) {
                     console.error('Native backup export error:', error);
-                    if (quickStatus) quickStatus.textContent = 'Не вдалося створити резервну копію: ' + (error?.message || 'невідома помилка');
+                    const details = error?.message || (error ? String(error) : 'невідома помилка');
+                    if (quickStatus) quickStatus.textContent = 'Помилка на кроці «' + exportStage + '»: ' + details;
                   }
                 };
               }
               function notificationId(value) {
-                let hash = 2166136261;
+                let hash = 2166136261; 
                 for (const ch of String(value)) { hash ^= ch.charCodeAt(0); hash = Math.imul(hash, 16777619); }
                 return (hash >>> 0) % 2000000000 + 1;
               }
-              async function syncReminders() {
-                try {
-                  const permission = await LocalNotifications.checkPermissions();
-                  if (permission.display !== 'granted') return;
-                  const notes = getNotes();
-                  const now = Date.now();
-                  const futureNotes = notes.filter(note => {
-                    const time = note.date ? new Date(note.date).getTime() : NaN;
-                    return Boolean(note.date) && !note.done && Number.isFinite(time) && time > now;
-                  });
+            async function syncReminders() {
+              try {
+                if (localStorage.getItem('reminders-enabled') === 'false') {
                   await LocalNotifications.cancelAll();
-                  if (futureNotes.length === 0) {
-                    status.textContent = 'Немає майбутніх нагадувань із заданою датою та часом.';
-                    return;
-                  }
-                  const result = await LocalNotifications.schedule({
-                    notifications: futureNotes.map(note => ({
-                      id: notificationId(note.id),
-                      title: 'Пам’ятай 🔔',
-                      body: String(note.text || 'У тебе є нагадування!').slice(0, 500),
-                      schedule: { at: new Date(note.date), allowWhileIdle: true },
-                      extra: { noteId: String(note.id) }
-                    }))
-                  });
-                  status.textContent = 'Заплановано нагадувань: ' + futureNotes.length + '.';
-                  if (result && result.warning) status.textContent += ' Android може показати деякі сповіщення із затримкою, якщо точний час не дозволено.';
+                  status.textContent = 'Сповіщення вимкнено.';
+                  return;
+                }
+
+                 const permission = await LocalNotifications.checkPermissions();
+
+                if (permission.display !== 'granted') {
+                  status.textContent = 'Спочатку дозволь сповіщення в Android.';
+                  return;
+                }
+
+                const exactPermission = await LocalNotifications.checkExactNotificationSetting();
+
+               if (exactPermission.exact_alarm !== 'granted') {
+                  status.textContent = 'Потрібно дозволити точні нагадування в налаштуваннях Android. Натисни кнопку ввімкнення.';
+                  return;
+                }
+                const notes = getNotes();
+                const now = Date.now();
+
+                const dayKey = value => {
+                  const d = new Date(value);
+                  return d.getFullYear() + '-' +
+                    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(d.getDate()).padStart(2, '0');
+                };
+
+                const schedules = [];
+
+                 for (const note of notes) {
+                   if (!note.date || note.done) continue;
+
+                   const eventTime = new Date(note.date).getTime();
+                   if (!Number.isFinite(eventTime) || eventTime <= now) continue;
+
+                   const eventIsToday = dayKey(eventTime) === dayKey(now);
+
+                   const reminders = [];
+
+                   // Головне сповіщення безпосередньо в призначений час
+                   reminders.push({
+                     key: 'atTime',
+                     title: '🔔 Час нагадування!',
+                     time: eventTime,
+                     message: String(note.text || 'У тебе є нагадування!')
+                   });
+
+                   // Попередження за 2 години, якщо подія сьогодні
+                   if (eventIsToday) {
+                     reminders.push({
+                       key: 'twoHours',
+                       title: 'Нагадування: за 2 години',
+                       time: eventTime - 2 * 60 * 60 * 1000,
+                       message: String(note.text || 'У тебе є нагадування!')
+                     });
+                   } else {
+                     // Попередження за добу та за годину
+                     reminders.push({
+                       key: 'oneDay',
+                       title: 'Нагадування: за добу',
+                       time: eventTime - 24 * 60 * 60 * 1000,
+                       message: String(note.text || 'У тебе є нагадування!')
+                     });
+
+                     reminders.push({
+                       key: 'oneHour',
+                       title: 'Нагадування: за годину',
+                       time: eventTime - 60 * 60 * 1000,
+                       message: String(note.text || 'У тебе є нагадування!')
+                     });
+                   }
+
+                   for (const reminder of reminders) {
+                     if (reminder.time <= now) continue;
+
+                     schedules.push({
+                       id: notificationId(String(note.id) + ':' + reminder.key),
+                       title: reminder.title,
+                       body: String(reminder.message || note.text || 'У тебе є нагадування!').slice(0, 500),
+                       schedule: {
+                         at: new Date(reminder.time),
+                         allowWhileIdle: true
+                       },
+                       extra: {
+                         noteId: String(note.id)
+                       }
+                     });
+                   }
+                 }
+
+                 await LocalNotifications.cancelAll();
+
+                 let scheduleWarning = null;
+
+                 if (schedules.length) {
+                   const scheduleResult = await LocalNotifications.schedule({
+                     notifications: schedules
+                   });
+                   scheduleWarning = scheduleResult.warning || null;
+                 }
+
+                 status.textContent = scheduleWarning
+                   ? 'Увага: Android не дозволив точний час. ' + scheduleWarning.message
+                   : schedules.length
+                     ? 'Заплановано сповіщень: ' + schedules.length + '.'
+                     : 'Немає майбутніх сповіщень, які ще потрібно запланувати.';
+
                 } catch (error) {
                   console.error('Local reminder error:', error);
                   status.textContent = 'Не вдалося запланувати нагадування. Перевір дозволи сповіщень.';
                 }
+                }
+               const settingsNotificationButton = document.getElementById('notificationToggle');
+
+              if (settingsNotificationButton) {
+                async function updateSettingsNotificationButton() {
+                  const permission = await LocalNotifications.checkPermissions();
+                  const enabled = localStorage.getItem('reminders-enabled') !== 'false';
+
+                  if (permission.display === 'denied') {
+                    settingsNotificationButton.textContent = 'Сповіщення заблоковано';
+                  } else if (!enabled) {
+                    settingsNotificationButton.textContent = '🔕 Сповіщення вимкнено';
+                  } else if (permission.display === 'granted') {
+                    settingsNotificationButton.textContent = '🔔 Сповіщення ввімкнено';
+                  } else {
+                    settingsNotificationButton.textContent = '🔔 Увімкнути сповіщення';
+                  }
+                }
+
+                settingsNotificationButton.addEventListener('click', async () => {
+                  const enabled = localStorage.getItem('reminders-enabled') !== 'false';
+
+                  if (enabled) {
+                    localStorage.setItem('reminders-enabled', 'false');
+                    await LocalNotifications.cancelAll();
+                  } else {
+                    let permission = await LocalNotifications.checkPermissions();
+                    if (permission.display !== 'granted') {
+                      permission = await LocalNotifications.requestPermissions();
+                    }
+                    if (permission.display !== 'granted') {
+                      settingsNotificationButton.textContent = 'Сповіщення заблоковано';
+                      return;
+                    }
+                    localStorage.setItem('reminders-enabled', 'true');
+                    await syncReminders();
+                  }
+
+                  await updateSettingsNotificationButton();
+                });
+
+                updateSettingsNotificationButton();
               }
-              button.addEventListener('click', async () => {
+               button.addEventListener('click', async () => {
                 try {
                   let permission = await LocalNotifications.checkPermissions();
-                  if (permission.display !== 'granted') permission = await LocalNotifications.requestPermissions();
+
+                  if (permission.display !== 'granted') {
+                    permission = await LocalNotifications.requestPermissions();
+                  }
+
                   if (permission.display !== 'granted') {
                     status.textContent = 'Дозволь сповіщення для застосунку в налаштуваннях Android.';
+                    await window.updateNativeReminderButtonLanguage();
                     return;
                   }
+
+                  let exactPermission = await LocalNotifications.checkExactNotificationSetting();
+
+                  if (exactPermission.exact_alarm !== 'granted') {
+                    status.textContent = 'Дозволь точні нагадування в налаштуваннях Android.';
+                    await LocalNotifications.changeExactNotificationSetting();
+
+                    exactPermission = await LocalNotifications.checkExactNotificationSetting();
+
+                    if (exactPermission.exact_alarm !== 'granted') {
+                      await window.updateNativeReminderButtonLanguage();
+                      return;
+                    }
+                  }
+
+                  localStorage.setItem('reminders-enabled', 'true');
                   status.textContent = 'Перевіряю та планую нагадування…';
+
                   await syncReminders();
+                  await window.updateNativeReminderButtonLanguage();
+
                 } catch (error) {
-                  console.error(error);
+                  console.error('Enable reminders error:', error);
                   status.textContent = 'Не вдалося ввімкнути сповіщення.';
+                  await window.updateNativeReminderButtonLanguage();
+                }
+              });
+              LocalNotifications.addListener('localNotificationActionPerformed', action => {
+                const noteId = action.notification.extra?.noteId;
+                if (noteId && typeof window.openReminderNote === 'function') {
+                  window.openReminderNote(noteId);
                 }
               });
               const refreshSoon = () => setTimeout(syncReminders, 600);
@@ -333,7 +655,13 @@ jobs:
       - name: Install web and Capacitor packages
         working-directory: native-app
         run: npm install --no-audit --no-fund
-
+      - name: Check native reminder module 
+        working-directory: native-app 
+        run: | 
+          echo "=== Lines 1-119 ===" 
+          nl -ba native-reminders.js | sed -n '1,119p' 
+          echo "=== JavaScript syntax check ===" 
+          node --check native-reminders.js
       - name: Build the web files for Android
         working-directory: native-app
         run: npm run build
@@ -351,13 +679,18 @@ jobs:
           npx cap add android
           npx cap sync android
           sed -i '/^android[[:space:]]*{/a\    compileSdk 36' android/app/build.gradle 
+          mkdir -p assets
+          cp ../icon.png.png.png assets/icon.png
           npx capacitor-assets generate --android
           # Force every launcher density to use the known green source icon.
           declare -A icon_sizes=( [ldpi]=36 [mdpi]=48 [hdpi]=72 [xhdpi]=96 [xxhdpi]=144 [xxxhdpi]=192 )
+          declare -A adaptive_sizes=( [ldpi]=81 [mdpi]=108 [hdpi]=162 [xhdpi]=216 [xxhdpi]=324 [xxxhdpi]=432 )
           for density in ldpi mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             size=${icon_sizes[$density]}
             convert assets/icon.png -resize ${size}x${size} "android/app/src/main/res/mipmap-${density}/ic_launcher.png"
             convert assets/icon.png -resize ${size}x${size} "android/app/src/main/res/mipmap-${density}/ic_launcher_round.png"
+          adaptive_size=${adaptive_sizes[$density]}
+          convert assets/icon.png -resize ${adaptive_size}x${adaptive_size} "android/app/src/main/res/mipmap-${density}/ic_launcher_foreground.png"
           done
           rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
           python3 - <<'PY'
@@ -380,22 +713,34 @@ jobs:
           p.write_text(text, encoding="utf-8")
           PY
 
-      - name: Verify Android manifest permissions
-        working-directory: native-app
-        run: |
-          grep -n 'android.permission.RECORD_AUDIO' android/app/src/main/AndroidManifest.xml
-          grep -n 'android.permission.SCHEDULE_EXACT_ALARM' android/app/src/main/AndroidManifest.xml
-
       - name: Build installable debug APK
         working-directory: native-app/android
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug
 
+      - name: Verify notification recovery after reboot
+        working-directory: native-app/android
+        run: |
+          MANIFEST=$(find app/build/intermediates/merged_manifest -type f -name AndroidManifest.xml | head -n 1)
+
+          if [ -z "$MANIFEST" ]; then
+            echo "ERROR: Merged AndroidManifest.xml not found"
+            exit 1
+          fi
+
+          echo "Checking boot permission..."
+          grep -q 'android.permission.RECEIVE_BOOT_COMPLETED' "$MANIFEST"
+
+          echo "Checking notification restore receiver..."
+          grep -q 'com.capacitorjs.plugins.localnotifications.LocalNotificationRestoreReceiver' "$MANIFEST"
+
+          echo "SUCCESS: Notification recovery components found!"
+   
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: pamyatai-android-apk
+          name: Nagaduvannya-4_test113
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14

@@ -4,62 +4,1504 @@
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" type="image/png" href="./icon-192.png"> 
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
 <title>Remember — твоя друга пам'ять</title>
 <style>
 :root{--bg:#0b0d14;--panel:#141824;--panel2:#1b2030;--text:#f5f6fb;--muted:#9da5b8;--purple:#a99aff;--purple2:#7560d9;--line:#2a3042;--green:#8de2c0}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 0%,#20203b 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
 button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1120px;margin:auto;padding:24px 18px 48px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}.brand{font-weight:850;letter-spacing:.22em;font-size:25px}.tag{color:var(--muted);font-size:13px;margin-top:2px}.avatar{border:1px solid var(--line);border-radius:50%;width:42px;height:42px;display:grid;place-items:center;background:var(--panel)}
-.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-bottom:20px}.card{background:linear-gradient(145deg,rgba(27,32,48,.97),rgba(17,20,31,.97));border:1px solid var(--line);border-radius:24px;padding:23px;box-shadow:0 18px 50px #0002}.eyebrow{color:var(--purple);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase}.hero h1{font-size:clamp(28px,4vw,43px);line-height:1.08;margin:10px 0 12px;letter-spacing:-.04em}.hero p{color:var(--muted);margin:0;max-width:520px}.capture{display:flex;gap:10px;margin-top:22px}.field{background:#0e111b;border:1px solid var(--line);border-radius:14px;color:var(--text);padding:13px 14px;width:100%;outline:none}.field:focus{border-color:var(--purple2)}textarea.field{min-height:94px;resize:vertical}.primary{border:0;border-radius:13px;background:linear-gradient(135deg,#b4a5ff,#8d78f1);color:#171326;font-weight:800;padding:12px 17px;white-space:nowrap}.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:10px 13px}.capture-card{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:230px;background:radial-gradient(circle at 50% 20%,#3b306b 0,transparent 50%),linear-gradient(145deg,#171b2a,#11141f)}.mic{width:84px;height:84px;border:1px solid #c7bbff;border-radius:50%;display:grid;place-items:center;background:#a99aff;color:#211943;font-size:32px;box-shadow:0 0 0 9px #a99aff16,0 0 35px #8f7bf755;margin:15px 0 12px}.hint{font-size:12px;color:var(--muted)}.status{font-size:12px;color:var(--green);min-height:18px;margin-top:8px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:18px;margin-bottom:20px;min-width:0}
+.hero>.card{min-width:0;max-width:100%;overflow-wrap:anywhere}.card{background:linear-gradient(145deg,rgba(27,32,48,.97),rgba(17,20,31,.97));border:1px solid var(--line);border-radius:24px;padding:23px;box-shadow:0 18px 50px #0002}.eyebrow{color:var(--purple);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase}.hero h1{font-size:clamp(28px,4vw,43px);line-height:1.08;margin:10px 0 12px;letter-spacing:-.04em}.hero p{color:var(--muted);margin:0;max-width:520px}.capture{display:flex;gap:10px;margin-top:22px}.field{background:#0e111b;border:1px solid var(--line);border-radius:14px;color:var(--text);padding:13px 14px;width:100%;outline:none}.field:focus{border-color:var(--purple2)}textarea.field{min-height:94px;resize:vertical}.primary{border:0;border-radius:13px;background:linear-gradient(135deg,#b4a5ff,#8d78f1);color:#171326;font-weight:800;padding:12px 17px;white-space:nowrap}.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:10px 13px}.capture-card{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:230px;background:radial-gradient(circle at 50% 20%,#3b306b 0,transparent 50%),linear-gradient(145deg,#171b2a,#11141f)}.mic{width:68px;height:68px;border:1px solid #c7bbff;border-radius:50%;display:grid;place-items:center;background:#a99aff;color:#211943;font-size:32px;box-shadow:0 0 0 9px #a99aff16,0 0 35px #8f7bf755;margin:15px 0 12px}.hint{font-size:12px;color:var(--muted)}.status{font-size:12px;color:var(--green);min-height:18px;margin-top:8px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}.stat{padding:16px;border-radius:18px;background:var(--panel);border:1px solid var(--line)}.stat strong{display:block;font-size:25px}.stat span{font-size:12px;color:var(--muted)}
 .section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:24px 0 13px}.section-head h2{font-size:20px;margin:0}.section-head p{font-size:12px;color:var(--muted);margin:4px 0 0}.section-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.toolbar .field{flex:1;min-width:180px}.chip{border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--muted);padding:9px 13px;font-size:13px}.chip.active{background:#292342;color:#d9d0ff;border-color:#7161b8}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.note{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:17px;min-width:0;display:flex;flex-direction:column;gap:11px}.note-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.kind{font-size:12px;color:var(--purple);background:#a99aff16;border:1px solid #a99aff30;border-radius:999px;padding:5px 9px}.note h3{font-size:16px;margin:0;overflow-wrap:anywhere}.note p{margin:0;color:#c1c7d5;overflow-wrap:anywhere;white-space:pre-wrap}.meta{font-size:11px;color:var(--muted)}.note-actions{display:flex;gap:7px;margin-top:auto;padding-top:4px}.note-actions button{font-size:12px;flex:1}.empty{grid-column:1/-1;text-align:center;padding:35px 15px;color:var(--muted);border:1px dashed var(--line);border-radius:18px}.footer{color:var(--muted);font-size:12px;text-align:center;margin-top:28px}.modal{position:fixed;inset:0;background:#05060bcc;display:none;align-items:center;justify-content:center;padding:16px;z-index:10}.modal.open{display:flex}.modal-box{width:min(520px,100%);background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px}.modal-box h2{margin-top:0}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
 @media(max-width:760px){.hero{grid-template-columns:1fr}.capture-card{min-height:180px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.app{padding:18px 12px 35px}.card{padding:19px}.hero h1{font-size:32px}}
 @media(max-width:480px){.grid{grid-template-columns:1fr}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:21px}.capture{flex-direction:column}.top{margin-bottom:18px}.form-row{grid-template-columns:1fr}.section-head{align-items:flex-start;flex-direction:column}.section-actions{justify-content:flex-start;width:100%}.section-actions button{flex:1}}
+.categories {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.category-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 65px;
+  padding: 12px 6px;
+  border: 1px solid var(--line, #dce5df);
+  border-radius: 16px;
+  background: var(--panel);
+  color: var(--text, #26352c);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.category-box span {
+  font-size: 14px;
+}
+
+.category-box:hover {
+  border-color: var(--purple2);
+  background: var(--panel2);
+}
+
+@media (max-width: 480px) {
+  .categories {
+    gap: 8px;
+  }
+
+  .category-box {
+    min-height: 78px;
+  }
+}
+.note-view-switch {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.note-view-switch button {
+  flex: 1;
+  min-height: 48px;
+}
+.note-view-switch button.active {
+  background: #292342;
+  color: #d9d0ff;
+  border-color: #7161b8;
+}
+.brand {
+  white-space: nowrap;
+  font-size: clamp(20px, 6vw, 26px);
+  letter-spacing: 0.04em;
+}
+.category-box.active {
+  border-color: #a99aff;
+  background: rgba(169, 154, 255, 0.22);
+  box-shadow: 0 0 0 2px rgba(169, 154, 255, 0.3);
+  font-weight: 700;
+}
+.mic.listening {
+  background: #e8757f;
+  border-color: #ffadb3;
+  color: #fff;
+  box-shadow: 0 0 0 9px rgba(232, 117, 127, 0.2), 0 0 32px rgba(232, 117, 127, 0.6);
+  animation: micPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes micPulse {
+  50% {
+    box-shadow: 0 0 0 14px rgba(232, 117, 127, 0.12), 0 0 42px rgba(232, 117, 127, 0.75);
+  }
+}
+@media (max-width: 600px) {
+  .top {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .top > div:first-child {
+    min-width: 0;
+    flex: 1 1 100%;
+  }
+
+  .brand {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    font-size: clamp(20px, 6vw, 25px);
+  }
+
+  .top > div:last-child {
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 480px) {
+  .note-view-switch {
+    width: 100%;
+    gap: 5px;
+  }
+
+  .note-view-switch button {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px 4px;
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: normal;
+  }
+}
 </style>
 </head>
 <body>
 <div class="app">
-  <header class="top"><div><div class="brand">Пам’ятай</div><div class="tag">Remember — твоя друга пам’ять</div></div><div class="avatar" title="Профіль">✦</div></header>
-  <section class="hero">
-    <div class="card"><div class="eyebrow">Менше забувай. Більше живи.</div><h1>Що хочеш<br>запам'ятати?</h1><p>Ідея, покупка, рекомендація чи маленька думка — збережи її тут, а LATER допоможе повернутися до неї вчасно.</p><div class="capture"><input id="quickInput" class="field" placeholder="Наприклад: купити подарунок мамі…" aria-label="Швидкий запис"><button class="primary" id="quickAdd">＋ Зберегти</button></div><div class="status" id="quickStatus" aria-live="polite"></div></div>
-    <div class="card capture-card"><div class="hint">Зручніше сказати вголос?</div><button class="mic" id="micBtn" aria-label="Записати голосом">🎙</button><strong id="micTitle">Запам'ятати голосом</strong><div class="hint" id="micHint">Натисни та продиктуй думку</div><div class="status" id="voiceStatus" aria-live="polite"></div></div>
-  </section>
-  <section class="stats"><div class="stat"><strong id="totalStat">0</strong><span>Збережено записів</span></div><div class="stat"><strong id="reminderStat">0</strong><span>Мають нагадування</span></div><div class="stat"><strong id="categoryStat">0</strong><span>Категорій використано</span></div></section>
-  <div class="section-head"><div><h2>Твоя пам'ять</h2><p>Усе важливе — в одному місці.</p></div><div class="section-actions"><button class="secondary" id="exportBackup">⬇ Резервна копія</button><button class="secondary" id="importBackup">⬆ Імпорт записів</button><input type="file" id="importFile" accept="application/json,.json" hidden><button class="secondary" id="addDetailed">＋ Новий запис</button></div></div>
-  <div class="toolbar" id="filters"><button class="chip active" data-filter="Усе">Усе</button><button class="chip" data-filter="Покупки">🛍 Покупки</button><button class="chip" data-filter="Ідеї">💡 Ідеї</button><button class="chip" data-filter="Місця">📍 Місця</button><button class="chip" data-filter="Рекомендації">🎬 Рекомендації</button><button class="chip" data-filter="Справи">✓ Справи</button><input class="field" id="search" placeholder="⌕ Пошук за змістом…"></div>
+  <header class="top"><div><div class="brand">Твої нагадування</div><div class="tag">Зберігай важливе й отримуй нагадування вчасно</div></div>
+ <div style="display:flex;align-items:center;gap:8px">
+<div style="position:relative">
+  <select id="languageSelect" aria-label="Вибір мови"
+    style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--panel);color:var(--text);font-weight:700;font-size:14px;cursor:pointer">
+    <option value="uk">🇺🇦 UA</option>
+    <option value="ru">🇷🇺 RU</option>
+    <option value="de">🇩🇪 DE</option>
+    <option value="fr">🇫🇷 FR</option>
+    <option value="it">🇮🇹 IT</option>
+    <option value="en">🇬🇧 EN</option>
+    <option value="pl">🇵🇱 PL</option>
+    <option value="es">🇪🇸 ES</option>
+  </select>
+</div>
+   <button id="settingsBtn" type="button" title="Налаштування"
+    style="border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--panel);color:var(--text);font-size:18px;cursor:pointer">⚙️</button>
+  <div class="avatar" title="Профіль">✦</div>
+</div></header>
+ <div id="helpPanel" style="display:none;position:fixed;inset:0;z-index:1001;background:rgba(0,0,0,.6);padding:20px;overflow-y:auto">
+  <div style="width:calc(100% - 24px);max-width:420px;box-sizing:border-box;margin:60px auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 id="helpTitle" style="margin:0">📱 Як користуватися?</h2>
+      <button id="closeHelp" type="button" class="secondary">✕</button>
+    </div>
+
+    <div id="helpContent" style="font-size:14px;line-height:1.7;color:var(--muted)">
+      <p>🎙️ <b>Голосом:</b> скажи, що потрібно зробити.</p>
+      <p>✍️ <b>Вручну:</b> створи запис самостійно.</p>
+      <p>📅 <b>Дата й час:</b> встанови потрібний момент.</p>
+      <p>🔔 <b>Сповіщення:</b> отримуй нагадування про справи.</p>
+      <p>🔍 <b>Пошук:</b> швидко знаходь потрібні записи.</p>
+      <p>💾 <b>Резервна копія:</b> зберігай і відновлюй записи.</p>
+    </div>
+  </div>
+</div>
+  <div id="settingsPanel" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.6);padding:20px;overflow-y:auto">
+  <div style="max-width:420px;margin:60px auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 id="settingsTitle" style="margin:0">⚙️ Налаштування</h2>
+      <button id="closeSettings" type="button" class="secondary">✕</button>
+    </div>
+
+    <h3 id="backupSettingsTitle">Резервна копія</h3>
+    <div style="display:grid;gap:10px;margin-bottom:24px">
+      <button class="secondary" id="exportBackup">⬇ Резервна копія</button>
+      <button class="secondary" id="importBackup">⬆ Імпорт записів</button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </div>
+
+    <h3 id="notificationSettingsTitle">Системні сповіщення</h3>
+    <div id="notificationSettings">
+  <p id="notificationSettingsText">Тут можна керувати системними сповіщеннями.</p>
+  <button class="secondary" id="notificationToggle" type="button">
+    🔔 Увімкнути сповіщення
+  </button>
+</div>
+ <div style="margin-top:24px">
+  <button class="secondary" id="feedbackBtn" type="button" style="width:100%">
+    ✉️ Повідомити про помилку / Поділитися ідеєю
+  </button>
+</div>
+  </div>
+</div>
+  <div id="feedbackPanel" style="display:none;position:fixed;inset:0;z-index:1002;background:rgba(0,0,0,.6);padding:20px;overflow-y:auto">
+  <div style="max-width:420px;margin:60px auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 style="margin:0">💬 Відгук та пропозиції</h2>
+      <button id="closeFeedback" type="button" class="secondary">✕</button>
+    </div>
+
+    <label for="feedbackType">Що хочеш повідомити?</label>
+    <select id="feedbackType" style="width:100%;margin:10px 0 16px;padding:12px;border-radius:10px">
+      <option value="Помилка">🐞 Повідомити про помилку</option>
+      <option value="Ідея">💡 Запропонувати покращення</option>
+      <option value="Відгук">💬 Залишити відгук</option>
+    </select>
+
+    <textarea id="feedbackMessage" placeholder="Напиши своє повідомлення..." style="width:100%;min-height:130px;box-sizing:border-box;padding:12px;border-radius:10px;resize:vertical"></textarea>
+
+    <button id="sendFeedback" type="button" style="width:100%;margin-top:14px">
+      Надіслати
+    </button>
+
+  </div>
+</div>
+  <section class="hero"> 
+    <div class="card">
+      <div class="eyebrow">Швидкий запис</div> 
+      <h1 style="white-space:normal;overflow-wrap:anywhere;font-size:clamp(22px,7vw,30px);line-height:1.1;letter-spacing:-.04em"> Що і коли нагадати?
+</h1>
+      <p>Натисни 🎙 і скажи, що та коли нагадати. Перевір дані й натисни «Зберегти».</p> 
+      <div style="display:flex;align-items:center;gap:16px;margin-top:12px"> 
+        <button class="mic" id="micBtn" aria-label="Продиктувати нагадування">🎙</button>
+        <div> 
+          <strong id="micTitle">Сказати нагадування</strong>
+          <div class="hint" id="micHint">Натисни й продиктуй справу та час</div>
+        </div> 
+      </div> 
+      <div class="status" id="voiceStatus" aria-live="polite"></div>
+      <div class="capture">
+        <input id="quickInput" class="field" placeholder="Або напиши тут…" aria-label="Швидкий запис">
+        <button class="primary" id="quickAdd">＋ Зберегти</button>
+      </div> 
+      <div class="status" id="quickStatus" aria-live="polite"></div> 
+    </div> 
+    <div class="card capture-card">
+  <div class="eyebrow" id="memoryEyebrow">Твоя друга пам'ять</div>
+
+  <h2 id="howToTitle" style="font-size:22px;line-height:1.2;margin:12px 0">
+    📱 Як користуватися?
+  </h2>
+
+  <button id="helpBtn" class="secondary" type="button">
+    Дізнатися більше
+  </button>
+</div>
+  </section> 
+    <section class="categories">
+    <button class="category-box active" data-filter="Усе">📚<span>Усе</span></button>
+    <button class="category-box" data-filter="Покупки">🛍️<span>Покупки</span></button>
+    <button class="category-box" data-filter="Зустрічі">🩺<span>Зустрічі</span></button>
+    <button class="category-box" data-filter="Здоров’я">💊<span>Здоров’я</span></button>
+    <button class="category-box" data-filter="Справи">✓<span>Справи</span></button>
+    <button class="category-box" data-filter="Місця">📍<span>Місця</span></button>
+    <button class="category-box" data-filter="Нотатки">📝<span>Нотатки</span></button>
+    <button class="category-box" data-filter="Їжа та кафе">🍽️<span>Їжа та кафе</span></button>
+    </section>
+  
+  <section class="stats">
+    <div class="stat"><strong id="totalStat">0</strong><span id="totalStatLabel">Збережено записів</span></div>
+    <div class="stat"><strong id="reminderStat">0</strong><span id="reminderStatLabel">Мають нагадування</span></div>
+    <div class="stat"><strong id="categoryStat">0</strong><span id="categoryStatLabel">Категорій використано</span></div></section>
+    <div class="section-head"><div><h2 id="memoryTitle">Твоя пам'ять</h2>
+<p id="memorySubtitle">Усе важливе — в одному місці.</p></div><div class="section-actions"><button class="secondary" id="addDetailed">＋ Новий запис</button></div></div>
+    <div class="toolbar" id="filters">
+  <input class="field" id="search" placeholder="⌕ Пошук за змістом…">
+</div>
+ <div class="note-view-switch" role="group" aria-label="Показ записів">
+  <button class="secondary active" id="showUpcomingNotes" type="button" aria-pressed="true">
+    3 найближчі
+  </button>
+  <button class="secondary" id="showAllNotes" type="button" aria-pressed="false">
+    Усі нагадування
+  </button>
+   <button class="secondary" id="showCompletedNotes" type="button" aria-pressed="false">
+    ✓ Завершені
+  </button>
+ </div>
   <div class="grid" id="notesGrid"></div>
   <div class="footer">Прототип LATER · Дані зберігаються локально на цьому пристрої. Регулярно роби резервну копію.</div>
 </div>
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-box"><h2 id="modalTitle">Новий запис</h2><label class="form-label" for="noteText">Що хочеш запам'ятати?</label><textarea class="field" id="noteText" placeholder="Напиши думку, ідею або річ…" rows="3"></textarea><div class="form-row"><div><label class="form-label" for="noteCategory">Категорія</label><select class="field" id="noteCategory"><option>Автоматично</option><option>Покупки</option><option>Ідеї</option><option>Місця</option><option>Рекомендації</option><option>Справи</option><option>Інше</option></select></div><div><label class="form-label" for="noteDate">Нагадати (необов'язково)</label><input class="field" id="noteDate" type="datetime-local"></div></div><div class="modal-actions"><button class="secondary" id="cancelModal">Скасувати</button><button class="primary" id="saveNote">Зберегти запис</button></div></div></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-box"><h2 id="modalTitle">Новий запис</h2><label class="form-label" for="noteText">Що хочеш запам'ятати?</label><textarea class="field" id="noteText" placeholder="Напиши думку, ідею або річ…" rows="3"></textarea><div class="form-row"><div><label class="form-label" for="noteCategory">Категорія</label><select class="field" id="noteCategory"><option>Автоматично</option><option>Покупки</option><option>Ідеї</option><option>Місця</option><option>Рекомендації</option><option>Зустрічі</option><option>Здоров’я</option><option>Нотатки</option><option>Справи</option><option>Їжа та кафе</option><option>Інше</option></select></div><div><label class="form-label" for="noteDate">Нагадати (необов'язково)</label><input class="field" id="noteDate" type="datetime-local"></div></div><div class="modal-actions"><button class="secondary" id="cancelModal">Скасувати</button><button class="primary" id="saveNote">Зберегти запис</button></div></div></div>
 <script>
 const KEY='later-prototype-v1';
 let notes=[];
 let activeFilter='Усе';
+let showAllNotes=false;
+let showCompletedNotes = false;  
 let editingId=null;
 const $=id=>document.getElementById(id);
-const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Інше':'✦'};
+let appLanguage = localStorage.getItem('app-language') || 'uk';
+
+ const categories = [
+  {
+    value: 'Автоматично',
+    uk: 'Автоматично', ru: 'Автоматически',
+    de: 'Automatisch', fr: 'Automatique',
+    it: 'Automatico', en: 'Automatic',
+    pl: 'Automatycznie', es: 'Automático'
+  },
+  {
+    value: 'Покупки',
+    uk: 'Покупки', ru: 'Покупки',
+    de: 'Einkäufe', fr: 'Achats',
+    it: 'Acquisti', en: 'Shopping',
+    pl: 'Zakupy', es: 'Compras'
+  },
+  {
+    value: 'Ідеї',
+    uk: 'Ідеї', ru: 'Идеи',
+    de: 'Ideen', fr: 'Idées',
+    it: 'Idee', en: 'Ideas',
+    pl: 'Pomysły', es: 'Ideas'
+  },
+  {
+    value: 'Місця',
+    uk: 'Місця', ru: 'Места',
+    de: 'Orte', fr: 'Lieux',
+    it: 'Luoghi', en: 'Places',
+    pl: 'Miejsca', es: 'Lugares'
+  },
+  {
+    value: 'Рекомендації',
+    uk: 'Рекомендації', ru: 'Рекомендации',
+    de: 'Empfehlungen', fr: 'Recommandations',
+    it: 'Consigli', en: 'Recommendations',
+    pl: 'Polecenia', es: 'Recomendaciones'
+  },
+  {
+    value: 'Зустрічі',
+    uk: 'Зустрічі', ru: 'Встречи',
+    de: 'Termine', fr: 'Rendez-vous',
+    it: 'Appuntamenti', en: 'Appointments',
+    pl: 'Spotkania', es: 'Citas'
+  },
+  {
+    value: 'Здоров’я',
+    uk: 'Здоров’я', ru: 'Здоровье',
+    de: 'Gesundheit', fr: 'Santé',
+    it: 'Salute', en: 'Health',
+    pl: 'Zdrowie', es: 'Salud'
+  },
+  {
+    value: 'Нотатки',
+    uk: 'Нотатки', ru: 'Заметки',
+    de: 'Notizen', fr: 'Notes',
+    it: 'Note', en: 'Notes',
+    pl: 'Notatki', es: 'Notas'
+  },
+  {
+    value: 'Справи',
+    uk: 'Справи', ru: 'Дела',
+    de: 'Aufgaben', fr: 'Tâches',
+    it: 'Attività', en: 'Tasks',
+    pl: 'Zadania', es: 'Tareas'
+  },
+  {
+    value: 'Їжа та кафе',
+    uk: 'Їжа та кафе', ru: 'Еда и кафе',
+    de: 'Essen und Cafés', fr: 'Repas et cafés',
+    it: 'Cibo e caffè', en: 'Food and cafés',
+    pl: 'Jedzenie i kawiarnie', es: 'Comida y cafés'
+  },
+  {
+    value: 'Інше',
+    uk: 'Інше', ru: 'Другое',
+    de: 'Sonstiges', fr: 'Autres',
+    it: 'Altro', en: 'Other',
+    pl: 'Inne', es: 'Otros'
+  }
+];
+function setAppLanguage(language) {
+  appLanguage = language;
+   document.documentElement.lang = language;
+  localStorage.setItem('app-language', language);
+
+  const russian = language === 'ru';
+  const text = (selector, value) => {
+    const element = document.querySelector(selector);
+    if (element) element.textContent = value;
+  };
+
+const headerTranslations = {
+  uk: ['Твої нагадування', 'Зберігай важливе й отримуй нагадування вчасно'],
+  ru: ['Твои напоминания', 'Сохраняй важное и получай напоминания вовремя'],
+  de: ['Deine Erinnerungen', 'Bewahre Wichtiges auf und lass dich rechtzeitig erinnern'],
+  fr: ['Tes rappels', 'Garde les choses importantes et souviens-t’en à temps'],
+  it: ['I tuoi promemoria', 'Conserva ciò che è importante e ricordalo al momento giusto'],
+  en: ['Your reminders', 'Save what matters and get reminded at the right time'],
+  pl: ['Twoje przypomnienia', 'Zapisuj ważne sprawy i pamiętaj o nich na czas'],
+  es: ['Tus recordatorios', 'Guarda lo importante y recibe recordatorios a tiempo']
+};
+
+const headerText = headerTranslations[language] || headerTranslations.uk;
+
+text('header .brand', headerText[0]);
+text('header .tag', headerText[1]);
+
+const quickTranslations = {
+  uk: ['Швидкий запис', 'Що і коли нагадати?', 'Натисни 🎙 і скажи, що та коли нагадати. Перевір дані й натисни «Зберегти».'],
+  ru: ['Быстрая запись', 'Что и когда напомнить?', 'Нажми 🎙 и скажи, что и когда напомнить. Проверь данные и нажми «Сохранить».'],
+  de: ['Schnelle Notiz', 'Woran und wann erinnern?', 'Drücke 🎙 und sage, woran und wann du erinnert werden möchtest. Prüfe die Angaben und tippe auf «Speichern».'],
+  fr: ['Note rapide', 'À quoi et quand te rappeler ?', 'Appuie sur 🎙 et indique quoi et quand te rappeler. Vérifie les informations et appuie sur «Enregistrer».'],
+  it: ['Nota rapida', 'Cosa ricordare e quando?', 'Premi 🎙 e indica cosa ricordare e quando. Controlla i dati e premi «Salva».'],
+  en: ['Quick note', 'What should I remind you about, and when?', 'Tap 🎙 and say what to remember and when. Check the details and tap «Save».'],
+  pl: ['Szybki zapis', 'O czym i kiedy przypomnieć?', 'Naciśnij 🎙 i powiedz, o czym i kiedy przypomnieć. Sprawdź dane i naciśnij «Zapisz».'],
+  es: ['Nota rápida', '¿Qué recordar y cuándo?', 'Pulsa 🎙 y di qué quieres recordar y cuándo. Comprueba los datos y pulsa «Guardar».']
+};
+
+const quickText = quickTranslations[language] || quickTranslations.uk;
+
+text('.hero .card:first-child .eyebrow', quickText[0]);
+text('.hero .card:first-child h1', quickText[1]);
+text('.hero .card:first-child p', quickText[2]);
+
+ const micTranslations = {
+  uk: ['Сказати нагадування', 'Натисни й продиктуй справу та час'],
+  ru: ['Сказать напоминание', 'Нажми и продиктуй дело и время'],
+  de: ['Erinnerung sprechen', 'Tippe und sprich deine Aufgabe und die Uhrzeit'],
+  fr: ['Dicter un rappel', 'Appuie et dicte ta tâche et l’heure'],
+  it: ['Detta un promemoria', 'Premi e detta l’attività e l’ora'],
+  en: ['Speak a reminder', 'Tap and dictate your task and time'],
+  pl: ['Powiedz przypomnienie', 'Naciśnij i podyktuj zadanie oraz godzinę'],
+  es: ['Dictar un recordatorio', 'Pulsa y dicta la tarea y la hora']
+};
+
+const micText = micTranslations[language] || micTranslations.uk;
+
+text('#micTitle', micText[0]);
+text('#micHint', micText[1]);
+  const input = $('quickInput');
+
+const quickInputTexts = {
+  uk: 'Або напиши тут…',
+  ru: 'Или напиши здесь…',
+  de: 'Oder schreibe hier…',
+  fr: 'Ou écris ici…',
+  it: 'Oppure scrivi qui…',
+  en: 'Or type here…',
+  pl: 'Lub napisz tutaj…',
+  es: 'O escribe aquí…'
+};
+
+if (input) {
+  input.placeholder = quickInputTexts[language] || quickInputTexts.uk;
+}
+  const quickAddTexts = {
+  uk: '＋ Зберегти',
+  ru: '＋ Сохранить',
+  de: '＋ Speichern',
+  fr: '＋ Enregistrer',
+  it: '＋ Salva',
+  en: '＋ Save',
+  pl: '＋ Zapisz',
+  es: '＋ Guardar'
+};
+
+text('#quickAdd', quickAddTexts[language] || quickAddTexts.uk);
+  text('#showUpcomingNotes', russian ? '3 ближайших' : '3 найближчі');
+  text('#showAllNotes', russian ? 'Все напоминания' : 'Усі нагадування');
+ 
+ text('.capture-card .eyebrow', russian ? 'Твоя вторая память' : "Твоя друга пам'ять");
+ text('#howToTitle', russian ? '📱 Как пользоваться?' : '📱 Як користуватися?');
+
+  text('#helpTitle', russian ? '📱 Как пользоваться?' : '📱 Як користуватися?');
+
+ const helpContent = $('helpContent');
+if (helpContent) {
+  helpContent.innerHTML = russian
+    ? `
+      <p><b>🧠 Твоя вторая память</b></p>
+      <p>«Напоминания» помогают сохранять важные дела и вовремя вспоминать о них. Просто добавь запись — остальное будет под рукой.</p>
+
+      <p><b>🎙️ 1. Создавай записи голосом</b></p>
+      <p>Нажми кнопку с микрофоном и произнеси, что нужно сделать и когда. Приложение распознает речь и подготовит запись. Проверь текст, дату и время перед сохранением.</p>
+
+      <p><b>🔔 2. Получай автоматические напоминания</b></p>
+      <p>Если уведомления включены и разрешены на устройстве, приложение напомнит о запланированном деле:</p>
+      <ul>
+        <li>За сутки до события.</li>
+        <li>За час до события.</li>
+        <li>Если дело запланировано на сегодня — за два часа до него.</li>
+      </ul>
+      <p>Тебе не нужно создавать несколько будильников вручную.</p>
+
+      <p><b>✍️ 3. Добавляй записи вручную</b></p>
+      <p>Можно самостоятельно написать дело, выбрать категорию, дату и время напоминания.</p>
+
+      <p><b>🔍 4. Быстро находи нужное</b></p>
+      <p>Используй поиск и категории, чтобы находить сохраненные записи.</p>
+
+      <p><b>💾 5. Сохраняй резервную копию</b></p>
+      <p>В настройках можно экспортировать записи в файл, а затем импортировать их обратно на устройство.</p>
+
+      <p><b>✅ 6. Отмечай выполненные дела</b></p>
+      <p>Когда закончишь дело, отметь его как выполненное. Так будет легче следить за тем, что еще осталось сделать.</p>
+
+      <p><b>Твоя память свободна для важного — а нужные дела всегда под рукой!</b></p>
+    `
+    : `
+      <p><b>🧠 Твоя друга пам'ять</b></p>
+      <p>«Нагадування» допомагає зберігати важливі справи та вчасно згадувати про них. Просто додай запис — усе потрібне буде під рукою.</p>
+
+      <p><b>🎙️ 1. Створюй записи голосом</b></p>
+      <p>Натисни кнопку з мікрофоном і скажи, що потрібно зробити та коли. Застосунок розпізнає мовлення й підготує запис. Перевір текст, дату й час перед збереженням.</p>
+
+      <p><b>🔔 2. Отримуй автоматичні нагадування</b></p>
+      <p>Якщо сповіщення ввімкнені й дозволені на пристрої, застосунок нагадає про заплановану справу:</p>
+      <ul>
+        <li>За добу до події.</li>
+        <li>За годину до події.</li>
+        <li>Якщо справа запланована на сьогодні — за дві години до неї.</li>
+      </ul>
+      <p>Не потрібно вручну створювати кілька будильників.</p>
+
+      <p><b>✍️ 3. Додавай записи вручну</b></p>
+      <p>Можна самостійно написати справу, вибрати категорію, дату й час нагадування.</p>
+
+      <p><b>🔍 4. Швидко знаходь потрібне</b></p>
+      <p>Користуйся пошуком і категоріями, щоб знаходити збережені записи.</p>
+
+      <p><b>💾 5. Зберігай резервну копію</b></p>
+      <p>У налаштуваннях можна експортувати записи у файл, а потім імпортувати їх назад на пристрій.</p>
+
+      <p><b>✅ 6. Позначай виконані справи</b></p>
+      <p>Коли завершиш справу, познач її як виконану. Так легше стежити за тим, що ще потрібно зробити.</p>
+
+      <p><b>Твоя пам'ять вільна для важливого, а потрібні справи завжди під рукою!</b></p>
+    `;
+}
+
+  text('#helpBtn', russian ? 'Узнать больше' : 'Дізнатися більше');
+ const slogan = document.querySelector('.capture-card h2');
+if (slogan) {
+  slogan.innerHTML = russian
+    ? '📱 Как пользоваться приложением'
+    : '📱 Як користуватися застосунком';
+}
+
+  text('.capture-card p', russian
+    ? 'Идея, покупка, рекомендация или небольшая мысль — сохрани её здесь, а «Напоминания» помогут вернуться к ней вовремя.'
+    : 'Ідея, покупка, рекомендація чи маленька думка — збережи її тут, а «Нагадування» допоможе повернутися до неї вчасно.');
+
+  text('.capture-card .hint', russian
+    ? '🎙 Можно говорить или вводить текст'
+    : '🎙 Можна говорити або вводити текст');
+
+  text('.section-head h2', russian ? 'Твои напоминания' : "Твоя пам'ять");
+  text('.section-head p', russian ? 'Всё важное — в одном месте.' : 'Усе важливе — в одному місці.');
+const backupLanguageTexts = {
+  uk: ['⬇ Резервна копія', '⬆ Імпорт записів'],
+  ru: ['⬇ Резервная копия', '⬆ Импорт записей'],
+  de: ['⬇ Sicherung exportieren', '⬆ Sicherung importieren'],
+  fr: ['⬇ Exporter la sauvegarde', '⬆ Importer les données'],
+  it: ['⬇ Esporta backup', '⬆ Importa dati'],
+  en: ['⬇ Export backup', '⬆ Import records'],
+  pl: ['⬇ Eksportuj kopię', '⬆ Importuj wpisy'],
+  es: ['⬇ Exportar copia', '⬆ Importar registros']
+};
+
+const backupLabels = backupLanguageTexts[language] || backupLanguageTexts.uk;
+
+text('#exportBackup', backupLabels[0]);
+text('#importBackup', backupLabels[1]);
+ const feedbackButtonTexts = {
+  uk: '✉️ Повідомити про помилку / Поділитися ідеєю',
+  ru: '✉️ Сообщить об ошибке / Поделиться идеей',
+  de: '✉️ Fehler melden / Idee teilen',
+  fr: '✉️ Signaler un problème / Partager une idée',
+  it: '✉️ Segnala un errore / Condividi un’idea',
+  en: '✉️ Report a bug / Share an idea',
+  pl: '✉️ Zgłoś błąd / Podziel się pomysłem',
+  es: '✉️ Informar de un error / Compartir una idea'
+};
+
+text('#feedbackBtn', feedbackButtonTexts[language] || feedbackButtonTexts.uk);
+ const feedbackFormTexts = {
+  uk: [
+    '💬 Відгук та пропозиції',
+    'Що хочеш повідомити?',
+    '🐞 Повідомити про помилку',
+    '💡 Запропонувати покращення',
+    '💬 Залишити відгук',
+    'Напиши своє повідомлення...',
+    'Надіслати'
+  ],
+  ru: [
+    '💬 Отзыв и предложения',
+    'Что хочешь сообщить?',
+    '🐞 Сообщить об ошибке',
+    '💡 Предложить улучшение',
+    '💬 Оставить отзыв',
+    'Напиши своё сообщение...',
+    'Отправить'
+  ],
+  de: [
+    '💬 Feedback und Vorschläge',
+    'Was möchtest du mitteilen?',
+    '🐞 Fehler melden',
+    '💡 Verbesserung vorschlagen',
+    '💬 Feedback geben',
+    'Schreibe deine Nachricht...',
+    'Senden'
+  ],
+  fr: [
+    '💬 Avis et suggestions',
+    'Que souhaitez-vous nous signaler ?',
+    '🐞 Signaler un problème',
+    '💡 Proposer une amélioration',
+    '💬 Laisser un avis',
+    'Écrivez votre message...',
+    'Envoyer'
+  ],
+  it: [
+    '💬 Feedback e suggerimenti',
+    'Cosa vuoi comunicarci?',
+    '🐞 Segnala un errore',
+    '💡 Suggerisci un miglioramento',
+    '💬 Lascia un feedback',
+    'Scrivi il tuo messaggio...',
+    'Invia'
+  ],
+  en: [
+    '💬 Feedback and suggestions',
+    'What would you like to tell us?',
+    '🐞 Report a bug',
+    '💡 Suggest an improvement',
+    '💬 Leave feedback',
+    'Write your message...',
+    'Send'
+  ],
+  pl: [
+    '💬 Opinie i sugestie',
+    'Co chcesz zgłosić?',
+    '🐞 Zgłoś błąd',
+    '💡 Zaproponuj ulepszenie',
+    '💬 Dodaj opinię',
+    'Napisz swoją wiadomość...',
+    'Wyślij'
+  ],
+  es: [
+    '💬 Comentarios y sugerencias',
+    '¿Qué quieres comunicarnos?',
+    '🐞 Informar de un error',
+    '💡 Sugerir una mejora',
+    '💬 Dejar un comentario',
+    'Escribe tu mensaje...',
+    'Enviar'
+  ]
+};
+
+const fl = feedbackFormTexts[language] || feedbackFormTexts.uk;
+
+const feedbackTitle = document.querySelector('#feedbackPanel h2');
+if (feedbackTitle) feedbackTitle.textContent = fl[0];
+
+const feedbackQuestion = document.querySelector('#feedbackPanel label');
+if (feedbackQuestion) feedbackQuestion.textContent = fl[1];
+
+const feedbackTypeSelect = $('feedbackType');
+if (feedbackTypeSelect && feedbackTypeSelect.options.length >= 3) {
+  feedbackTypeSelect.options[0].textContent = fl[2];
+  feedbackTypeSelect.options[1].textContent = fl[3];
+  feedbackTypeSelect.options[2].textContent = fl[4];
+}
+
+const feedbackMessage = $('feedbackMessage');
+if (feedbackMessage) feedbackMessage.placeholder = fl[5];
+
+const sendFeedbackButton = $('sendFeedback');
+if (sendFeedbackButton) sendFeedbackButton.textContent = fl[6];
+  const helpUiTexts = {
+  uk: ["Твоя друга пам'ять", "📱 Як користуватися?", "Дізнатися більше"],
+  ru: ["Твоя вторая память", "📱 Как пользоваться?", "Узнать больше"],
+  de: ["Dein zweites Gedächtnis", "📱 So verwendest du die App", "Mehr erfahren"],
+  fr: ["Ta deuxième mémoire", "📱 Comment utiliser l’application ?", "En savoir plus"],
+  it: ["La tua seconda memoria", "📱 Come usare l’app", "Scopri di più"],
+  en: ["Your second memory", "📱 How to use the app", "Learn more"],
+  pl: ["Twoja druga pamięć", "📱 Jak korzystać z aplikacji", "Dowiedz się więcej"],
+  es: ["Tu segunda memoria", "📱 Cómo usar la aplicación", "Más información"]
+};
+
+const hu = helpUiTexts[language] || helpUiTexts.uk;
+
+text('#memoryEyebrow', hu[0]);
+text('#howToTitle', hu[1]);
+text('#helpTitle', hu[1]);
+  const dashboardTexts = {
+  uk: ['Збережено записів', 'Мають нагадування', 'Категорій використано', 'Твоя пам’ять', 'Усе важливе — в одному місці.', '＋ Новий запис'],
+  ru: ['Сохранено записей', 'С напоминаниями', 'Использовано категорий', 'Твоя память', 'Всё важное — в одном месте.', '＋ Новая запись'],
+  de: ['Einträge gespeichert', 'Mit Erinnerungen', 'Kategorien verwendet', 'Dein Gedächtnis', 'Alles Wichtige an einem Ort.', '＋ Neuer Eintrag'],
+  fr: ['Notes enregistrées', 'Avec rappels', 'Catégories utilisées', 'Ta mémoire', 'Tout ce qui compte au même endroit.', '＋ Nouvelle note'],
+  it: ['Note salvate', 'Con promemoria', 'Categorie utilizzate', 'La tua memoria', 'Tutto ciò che conta in un unico posto.', '＋ Nuova nota'],
+  en: ['Saved entries', 'With reminders', 'Categories used', 'Your memory', 'Everything important in one place.', '＋ New entry'],
+  pl: ['Zapisane wpisy', 'Z przypomnieniami', 'Użyte kategorie', 'Twoja pamięć', 'Wszystko, co ważne, w jednym miejscu.', '＋ Nowy wpis'],
+  es: ['Registros guardados', 'Con recordatorios', 'Categorías utilizadas', 'Tu memoria', 'Todo lo importante en un solo lugar.', '＋ Nueva nota']
+};
+
+const dashboardLabels = dashboardTexts[language] || dashboardTexts.uk;
+
+text('#totalStatLabel', dashboardLabels[0]);
+text('#reminderStatLabel', dashboardLabels[1]);
+text('#categoryStatLabel', dashboardLabels[2]);
+text('#memoryTitle', dashboardLabels[3]);
+text('#memorySubtitle', dashboardLabels[4]);
+text('#addDetailed', dashboardLabels[5]);
+  text('#helpBtn', hu[2]);
+  const helpContentTexts = {
+  uk: `
+    <p><b>🧠 Твоя друга пам'ять</b></p>
+    <p>«Нагадування» допомагає зберігати важливі справи та вчасно згадувати про них. Просто додай запис — усе потрібне буде під рукою.</p>
+
+    <p><b>🎙️ 1. Створюй записи голосом</b></p>
+    <p>Натисни кнопку з мікрофоном і скажи, що потрібно зробити та коли. Застосунок розпізнає мовлення й підготує запис. Перевір текст, дату й час перед збереженням.</p>
+
+    <p><b>🔔 2. Отримуй автоматичні нагадування</b></p>
+    <p>Якщо сповіщення ввімкнені й дозволені на пристрої, застосунок нагадає про заплановану справу:</p>
+    <ul><li>За добу до події.</li><li>За годину до події.</li><li>Якщо справа запланована на сьогодні — за дві години до неї.</li></ul>
+    <p>Не потрібно вручну створювати кілька будильників.</p>
+
+    <p><b>✍️ 3. Додавай записи вручну</b></p>
+    <p>Можна самостійно написати справу, вибрати категорію, дату й час нагадування.</p>
+
+    <p><b>🔍 4. Швидко знаходь потрібне</b></p>
+    <p>Користуйся пошуком і категоріями, щоб знаходити збережені записи.</p>
+
+    <p><b>💾 5. Зберігай резервну копію</b></p>
+    <p>У налаштуваннях можна експортувати записи у файл, а потім імпортувати їх назад на пристрій.</p>
+
+    <p><b>✅ 6. Позначай виконані справи</b></p>
+    <p>Коли завершиш справу, познач її як виконану. Так легше стежити за тим, що ще потрібно зробити.</p>
+
+    <p><b>Твоя пам'ять вільна для важливого, а потрібні справи завжди під рукою!</b></p>
+  `,
+
+  ru: `
+    <p><b>🧠 Твоя вторая память</b></p>
+    <p>«Напоминания» помогает сохранять важные дела и вовремя вспоминать о них. Просто добавь запись — всё нужное будет под рукой.</p>
+
+    <p><b>🎙️ 1. Создавай записи голосом</b></p>
+    <p>Нажми кнопку с микрофоном и скажи, что нужно сделать и когда. Приложение распознает речь и подготовит запись. Проверь текст, дату и время перед сохранением.</p>
+
+    <p><b>🔔 2. Получай автоматические напоминания</b></p>
+    <p>Если уведомления включены и разрешены на устройстве, приложение напомнит о запланированном деле:</p>
+    <ul><li>За сутки до события.</li><li>За час до события.</li><li>Если дело запланировано на сегодня — за два часа до него.</li></ul>
+    <p>Не нужно вручную создавать несколько будильников.</p>
+
+    <p><b>✍️ 3. Добавляй записи вручную</b></p>
+    <p>Можно самостоятельно написать дело, выбрать категорию, дату и время напоминания.</p>
+
+    <p><b>🔍 4. Быстро находи нужное</b></p>
+    <p>Используй поиск и категории, чтобы находить сохранённые записи.</p>
+
+    <p><b>💾 5. Сохраняй резервную копию</b></p>
+    <p>В настройках можно экспортировать записи в файл, а затем импортировать их обратно на устройство.</p>
+
+    <p><b>✅ 6. Отмечай выполненные дела</b></p>
+    <p>Когда закончишь дело, отметь его как выполненное. Так легче следить за тем, что ещё нужно сделать.</p>
+
+    <p><b>Твоя память свободна для важного, а нужные дела всегда под рукой!</b></p>
+  `,
+
+  de: `
+    <p><b>🧠 Dein zweites Gedächtnis</b></p>
+    <p>„Erinnerungen“ hilft dir, wichtige Aufgaben zu speichern und rechtzeitig an sie zu denken. Füge einfach einen Eintrag hinzu – alles Wichtige ist griffbereit.</p>
+
+    <p><b>🎙️ 1. Erstelle Einträge mit deiner Stimme</b></p>
+    <p>Drücke die Mikrofontaste und sage, was du erledigen möchtest und wann. Die App erkennt deine Sprache und erstellt einen Eintrag. Überprüfe den Text, das Datum und die Uhrzeit vor dem Speichern.</p>
+
+    <p><b>🔔 2. Erhalte automatische Erinnerungen</b></p>
+    <p>Wenn Benachrichtigungen auf deinem Gerät aktiviert und erlaubt sind, erinnert dich die App an geplante Aufgaben:</p>
+    <ul><li>Einen Tag vor dem Ereignis.</li><li>Eine Stunde vor dem Ereignis.</li><li>Wenn die Aufgabe für heute geplant ist – zwei Stunden vorher.</li></ul>
+    <p>Du musst nicht mehrere Wecker manuell einstellen.</p>
+
+    <p><b>✍️ 3. Füge Einträge manuell hinzu</b></p>
+    <p>Du kannst eine Aufgabe selbst eingeben und eine Kategorie, ein Datum und eine Erinnerungszeit auswählen.</p>
+
+    <p><b>🔍 4. Finde schnell, was du suchst</b></p>
+    <p>Nutze die Suche und Kategorien, um gespeicherte Einträge zu finden.</p>
+
+    <p><b>💾 5. Erstelle eine Sicherungskopie</b></p>
+    <p>In den Einstellungen kannst du deine Einträge als Datei exportieren und später wieder auf dein Gerät importieren.</p>
+
+    <p><b>✅ 6. Markiere erledigte Aufgaben</b></p>
+    <p>Wenn du eine Aufgabe erledigt hast, markiere sie als erledigt. So behältst du leichter den Überblick über alles, was noch zu tun ist.</p>
+
+    <p><b>Dein Gedächtnis bleibt frei für Wichtiges und deine Aufgaben sind immer griffbereit!</b></p>
+  `,
+
+  fr: `
+    <p><b>🧠 Ta deuxième mémoire</b></p>
+    <p>« Rappels » t'aide à conserver tes tâches importantes et à t'en souvenir au bon moment. Ajoute simplement une note : tout ce dont tu as besoin sera à portée de main.</p>
+
+    <p><b>🎙️ 1. Crée des notes avec ta voix</b></p>
+    <p>Appuie sur le bouton du microphone et dis ce que tu dois faire et quand. L'application reconnaît ta voix et prépare une note. Vérifie le texte, la date et l'heure avant de l'enregistrer.</p>
+
+    <p><b>🔔 2. Reçois des rappels automatiques</b></p>
+    <p>Si les notifications sont activées et autorisées sur ton appareil, l'application te rappellera les tâches prévues :</p>
+    <ul><li>Un jour avant l'événement.</li><li>Une heure avant l'événement.</li><li>Si la tâche est prévue pour aujourd'hui, deux heures avant.</li></ul>
+    <p>Pas besoin de créer plusieurs alarmes manuellement.</p>
+
+    <p><b>✍️ 3. Ajoute des notes manuellement</b></p>
+    <p>Tu peux écrire une tâche, choisir une catégorie, une date et une heure de rappel.</p>
+
+    <p><b>🔍 4. Trouve rapidement ce que tu cherches</b></p>
+    <p>Utilise la recherche et les catégories pour retrouver tes notes enregistrées.</p>
+
+    <p><b>💾 5. Enregistre une sauvegarde</b></p>
+    <p>Dans les paramètres, tu peux exporter tes notes dans un fichier, puis les importer à nouveau sur ton appareil.</p>
+
+    <p><b>✅ 6. Marque les tâches terminées</b></p>
+    <p>Lorsque tu as terminé une tâche, marque-la comme terminée. Tu peux ainsi suivre plus facilement ce qu'il te reste à faire.</p>
+
+    <p><b>Ta mémoire reste libre pour l'essentiel et tes tâches importantes sont toujours à portée de main !</b></p>
+  `,
+
+  it: `
+    <p><b>🧠 La tua seconda memoria</b></p>
+    <p>« Promemoria » ti aiuta a conservare le attività importanti e a ricordarle al momento giusto. Aggiungi semplicemente una nota: tutto ciò che ti serve sarà a portata di mano.</p>
+
+    <p><b>🎙️ 1. Crea note con la voce</b></p>
+    <p>Premi il pulsante del microfono e di' cosa devi fare e quando. L'app riconosce la tua voce e prepara una nota. Controlla il testo, la data e l'ora prima di salvare.</p>
+
+    <p><b>🔔 2. Ricevi promemoria automatici</b></p>
+    <p>Se le notifiche sono attivate e autorizzate sul dispositivo, l'app ti ricorderà le attività programmate:</p>
+    <ul><li>Un giorno prima dell'evento.</li><li>Un'ora prima dell'evento.</li><li>Se l'attività è prevista per oggi, due ore prima.</li></ul>
+    <p>Non è necessario creare manualmente più sveglie.</p>
+
+    <p><b>✍️ 3. Aggiungi note manualmente</b></p>
+    <p>Puoi scrivere un'attività, scegliere una categoria, una data e l'ora del promemoria.</p>
+
+    <p><b>🔍 4. Trova rapidamente ciò che cerchi</b></p>
+    <p>Usa la ricerca e le categorie per trovare le note salvate.</p>
+
+    <p><b>💾 5. Crea una copia di backup</b></p>
+    <p>Nelle impostazioni puoi esportare le note in un file e poi importarle nuovamente sul dispositivo.</p>
+
+    <p><b>✅ 6. Segna le attività completate</b></p>
+    <p>Quando hai terminato un'attività, contrassegnala come completata. Così sarà più facile controllare cosa resta da fare.</p>
+
+    <p><b>La tua memoria resta libera per le cose importanti e le attività necessarie sono sempre a portata di mano!</b></p>
+  `,
+
+  en: `
+    <p><b>🧠 Your second memory</b></p>
+    <p>“Reminders” helps you save important tasks and remember them at the right time. Just add an entry – everything you need will be close at hand.</p>
+
+    <p><b>🎙️ 1. Create entries with your voice</b></p>
+    <p>Press the microphone button and say what needs to be done and when. The app recognizes your speech and prepares an entry. Check the text, date and time before saving.</p>
+
+    <p><b>🔔 2. Get automatic reminders</b></p>
+    <p>If notifications are enabled and allowed on your device, the app will remind you about planned tasks:</p>
+    <ul><li>One day before the event.</li><li>One hour before the event.</li><li>If the task is scheduled for today, two hours beforehand.</li></ul>
+    <p>There is no need to create several alarms manually.</p>
+
+    <p><b>✍️ 3. Add entries manually</b></p>
+    <p>You can write a task yourself and choose a category, date and reminder time.</p>
+
+    <p><b>🔍 4. Find what you need quickly</b></p>
+    <p>Use search and categories to find your saved entries.</p>
+
+    <p><b>💾 5. Save a backup</b></p>
+    <p>In Settings, you can export your entries to a file and then import them back onto your device.</p>
+
+    <p><b>✅ 6. Mark completed tasks</b></p>
+    <p>When you finish a task, mark it as completed. This makes it easier to keep track of what still needs to be done.</p>
+
+    <p><b>Your memory stays free for what matters, and your important tasks are always close at hand!</b></p>
+  `,
+
+  pl: `
+    <p><b>🧠 Twoja druga pamięć</b></p>
+    <p>„Przypomnienia” pomagają zapisywać ważne sprawy i pamiętać o nich we właściwym czasie. Wystarczy dodać wpis – wszystko, czego potrzebujesz, będzie pod ręką.</p>
+
+    <p><b>🎙️ 1. Twórz wpisy głosowo</b></p>
+    <p>Naciśnij przycisk mikrofonu i powiedz, co trzeba zrobić i kiedy. Aplikacja rozpozna mowę i przygotuje wpis. Przed zapisaniem sprawdź tekst, datę i godzinę.</p>
+
+    <p><b>🔔 2. Otrzymuj automatyczne przypomnienia</b></p>
+    <p>Jeśli powiadomienia są włączone i dozwolone na urządzeniu, aplikacja przypomni Ci o zaplanowanym zadaniu:</p>
+    <ul><li>Dzień przed wydarzeniem.</li><li>Godzinę przed wydarzeniem.</li><li>Jeśli zadanie jest zaplanowane na dziś – dwie godziny wcześniej.</li></ul>
+    <p>Nie musisz ręcznie ustawiać kilku alarmów.</p>
+
+    <p><b>✍️ 3. Dodawaj wpisy ręcznie</b></p>
+    <p>Możesz samodzielnie wpisać zadanie i wybrać kategorię, datę oraz godzinę przypomnienia.</p>
+
+    <p><b>🔍 4. Szybko znajduj potrzebne informacje</b></p>
+    <p>Korzystaj z wyszukiwarki i kategorii, aby znajdować zapisane wpisy.</p>
+
+    <p><b>💾 5. Zapisuj kopię zapasową</b></p>
+    <p>W ustawieniach możesz wyeksportować wpisy do pliku, a następnie zaimportować je ponownie na urządzenie.</p>
+
+    <p><b>✅ 6. Oznaczaj wykonane zadania</b></p>
+    <p>Po zakończeniu zadania oznacz je jako wykonane. Dzięki temu łatwiej sprawdzisz, co jeszcze trzeba zrobić.</p>
+
+    <p><b>Twoja pamięć pozostaje wolna na ważne rzeczy, a potrzebne zadania są zawsze pod ręką!</b></p>
+  `,
+
+  es: `
+    <p><b>🧠 Tu segunda memoria</b></p>
+    <p>«Recordatorios» te ayuda a guardar tareas importantes y recordarlas en el momento adecuado. Simplemente añade una nota: todo lo que necesitas estará a mano.</p>
+
+    <p><b>🎙️ 1. Crea notas con tu voz</b></p>
+    <p>Pulsa el botón del micrófono y di qué tienes que hacer y cuándo. La aplicación reconoce tu voz y prepara una nota. Comprueba el texto, la fecha y la hora antes de guardarla.</p>
+
+    <p><b>🔔 2. Recibe recordatorios automáticos</b></p>
+    <p>Si las notificaciones están activadas y permitidas en tu dispositivo, la aplicación te recordará las tareas programadas:</p>
+    <ul><li>Un día antes del evento.</li><li>Una hora antes del evento.</li><li>Si la tarea está programada para hoy, dos horas antes.</li></ul>
+    <p>No necesitas crear varias alarmas manualmente.</p>
+
+    <p><b>✍️ 3. Añade notas manualmente</b></p>
+    <p>Puedes escribir una tarea, elegir una categoría, una fecha y la hora del recordatorio.</p>
+
+    <p><b>🔍 4. Encuentra rápidamente lo que necesitas</b></p>
+    <p>Usa la búsqueda y las categorías para encontrar las notas guardadas.</p>
+
+    <p><b>💾 5. Guarda una copia de seguridad</b></p>
+    <p>En los ajustes puedes exportar las notas a un archivo y después importarlas de nuevo en tu dispositivo.</p>
+
+    <p><b>✅ 6. Marca las tareas completadas</b></p>
+    <p>Cuando termines una tarea, márcala como completada. Así será más fácil controlar lo que todavía tienes que hacer.</p>
+
+    <p><b>Tu memoria queda libre para lo importante y tus tareas siempre están a mano.</b></p>
+  `
+};
+
+const helpContentElement = $('helpContent');
+if (helpContentElement) {
+  helpContentElement.innerHTML = helpContentTexts[language] || helpContentTexts.uk;
+}
+ 
+ const search = $('search');
+
+const searchTexts = {
+  uk: '⌕ Пошук за змістом…',
+  ru: '⌕ Поиск по содержимому…',
+  de: '⌕ Nach Inhalt suchen…',
+  fr: '⌕ Rechercher dans le contenu…',
+  it: '⌕ Cerca nel contenuto…',
+  en: '⌕ Search by content…',
+  pl: '⌕ Szukaj w treści…',
+  es: '⌕ Buscar por contenido…'
+};
+
+if (search) {
+  search.placeholder = searchTexts[language] || searchTexts.uk;
+}
+
+const footerTexts = {
+  uk: 'Прототип LATER · Дані зберігаються локально на цьому пристрої. Регулярно роби резервну копію.',
+  ru: 'Прототип LATER · Данные хранятся локально на этом устройстве. Регулярно создавай резервную копию.',
+  de: 'LATER-Prototyp · Die Daten werden lokal auf diesem Gerät gespeichert. Erstelle regelmäßig eine Sicherungskopie.',
+  fr: 'Prototype LATER · Les données sont stockées localement sur cet appareil. Effectuez régulièrement une sauvegarde.',
+  it: 'Prototipo LATER · I dati sono salvati localmente su questo dispositivo. Crea regolarmente una copia di backup.',
+  en: 'LATER prototype · Data is stored locally on this device. Make regular backups.',
+  pl: 'Prototyp LATER · Dane są przechowywane lokalnie na tym urządzeniu. Regularnie twórz kopię zapasową.',
+  es: 'Prototipo LATER · Los datos se guardan localmente en este dispositivo. Crea copias de seguridad con regularidad.'
+};
+
+text('.footer', footerTexts[language] || footerTexts.uk);
+ const modalTexts = {
+  uk: ['Новий запис', "Що хочеш запам'ятати?", 'Категорія', "Нагадати (необов'язково)", 'Скасувати', 'Зберегти запис', 'Напиши думку, ідею або річ…'],
+  ru: ['Новая запись', 'Что хочешь запомнить?', 'Категория', 'Напомнить (необязательно)', 'Отмена', 'Сохранить запись', 'Напиши мысль, идею или дело…'],
+  de: ['Neuer Eintrag', 'Was möchtest du dir merken?', 'Kategorie', 'Erinnerung (optional)', 'Abbrechen', 'Eintrag speichern', 'Schreibe einen Gedanken, eine Idee oder eine Aufgabe…'],
+  fr: ['Nouvelle note', 'Que souhaites-tu retenir ?', 'Catégorie', 'Rappel (facultatif)', 'Annuler', 'Enregistrer la note', 'Écris une pensée, une idée ou une tâche…'],
+  it: ['Nuova nota', 'Cosa vuoi ricordare?', 'Categoria', 'Promemoria (facoltativo)', 'Annulla', 'Salva nota', 'Scrivi un pensiero, un’idea o un’attività…'],
+  en: ['New entry', 'What would you like to remember?', 'Category', 'Reminder (optional)', 'Cancel', 'Save entry', 'Write a thought, an idea or a task…'],
+  pl: ['Nowy wpis', 'Co chcesz zapamiętać?', 'Kategoria', 'Przypomnienie (opcjonalnie)', 'Anuluj', 'Zapisz wpis', 'Napisz myśl, pomysł lub zadanie…'],
+  es: ['Nueva nota', '¿Qué quieres recordar?', 'Categoría', 'Recordatorio (opcional)', 'Cancelar', 'Guardar nota', 'Escribe un pensamiento, una idea o una tarea…']
+};
+
+const mt = modalTexts[language] || modalTexts.uk;
+
+text('#modalTitle', mt[0]);
+text('label[for="noteText"]', mt[1]);
+text('label[for="noteCategory"]', mt[2]);
+text('label[for="noteDate"]', mt[3]);
+text('#cancelModal', mt[4]);
+text('#saveNote', mt[5]);
+
+const noteText = $('noteText');
+if (noteText) {
+  noteText.placeholder = mt[6];
+}
+
+const categorySelect = $('noteCategory');
+if (categorySelect) {
+  categories.forEach((category, index) => {
+    const option = categorySelect.options[index];
+    if (option) {
+      option.value = category.value;
+      option.textContent = category[language] || category.uk;
+    }
+  });
+}
+ const settingsLabels = {
+  uk: ['⚙️ Налаштування', 'Резервна копія', 'Системні сповіщення', 'Тут можна керувати системними сповіщеннями.'],
+  ru: ['⚙️ Настройки', 'Резервная копия', 'Системные уведомления', 'Здесь можно управлять системными уведомлениями.'],
+  de: ['⚙️ Einstellungen', 'Datensicherung', 'Systembenachrichtigungen', 'Hier kannst du die Systembenachrichtigungen verwalten.'],
+  fr: ['⚙️ Paramètres', 'Sauvegarde', 'Notifications système', 'Ici, vous pouvez gérer les notifications système.'],
+  it: ['⚙️ Impostazioni', 'Backup', 'Notifiche di sistema', 'Qui puoi gestire le notifiche di sistema.'],
+  en: ['⚙️ Settings', 'Backup', 'System notifications', 'Here you can manage system notifications.'],
+  pl: ['⚙️ Ustawienia', 'Kopia zapasowa', 'Powiadomienia systemowe', 'Tutaj możesz zarządzać powiadomieniami systemowymi.'],
+  es: ['⚙️ Configuración', 'Copia de seguridad', 'Notificaciones del sistema', 'Aquí puedes gestionar las notificaciones del sistema.']
+};
+
+const sl = settingsLabels[language] || settingsLabels.uk;
+
+text('#settingsTitle', sl[0]);
+text('#backupSettingsTitle', sl[1]);
+text('#notificationSettingsTitle', sl[2]);
+text('#notificationSettingsText', sl[3]);
+
+  const notificationButton = $('notificationToggle');
+
+const notificationTexts = {
+  uk: ['Сповіщення заблоковано', '🔕 Сповіщення вимкнено', '🔔 Сповіщення ввімкнено', '🔔 Увімкнути сповіщення'],
+  ru: ['Уведомления заблокированы', '🔕 Уведомления выключены', '🔔 Уведомления включены', '🔔 Включить уведомления'],
+  de: ['Benachrichtigungen blockiert', '🔕 Benachrichtigungen ausgeschaltet', '🔔 Benachrichtigungen aktiviert', '🔔 Benachrichtigungen aktivieren'],
+  fr: ['Notifications bloquées', '🔕 Notifications désactivées', '🔔 Notifications activées', '🔔 Activer les notifications'],
+  it: ['Notifiche bloccate', '🔕 Notifiche disattivate', '🔔 Notifiche attivate', '🔔 Attiva le notifiche'],
+  en: ['Notifications blocked', '🔕 Notifications turned off', '🔔 Notifications enabled', '🔔 Enable notifications'],
+  pl: ['Powiadomienia zablokowane', '🔕 Powiadomienia wyłączone', '🔔 Powiadomienia włączone', '🔔 Włącz powiadomienia'],
+  es: ['Notificaciones bloqueadas', '🔕 Notificaciones desactivadas', '🔔 Notificaciones activadas', '🔔 Activar notificaciones']
+};
+
+const nTexts = notificationTexts[language] || notificationTexts.uk;
+const notificationPermission = ('Notification' in window)
+  ? Notification.permission
+  : 'unsupported';
+
+if (notificationButton) {
+  if (notificationPermission === 'denied') {
+    notificationButton.textContent = nTexts[0];
+  } else if (localStorage.getItem('reminders-enabled') === 'false') {
+    notificationButton.textContent = nTexts[1];
+  } else if (notificationPermission === 'granted') {
+    notificationButton.textContent = nTexts[2];
+  } else {
+    notificationButton.textContent = nTexts[3];
+  }
+}
+const languageSelect = $('languageSelect');
+if (languageSelect) {
+  languageSelect.value = language;
+}
+const allCategories = {
+  uk: 'Усе',
+  ru: 'Всё',
+  de: 'Alle',
+  fr: 'Tout',
+  it: 'Tutte',
+  en: 'All',
+  pl: 'Wszystkie',
+  es: 'Todas'
+};
+
+document.querySelectorAll('.category-box').forEach(button => {
+  const category = button.dataset.filter;
+  const span = button.querySelector('span');
+  if (!span) return;
+
+  if (category === 'Усе') {
+    span.textContent = allCategories[language] || allCategories.uk;
+   } else {
+    const categoryTranslations = {
+      'Покупки': {
+        de: 'Einkäufe', fr: 'Achats', it: 'Acquisti',
+        en: 'Shopping', pl: 'Zakupy', es: 'Compras'
+      },
+      'Зустрічі': {
+        de: 'Termine', fr: 'Rendez-vous', it: 'Appuntamenti',
+        en: 'Appointments', pl: 'Spotkania', es: 'Citas'
+      },
+      'Здоров’я': {
+        de: 'Gesundheit', fr: 'Santé', it: 'Salute',
+        en: 'Health', pl: 'Zdrowie', es: 'Salud'
+      },
+      'Справи': {
+        de: 'Aufgaben', fr: 'Tâches', it: 'Attività',
+        en: 'Tasks', pl: 'Zadania', es: 'Tareas'
+      },
+      'Місця': {
+        de: 'Orte', fr: 'Lieux', it: 'Luoghi',
+        en: 'Places', pl: 'Miejsca', es: 'Lugares'
+      },
+      'Нотатки': {
+        de: 'Notizen', fr: 'Notes', it: 'Note',
+        en: 'Notes', pl: 'Notatki', es: 'Notas'
+      },
+      'Їжа та кафе': {
+        de: 'Essen und Cafés', fr: 'Repas et cafés', it: 'Cibo e caffè',
+        en: 'Food and cafés', pl: 'Jedzenie i kawiarnie', es: 'Comida y cafés'
+      }
+    };
+
+    const russianNames = {
+      'Покупки': 'Покупки',
+      'Зустрічі': 'Встречи',
+      'Здоров’я': 'Здоровье',
+      'Справи': 'Дела',
+      'Місця': 'Места',
+      'Нотатки': 'Заметки',
+      'Їжа та кафе': 'Еда и кафе'
+    };
+
+    span.textContent = language === 'uk'
+      ? category
+      : language === 'ru'
+        ? (russianNames[category] || category)
+        : (categoryTranslations[category]?.[language] || category);
+  }
+});
+render();
+}
+
+$('languageSelect').addEventListener('change', (event) => {
+  setAppLanguage(event.target.value);
+
+  if (window.updateNativeReminderButtonLanguage) {
+    window.updateNativeReminderButtonLanguage();
+  }
+});
+$('settingsBtn').addEventListener('click', () => {
+$('settingsPanel').style.display = 'block';
+});
+$('helpBtn').addEventListener('click', () => {
+  $('helpPanel').style.display = 'block';
+});
+
+$('closeHelp').addEventListener('click', () => {
+  $('helpPanel').style.display = 'none';
+});
+
+$('helpPanel').addEventListener('click', e => {
+  if (e.target === $('helpPanel')) {
+    $('helpPanel').style.display = 'none';
+  }
+});
+  
+$('closeSettings').addEventListener('click', () => {
+  $('settingsPanel').style.display = 'none';
+});
+$('feedbackBtn').addEventListener('click', () => {
+  $('feedbackPanel').style.display = 'block';
+});
+
+$('closeFeedback').addEventListener('click', () => {
+  $('feedbackPanel').style.display = 'none';
+});
+
+$('feedbackPanel').addEventListener('click', e => {
+  if (e.target === $('feedbackPanel')) {
+    $('feedbackPanel').style.display = 'none';
+  }
+});
+$('sendFeedback').addEventListener('click', async () => {
+  const type = $('feedbackType').value;
+  const message = $('feedbackMessage').value.trim();
+
+  if (!message) {
+    alert('Напиши повідомлення перед надсиланням.');
+    return;
+  }
+
+  const button = $('sendFeedback');
+  button.disabled = true;
+  button.textContent = 'Надсилання...';
+
+  try {
+    await fetch('https://script.google.com/macros/s/AKfycbzIbPMaXKVKxQ6b1toHlIMx_KUF60eAZBF3ewUGSuNovwxaXOxq4DgI1jxXvXGugW2j/exec', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify({ type, message })
+    });
+
+    alert('Повідомлення відправлено. Дякую!');
+    $('feedbackMessage').value = '';
+    $('feedbackPanel').style.display = 'none';
+
+  } catch (error) {
+    alert('Не вдалося надіслати повідомлення. Спробуй ще раз.');
+  }
+
+  button.disabled = false;
+  button.textContent = 'Надіслати';
+});
+
+  $('settingsPanel').addEventListener('click', e => {
+  if (e.target === $('settingsPanel')) {
+    $('settingsPanel').style.display = 'none';
+  }
+});
+  
+const icons={'Покупки':'🛍','Ідеї':'💡','Місця':'📍','Рекомендації':'🎬','Справи':'✓','Зустрічі':'🩺','Здоров’я':'💊','Нотатки':'📝','Їжа та кафе':'🍽️','Інше':'✦'};
+setAppLanguage(appLanguage);
 function load(){try{notes=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(notes))notes=[]}catch(e){notes=[]}render()}
 function persist(){localStorage.setItem(KEY,JSON.stringify(notes));render()}
-function categoryFor(text){const t=text.toLowerCase();if(/куп|магазин|ціна|кросів|навуш|подар|замов|придбат/.test(t))return'Покупки';if(/фільм|серіал|книг|пісн|музик|порад/.test(t))return'Рекомендації';if(/відвід|поїхат|ресторан|кафе|місц|адрес/.test(t))return'Місця';if(/ідея|придум|проєкт|бізнес|створ/.test(t))return'Ідеї';if(/треба|зробити|купити|нагад|зателефон|написати/.test(t))return'Справи';return'Інше'}
+function categoryFor(text) {
+  const t = text.toLowerCase();
+
+  if (/таблет|ліки|лікарств|медикамент|випити|прийняти ліки|упражнен|гимнастик|зарядк|таблетк|лекарств|медикамент|выпить лекарств|принять лекарств|физическ/.test(t)) return 'Здоров’я';
+  if (/зустріч|лікар|прийом|консультац|візит|встреч|врач|доктор|приём|прием|собрани/.test(t)) return 'Зустрічі';
+  if (/нотатк|занотува|особистий запис|заметк|личн(?:ая|ую)? запись/.test(t)) return 'Нотатки';
+  if (/їж|їст|поїст|поїм|снідан|обід|пообід|вечеря|перекус|хліб|хлеб|молок|яйц|сир|сыр|кафе|ресторан|куш|поесть|завтрак|обед|ужин|еда|будем\s+есть/.test(t)) return 'Їжа та кафе';
+  if (/куп|магазин|ціна|кросів|навуш|подар|замов|придбат|покуп|цен|кроссов|науш|заказ|приобрест/.test(t)) return 'Покупки';
+  if (/фільм|серіал|книг|пісн|музик|порад|фильм|сериал|книг|песн|музык|совет|рекомендац/.test(t)) return 'Рекомендації';
+  if (/відвід|поїхат|місц|адрес|посет|поехать|мест/.test(t)) return 'Місця';
+  if (/ідея|придум|проєкт|бізнес|створ|проект|бизнес|создат/.test(t)) return 'Ідеї';
+  if (/треба|зробити|купити|нагад|зателефон|написати|надо|нужно|сделать|напомн|позвон|написать/.test(t)) return 'Справи';
+
+  return 'Інше';
+}
+window.parseVoiceReminder = parseVoiceReminder;
+window.categoryFor = categoryFor;
+Object.defineProperty(window, 'editingId', {
+  get: () => editingId,
+  set: value => { editingId = value; }
+});
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function add(text,category='Автоматично',date=''){text=text.trim();if(!text)return;const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false});persist();$('quickStatus').textContent='Збережено. Продовжуй займатися своїми справами.';setTimeout(()=>$('quickStatus').textContent='',3500)}
-function fmtDate(d){if(!d)return'';const dt=new Date(d);if(Number.isNaN(dt.getTime()))return'';return dt.toLocaleString('uk-UA',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
-function render(){const q=$('search').value.toLowerCase().trim();const shown=notes.filter(n=>(activeFilter==='Усе'||n.category===activeFilter)&&(!q||(n.text+' '+n.category).toLowerCase().includes(q)));$('totalStat').textContent=notes.length;$('reminderStat').textContent=notes.filter(n=>n.date&&!n.done).length;$('categoryStat').textContent=new Set(notes.map(n=>n.category)).size;const grid=$('notesGrid');if(!shown.length){grid.innerHTML='<div class="empty">'+(notes.length?'Нічого не знайдено.\nСпробуй інший запит.':'Тут поки порожньо — збережи першу думку вище.\n✨')+'</div>';return}grid.innerHTML=shown.map(n=>`<article class="note"><div class="note-top"><span class="kind">${icons[n.category]||'✦'} ${escapeHtml(n.category)}</span><span class="meta">${n.done?'✓ Виконано':''}</span></div><h3>${escapeHtml(n.text.length>54?n.text.slice(0,54)+'…':n.text)}</h3>${n.text.length>54?`<p>${escapeHtml(n.text)}</p>`:''}<div class="meta">${n.date?'⏰ '+escapeHtml(fmtDate(n.date))+' · ':''}Додано ${escapeHtml(new Date(n.created).toLocaleDateString('uk-UA'))}</div><div class="note-actions"><button class="secondary" data-action="remind" data-id="${n.id}">${n.date?'Змінити нагадування':'＋ Нагадати'}</button><button class="secondary" data-action="done" data-id="${n.id}">${n.done?'Повернути':'✓ Готово'}</button><button class="secondary" data-action="delete" data-id="${n.id}">✕</button></div></article>`).join('')}
-function openModal(n=null){editingId=n?n.id:null;$('modalTitle').textContent=n?'Редагувати запис':'Новий запис';$('noteText').value=n?n.text:'';$('noteCategory').value=n?n.category:'Автоматично';$('noteDate').value=n&&n.date?n.date:'';$('modal').classList.add('open');$('noteText').focus()}
+function add(text,category='Автоматично',date=''){text=text.trim();if(!text)return;const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false});persist();
+const savedMessages = {
+  uk: 'Збережено. Продовжуй займатися своїми справами.',
+  ru: 'Сохранено. Продолжай заниматься своими делами.',
+  de: 'Gespeichert. Du kannst mit deinen Aufgaben weitermachen.',
+  fr: 'Enregistré. Tu peux continuer tes activités.',
+  it: 'Salvato. Puoi continuare con le tue attività.',
+  en: 'Saved. You can carry on with your day.',
+  pl: 'Zapisano. Możesz zająć się swoimi sprawami.',
+  es: 'Guardado. Puedes seguir con tus tareas.'
+};
+
+$('quickStatus').textContent =
+  savedMessages[appLanguage] || savedMessages.uk;
+  setTimeout(()=>$('quickStatus').textContent='',3500)}
+function fmtDate(d) {
+  if (!d) return '';
+  const dt = new Date(d);
+  if (Number.isNaN(dt.getTime())) return '';
+
+  const dateLocales = {
+    uk: 'uk-UA',
+    ru: 'ru-RU',
+    de: 'de-DE',
+    fr: 'fr-FR',
+    it: 'it-IT',
+    en: 'en-GB',
+    pl: 'pl-PL',
+    es: 'es-ES'
+  };
+
+  const locale = dateLocales[appLanguage] || 'uk-UA';
+
+  return dt.toLocaleString(locale, {
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+function render(){
+  const q=$('search').value.toLowerCase().trim();
+  const now=Date.now();
+
+  const filtered=notes.filter(n=>
+    (activeFilter==='Усе'||n.category===activeFilter)&&
+    (!q||(n.text+' '+n.category).toLowerCase().includes(q))
+  );
+
+  $('totalStat').textContent=notes.length;
+  $('reminderStat').textContent=notes.filter(n=>n.date&&!n.done).length;
+  $('categoryStat').textContent=new Set(notes.map(n=>n.category)).size;
+
+  const grid=$('notesGrid');
+
+  const upcoming=filtered
+    .filter(n=>n.date&&!n.done&&new Date(n.date).getTime()>=now)
+    .sort((a,b)=>new Date(a.date)-new Date(b.date));
+
+  const shown = showCompletedNotes
+  ? filtered.filter(n => n.done)
+  : showAllNotes
+    ? filtered.filter(n => !n.done)
+    : upcoming.slice(0, 3);
+const noteTexts = {
+  uk: ['Додано', 'Змінити нагадування', '＋ Нагадати', 'Повернути', '✓ Готово'],
+  ru: ['Добавлено', 'Изменить напоминание', '＋ Напомнить', 'Вернуть', '✓ Готово'],
+  de: ['Hinzugefügt', 'Erinnerung ändern', '＋ Erinnern', 'Wiederherstellen', '✓ Erledigt'],
+  fr: ['Ajouté', 'Modifier le rappel', '＋ Rappeler', 'Restaurer', '✓ Terminé'],
+  it: ['Aggiunto', 'Modifica promemoria', '＋ Ricorda', 'Ripristina', '✓ Completato'],
+  en: ['Added', 'Change reminder', '＋ Remind me', 'Restore', '✓ Done'],
+  pl: ['Dodano', 'Zmień przypomnienie', '＋ Przypomnij', 'Przywróć', '✓ Gotowe'],
+  es: ['Añadido', 'Cambiar recordatorio', '＋ Recordar', 'Restaurar', '✓ Hecho']
+};
+
+const nt = noteTexts[appLanguage] || noteTexts.uk;
+const statusTexts = {
+  uk: ['Виконано', 'Не виконано'],
+  ru: ['Выполнено', 'Не выполнено'],
+  de: ['Erledigt', 'Nicht erledigt'],
+  fr: ['Terminé', 'Non terminé'],
+  it: ['Completato', 'Non completato'],
+  en: ['Completed', 'Not done'],
+  pl: ['Ukończono', 'Niewykonane'],
+  es: ['Completado', 'Sin completar']
+};
+const st = statusTexts[appLanguage] || statusTexts.uk;
+const dateLocales = {
+  uk: 'uk-UA',
+  ru: 'ru-RU',
+  de: 'de-DE',
+  fr: 'fr-FR',
+  it: 'it-IT',
+  en: 'en-GB',
+  pl: 'pl-PL',
+  es: 'es-ES'
+};
+const dateLocale = dateLocales[appLanguage] || 'uk-UA';
+const upcomingButton = $('showUpcomingNotes');
+const allButton = $('showAllNotes');
+const completedButton = $('showCompletedNotes');
+
+const viewTexts = {
+  uk: ['Найближчі — три', 'Усі незавершені', '✓ Завершені'],
+  ru: ['Ближайшие — три', 'Все незавершённые', '✓ Завершённые'],
+  de: ['Nächste 3', 'Alle unerledigten', '✓ Erledigt'],
+  fr: ['3 prochaines', 'Toutes les tâches ouvertes', '✓ Terminées'],
+  it: ['Prossime 3', 'Tutti i promemoria attivi', '✓ Completati'],
+  en: ['Next 3', 'All unfinished', '✓ Completed'],
+  pl: ['3 najbliższe', 'Wszystkie niewykonane', '✓ Ukończone'],
+  es: ['Próximos 3', 'Todos los pendientes', '✓ Completadas']
+};
+
+const labels = viewTexts[appLanguage] || viewTexts.uk;
+
+if (upcomingButton) upcomingButton.textContent = labels[0];
+if (allButton) allButton.textContent = labels[1];
+if (completedButton) completedButton.textContent = labels[2];
+  
+if (upcomingButton) {
+  upcomingButton.classList.toggle('active', !showAllNotes && !showCompletedNotes);
+  upcomingButton.setAttribute('aria-pressed', String(!showAllNotes && !showCompletedNotes));
+}
+
+if (allButton) {
+  allButton.classList.toggle('active', showAllNotes);
+  allButton.setAttribute('aria-pressed', String(showAllNotes));
+}
+
+if (completedButton) {
+  completedButton.classList.toggle('active', showCompletedNotes);
+  completedButton.setAttribute('aria-pressed', String(showCompletedNotes));
+}
+
+  if(!shown.length){
+  grid.innerHTML = '<div class="empty">' + (
+    q || activeFilter !== 'Усе'
+      ? (appLanguage === 'ru'
+          ? 'Ничего не найдено.\nПопробуй другой запрос.'
+          : 'Нічого не знайдено.\nСпробуй інший запит.')
+      : showCompletedNotes
+        ? (appLanguage === 'ru'
+            ? 'Завершённых записей пока нет.'
+            : 'Завершених записів поки немає.')
+        : showAllNotes
+          ? (appLanguage === 'ru'
+              ? 'Незавершённых напоминаний пока нет.'
+              : 'Незавершених нагадувань поки немає.')
+          : (appLanguage === 'ru'
+              ? 'Нет предстоящих напоминаний.\nОткрой все записи или добавь новое напоминание.'
+              : 'Немає майбутніх нагадувань.\nВідкрий усі записи або додай нове нагадування.')
+  ) + '</div>';
+  return;
+}
+
+  grid.innerHTML=shown.map(n=>
+    `<article class="note">
+      <div class="note-top">
+<span class="kind">${icons[n.category]||'✦'} ${escapeHtml(
+  categories.find(c => c.value === n.category)?.[appLanguage] || n.category
+)}</span>
+<span class="meta">${n.done
+  ? `<span style="color:green;font-weight:bold">✓ ${st[0]}</span>`
+  : `<span style="color:red;font-weight:bold">● ${st[1]}</span>`}</span>
+      </div>
+      <h3>${escapeHtml(n.text.length>54?n.text.slice(0,54)+'…':n.text)}</h3>
+      ${n.text.length>54?`<p>${escapeHtml(n.text)}</p>`:''}
+      <div class="meta">${n.date ? '⏰ ' + escapeHtml(fmtDate(n.date)) + ' · ' : ''}
+      ${nt[0] + ' '}
+      ${escapeHtml(new Date(n.created).toLocaleDateString(dateLocale))}</div>
+      <div class="note-actions">
+        <button class="secondary" data-action="remind" data-id="${n.id}">${n.date ? nt[1] : nt[2]}</button>
+        <button class="secondary" data-action="done" data-id="${n.id}">${n.done ? nt[3] : nt[4]}</button>
+        <button class="secondary" data-action="delete" data-id="${n.id}">✕</button>
+      </div>
+    </article>`
+  ).join('');
+}
+function openModal(n = null) {
+  editingId = n ? n.id : null;
+
+  const modalTitles = {
+    uk: ['Новий запис', 'Редагувати запис'],
+    ru: ['Новая запись', 'Редактировать запись'],
+    de: ['Neuer Eintrag', 'Eintrag bearbeiten'],
+    fr: ['Nouvelle note', 'Modifier la note'],
+    it: ['Nuova nota', 'Modifica nota'],
+    en: ['New entry', 'Edit entry'],
+    pl: ['Nowy wpis', 'Edytuj wpis'],
+    es: ['Nueva nota', 'Editar nota']
+  };
+
+  const titles = modalTitles[appLanguage] || modalTitles.uk;
+
+  $('modalTitle').textContent = n ? titles[1] : titles[0];
+  $('noteText').value = n ? n.text : '';
+  $('noteCategory').value = n ? n.category : 'Автоматично';
+  $('noteDate').value = n && n.date ? n.date : '';
+  $('modal').classList.add('open');
+  $('noteText').focus();
+}
 function closeModal(){$('modal').classList.remove('open')}
-$('quickAdd').onclick=()=>{$('quickStatus').textContent='';add($('quickInput').value);$('quickInput').value=''};
+window.openReminderNote = function(noteId) {
+  const note = notes.find(n => String(n.id) === String(noteId));
+  if (note) {
+    openModal(note);
+  }
+};
+  $('quickAdd').onclick=()=>{
+  const input=$('quickInput');
+  const result=parseVoiceReminder(input.value);
+  if(!input.value.trim())return;
+  add(result.text,'Автоматично',result.date);
+  input.value='';
+};
 $('quickInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('quickAdd').click()}});
 $('addDetailed').onclick=()=>openModal();
 $('cancelModal').onclick=closeModal;
 $('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
 $('saveNote').onclick=()=>{const text=$('noteText').value.trim();if(!text){$('noteText').focus();return}const category=$('noteCategory').value;const date=$('noteDate').value;if(editingId){const n=notes.find(n=>n.id===editingId);if(n){n.text=text;n.category=category==='Автоматично'?categoryFor(text):category;n.date=date;n.done=false}}else{const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false})}persist();closeModal()};
 $('search').addEventListener('input',render);
-$('filters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;activeFilter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));render()});
+document.querySelector('.categories').addEventListener('click', e => {
+  const b = e.target.closest('[data-filter]');
+  if (!b) return;
+
+  activeFilter = b.dataset.filter;
+  document.querySelectorAll('.category-box').forEach(x =>
+    x.classList.toggle('active', x === b)
+  );
+
+  render();
+  document.querySelector('.section-head')?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+});
+function resetCategoryFilter() {
+  activeFilter = 'Усе';
+
+  document.querySelectorAll('.category-box').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === 'Усе');
+  });
+}
+
+$('showUpcomingNotes').addEventListener('click', () => {
+  showAllNotes = false;
+  showCompletedNotes = false;
+  resetCategoryFilter();
+  render();
+});
+
+$('showAllNotes').addEventListener('click', () => {
+  showAllNotes = true;
+  showCompletedNotes = false;
+  resetCategoryFilter();
+  render();
+});
+
+$('showCompletedNotes').addEventListener('click', () => {
+  showAllNotes = false;
+  showCompletedNotes = true;
+  resetCategoryFilter();
+  render();
+});
 $('notesGrid').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const id=Number(b.dataset.id);const n=notes.find(x=>x.id===id);if(!n)return;if(b.dataset.action==='delete'){if(confirm('Видалити цей запис?')){notes=notes.filter(x=>x.id!==id);persist()}}else if(b.dataset.action==='done'){n.done=!n.done;persist()}else if(b.dataset.action==='remind'){openModal(n)}});
 function backupStatus(message){$('quickStatus').textContent=message;setTimeout(()=>$('quickStatus').textContent='',6000)}
-$('exportBackup').onclick=()=>{try{const payload={format:'pamyatai-backup',version:1,exportedAt:new Date().toISOString(),notes};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='pamyatai-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);backupStatus('Резервну копію створено: '+notes.length+' записів. Збережи файл у надійному місці.')}catch(error){console.error(error);backupStatus('Не вдалося створити резервну копію в цьому середовищі. Спробуй вебверсію в Chrome.')}};
+$('exportBackup').onclick=()=>{try{const payload={format:'pamyatai-backup',version:1,exportedAt:new Date().toISOString(),notes};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='pamyatai-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);backupStatus(`Резервну копію створено: ${notes.length} записів. Збережи файл у надійному місці.`)}catch(error){console.error(error);backupStatus('Не вдалося створити резервну копію в цьому середовищі. Спробуй вебверсію в Chrome.')}};
 $('importBackup').onclick=()=>$('importFile').click();
-$('importFile').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());const incoming=Array.isArray(data)?data:data&&Array.isArray(data.notes)?data.notes:null;if(!incoming)throw new Error('Це не файл резервної копії «Пам’ятай».');const existingKeys=new Set(notes.map(n=>[String(n.text||'').trim().toLowerCase(),String(n.category||''),String(n.date||''),String(n.created||'')].join('\u241f')));const ids=new Set(notes.map(n=>String(n.id)));let added=0,skipped=0;for(const raw of incoming){if(!raw||typeof raw.text!=='string'||!raw.text.trim()){skipped++;continue}const item={...raw,text:raw.text.trim(),category:typeof raw.category==='string'?raw.category:categoryFor(raw.text),date:typeof raw.date==='string'?raw.date:'',created:typeof raw.created==='string'?raw.created:new Date().toISOString(),done:Boolean(raw.done)};const fingerprint=[item.text.toLowerCase(),String(item.category),item.date,item.created].join('\u241f');if(existingKeys.has(fingerprint)){skipped++;continue}if(item.id===undefined||item.id===null||ids.has(String(item.id)))item.id=Date.now()+Math.random();ids.add(String(item.id));existingKeys.add(fingerprint);notes.push(item);added++}persist();backupStatus('Імпорт завершено. Додано: '+added+'. Пропущено повторів або некоректних записів: '+skipped+'.');const nativeReminderButton=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.includes('Увімкнути системні нагадування'));if(nativeReminderButton)nativeReminderButton.click()}catch(error){console.error(error);alert('Не вдалося імпортувати файл. Переконайся, що вибрав JSON-резервну копію з «Пам’ятай». '+error.message)}finally{$('importFile').value=''}});
+$('importFile').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());const incoming=Array.isArray(data)?data:data&&Array.isArray(data.notes)?data.notes:null;if(!incoming)throw new Error('Це не файл резервної копії «Пам’ятай».');const existingKeys=new Set(notes.map(n=>[String(n.text||'').trim().toLowerCase(),String(n.category||''),String(n.date||''),String(n.created||'')].join('\u241f')));const ids=new Set(notes.map(n=>String(n.id)));let added=0,skipped=0;for(const raw of incoming){if(!raw||typeof raw.text!=='string'||!raw.text.trim()){skipped++;continue}const item={...raw,text:raw.text.trim(),category:typeof raw.category==='string'?raw.category:categoryFor(raw.text),date:typeof raw.date==='string'?raw.date:'',created:typeof raw.created==='string'?raw.created:new Date().toISOString(),done:Boolean(raw.done)};const fingerprint=[item.text.toLowerCase(),String(item.category),item.date,item.created].join('\u241f');if(existingKeys.has(fingerprint)){skipped++;continue}if(item.id===undefined||item.id===null||ids.has(String(item.id)))item.id=Date.now()+Math.random();ids.add(String(item.id));existingKeys.add(fingerprint);notes.push(item);added++}persist();backupStatus(`Імпорт завершено. Додано: ${added}. Пропущено повторів або некоректних записів: ${skipped}.`);const nativeReminderButton=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.includes('Увімкнути системні нагадування'));if(nativeReminderButton)nativeReminderButton.click()}catch(error){console.error(error);alert('Не вдалося імпортувати файл. Переконайся, що вибрав JSON-резервну копію з «Пам’ятай». '+error.message)}finally{$('importFile').value=''}});
 function parseVoiceReminder(transcript) {
   const original = transcript.trim();
   let text = original;
@@ -77,53 +1519,613 @@ function parseVoiceReminder(transcript) {
     }
     return false;
   }
+// Відносний час: через годину, дві години або кілька хвилин
+// Через пів години / полчаса
+// Іспанською: півтори години — 90 хвилин
+  console.log('ПЕРЕВІРКА 90 ХВ:', JSON.stringify(text));
+const spanishHourAndHalfMatch = text.match(
+  /(?<![\p{L}\p{N}])dentro\s+de\s+(una\s+hora|dos\s+horas|tres\s+horas)\s+y\s+media(?![\p{L}\p{N}])/iu
+);
+const halfHourMatch = text.match(
+  /(?<![\p{L}\p{N}])(?:через\s+(?:пів\s+години|півгодини|полчаса|половину\s+часа)|in einer halben Stunde|in half an hour|dans une demi-heure|tra mezz'ora|fra mezz'ora|za pół godziny|dentro de media hora|en media hora)(?![\p{L}\p{N}])/iu
+);
+if (spanishHourAndHalfMatch) {
+  const spanishHours = spanishHourAndHalfMatch[1].startsWith('tres')
+  ? 3
+  : spanishHourAndHalfMatch[1].startsWith('dos')
+    ? 2
+    : 1;
+  const totalMinutes = spanishHours * 60 + 30;
 
-  // 1. Відносні дати: завтра, післязавтра, сьогодні
-  if (removePhrase(/(?<![\p{L}\p{N}])післязавтра(?![\p{L}\p{N}])/iu)) {
+  date = new Date(now.getTime() + totalMinutes * 60 * 1000);
+  hasDate = true;
+  hasTime = true;
+  text = text.replace(spanishHourAndHalfMatch[0], ' ');
+  console.log('ТЕКСТ ПІСЛЯ ВИДАЛЕННЯ ІСПАНСЬКОГО ЧАСУ:', JSON.stringify(text));
+}
+  
+if (halfHourMatch) {
+  date = new Date(now.getTime() + 30 * 60 * 1000);
+  hasDate = true;
+  hasTime = true;
+  text = text.replace(halfHourMatch[0], ' ');
+}
+
+const oneHourMatch = text.match(
+  /(?<![\p{L}\p{N}])(?:через\s+годину|через\s+один\s+час|через\s+час|через\s+одну\s+годину|in einer Stunde|in one hour|dans une heure|tra un'ora|fra un'ora|za godzinę|za jedną godzinę|dentro de una hora|en una hora)(?![\p{L}\p{N}])/iu
+);
+
+if (oneHourMatch && !halfHourMatch && !spanishHourAndHalfMatch) {
+  date = new Date(now.getTime() + 60 * 60 * 1000);
+  hasDate = true;
+  hasTime = true;
+  text = text.replace(oneHourMatch[0], ' ');
+}
+   const amounts = {
+  // Українська
+  'один':1,'одна':1,'одне':1,'одну':1,
+  'два':2,'дві':2,'три':3,'чотири':4,'п’ять':5,"п'ять":5,
+  'шість':6,'сім':7,'вісім':8,'дев’ять':9,"дев'ять":9,
+  'десять':10,'одинадцять':11,'дванадцять':12,
+  'тринадцять':13,'чотирнадцять':14,'п’ятнадцять':15,
+  "п'ятнадцять":15,'шістнадцять':16,'сімнадцять':17,
+  'вісімнадцять':18,'дев’ятнадцять':19,"дев'ятнадцять":19,
+  'двадцять':20,
+  'двадцять один':21,'двадцять два':22,'двадцять три':23,
+  'двадцять чотири':24,'двадцять п’ять':25,"двадцять п'ять":25,
+  'двадцять шість':26,'двадцять сім':27,'двадцять вісім':28,
+  'двадцять дев’ять':29,"двадцять дев'ять":29,'тридцять':30,
+
+  // Російська
+  'один':1,'одна':1,'одно':1,'одну':1,
+  'два':2,'две':2,'три':3,'четыре':4,'пять':5,'шесть':6,
+  'семь':7,'восемь':8,'девять':9,'десять':10,
+  'одиннадцать':11,'двенадцать':12,'тринадцать':13,
+  'четырнадцать':14,'пятнадцать':15,'шестнадцать':16,
+  'семнадцать':17,'восемнадцать':18,'девятнадцать':19,
+  'двадцать':20,
+  'двадцать один':21,'двадцать два':22,'двадцать три':23,
+  'двадцать четыре':24,'двадцать пять':25,'двадцать шесть':26,
+  'двадцать семь':27,'двадцать восемь':28,'двадцать девять':29,
+  'тридцать':30,
+
+  // Німецька
+  'eins':1,'ein':1,'eine':1,'einen':1,'zwei':2,'drei':3,
+  'vier':4,'fünf':5,'sechs':6,'sieben':7,'acht':8,'neun':9,
+  'zehn':10,'elf':11,'zwölf':12,'dreizehn':13,'vierzehn':14,
+  'fünfzehn':15,'sechzehn':16,'siebzehn':17,'achtzehn':18,
+  'neunzehn':19,'zwanzig':20,
+  'einundzwanzig':21,'zweiundzwanzig':22,'dreiundzwanzig':23,
+  'vierundzwanzig':24,'fünfundzwanzig':25,'sechsundzwanzig':26,
+  'siebenundzwanzig':27,'achtundzwanzig':28,'neunundzwanzig':29,
+  'dreißig':30,
+
+  // Англійська
+  'one':1,'two':2,'three':3,'four':4,'five':5,'six':6,
+  'seven':7,'eight':8,'nine':9,'ten':10,'eleven':11,'twelve':12,
+  'thirteen':13,'fourteen':14,'fifteen':15,'sixteen':16,
+  'seventeen':17,'eighteen':18,'nineteen':19,'twenty':20,
+  'twenty-one':21,'twenty one':21,'twenty-two':22,'twenty two':22,
+  'twenty-three':23,'twenty three':23,'twenty-four':24,'twenty four':24,
+  'twenty-five':25,'twenty five':25,'twenty-six':26,'twenty six':26,
+  'twenty-seven':27,'twenty seven':27,'twenty-eight':28,'twenty eight':28,
+  'twenty-nine':29,'twenty nine':29,'thirty':30,
+
+  // Французька
+  'un':1,'une':1,'deux':2,'trois':3,'quatre':4,'cinq':5,
+  'six':6,'sept':7,'huit':8,'neuf':9,'dix':10,'onze':11,
+  'douze':12,'treize':13,'quatorze':14,'quinze':15,
+  'seize':16,'dix-sept':17,'dix-huit':18,'dix-neuf':19,
+  'vingt':20,'vingt et un':21,'vingt-et-un':21,
+  'vingt et une':21,'vingt une':21,'vingt deux':22,'vingt trois':23,
+  'vingt quatre':24,'vingt cinq':25,'vingt six':26,
+  'vingt sept':27,'vingt huit':28,'vingt neuf':29, 'vingt-deux':22,'vingt-trois':23,
+  'vingt-quatre':24,'vingt-cinq':25,'vingt-six':26,
+  'vingt-sept':27,'vingt-huit':28,'vingt-neuf':29,'trente':30,
+
+  // Італійська
+  'uno':1,'una':1,'due':2,'tre':3,'quattro':4,'cinque':5,
+  'sei':6,'sette':7,'otto':8,'nove':9,'dieci':10,'undici':11,
+  'dodici':12,'tredici':13,'quattordici':14,'quindici':15,
+  'sedici':16,'diciassette':17,'diciotto':18,'diciannove':19,
+  'venti':20,'ventuno':21,'ventidue':22,'ventitré':23,
+  'ventiquattro':24,'venticinque':25,'ventisei':26,
+  'ventisette':27,'ventotto':28,'ventinove':29,'trenta':30,
+
+  // Польська
+  'jeden':1,'jedna':1,'jedno':1,'jedną':1,
+  'dwa':2,'dwie':2,'trzy':3,'cztery':4,'pięć':5,'piec':5,'sześć':6,'szesc':6,
+  'siedem':7,'osiem':8,'dziewięć':9,'dziewiec':9,'dziesięć':10,'dziesiec':10,
+  'jedenaście':11,'dwanaście':12,'trzynaście':13,
+  'czternaście':14,'piętnaście':15,'szesnaście':16,
+  'siedemnaście':17,'osiemnaście':18,'dziewiętnaście':19,
+  'dwadzieścia':20,
+  'dwadzieścia jeden':21,'dwadzieścia dwa':22,
+  'dwadzieścia trzy':23,'dwadzieścia cztery':24,
+  'dwadzieścia pięć':25,'dwadzieścia sześć':26,
+  'dwadzieścia siedem':27,'dwadzieścia osiem':28,
+  'dwadzieścia dziewięć':29,'trzydzieści':30,
+
+  // Іспанська
+  'uno':1,'una':1,'un':1,'dos':2,'tres':3,'cuatro':4,
+  'cinco':5,'seis':6,'siete':7,'ocho':8,'nueve':9,'diez':10,
+  'once':11,'doce':12,'trece':13,'catorce':14,'quince':15,
+  'dieciséis':16,'diecisiete':17,'dieciocho':18,
+  'diecinueve':19,'veinte':20,'veintiuno':21,'veintiún':21,
+  'veintidós':22,'veintitrés':23,'veinticuatro':24,
+  'veinticinco':25,'veintiséis':26,'veintisiete':27,
+  'veintiocho':28,'veintinueve':29,'treinta':30,
+  'treinta y uno':31,'treinta y dos':32,
+  'treinta y tres':33,'treinta y cuatro':34,
+  'treinta y cinco':35,'treinta y seis':36,
+  'treinta y siete':37,'treinta y ocho':38,
+  'treinta y nueve':39,
+  'cuarenta':40,'cuarenta y uno':41,'cuarenta y dos':42,
+  'cuarenta y tres':43,'cuarenta y cuatro':44,
+  'cuarenta y cinco':45,'cuarenta y seis':46,
+  'cuarenta y siete':47,'cuarenta y ocho':48,
+  'cuarenta y nueve':49,'cincuenta':50,
+  'cincuenta y uno':51,'cincuenta y dos':52,
+  'cincuenta y tres':53,'cincuenta y cuatro':54,
+  'cincuenta y cinco':55,'cincuenta y seis':56,
+  'cincuenta y siete':57,'cincuenta y ocho':58,
+  'cincuenta y nueve':59,
+  'sesenta':60,'sesenta y uno':61,
+  'sesenta y dos':62,'sesenta y tres':63,
+  'sesenta y cuatro':64,'sesenta y cinco':65,
+  'sesenta y seis':66,'sesenta y siete':67,
+  'sesenta y ocho':68,'sesenta y nueve':69,
+   
+// Іспанські числа від 70 до 99
+'setenta':70,'setenta y uno':71,
+'setenta y dos':72,'setenta y tres':73,
+'setenta y cuatro':74,'setenta y cinco':75,
+'setenta y seis':76,'setenta y siete':77,
+'setenta y ocho':78,'setenta y nueve':79,
+
+'ochenta':80,'ochenta y uno':81,
+'ochenta y dos':82,'ochenta y tres':83,
+'ochenta y cuatro':84,'ochenta y cinco':85,
+'ochenta y seis':86,'ochenta y siete':87,
+'ochenta y ocho':88,'ochenta y nueve':89,
+
+'noventa':90,'noventa y uno':91,
+'noventa y dos':92,'noventa y tres':93,
+'noventa y cuatro':94,'noventa y cinco':95,
+'noventa y seis':96,'noventa y siete':97,
+'noventa y ocho':98,'noventa y nueve':99,
+  
+  // Цифри
+  '1':1,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,
+  '10':10,'11':11,'12':12,'13':13,'14':14,'15':15,
+  '16':16,'17':17,'18':18,'19':19,'20':20,'21':21,
+  '22':22,'23':23,'24':24,'25':25,'26':26,'27':27,
+  '28':28,'29':29,'30':30
+};
+  
+ const amountPattern = Object.keys(amounts)
+  .sort((a, b) => b.length - a.length)
+  .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  .join('|');
+
+
+const relativeTimeMatch = text.match(
+  new RegExp(
+    '(?<![\\p{L}\\p{N}])(?:через|за|in|dans|tra|fra|dentro de|en)\\s+(?:(' +
+    amountPattern +
+    ')\\s+)?(годину|години|годин|год|час|часа|часов|stunde|stunden|hour|hours|hr|heure|heures|ora|ore|hora|horas|godzinę|godzina|godziny|godzin|minutę|хвилину|хвилини|хвилин|хв|минуту|минуты|минут|минута|minute|minutes|min|minuten|minuti|minuta|minuty|minuto|minutos)(?![\\p{L}\\p{N}])',
+    'iu'
+  )
+);
+
+  if (relativeTimeMatch && !halfHourMatch && !oneHourMatch && !spanishHourAndHalfMatch) {
+    const amountWord = (relativeTimeMatch[1] || '1')
+      .toLowerCase();
+
+    const unit = relativeTimeMatch[2].toLowerCase();
+
+   
+
+    const amount = /^\d+$/.test(amountWord)
+      ? Number(amountWord)
+      : amounts[amountWord];
+
+    const isMinutes = [
+  // Українська
+  'хвилину', 'хвилини', 'хвилин', 'хв',
+
+  // Російська
+  'минуту', 'минуты', 'минут', 'минута',
+
+  // Німецька
+  'minute', 'minuten',
+
+  // Англійська
+  'minute', 'minutes', 'min',
+
+  // Французька
+  'minute', 'minutes',
+
+  // Італійська
+  'minuto', 'minuti',
+
+  // Польська
+  'minuta', 'minutę', 'minuty', 'minut',
+
+  // Іспанська
+  'minuto', 'minutos'
+].includes(unit);
+
+    const milliseconds = amount *
+      (isMinutes ? 60 * 1000 : 60 * 60 * 1000);
+
+    date = new Date(now.getTime() + milliseconds);
+
+    hasDate = true;
+    hasTime = true;
+
+    text = text.replace(relativeTimeMatch[0], ' ');
+  }
+  // Іспанською: por la mañana — вранці, а не завтра
+  const spanishMorningMatch = text.match(
+    /(?<![\p{L}\p{N}])por\s+la\s+mañana(?![\p{L}\p{N}])/iu
+  );
+
+  if (spanishMorningMatch) {
+    text = text.replace(spanishMorningMatch[0], ' ');
+    defaultHour = 9;
+  }
+
+  // Німецькою: am Morgen — вранці, а не завтра
+  const germanMorningMatch = text.match(
+    /(?<![\p{L}\p{N}])am\s+Morgen(?![\p{L}\p{N}])/iu
+  );
+
+  if (germanMorningMatch) {
+    text = text.replace(germanMorningMatch[0], ' ');
+    defaultHour = 9;
+    hasDate = true;
+  }
+  
+  // 1. Відносні дати всіма підтримуваними мовами
+  if (removePhrase(/(?<![\p{L}\p{N}])(?:післязавтра|послезавтра|übermorgen|the day after tomorrow|après-demain|dopodomani|pojutrze|pasado mañana)(?![\p{L}\p{N}])/iu)) {
     date.setDate(date.getDate() + 2);
     hasDate = true;
-  } else if (removePhrase(/(?<![\p{L}\p{N}])завтра(?![\p{L}\p{N}])/iu)) {
+ } else if (
+    removePhrase(/(?<![\p{L}\p{N}])(?:завтра|morgen(?:\s+(?:früh|frueh))?|tomorrow|demain|domani|jutro)(?![\p{L}\p{N}])/iu) ||
+    removePhrase(/(?<![\p{L}\p{N}])mañana(?![\p{L}\p{N}])/iu) ||
+    removePhrase(/(?<![\p{L}\p{N}])am\s+nächsten\s+Tag(?![\p{L}\p{N}])/iu)
+  ) {
     date.setDate(date.getDate() + 1);
     hasDate = true;
-  } else if (removePhrase(/(?<![\p{L}\p{N}])сьогодні(?![\p{L}\p{N}])/iu)) {
+  } else if (removePhrase(/(?<![\p{L}\p{N}])(?:сьогодні|сегодня|heute|today|aujourd'hui|aujourd’hui|oggi|dzisiaj|hoy)(?![\p{L}\p{N}])/iu)) {
     hasDate = true;
   }
 
-  // 2. Через одну, дві або три неділі / тижні
-  const weekMatch = text.match(
-    /(?<![\p{L}\p{N}])через\s+(одну|один|дві|два|три|1|2|3)\s+(?:неділю|неділі|тиждень|тижні)(?![\p{L}\p{N}])/iu
+  // 2. Перед вихідними — найближча п’ятниця о 17:00
+  const beforeWeekendMatch = text.match(
+    /(?<![\p{L}\p{N}])(?:перед\s+(?:(?:наступними|следующими)\s+)?(?:вихідними|выходными)|vor\s+(?:dem\s+)?(?:nächsten\s+)?Wochenende|before\s+(?:next\s+)?weekend|avant\s+(?:le\s+)?(?:prochain\s+)?week-end|prima\s+(?:del\s+)?(?:prossimo\s+)?fine\s+settimana|przed\s+(?:następnym\s+)?weekendem|antes\s+del\s+(?:próximo\s+)?fin\s+de\s+semana)(?![\p{L}\p{N}])/iu
+  );
+
+  if (beforeWeekendMatch) {
+    let daysUntilFriday = (5 - now.getDay() + 7) % 7;
+    const fridayAtFive = new Date(now);
+    fridayAtFive.setDate(now.getDate() + daysUntilFriday);
+    fridayAtFive.setHours(17, 0, 0, 0);
+
+   if (fridayAtFive <= now) {
+     fridayAtFive.setDate(fridayAtFive.getDate() + 7);
+   }
+
+    date = new Date(fridayAtFive);
+    hasDate = true;
+    hasTime = true;
+    text = text.replace(beforeWeekendMatch[0], ' ');
+  }
+  // 3. Додавання календарних місяців і років
+ const relativeNumbers = {
+   // Німецькі числа
+  'eins': 1, 'ein': 1, 'eine': 1, 'einen': 1,
+  'einem': 1, 'einer': 1,
+  'zwei': 2,
+  'drei': 3,
+  'vier': 4,
+  'fünf': 5,
+  'sechs': 6,
+  'sieben': 7,
+  'acht': 8,
+  'neun': 9,
+  'zehn': 10,
+  'elf': 11,
+  'zwölf': 12,
+  'один': 1, 'одна': 1, 'одну': 1, 'одного': 1, '1': 1,
+  'два': 2, 'дві': 2, 'две': 2, 'двоє': 2, 'двое': 2, '2': 2,
+  'три': 3, 'троє': 3, 'трое': 3, '3': 3,
+  'чотири': 4, 'четыре': 4, '4': 4,
+  'п’ять': 5, "п'ять": 5, 'пять': 5, '5': 5,
+  'шість': 6, 'шесть': 6, '6': 6,
+  'сім': 7, 'семь': 7, '7': 7,
+  'вісім': 8, 'восемь': 8, '8': 8,
+  'дев’ять': 9, "дев'ять": 9, 'девять': 9, '9': 9,
+  'десять': 10, '10': 10,
+  'одинадцять': 11, 'одиннадцать': 11, '11': 11,
+  'дванадцять': 12, 'двенадцать': 12, '12': 12,
+  'one': 1, 'two': 2, 'three': 3, 'four': 4,
+  'five': 5, 'six': 6, 'seven': 7,
+  'eight': 8, 'nine': 9, 'ten': 10,
+  'eleven': 11, 'twelve': 12,
+  'une': 1, 'un': 1, 'deux': 2, 'trois': 3,
+  'quatre': 4, 'cinq': 5, 'six': 6,
+  'sept': 7, 'huit': 8, 'neuf': 9,
+  'dix': 10, 'onze': 11, 'douze': 12,
+  'una': 1, 'uno': 1, 'due': 2, 'tre': 3,
+  'quattro': 4, 'cinque': 5, 'sei': 6, 'sette': 7,
+  'otto': 8, 'nove': 9, 'dieci': 10,
+  'undici': 11, 'dodici': 12,
+  'jeden': 1, 'jedna': 1, 'jedną': 1,
+  'dwa': 2, 'dwie': 2, 'trzy': 3, 
+  'cztery': 4, 'pięć': 5, 'sześć': 6,
+  'siedem': 7, 'osiem': 8, 'dziewięć': 9,
+  'dziesięć': 10, 'jedenaście': 11, 'jedenascie': 11,
+  'dwanaście': 12, 'dwanascie': 12,
+  'dos': 2, 'tres': 3, 'cuatro': 4, 'cinco': 5,
+  'seis': 6, 'siete': 7, 'ocho': 8, 'nueve': 9,
+  'diez': 10, 'once': 11, 'doce': 12,
+
+// Німецькі числа 13–31
+'dreizehn': 13, 'vierzehn': 14, 'fünfzehn': 15,
+'sechzehn': 16, 'siebzehn': 17, 'achtzehn': 18,
+'neunzehn': 19, 'zwanzig': 20, 'einundzwanzig': 21,
+'zweiundzwanzig': 22, 'dreiundzwanzig': 23,
+'vierundzwanzig': 24, 'fünfundzwanzig': 25,
+'sechsundzwanzig': 26, 'siebenundzwanzig': 27,
+'achtundzwanzig': 28, 'neunundzwanzig': 29,
+'dreißig': 30, 'einunddreißig': 31,
+
+// Англійські числа 13–31
+'thirteen': 13, 'fourteen': 14, 'fifteen': 15,
+'sixteen': 16, 'seventeen': 17, 'eighteen': 18,
+'nineteen': 19, 'twenty': 20, 'twenty-one': 21,
+'twenty one': 21, 'twenty-two': 22, 'twenty two': 22,
+'twenty-three': 23, 'twenty three': 23,
+'twenty-four': 24, 'twenty four': 24,
+'twenty-five': 25, 'twenty five': 25,
+'twenty-six': 26, 'twenty six': 26,
+'twenty-seven': 27, 'twenty seven': 27,
+'twenty-eight': 28, 'twenty eight': 28,
+'twenty-nine': 29, 'twenty nine': 29,
+'thirty': 30, 'thirty-one': 31, 'thirty one': 31,
+
+// Французькі числа 13–31
+'treize': 13, 'quatorze': 14, 'quinze': 15,
+'seize': 16, 'dix-sept': 17, 
+'dix-huit': 18, 'dix-neuf': 19, 'dix sept': 17,
+'dix huit': 18,
+'dix neuf': 19, 'vingt': 20,
+'vingt et un': 21, 'vingt et une': 21,
+'vingt-et-un': 21, 'vingt-et-une': 21,
+'vingt-un': 21, 'vingt une': 21,
+'vingt-deux': 22, 'vingt deux': 22,
+'vingt quatre': 24,
+'vingt cinq': 25,
+'vingt six': 26,
+'vingt sept': 27,
+'vingt huit': 28,
+'vingt neuf': 29, 'vingt trois': 23, 'vingt-trois': 23,
+'vingt-quatre': 24, 'vingt-cinq': 25,
+'vingt-six': 26, 'vingt-sept': 27,
+'vingt-huit': 28, 'vingt-neuf': 29,
+'trente': 30, 'trente et un': 31, 
+'trente-et-un': 31, 
+'trente-un': 31, 'trente un': 31,
+
+// Італійські числа 13–31
+'tredici': 13, 'quattordici': 14, 'quindici': 15,
+'sedici': 16, 'diciassette': 17, 'diciotto': 18,
+'diciannove': 19, 'venti': 20, 'ventuno': 21,
+'ventidue': 22, 'ventitré': 23, 'ventiquattro': 24,
+'venticinque': 25, 'ventisei': 26, 'ventisette': 27,
+'ventotto': 28, 'ventinove': 29, 'trenta': 30,
+'trentuno': 31,
+
+// Польські числа 13–31
+'trzynaście': 13, 'czternaście': 14, 'piętnaście': 15,
+'szesnaście': 16, 'siedemnaście': 17, 'osiemnaście': 18,
+'dziewiętnaście': 19, 'dwadzieścia': 20,
+'dwadzieścia jeden': 21, 'dwadzieścia dwa': 22,
+'dwadzieścia trzy': 23, 'dwadzieścia cztery': 24,
+'dwadzieścia pięć': 25, 'dwadzieścia sześć': 26,
+'dwadzieścia siedem': 27, 'dwadzieścia osiem': 28,
+'dwadzieścia dziewięć': 29, 'trzydzieści': 30,
+'trzydzieści jeden': 31,
+
+// Польські числа без діакритики
+'piec': 5, 'szesc': 6, 'dziewiec': 9, 'dziesiec': 10,
+'jedenascie': 11, 'dwanascie': 12,
+'trzynascie': 13, 'czternascie': 14, 'pietnascie': 15,
+'szesnascie': 16, 'siedemnascie': 17, 'osiemnascie': 18,
+'dziewietnascie': 19,
+'dwadziescia': 20,
+'dwadziescia jeden': 21, 'dwadziescia dwa': 22,
+'dwadziescia trzy': 23, 'dwadziescia cztery': 24,
+'dwadziescia pięć': 25, 'dwadziescia piec': 25,
+'dwadziescia sześć': 26, 'dwadziescia szesc': 26,
+'dwadziescia siedem': 27, 'dwadziescia osiem': 28,
+'dwadziescia dziewięć': 29, 'dwadziescia dziewiec': 29,
+'trzydziesci': 30, 'trzydziesci jeden': 31,
+
+// Іспанські числа 13–31
+'trece': 13, 'catorce': 14, 'quince': 15,
+'dieciséis': 16, 'dieciseis': 16,
+'diecisiete': 17, 'dieciocho': 18,
+'diecinueve': 19, 'veinte': 20, 'veintiuno': 21,
+'veintidós': 22, 'veintidos': 22,
+'veintitrés': 23, 'veintitres': 23,
+'veinticuatro': 24, 'veinticinco': 25,
+'veintiséis': 26, 'veintiseis': 26,
+'veintisiete': 27, 'veintiocho': 28,
+'veintinueve': 29, 'treinta': 30,
+'treinta y uno': 31,
+
+// Українські числа 13–31
+'тринадцять': 13, 'чотирнадцять': 14, 'п’ятнадцять': 15,
+"п'ятнадцять": 15, 'шістнадцять': 16, 'сімнадцять': 17,
+'вісімнадцять': 18, 'дев’ятнадцять': 19,
+"дев'ятнадцять": 19, 'двадцять': 20,
+'двадцять один': 21, 'двадцять два': 22,
+'двадцять три': 23, 'двадцять чотири': 24,
+'двадцять п’ять': 25, "двадцять п'ять": 25, 'двадцять пять': 25,
+'двадцять шість': 26, 'двадцять сім': 27,
+'двадцять вісім': 28, 'двадцять дев’ять': 29, 'двадцять девять': 29,
+'тридцять': 30, 'тридцять один': 31,
+
+
+// Російські числа 13–31
+'тринадцать': 13, 'четырнадцать': 14, 'пятнадцать': 15,
+'шестнадцать': 16, 'семнадцать': 17, 'восемнадцать': 18,
+'девятнадцать': 19, 'двадцать': 20,
+'двадцать один': 21, 'двадцать два': 22,
+'двадцать три': 23, 'двадцать четыре': 24,
+'двадцать пять': 25, 'двадцать шесть': 26,
+'двадцать семь': 27, 'двадцать восемь': 28,
+'двадцать девять': 29, 'тридцать': 30,
+'тридцать один': 31
+};
+  
+ const relativeDayMatch = text.match(
+  /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|одного|два|дві|две|двоє|двое|три|троє|трое|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|тринадцять|тринадцать|чотирнадцять|четырнадцать|п’ятнадцять|п'ятнадцять|пятнадцать|шістнадцять|шестнадцать|сімнадцять|семнадцать|вісімнадцять|восемнадцать|дев’ятнадцять|дев'ятнадцять|девятнадцать|двадцять|тридцять|двадцять\s+(?:один|два|три|чотири|п’ять|п'ять|шість|сім|вісім|дев’ять)|двадцать\s+(?:один|два|три|четыре|пять|шесть|семь|восемь|девять)|тридцять\s+один|тридцать\s+один|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|dreizehn|vierzehn|fünfzehn|sechzehn|siebzehn|achtzehn|neunzehn|zwanzig|einundzwanzig|zweiundzwanzig|dreiundzwanzig|vierundzwanzig|fünfundzwanzig|sechsundzwanzig|siebenundzwanzig|achtundzwanzig|neunundzwanzig|dreißig|einunddreißig|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|twenty[-\s](?:one|two|three|four|five|six|seven|eight|nine)|thirty|thirty[-\s]one|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|dix[-\s]sept|dix[-\s]huit|dix[-\s]neuf|vingt|vingt(?:[-\s]et)?[-\s](?:un|une)|vingt[-\s](?:deux|trois|quatre|cinq|six|sept|huit|neuf)|trente|trente(?:[-\s]et)?[-\s]un|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|tredici|quattordici|quindici|sedici|diciassette|diciotto|diciannove|venti|ventuno|ventidue|ventitré|ventiquattro|venticinque|ventisei|ventisette|ventotto|ventinove|trenta|trentuno|jeden|jedna|jedną|jedno|dwa|dwie|dwóch|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|jedenaście|jedenascie|dwanaście|dwanascie|trzynaście|trzynascie|czternaście|czternascie|piętnaście|pietnascie|szesnaście|szesnascie|siedemnaście|siedemnascie|osiemnaście|osiemnascie|dziewiętnaście|dziewietnascie|dwadzieścia|dwadziescia|dwadzieścia\s+(?:jeden|dwa|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec)|dwadziescia\s+(?:jeden|dwa|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec)|trzydzieści|trzydziesci|trzydzieści\s+jeden|trzydziesci\s+jeden|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|veinte|veintiuno|veintidós|veintidos|veintitrés|veintitres|veinticuatro|veinticinco|veintiséis|veintiseis|veintisiete|veintiocho|veintinueve|treinta|treinta\s+y\s+uno|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31)\s+)?(день|дня|днів|дні|доба|добу|доби|діб|дней|сутки|суток|Tag|Tage|Tagen|day|days|jour|jours|giorno|giorni|dzień|dni|dnia|dniu|días|dias|día)(?![\p{L}\p{N}])/iu
+ );
+
+  if (relativeDayMatch) {
+    const word = (relativeDayMatch[1] || '1').toLowerCase();
+   
+   const daysToAdd = /^\d+$/.test(word)
+  ? Number(word)
+  : relativeNumbers[word];
+
+    if (daysToAdd) {
+      date.setDate(date.getDate() + daysToAdd);
+      hasDate = true;
+      text = text.replace(relativeDayMatch[0], ' ');
+    }
+  }
+   const weekMatch = text.match(
+    /(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(одну|один|одна|дві|две|два|три|eine|einen|einer|ein|zwei|drei|one|two|three|un|une|deux|trois|una|uno|due|tre|dos|tres|jeden|jedna|jedną|dwa|dwie|trzy|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели|Woche|Wochen|week|weeks|semaine|semaines|settimana|settimane|tydzień|tygodnie|tygodni|semana|semanas)(?![\p{L}\p{N}])/iu
   );
 
   if (weekMatch) {
     const word = weekMatch[1].toLowerCase();
-    const weeks = ({
-      'одну': 1, 'один': 1, '1': 1,
-      'дві': 2, 'два': 2, '2': 2,
-      'три': 3, '3': 3
-    })[word];
 
-    date.setDate(date.getDate() + weeks * 7);
-    hasDate = true;
-    text = text.replace(weekMatch[0], ' ');
+   const weeks = ({
+  'одну': 1, 'один': 1, 'одна': 1, '1': 1,
+  'дві': 2, 'две': 2, 'два': 2, '2': 2,
+  'три': 3, '3': 3,
+
+  'eine': 1, 'einen': 1, 'einer': 1, 'ein': 1,
+  'zwei': 2, 'drei': 3,
+
+  'one': 1, 'two': 2, 'three': 3,
+
+  'un': 1, 'une': 1, 'deux': 2, 'trois': 3,
+
+  'una': 1, 'uno': 1, 'due': 2, 'tre': 3,
+  'dos': 2, 'tres': 3,
+
+  'jeden': 1, 'jedna': 1, 'jedną': 1,
+  'dwa': 2, 'dwie': 2, 'trzy': 3
+})[word];
+
+    if (weeks) {
+      date.setDate(date.getDate() + weeks * 7);
+      hasDate = true;
+      text = text.replace(weekMatch[0], ' ');
+   }
   } else if (
-    removePhrase(/(?<![\p{L}\p{N}])через\s+(?:неділю|тиждень)(?![\p{L}\p{N}])/iu)
+    removePhrase(/(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:неділю|тиждень|неделю|Woche|week|semaine|settimana|tydzień|semana)(?![\p{L}\p{N}])|(?<![\p{L}\p{N}])(?:nächste\s+Woche|in\s+der\s+nächsten\s+Woche|kommende\s+Woche|in\s+der\s+kommenden\s+Woche|наступного\s+тижня|на\s+наступному\s+тижні|на\s+следующей\s+неделе|next\s+week|the\s+following\s+week|la\s+semaine\s+prochaine|la\s+settimana\s+prossima|w\s+przyszłym\s+tygodniu|w\s+przyszlym\s+tygodniu|w\s+następnym\s+tygodniu|w\s+nastepnym\s+tygodniu|la\s+próxima\s+semana|la\s+proxima\s+semana)(?![\p{L}\p{N}])/iu)
   ) {
     date.setDate(date.getDate() + 7);
     hasDate = true;
   }
 
-  // 3. Через місяць — один календарний місяць
-  if (removePhrase(/(?<![\p{L}\p{N}])через\s+місяць(?![\p{L}\p{N}])/iu)) {
-    const day = date.getDate();
-    date.setDate(1);
-    date.setMonth(date.getMonth() + 1);
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-    date.setDate(Math.min(day, lastDay));
+// Правильне додавання календарних місяців
+function addCalendarMonths(baseDate, monthsToAdd) {
+  const result = new Date(baseDate);
+  const originalDay = result.getDate();
+
+  result.setDate(1);
+  result.setMonth(result.getMonth() + monthsToAdd);
+
+  const lastDay = new Date(
+    result.getFullYear(),
+    result.getMonth() + 1,
+    0
+  ).getDate();
+
+  result.setDate(Math.min(originalDay, lastDay));
+
+  return result;
+}
+
+ // Французькою та італійською: наступного року
+const nextYearMatch = text.match(
+  /(?<![\p{L}\p{N}])(?:l['’]année\s+prochaine|l['’]anno\s+prossimo)(?![\p{L}\p{N}])/iu
+);
+
+if (nextYearMatch) {
+  date = addCalendarMonths(date, 12);
+  hasDate = true;
+  text = text.replace(nextYearMatch[0], ' ');
+} 
+
+// Через один, два, три та інші роки
+const relativeYearMatch = text.match(
+  /(?<![\p{L}\p{N}])(?:(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|jeden|jedna|jedną|dwa|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce)\s+)?|(?:im\s+(?:nächsten|kommenden)|nächstes|kommendes|наступного|в\s+следующем|next|w\s+przyszłym|el\s+próximo)\s+)(рік|роки|років|року|год|года|году|лет|Jahr|Jahren|year|years|an|ans|année|années|anno|anni|rok|roku|lata|lat|año|años)(?![\p{L}\p{N}])/iu
+);
+
+if (relativeYearMatch) {
+  const word = (relativeYearMatch[1] || '1').toLowerCase();
+  const yearsToAdd = /^\d+$/.test(word)
+   ? Number(word)
+   : relativeNumbers[word];
+
+  if (yearsToAdd) {
+    date = addCalendarMonths(date, yearsToAdd * 12);
     hasDate = true;
+    text = text.replace(relativeYearMatch[0], ' ');
   }
+}
+
+// Через пів року або полгода
+const halfYearMatch = text.match(
+  /(?<![\p{L}\p{N}])(?:через\s+(?:пів\s+року|півроку|полгода|пол\s+года)|in\s+einem\s+halben\s+Jahr|in\s+half\s+a\s+year|dans\s+six\s+mois|tra\s+sei\s+mesi|za\s+pół\s+roku|en\s+seis\s+meses)(?![\p{L}\p{N}])/iu
+);
+
+if (halfYearMatch) {
+  date = addCalendarMonths(date, 6);
+  hasDate = true;
+  text = text.replace(halfYearMatch[0], ' ');
+}
+// Через один, два, три та інші місяці
+const relativeMonthMatch = text.match(
+ /(?<![\p{L}\p{N}])(?:(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|jeden|jedna|jedną|dwa|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|jedenaście|jedenascie|dwanaście|dwanascie|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce)\s+)?(?:місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten|month|months|mois|mese|mesi|miesiąc|miesiąca|miesiącu|miesięcy|miesiące|mes|meses)|(?:(?:im\s+)?(?:nächsten|nächste|kommenden)\s+Monat|next\s+month|the\s+coming\s+month|le\s+mois\s+prochain|dans\s+le\s+mois\s+prochain|il\s+prossimo\s+mese|nel\s+prossimo\s+mese|w\s+przyszłym\s+miesiącu|w\s+przyszlym\s+miesiacu|el\s+próximo\s+mes|el\s+proximo\s+mes|próximo\s+mes|proximo\s+mes))(?![\p{L}\p{N}])/iu
+);
+
+if (relativeMonthMatch) {
+  const word = (relativeMonthMatch[1] || '1').toLowerCase();
+  const monthsToAdd = /^\d+$/.test(word)
+  ? Number(word)
+  : relativeNumbers[word];
+
+  if (monthsToAdd) {
+    date = addCalendarMonths(date, monthsToAdd);
+    hasDate = true;
+    text = text.replace(relativeMonthMatch[0], ' ');
+  }
+}
 
   // 4. Назви місяців
-  const months = {
+   const months = {
+    // Українська
     'січня': 0, 'січень': 0,
     'лютого': 1, 'лютий': 1,
     'березня': 2, 'березень': 2,
@@ -135,56 +2137,406 @@ function parseVoiceReminder(transcript) {
     'вересня': 8, 'вересень': 8,
     'жовтня': 9, 'жовтень': 9,
     'листопада': 10, 'листопад': 10,
-    'грудня': 11, 'грудень': 11
+    'грудня': 11, 'грудень': 11,
+
+    // Російська
+    'января': 0, 'январь': 0,
+    'февраля': 1, 'февраль': 1,
+    'марта': 2, 'март': 2,
+    'апреля': 3, 'апрель': 3,
+    'мая': 4, 'май': 4,
+    'июня': 5, 'июнь': 5,
+    'июля': 6, 'июль': 6,
+    'августа': 7, 'август': 7,
+    'сентября': 8, 'сентябрь': 8,
+    'октября': 9, 'октябрь': 9,
+    'ноября': 10, 'ноябрь': 10,
+    'декабря': 11, 'декабрь': 11,
+
+    // Німецька
+    'januar': 0, 'februar': 1, 'märz': 2, 'maerz': 2,
+    'april': 3, 'mai': 4, 'juni': 5,
+    'juli': 6, 'august': 7, 'september': 8,
+    'oktober': 9, 'november': 10, 'dezember': 11,
+
+   // Англійська — повні та скорочені назви
+   'january': 0, 'jan': 0,
+   'february': 1, 'feb': 1,
+   'march': 2, 'mar': 2,
+   'april': 3, 'apr': 3,
+   'may': 4,
+   'june': 5, 'jun': 5,
+   'july': 6, 'jul': 6,
+   'august': 7, 'aug': 7,
+   'september': 8, 'sep': 8, 'sept': 8,
+   'october': 9, 'oct': 9,
+   'november': 10, 'nov': 10,
+   'december': 11, 'dec': 11,
+
+    // Французька
+    'janvier': 0, 'janv': 0,
+    'février': 1, 'févr': 1, 'fevrier': 1, 'fevr': 1,
+    'mars': 2,
+    'avril': 3, 'avr': 3,
+    'mai': 4,
+    'juin': 5,
+    'juillet': 6, 'juil': 6,
+    'août': 7, 'aout': 7,
+    'septembre': 8, 'sept': 8,
+    'octobre': 9, 'oct': 9,
+    'novembre': 10, 'nov': 10,
+    'décembre': 11, 'déc': 11, 'decembre': 11, 'dec': 11,
+
+   // Італійська
+   'gennaio': 0, 'gen': 0,
+   'febbraio': 1, 'feb': 1,
+   'marzo': 2, 'mar': 2,
+   'aprile': 3, 'apr': 3,
+   'maggio': 4, 'mag': 4,
+   'giugno': 5, 'giu': 5,
+   'luglio': 6, 'lug': 6,
+   'agosto': 7, 'ago': 7,
+   'settembre': 8, 'set': 8,
+   'ottobre': 9, 'ott': 9,
+   'novembre': 10, 'nov': 10,
+   'dicembre': 11, 'dic': 11,
+
+   // Польська
+   'stycznia': 0, 'styczeń': 0, 'sty': 0,
+   'lutego': 1, 'luty': 1, 'lut': 1,
+   'marca': 2, 'marzec': 2, 'marcu': 2,
+   'kwietnia': 3, 'kwiecień': 3, 'kwietniu': 3, 'kwi': 3,
+   'maja': 4, 'maj': 4, 'maju': 4,
+   'czerwca': 5, 'czerwiec': 5, 'cze': 5,
+   'lipca': 6, 'lipiec': 6, 'lip': 6,
+   'sierpnia': 7, 'sierpień': 7, 'sie': 7,
+   'września': 8, 'wrzesień': 8, 'wrz': 8,
+   'października': 9, 'październik': 9, 'paź': 9, 'paz': 9,
+   'listopada': 10, 'listopad': 10, 'lis': 10,
+   'grudnia': 11, 'grudzień': 11, 'gru': 11,
+
+   // Іспанська
+   'enero': 0, 'ene': 0,
+   'febrero': 1, 'feb': 1,
+   'marzo': 2, 'mar': 2, 
+   'abril': 3, 'abr': 3,
+   'mayo': 4,
+   'junio': 5, 'jun': 5,
+   'julio': 6, 'jul': 6,
+   'agosto': 7, 'ago': 7,
+   'septiembre': 8, 'sep': 8,
+   'octubre': 9, 'oct': 9,
+   'noviembre': 10, 'nov': 10,
+   'diciembre': 11, 'dic': 11
   };
+// Дні місяця, сказані словами
+const dayWords = {
+  'першого': 1, 'першого числа': 1,
+  'другого': 2,
+  'третього': 3,
+  'четвертого': 4, 'четвёртого': 4,
+  'п’ятого': 5, "п'ятого": 5, 'пятого': 5,
+  'шостого': 6,
+  'сьомого': 7,
+  'восьмого': 8,
+  'дев’ятого': 9, "дев'ятого": 9, 'девятого': 9,
+  'десятого': 10,
+  'одинадцятого': 11,
+  'дванадцятого': 12,
+  'тринадцятого': 13,
+  'чотирнадцятого': 14,
+  'п’ятнадцятого': 15, "п'ятнадцятого": 15, 'пятнадцатого': 15,
+  'шістнадцятого': 16,
+  'сімнадцятого': 17,
+  'вісімнадцятого': 18,
+  'дев’ятнадцятого': 19, "дев'ятнадцятого": 19,
+  'двадцятого': 20,
+  'двадцять першого': 21,
+  'двадцять другого': 22,
+  'двадцять третього': 23,
+  'двадцять четвертого': 24,
+  'двадцять п’ятого': 25, "двадцять п'ятого": 25,
+  'двадцять шостого': 26,
+  'двадцять сьомого': 27,
+  'двадцять восьмого': 28,
+  'двадцять дев’ятого': 29, "двадцять дев'ятого": 29,
+  'тридцятого': 30,
+  'тридцять першого': 31,
+   
+  // Російська
+  'первого': 1,
+  'второго': 2,
+  'третьего': 3,
+  'четвертого': 4,
+  'пятого': 5,
+  'шестого': 6,
+  'седьмого': 7,
+  'восьмого': 8,
+  'девятого': 9,
+  'десятого': 10,
+  'одиннадцатого': 11,
+  'двенадцатого': 12,
+  'тринадцатого': 13,
+  'четырнадцатого': 14,
+  'пятнадцатого': 15,
+  'шестнадцатого': 16,
+  'семнадцатого': 17,
+  'восемнадцатого': 18,
+  'девятнадцатого': 19,
+  'двадцатого': 20,
+  'двадцать первого': 21,
+  'двадцать второго': 22,
+  'двадцать третьего': 23,
+  'двадцать четвертого': 24,
+  'двадцать пятого': 25,
+  'двадцать шестого': 26,
+  'двадцать седьмого': 27,
+  'двадцать восьмого': 28,
+  'двадцать девятого': 29,
+  'тридцатого': 30,
+  'тридцать первого': 31,
+  
+  // Німецька
+  'ersten': 1, 'zweiten': 2, 'dritten': 3,
+  'vierten': 4, 'fünften': 5, 'sechsten': 6,
+  'siebten': 7, 'achten': 8, 'neunten': 9,
+  'zehnten': 10, 'elften': 11, 'zwölften': 12,
+  'dreizehnten': 13,
+  'vierzehnten': 14,
+  'fünfzehnten': 15,
+  'sechzehnten': 16,
+  'siebzehnten': 17,
+  'achtzehnten': 18,
+  'neunzehnten': 19,
+  'zwanzigsten': 20,
+  'einundzwanzigsten': 21,
+  'zweiundzwanzigsten': 22,
+  'dreiundzwanzigsten': 23,
+  'vierundzwanzigsten': 24,
+  'fünfundzwanzigsten': 25,
+  'sechsundzwanzigsten': 26,
+  'siebenundzwanzigsten': 27,
+  'achtundzwanzigsten': 28,
+  'neunundzwanzigsten': 29,
+  'dreißigsten': 30,
+  'einunddreißigsten': 31,
 
-  const monthNames = Object.keys(months)
-    .sort((a, b) => b.length - a.length)
-    .join('|');
+  // Англійська
+'first': 1, 'second': 2, 'third': 3,
+'fourth': 4, 'fifth': 5, 'sixth': 6,
+'seventh': 7, 'eighth': 8, 'ninth': 9,
+'tenth': 10, 'eleventh': 11, 'twelfth': 12,
+'thirteenth': 13, 'fourteenth': 14,
+'fifteenth': 15, 'sixteenth': 16,
+'seventeenth': 17, 'eighteenth': 18,
+'nineteenth': 19, 'twentieth': 20,
+'twenty-first': 21, 'twenty first': 21,
+'twenty-second': 22, 'twenty second': 22,
+'twenty-third': 23, 'twenty third': 23,
+'twenty-fourth': 24, 'twenty fourth': 24,
+'twenty-fifth': 25, 'twenty fifth': 25,
+'twenty-sixth': 26, 'twenty sixth': 26,
+'twenty-seventh': 27, 'twenty seventh': 27,
+'twenty-eighth': 28, 'twenty eighth': 28,
+'twenty-ninth': 29, 'twenty ninth': 29,
+'thirtieth': 30, 'thirty-first': 31, 'thirty first': 31,
+  
+  // Французька
+  'premier': 1, 'première': 1, 'deuxième': 2,
+  'troisième': 3, 'quatrième': 4, 'cinquième': 5,
+  'sixième': 6, 'septième': 7, 'huitième': 8,
+  'neuvième': 9, 'dixième': 10, 'onzième': 11,
+  'douzième': 12,
+  'treizième': 13,
+  'quatorzième': 14,
+  'quinzième': 15,
+  'seizième': 16,
+  'dix-septième': 17,
+  'dix-huitième': 18,
+  'dix-neuvième': 19,
+  'vingtième': 20,
+  'vingt et unième': 21,
+  'vingt-deuxième': 22,
+  'vingt-troisième': 23,
+  'vingt-quatrième': 24,
+  'vingt-cinquième': 25,
+  'vingt-sixième': 26,
+  'vingt-septième': 27,
+  'vingt-huitième': 28,
+  'vingt-neuvième': 29,
+  'trentième': 30,
+  'trente et unième': 31,
+   'vingt deux': 22,
+   'vingt quatre': 24,
+   'vingt cinq': 25,
+   'vingt six': 26,
+   'vingt sept': 27,
+   'vingt huit': 28,
+   'vingt neuf': 29,
+   'vingt et deux': 22,
+   'vingt et trois': 23,
+ 
+// Італійська
+'primo': 1, 'secondo': 2, 'terzo': 3,
+'quarto': 4, 'quinto': 5, 'sesto': 6,
+'settimo': 7, 'ottavo': 8, 'nono': 9,
+'decimo': 10, 'undicesimo': 11, 'dodicesimo': 12,
+'tredicesimo': 13, 'quattordicesimo': 14,
+'quindicesimo': 15, 'sedicesimo': 16,
+'diciassettesimo': 17, 'diciottesimo': 18,
+'diciannovesimo': 19, 'ventesimo': 20,
+'ventunesimo': 21, 'ventiduesimo': 22,
+'ventitreesimo': 23, 'ventiquattresimo': 24,
+'venticinquesimo': 25, 'ventiseiesimo': 26,
+'ventisettesimo': 27, 'ventottesimo': 28,
+'ventinovesimo': 29, 'trentesimo': 30,
+'trentunesimo': 31,
 
-  const monthDateRegex = new RegExp(
-    '(?<![\\p{L}\\p{N}])(\\d{1,2})\\s+(' +
-    monthNames +
-    ')(?:\\s+(\\d{4})(?:\\s+року)?)?(?![\\p{L}])',
-    'iu'
-  );
+  // Польська
+  'pierwszego': 1, 'drugiego': 2, 'trzeciego': 3,
+  'czwartego': 4, 'piątego': 5, 'szóstego': 6,
+  'siódmego': 7, 'ósmego': 8, 'dziewiątego': 9,
+  'dziesiątego': 10, 'jedenastego': 11,
+  'dwunastego': 12, 'trzynastego': 13,
+  'czternastego': 14, 'piętnastego': 15,
+  'szesnastego': 16, 'siedemnastego': 17,
+  'osiemnastego': 18, 'dziewiętnastego': 19,
+  'dwudziestego': 20, 'dwudziestego pierwszego': 21,
+  'dwudziestego drugiego': 22,
+  'dwudziestego trzeciego': 23,
+  'dwudziestego czwartego': 24,
+  'dwudziestego piątego': 25,
+  'dwudziestego szóstego': 26,
+  'dwudziestego siódmego': 27,
+  'dwudziestego ósmego': 28,
+  'dwudziestego dziewiątego': 29,
+  'trzydziestego': 30,
+  'trzydziestego pierwszego': 31,
 
-  const monthMatch = text.match(monthDateRegex);
+// Іспанська
+'primero': 1, 'uno': 1, 'una': 1,
+'dos': 2, 'tres': 3, 'cuatro': 4, 'cinco': 5,
+'seis': 6, 'siete': 7, 'ocho': 8, 'nueve': 9,
+'diez': 10, 'once': 11, 'doce': 12,
+'trece': 13, 'catorce': 14, 'quince': 15,
+'dieciséis': 16, 'diecisiete': 17, 'dieciocho': 18,
+'diecinueve': 19, 'veinte': 20,
+'veintiuno': 21, 'veintidós': 22, 'veintitrés': 23,
+'veinticuatro': 24, 'veinticinco': 25, 'veintiséis': 26,
+'veintisiete': 27, 'veintiocho': 28, 'veintinueve': 29,
+'treinta': 30, 'treinta y uno': 31,
+};
 
-  if (monthMatch) {
-    const day = Number(monthMatch[1]);
-    const month = months[monthMatch[2].toLowerCase()];
-    let year = monthMatch[3] ? Number(monthMatch[3]) : now.getFullYear();
+const escapeDateRegex = value =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-    let candidate = new Date(year, month, day);
+const monthNames = Object.keys(months)
+  .sort((a, b) => b.length - a.length)
+  .map(name => escapeDateRegex(name) + '\\.?')
+  .join('|');
 
-    // Якщо дата без року вже минула, беремо наступний рік
-    if (
-      !monthMatch[3] &&
-      candidate < new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    ) {
-      year++;
-      candidate = new Date(year, month, day);
-    }
+const dayWordNames = Object.keys(dayWords)
+  .sort((a, b) => b.length - a.length)
+  .map(escapeDateRegex)
+  .join('|');
 
-    // Перевіряємо, що дата справді існує
-    if (
-      candidate.getFullYear() === year &&
-      candidate.getMonth() === month &&
-      candidate.getDate() === day
-    ) {
-      date = candidate;
-      hasDate = true;
-      text = text.replace(monthMatch[0], ' ');
-    }
+const monthDateRegex = new RegExp(
+  '(?<![\\p{L}\\p{N}])(?:(?:am|el|on)\\s+)?(?:the\\s+)?(' +
+  '\\d{1,2}(?:st|nd|rd|th)?\\.?[,]?|' +
+  dayWordNames +
+  ')(?:\\s+(?:de|of))?\\s+(' +
+  monthNames +
+  ')(?:(?:\\s+(?:de|of))?\\s+(\\d{4})(?:\\s+(?:року|Jahr))?)?(?![\\p{L}])',
+  'iu'
+);
+const monthMatch = text.match(monthDateRegex);
+console.log('Перевірка дати:', text, monthMatch);
+  
+const monthFirstRegex = new RegExp(
+  '(?<![\\p{L}\\p{N}])(?:on\\s+)?(' +
+  monthNames +
+  ')\\s+(' +
+  dayWordNames +
+  '|\\d{1,2}(?:st|nd|rd|th)?)(?:,?\\s+(\\d{4}))?(?![\\p{L}\\p{N}])',
+  'iu'
+);
+
+const monthFirstMatch = text.match(monthFirstRegex);
+console.log('ПЕРЕВІРКА MONTH-FIRST:', monthFirstRegex, monthFirstMatch);
+if (monthMatch || monthFirstMatch) {
+  const matched = monthMatch || monthFirstMatch;
+
+  const dayText = monthMatch
+  ? matched[1].toLowerCase()
+  : matched[2].toLowerCase();
+
+  const monthText = (monthMatch
+    ? matched[2]
+    : matched[1]).toLowerCase().replace(/\.$/, '');
+
+  const day = dayWords[dayText] ?? Number(dayText.replace(/(?:st|nd|rd|th)?[,]?$/i, ''));
+  const month = months[monthText];
+
+  const yearText = matched[3];
+
+  let year = yearText
+    ? Number(yearText)
+    : now.getFullYear();
+
+  let candidate = new Date(year, month, day);
+
+  // Якщо дата без року вже минула, беремо наступний рік
+  if (
+    !yearText &&
+    candidate < new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    )
+  ) {
+    year++;
+    candidate = new Date(year, month, day);
   }
 
-  // 5. Числова дата: 25.10, 25.10.2026, 25/10/2026
-  const numericDateRegex =
-    /(?<![\p{L}\p{N}])(\d{1,2})[./](\d{1,2})(?:[./](\d{4}))?(?![\p{L}\p{N}])/u;
+  // Перевіряємо, що дата справді існує
+  if (
+    candidate.getFullYear() === year &&
+    candidate.getMonth() === month &&
+    candidate.getDate() === day
+  ) {
+    date = candidate;
+    hasDate = true;
+    text = text.replace(matched[0], ' ');
+  }
+}
+// Міжнародний формат дати: YYYY-MM-DD
+const isoDateRegex =
+  /(?<![\p{L}\p{N}])(\d{4})-(\d{2})-(\d{2})(?![\p{L}\p{N}])/u;
 
-  const numericDateMatch = text.match(numericDateRegex);
+const isoDateMatch = text.match(isoDateRegex);
 
+if (isoDateMatch) {
+  const year = Number(isoDateMatch[1]);
+  const month = Number(isoDateMatch[2]) - 1;
+  const day = Number(isoDateMatch[3]);
+
+  const candidate = new Date(year, month, day);
+
+  if (
+    candidate.getFullYear() === year &&
+    candidate.getMonth() === month &&
+    candidate.getDate() === day
+  ) {
+    date = candidate;
+    hasDate = true;
+    text = text.replace(isoDateMatch[0], ' ');
+  }
+}
+  
+const numericDateRegex =
+  /(?<![\p{L}\p{N}])(\d{1,2})[./](\d{1,2})(?:[./](\d{4}))?(?![\p{L}\p{N}])/u;
+
+const numericDateMatch = text.match(numericDateRegex);
   if (numericDateMatch) {
     const day = Number(numericDateMatch[1]);
     const month = Number(numericDateMatch[2]) - 1;
@@ -213,137 +2565,857 @@ function parseVoiceReminder(transcript) {
     }
   }
 
-  // 6. Час цифрами або словами
+   // 6. Час цифрами або словами
   const hourWords = {
+     // Німецькі числівники годин
+  'ein': 1, 'eins': 1, 'eine': 1,
+  'zwei': 2,
+  'drei': 3,
+  'vier': 4,
+  'fünf': 5,
+  'sechs': 6,
+  'sieben': 7,
+  'acht': 8,
+  'neun': 9,
+  'zehn': 10,
+  'elf': 11,
+  'zwölf': 12,
+  'dreizehn': 13,
+  'vierzehn': 14,
+  'fünfzehn': 15,
+  'sechzehn': 16,
+  'siebzehn': 17,
+  'achtzehn': 18,
+  'neunzehn': 19,
+  'zwanzig': 20,
+  'einundzwanzig': 21,
+  'zweiundzwanzig': 22,
+  'dreiundzwanzig': 23,
     'першій': 1, 'першу': 1, 'одній': 1, 'одну': 1,
-    'другій': 2, 'другу': 2,
+    'першій годині': 1,
+    'другій': 2,
     'третій': 3, 'третю': 3,
     'четвертій': 4, 'четверту': 4,
     'пятій': 5, 'п’ятій': 5, "п'ятій": 5,
     'пяту': 5, 'п’яту': 5, "п'яту": 5,
     'шостій': 6, 'шосту': 6,
-    'сьомій': 7, 'сьому': 7,
-    'восьмій': 8, 'восьму': 8,
+    'сьомій': 7, 'сьому': 7, 'сім': 7,
+    'восьмій': 8, 'восьму': 8, 'вісім': 8,
     'девятій': 9, 'дев’ятій': 9, "дев'ятій": 9,
     'девяту': 9, 'дев’яту': 9, "дев'яту": 9,
-    'десятій': 10, 'десяту': 10,
-    'одинадцятій': 11, 'одинадцяту': 11,
-    'дванадцятій': 12, 'дванадцяту': 12
+    'десятій': 10, 'десяту': 10, 'десять': 10,
+    'одинадцятій': 11, 'одинадцяту': 11, 'одинадцять': 11,
+    'дванадцятій': 12, 'дванадцяту': 12, 'дванадцять': 12,
+    'девятнадцятій': 19, 'дев’ятнадцятій': 19, "дев'ятнадцятій": 19,
+     // Англійські години
+  'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+  'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
+  'eleven': 11, 'twelve': 12, 'thirteen': 13, 'fourteen': 14,
+  'fifteen': 15, 'sixteen': 16, 'seventeen': 17, 'eighteen': 18,
+  'nineteen': 19, 'twenty': 20, 'twenty one': 21,
+  'twenty-one': 21, 'twenty two': 22, 'twenty-two': 22,
+  'twenty three': 23, 'twenty-three': 23,
+
+  // Французькі години
+  'un': 1, 'une': 1, 'deux': 2, 'trois': 3, 'quatre': 4,
+  'cinq': 5, 'six': 6, 'sept': 7, 'huit': 8, 'neuf': 9,
+  'dix': 10, 'onze': 11, 'douze': 12, 'treize': 13,
+  'quatorze': 14, 'quinze': 15, 'seize': 16,
+  'dix-sept': 17, 'dix-huit': 18, 'dix-neuf': 19,
+  'vingt': 20, 'vingt et un': 21, 'vingt et une': 21,
+  'vingt-et-un': 21, 'vingt-et-une': 21,
+  'vingt-un': 21, 'vingt une': 21, 'vingt-deux': 22,
+  'vingt-trois': 23,
+
+  // Італійські години
+  'uno': 1, 'una': 1, 'due': 2, 'tre': 3, 'quattro': 4,
+  'cinque': 5, 'sei': 6, 'sette': 7, 'otto': 8, 'nove': 9,
+  'dieci': 10, 'undici': 11, 'dodici': 12, 'tredici': 13,
+  'quattordici': 14, 'quindici': 15, 'sedici': 16,
+  'diciassette': 17, 'diciotto': 18, 'diciannove': 19,
+  'venti': 20, 'ventuno': 21, 'ventidue': 22, 'ventitré': 23,
+
+  // Польські години
+  'jeden': 1, 'jedna': 1, 'pierwszej': 1,
+  'dwa': 2, 'dwie': 2, 'drugiej': 2,
+  'trzy': 3, 'trzeciej': 3,
+  'cztery': 4, 'czwartej': 4,
+  'pięć': 5, 'piątej': 5,
+  'sześć': 6, 'szóstej': 6,
+  'siedem': 7, 'siódmej': 7,
+  'osiem': 8, 'ósmej': 8,
+  'dziewięć': 9, 'dziewiątej': 9,
+  'dziesięć': 10, 'dziesiątej': 10,
+  'jedenaście': 11, 'jedenastej': 11,
+  'dwanaście': 12, 'dwunastej': 12,
+  'trzynaście': 13, 'trzynastej': 13,
+  'czternaście': 14, 'czternastej': 14,
+  'piętnaście': 15, 'piętnastej': 15,
+  'szesnaście': 16, 'szesnastej': 16,
+  'siedemnaście': 17, 'siedemnastej': 17,
+  'osiemnaście': 18, 'osiemnastej': 18,
+  'dziewiętnaście': 19, 'dziewiętnastej': 19,
+  'dwadzieścia': 20, 'dwudziestej': 20,
+  'dwadzieścia pierwszej': 21, 'dwudziestej pierwszej': 21,
+  'dwadzieścia drugiej': 22, 'dwudziestej drugiej': 22,
+  'dwadzieścia trzeciej': 23, 'dwudziestej trzeciej': 23,
+
+  // Іспанські години
+  'uno': 1, 'una': 1, 'dos': 2, 'tres': 3, 'cuatro': 4,
+  'cinco': 5, 'seis': 6, 'siete': 7, 'ocho': 8, 'nueve': 9,
+  'diez': 10, 'once': 11, 'doce': 12, 'trece': 13,
+  'catorce': 14, 'quince': 15, 'dieciséis': 16,
+  'diecisiete': 17, 'dieciocho': 18, 'diecinueve': 19,
+  'veinte': 20, 'veintiuno': 21, 'veintiuna': 21, 'veintidós': 22,
+  'veintitrés': 23,
+    // Українські години 13–18 та 20–23
+    'тринадцятій': 13, 'тринадцяту': 13, 'тринадцять': 13,
+    'чотирнадцятій': 14, 'чотирнадцяту': 14, 'чотирнадцять': 14,
+    'п’ятнадцятій': 15, "п'ятнадцятій": 15, 'пятнадцятій': 15,
+    'п’ятнадцяту': 15, "п'ятнадцяту": 15, 'пятнадцяту': 15,
+    'шістнадцятій': 16, 'шістнадцяту': 16, 'шістнадцять': 16,
+    'сімнадцятій': 17, 'сімнадцяту': 17, 'сімнадцять': 17,
+    'вісімнадцятій': 18, 'вісімнадцяту': 18, 'вісімнадцять': 18,
+    'двадцятій': 20, 'двадцяту': 20, 'двадцять': 20,
+    'двадцять першій': 21, 'двадцять першої': 21,
+    'двадцять другій': 22, 'двадцять другої': 22,
+    'двадцять третій': 23, 'двадцять третьої': 23,
+    // Російські числівники годин
+    'один': 1, 'одна': 1, 'первый': 1, 'первой': 1, 'первую': 1,
+    'два': 2, 'две': 2, 'второй': 2, 'вторую': 2,
+    'три': 3, 'третий': 3, 'третью': 3,
+    'четыре': 4, 'четвертый': 4, 'четвертую': 4, 'четвёртый': 4, 'четвёртую': 4,
+    'пять': 5, 'пятой': 5, 'пятую': 5, 
+    'шесть': 6, 'шестой': 6, 'шестую': 6,
+    'семь': 7, 'седьмой': 7, 'седьмую': 7,
+    'восемь': 8, 'восьмой': 8, 'восьмую': 8,
+    'девять': 9, 'девятой': 9, 'девятую': 9,
+    'десять': 10, 'десятой': 10, 'десятую': 10,
+    'одиннадцать': 11, 'одиннадцатой': 11, 'одиннадцатую': 11,
+    'двенадцать': 12, 'двенадцатой': 12, 'двенадцатую': 12,
+     // Російські години 13–18 та 20–23
+    'тринадцать': 13, 'тринадцатой': 13, 'тринадцатую': 13,
+    'четырнадцать': 14, 'четырнадцатой': 14, 'четырнадцатую': 14,
+    'пятнадцать': 15, 'пятнадцатой': 15, 'пятнадцатую': 15,
+    'шестнадцать': 16, 'шестнадцатой': 16, 'шестнадцатую': 16,
+    'семнадцать': 17, 'семнадцатой': 17, 'семнадцатую': 17,
+    'восемнадцать': 18, 'восемнадцатой': 18, 'восемнадцатую': 18,
+    'двадцать': 20, 'двадцатой': 20, 'двадцатую': 20,
+    'двадцать первой': 21, 'двадцать первую': 21,
+    'двадцать второй': 22, 'двадцать вторую': 22,
+    'двадцать третьей': 23, 'двадцать третью': 23,
+    'девятнадцать': 19, 'девятнадцатой': 19, 'девятнадцатую': 19,
+    'девятнадцяту': 19, 'дев’ятнадцяту': 19, "дев'ятнадцяту": 19
   };
+
+  const minuteWords = {
+     // Німецькі хвилини
+    'null': 0,
+    'fünf': 5,
+    'zehn': 10,
+    'fünfzehn': 15,
+    'zwanzig': 20,
+    'fünfundzwanzig': 25,
+    'dreißig': 30,
+    'fünfunddreißig': 35,
+    'vierzig': 40,
+    'fünfundvierzig': 45,
+    'fünfzig': 50,
+    'fünfundfünfzig': 55,
+    'нуль': 0,
+    'ноль': 0,
+    'ноль 5': 5, 'нуль 5': 5,
+    'ноль пять': 5,
+    'нуль п’ять': 5, "нуль п'ять": 5,
+    'п’ять': 5, "п'ять": 5, 'пять': 5,
+    'десять': 10,
+    'п’ятнадцять': 15, "п'ятнадцять": 15, 'пятнадцять': 15,
+    'двадцять': 20,
+    'двадцять п’ять': 25, "двадцять п'ять": 25, 'двадцять пять': 25,
+    'тридцять': 30,
+    'тридцять п’ять': 35, "тридцять п'ять": 35, 'тридцять пять': 35,
+    'сорок': 40,
+    'сорок п’ять': 45, "сорок п'ять": 45, 'сорок пять': 45,
+    'п’ятдесят': 50, "п'ятдесят": 50, 'пятдесят': 50, 'пятьдесят': 50,
+    'п’ятдесят п’ять': 55, "п'ятдесят п'ять": 55, 'пятдесят пять': 55, 'пятьдесят пять': 55,
+     // Російські хвилини
+    'пять': 5,
+    'десять': 10,
+    'пятнадцать': 15,
+    // Російські хвилини
+    'двадцать': 20,
+    'двадцать пять': 25,
+    'тридцать': 30,
+    'тридцать пять': 35,
+    'сорок': 40,
+    'сорок пять': 45,
+    'пятьдесят': 50,
+    'пятьдесят пять': 55,
+  // Англійські хвилини
+    'zero': 0,
+    'five': 5,
+    'ten': 10,
+    'fifteen': 15,
+    'twenty': 20,
+    'twenty-five': 25,
+    'thirty': 30,
+    'thirty-five': 35,
+    'forty': 40,
+    'forty-five': 45,
+    'fifty': 50,
+    'fifty-five': 55,
+
+    // Французькі хвилини
+    'zéro': 0,
+    'cinq': 5,
+    'dix': 10,
+    'quinze': 15,
+    'vingt': 20,
+    'vingt-cinq': 25,
+    'trente': 30,
+    'trente-cinq': 35,
+    'quarante': 40,
+    'quarante-cinq': 45,
+    'cinquante': 50,
+    'cinquante-cinq': 55,
+
+    // Італійські хвилини
+    'zero': 0,
+    'cinque': 5,
+    'dieci': 10,
+    'quindici': 15,
+    'venti': 20,
+    'venticinque': 25,
+    'trenta': 30,
+    'trentacinque': 35,
+    'quaranta': 40,
+    'quarantacinque': 45,
+    'cinquanta': 50,
+    'cinquantacinque': 55,
+
+    // Польські хвилини
+    'zero': 0,
+    'pięć': 5,
+    'dziesięć': 10,
+    'piętnaście': 15,
+    'dwadzieścia': 20,
+    'dwadzieścia pięć': 25,
+    'trzydzieści': 30,
+    'trzydzieści pięć': 35,
+    'czterdzieści': 40,
+    'czterdzieści pięć': 45,
+    'pięćdziesiąt': 50,
+    'pięćdziesiąt pięć': 55,
+
+    // Іспанські хвилини
+    'cero': 0,
+    'cinco': 5,
+    'diez': 10,
+    'quince': 15,
+    'veinte': 20,
+    'veinticinco': 25,
+    'treinta': 30,
+    'treinta y cinco': 35,
+    'cuarenta': 40,
+    'cuarenta y cinco': 45,
+    'cincuenta': 50,
+    'cincuenta y cinco': 55, 
+  };
+
+  const periodPattern =
+  '(?:ранку|вранці|вдень|утра|утром|дня|днем|днём|до\\s+обіду|обідом|обіді|після\\s+обіду|после\\s+обеда|вечора|вечір|вечер|увечері|ввечері|вечором|вечером|ночі|ночи|ночью|опівночі|am\\s+Morgen|am\\s+Vormittag|am\\s+Nachmittag|am\\s+Abend|in\\s+der\\s+Nacht|morgens|vormittags|mittags|nachmittags|abends|nachts|a\\.?\\s*m\\.?|p\\.?\\s*m\\.?|in\\s+the\\s+morning|in\\s+the\\s+afternoon|in\\s+the\\s+evening|at\\s+night|in\\s+the\\s+night|le\\s+matin|l’après-midi|l[’\']après-midi|le\\s+soir|la\\s+nuit|di\\s+mattina|di\\s+pomeriggio|pomeriggio|di\\s+sera|di\\s+notte|rano|po\\s+południu|wieczorem|w\\s+nocy|por\\s+la\\s+mañana|por\\s+la\\s+tarde|por\\s+la\\s+noche|de\\s+noche)';
+  const escapeRegex = word =>
+    word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
   const hourPattern = Object.keys(hourWords)
     .sort((a, b) => b.length - a.length)
-    .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .map(escapeRegex)
     .join('|');
 
-  const periodPattern = '(?:ранку|вранці|дня|днем|після\\s+обіду|вечора|увечері|ввечері|вечором|ночі)';
+  const minutePattern = Object.keys(minuteWords)
+    .sort((a, b) => b.length - a.length)
+    .map(escapeRegex)
+    .join('|');
 
-  // Спочатку шукаємо час цифрами: "о 9", "в 11", "о 15:30"
-  let timeMatch = text.match(
+  let timeMatch;
+  let hour;
+  let minute = 0;
+  // Розмовний час: "п'ять по восьмій" = 08:05
+  // Німецький розмовний час: nach, vor, halb, Viertel
+  const germanTimeMatch = text.match(
+    /(?<![\p{L}\p{N}])(?:(\d{1,2}|fünfzehn|fünf|zehn|zwanzig|fünfundzwanzig|dreißig|fünfunddreißig|vierzig|fünfundvierzig|fünfzig|fünfundfünfzig)\s+nach\s+(\d{1,2}|eins|ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)|(?:(\d{1,2}|fünfzehn|fünf|zehn|zwanzig|fünfundzwanzig|dreißig|fünfunddreißig|vierzig|fünfundvierzig|fünfzig|fünfundfünfzig)\s+vor\s+(\d{1,2}|eins|ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf))|halb\s+(\d{1,2}|eins|ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf)|viertel\s+(nach|vor)\s+(\d{1,2}|eins|ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf))(?![\p{L}\p{N}])/iu
+  );
+   if (germanTimeMatch) {
+    const germanNumbers = {
+   'eins': 1, 'ein': 1,
+   'zwei': 2, 'drei': 3, 'vier': 4,
+   'fünf': 5, 'sechs': 6, 'sieben': 7,
+   'acht': 8, 'neun': 9, 'zehn': 10,
+   'elf': 11, 'zwölf': 12,
+   'fünfzehn': 15,
+   'zwanzig': 20,
+   'fünfundzwanzig': 25,
+   'dreißig': 30,
+   'fünfunddreißig': 35,
+   'vierzig': 40,
+   'fünfundvierzig': 45,
+   'fünfzig': 50,
+   'fünfundfünfzig': 55
+   };
+
+    const getGermanNumber = value =>
+      /^\d+$/.test(value)
+        ? Number(value)
+        : germanNumbers[value.toLowerCase()];
+
+    if (germanTimeMatch[1]) {
+      minute = getGermanNumber(germanTimeMatch[1]);
+      hour = getGermanNumber(germanTimeMatch[2]);
+    } else if (germanTimeMatch[3]) {
+      minute = 60 - getGermanNumber(germanTimeMatch[3]);
+      hour = getGermanNumber(germanTimeMatch[4]) - 1;
+    } else if (germanTimeMatch[5]) {
+      minute = 30;
+      hour = getGermanNumber(germanTimeMatch[5]) - 1;
+    } else {
+      minute = germanTimeMatch[6] === 'nach' ? 15 : 45;
+      hour = getGermanNumber(germanTimeMatch[7]);
+
+      if (germanTimeMatch[6] === 'vor') {
+        hour--;
+      }
+    }
+
+    if (hour < 0) hour = 23;
+
+    timeMatch = germanTimeMatch;
+  }
+ const colloquialPastMatch = text.match(
+  /(?<![\p{L}\p{N}])(5|10|15|20|п’ять|п'ять|пять|десять|десят|п’ятнадцять|п'ятнадцять|пятнадцать|двадцять|двадцать)\s+по\s+(1[0-2]|[1-9]|першій|другій|третій|четвертій|п’ятій|п'ятій|шостій|сьомій|восьмій|дев’ятій|дев'ятій|десятій|одинадцятій|дванадцятій|первой|второй|третьей|четвертой|четвёртой|пятой|шестой|седьмой|восьмой|девятой|десятой|одиннадцатой|двенадцатой)(?![\p{L}\p{N}])/iu
+);
+
+  if (colloquialPastMatch && !timeMatch) {
+    const colloquialMinutes = {
+      '5': 5, '10': 10, '15': 15, '20': 20,
+      'п’ять': 5, "п'ять": 5, 'пять': 5,
+      'десять': 10, 'десят': 10,
+      'п’ятнадцять': 15, "п'ятнадцять": 15, 'пятнадцать': 15,
+      'двадцять': 20, 'двадцать': 20
+    };
+
+ const colloquialHours = {
+  // Українська
+  'першій': 1, 'другій': 2, 'третій': 3, 'четвертій': 4,
+  'п’ятій': 5, "п'ятій": 5,
+  'шостій': 6, 'сьомій': 7, 'восьмій': 8,
+  'дев’ятій': 9, "дев'ятій": 9,
+  'десятій': 10, 'одинадцятій': 11, 'дванадцятій': 12,
+
+  // Російська
+  'первой': 1, 'второй': 2, 'третьей': 3,
+  'четвертой': 4, 'четвёртой': 4,
+  'пятой': 5, 'шестой': 6, 'седьмой': 7,
+  'восьмой': 8, 'девятой': 9, 'десятой': 10,
+  'одиннадцатой': 11, 'двенадцатой': 12
+};
+
+      const hourText = colloquialPastMatch[2].toLowerCase();
+    hour = /^\d+$/.test(hourText)
+      ? Number(hourText)
+      : colloquialHours[hourText];
+    minute = colloquialMinutes[colloquialPastMatch[1].toLowerCase()];
+
+    timeMatch = colloquialPastMatch;
+    console.log('РОЗМОВНИЙ ЧАС:', colloquialPastMatch[0], hour, minute);
+  }
+ // Розмовний час: "за п'ять дев'ята" = 08:55
+ const colloquialToMatch = text.match(
+  /(?<![\p{L}\p{N}])за\s+(5|10|15|20|п’ять|п'ять|пять|десять|десят|п’ятнадцять|п'ятнадцять|пятнадцать|двадцять|двадцать)\s+(першої|перша|першу|другої|друга|другу|третьої|третя|третю|четвертої|четверта|четверту|п’ятої|п'ятої|пятой|п’ята|п'ята|пята|шостої|шоста|шосту|сьомої|сьома|сьому|восьмої|восьма|восьму|дев’ятої|дев'ятої|девятой|дев’ята|дев'ята|девята|девяте|дев'яте|десятої|десята|десяту|одинадцятої|одинадцята|одинадцяту|дванадцятої|дванадцята|дванадцяту|первого|первая|первую|второго|вторая|вторую|третьего|третья|третью|четвертого|четвёртого|четвертая|четвёртая|четвертую|четвёртую|пятого|пятая|пятую|шестого|шестая|шестую|седьмого|седьмая|седьмую|восьмого|восьмая|восьмую|девятого|девятая|девятую|десятого|десятая|десятую|одиннадцатого|одиннадцатая|одиннадцатую|двенадцатого|двенадцатая|двенадцатую)(?![\p{L}\p{N}])/iu
+);
+
+  if (colloquialToMatch && !timeMatch) {
+    const minutesTo = {
+      '5': 5, '10': 10, '15': 15, '20': 20,
+      'п’ять': 5, "п'ять": 5, 'пять': 5,
+      'десять': 10, 'десят': 10,
+      'п’ятнадцять': 15, "п'ятнадцять": 15, 'пятнадцать': 15,
+      'двадцять': 20, 'двадцать': 20
+    };
+
+const hoursTo = {
+  // Українська
+  'першої': 1, 'перша': 1, 'першу': 1,
+  'другої': 2, 'друга': 2, 'другу': 2,
+  'третьої': 3, 'третя': 3, 'третю': 3,
+  'четвертої': 4, 'четверта': 4, 'четверту': 4,
+  'п’ятої': 5, "п'ятої": 5,
+  'п’ята': 5, "п'ята": 5,
+  'шостої': 6, 'шоста': 6, 'шосту': 6,
+  'сьомої': 7, 'сьома': 7, 'сьому': 7,
+  'восьмої': 8, 'восьма': 8, 'восьму': 8,
+  'дев’ятої': 9, "дев'ятої": 9,
+  'дев’ята': 9, "дев'ята": 9,
+  'девяте': 9, "дев'яте": 9,
+  'десятої': 10, 'десята': 10, 'десяту': 10,
+  'одинадцятої': 11, 'одинадцята': 11, 'одинадцяту': 11,
+  'дванадцятої': 12, 'дванадцята': 12, 'дванадцяту': 12,
+
+  // Російська
+  'первого': 1, 'первая': 1, 'первую': 1,
+  'второго': 2, 'вторая': 2, 'вторую': 2,
+  'третьего': 3, 'третья': 3, 'третью': 3,
+  'четвертого': 4, 'четвёртого': 4,
+  'четвертая': 4, 'четвёртая': 4, 'четвертую': 4, 'четвёртую': 4,
+  'пятого': 5, 'пятая': 5, 'пятую': 5, 'пятой': 5,
+  'шестого': 6, 'шестая': 6, 'шестую': 6,
+  'седьмого': 7, 'седьмая': 7, 'седьмую': 7,
+  'восьмого': 8, 'восьмая': 8, 'восьмую': 8,
+  'девятого': 9, 'девятая': 9, 'девятую': 9, 'девятой': 9, 'девята': 9,
+  'десятого': 10, 'десятая': 10, 'десятую': 10,
+  'одиннадцатого': 11, 'одиннадцатая': 11, 'одиннадцатую': 11,
+  'двенадцатого': 12, 'двенадцатая': 12, 'двенадцатую': 12
+};
+    hour = (hoursTo[colloquialToMatch[2].toLowerCase()] + 11) % 12;
+    minute = 60 - minutesTo[colloquialToMatch[1].toLowerCase()];
+    timeMatch = colloquialToMatch;
+  }
+
+  // Російський розмовний час:
+  // "без пяти девять" = 08:55
+  // "десять минут двенадцатого" = 11:10
+  // "двадцать минут третьего" = 02:20
+
+  if (!timeMatch) {
+    const russianClockMatch = text.match(
+      /(?<![\p{L}\p{N}])(?:без\s+(5|пять|10|десять|15|пятнадцать|20|двадцать)\s+(?:минут\s+)?(один|одна|два|две|три|четыре|пять|шесть|семь|восемь|девять|десять|одиннадцать|двенадцать|одного|одной|двух|трех|трёх|четырех|четырёх|пяти|шести|семи|восьми|девяти|одиннадцати|двенадцати)|(5|пять|10|десять|15|пятнадцать|20|двадцать)\s+(?:минут\s+)?(первого|второго|третьего|четвертого|четвёртого|пятого|шестого|седьмого|восьмого|девятого|десятого|одиннадцатого|двенадцатого))(?![\p{L}\p{N}])/iu
+    );
+
+    if (russianClockMatch) {
+      const russianMinutes = {
+        '5': 5, 'пять': 5,
+        '10': 10, 'десять': 10,
+        '15': 15, 'пятнадцать': 15,
+        '20': 20, 'двадцать': 20
+      };
+
+      const russianHours = {
+        'один': 1, 'одна': 1, 'одного': 1, 'одной': 1,
+        'два': 2, 'две': 2, 'двух': 2,
+        'три': 3, 'трех': 3, 'трёх': 3,
+        'четыре': 4, 'четырех': 4, 'четырёх': 4,
+        'пять': 5, 'пяти': 5,
+        'шесть': 6, 'шести': 6,
+        'семь': 7, 'семи': 7,
+        'восемь': 8, 'восьми': 8,
+        'девять': 9, 'девяти': 9,
+        'десять': 10, 'десяти': 10,
+        'одиннадцать': 11, 'одиннадцати': 11,
+        'двенадцать': 12, 'двенадцати': 12
+      };
+
+      const russianOrdinalHours = {
+        'первого': 1,
+        'второго': 2,
+        'третьего': 3,
+        'четвертого': 4, 'четвёртого': 4,
+        'пятого': 5,
+        'шестого': 6,
+        'седьмого': 7,
+        'восьмого': 8,
+        'девятого': 9,
+        'десятого': 10,
+        'одиннадцатого': 11,
+        'двенадцатого': 12
+      };
+
+      if (russianClockMatch[1]) {
+        hour = (russianHours[russianClockMatch[2].toLowerCase()] + 11) % 12;
+        minute = 60 - russianMinutes[russianClockMatch[1].toLowerCase()];
+      } else {
+        hour = (russianOrdinalHours[russianClockMatch[4].toLowerCase()] + 11) % 12;
+        minute = russianMinutes[russianClockMatch[3].toLowerCase()];
+      }
+
+      timeMatch = russianClockMatch;
+    }
+  }
+  // Виправляємо цифровий час, коли мікрофон розділяє 08:05 як "8, 0 5"
+   if (!timeMatch) {
+    timeMatch = text.match(
     new RegExp(
-      '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у)\\s*(\\d{1,2})' +
-      '(?:\\s*[:.]\\s*(\\d{2}))?' +
+      '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\\s+las|a\\s+la)\\s*(\\d{1,2})\\s*[,\\s.]+0\\s+([1-9])' +
       '(?:\\s+(' + periodPattern + '))?' +
       '(?![\\p{L}\\p{N}])',
       'iu'
     )
   );
 
-  let hour;
-  let minute = 0;
-
-  if (timeMatch) {
+ if (timeMatch) {
     hour = Number(timeMatch[1]);
-    minute = Number(timeMatch[2] || 0);
-  } else {
-    // Час словами: "о дев'ятій", "в одинадцятій"
+    minute = Number(timeMatch[2]);
+  }
+
+  console.log('ПЕРЕВІРКА ЦИФРОВОГО ЧАСУ:', timeMatch && timeMatch[0], hour, minute);
+}
+    // 1. Час цифрами та хвилинами словами: "о 7 п'ятнадцять"
+  if (!timeMatch) {
     timeMatch = text.match(
       new RegExp(
-        '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у)\\s*(' +
-        hourPattern +
+        '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\\s+las|a\\s+la)\\s*(\\d{1,2})\\s+(' +
+        minutePattern +
         ')(?:\\s+(' + periodPattern + '))?(?![\\p{L}\\p{N}])',
         'iu'
       )
     );
 
     if (timeMatch) {
-      hour = hourWords[timeMatch[1].toLowerCase()];
-      minute = 0;
+      hour = Number(timeMatch[1]);
+      minute = minuteWords[timeMatch[2].toLowerCase()];
     }
   }
 
-  if (timeMatch && Number.isFinite(hour)) {
-    const period = (timeMatch[3] || timeMatch[2] || '').toLowerCase();
+  // Французький цифровий час: "14h", "17h30"
+  if (!timeMatch) {
+    const frenchTimeMatch = text.match(
+      /(?<![\p{L}\p{N}])(?:à\s*)?(\d{1,2})\s*h\s*(\d{2})?(?![\p{L}\p{N}])/iu
+    );
 
+    if (frenchTimeMatch) {
+      hour = Number(frenchTimeMatch[1]);
+      minute = Number(frenchTimeMatch[2] || 0);
+      timeMatch = frenchTimeMatch;
+    }
+  }
+  
+  // 2. Цифровий час: "о 7:15", "о 18:30"
+  if (!timeMatch) {
+    timeMatch = text.match(
+      new RegExp(
+        '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\\s+las|a\\s+la)\\s*(\\d{1,2})' +
+        '(?:\\s*(?:[:,.]\\s*|\\s+)(\\d{1,2}))?' +
+        '(?:\\s+Uhr)?' +
+        '(?:\\s+(' + periodPattern + '))?' +
+        '(?![\\p{L}\\p{N}])',
+        'iu'
+      )
+    );
+
+    if (timeMatch) {
+      hour = Number(timeMatch[1]);
+      minute = Number(timeMatch[2] || 0);
+    }
+  }
+
+    // Цифровий час без прийменника: "22:00", "17:30"
+  if (!timeMatch) {
+    timeMatch = text.match(
+      /(?<![\p{L}\p{N}])(\d{1,2}):(\d{2})(?![\p{L}\p{N}]|:\d)/u
+    );
+
+    if (timeMatch) {
+      hour = Number(timeMatch[1]);
+      minute = Number(timeMatch[2]);
+    }
+  }
+ // Не розпізнаємо числа як час, якщо перед ними вказано ціну
+const priceBeforeNumber = /(?:for|für)\s+(?:an?\s+)?(?:item|article|artikel)?\s*$/iu.test(text.slice(0, text.search(/\b2015\b/i) >= 0 ? text.search(/\b2015\b/i) : 0));
+
+// Не розпізнаємо числа, за якими йдуть назви валют
+if (!timeMatch && !priceBeforeNumber) {
+  timeMatch = text.match(
+    /(?<![\p{L}\p{N}])([01]\d|2[0-3])([0-5]\d)(?!\s*(?:гривень|гривні|гривня|гривню|гривнею|грн|франків|франки|франк|франка|франке|frank|franks|franc|francs|franken|євро|euro|euros|доларів|долари|долар|dollar|dollars|доллара|долларов|pound|pounds|руб|рублів|рублі|рубль|рубля|рублей|рублю|рублём|рублем)(?![\p{L}\p{N}]))(?![\p{L}\p{N}])/iu
+  );
+
+  if (timeMatch) {
+    hour = Number(timeMatch[1]);
+    minute = Number(timeMatch[2]);
+  }
+}
+  
+  // 3. Час словами: "о сьомій п'ятнадцять"
+  if (!timeMatch) {
+    timeMatch = text.match(
+      new RegExp(
+        '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\\s+las|a\\s+la)?\\s*(' +
+         hourPattern +
+        ')' +
+        '(?:\\s+Uhr)?' +
+        '(?:\\s+(' + minutePattern + '))?' +
+        '(?:\\s+(' + periodPattern + '))?' +
+        '(?![\\p{L}\\p{N}])',
+        'iu'
+      )
+    );
+
+    if (timeMatch) {
+      hour = hourWords[timeMatch[1].toLowerCase()];
+      minute = timeMatch[2]
+        ? minuteWords[timeMatch[2].toLowerCase()]
+        : 0;
+    }
+  }
+ // Виправляємо випадок, коли мікрофон розбиває 14:45 на "14 40 п'ять"
+  const splitMinuteMatch = text.match(
+    /(?<![\p{L}\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\s+las|a\s+la)\s*(\d{1,2})[.\s]+\s*40\s+(?:п’ять|п'ять|пять|five|fünf|cinq|cinque|pięć|piec|cinco)(?![\p{L}\p{N}])/iu
+  );
+
+  if (splitMinuteMatch) {
+    timeMatch = splitMinuteMatch;
+    hour = Number(splitMinuteMatch[1]);
+    minute = 45;
+  }
+  if (!relativeTimeMatch && timeMatch && Number.isFinite(hour)) {
+    const periodMatch = timeMatch[0].match(
+    new RegExp('(?:' + periodPattern + ')$', 'iu')
+    );
+    const period = periodMatch ? periodMatch[0].toLowerCase() : '';
+    console.log('ІСПАНСЬКИЙ ПЕРІОД:', period, 'TIME:', timeMatch[0]);
+    // Англійський 12-годинний час AM/PM
+    if (/^p\.?\s*m\.?$/iu.test(period)) {
+      if (hour < 12) hour += 12;
+    } else if (/^a\.?\s*m\.?$/iu.test(period)) {
+      if (hour === 12) hour = 0;
+    }
+    
     if (
-      ['дня', 'днем', 'після обіду', 'вечора', 'увечері', 'ввечері', 'вечором'].includes(period) &&
-      hour < 12
-    ) {
-      hour += 12;
-    }
+[
+  // Українська
+  'дня', 'днем', 'днём',
+  'після обіду', 'обідом', 'обіді',
+  'вечора', 'вечір', 'увечері', 'ввечері', 'вечором',
 
-    if (period === 'ночі' && hour === 12) {
-      hour = 0;
-    }
+  // Російська
+  'после обеда', 'вечер', 'вечером',
+
+  // Німецька
+  'nachmittags', 'abends',
+  'am nachmittag', 'am abend',
+
+  // Англійська
+  'afternoon', 'evening',
+  'in the afternoon', 'in the evening',
+
+  // Французька
+  'après-midi', 'l’après-midi', "l'après-midi",
+  'après le déjeuner', 'le soir',
+
+  // Італійська
+  'pomeriggio', 'di pomeriggio', 'sera', 'di sera',
+
+  // Польська
+  'po południu', 'wieczorem',
+
+  // Іспанська
+ 'tarde', 'por la tarde', 'noche', 'por la noche'
+].includes(period) &&
+  hour < 12
+) {
+  hour += 12;
+}
+
+   if (
+ [
+  // Українська
+  'ночі',
+
+  // Російська
+  'ночи', 'ночью',
+
+  // Німецька
+  'nachts', 'in der nacht',
+
+  // Англійська
+  'night', 'at night', 'in the night',
+
+  // Французька
+  'la nuit', 'de nuit',
+
+  // Італійська
+  'notte', 'di notte',
+
+  // Польська
+  'w nocy', 'nocą',
+
+  // Іспанська
+  'noche', 'de noche'
+  ].includes(period)
+  ) {
+   if (hour === 12) {
+    hour = 0;
+ } else if (hour >= 6 && hour <= 11) {
+  hour += 12;
+ }
+  }
 
     if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) {
       date.setHours(hour, minute, 0, 0);
       hasTime = true;
       hasDate = true;
-      text = text.replace(timeMatch[0], ' ');
+       text = text.replace(timeMatch[0], ' ');
+
+      if (colloquialPastMatch) {
+        text = text.replace(colloquialPastMatch[0], ' ');
+      }
     }
   }
+  
+  // Дні тижня українською та російською
+   const weekdayPattern = String.raw`
+    (?:(?:у|в|во|на|am|on|le|il|el|di|w)\s+)?(?:(наступного|следующий|nächsten|nächste|next|prochain|prochaine|prossimo|prossima|następny|następna|następne|przyszły|przyszła|przyszłe|próximo|próxima|ersten|zweiten|dritten|vierten|first|second|third|fourth|premier|première|deuxième|troisième|quatrième|primo|prima|secondo|seconda|terzo|terza|quarto|quarta|pierwszy|pierwsza|drugi|druga|trzeci|trzecia|czwarty|czwarta|primer|primero|primera|segundo|segunda|tercero|tercera|cuarto|cuarta|перш(?:ий|ого|у|а)|перв(?:ый|ого|ую|ая)|друг(?:ий|ого|у|а)|втор(?:ой|ого|ую|ая)|трет(?:ій|ього|ю|я)|треть(?:ий|его|ю|я)|четверт(?:ий|ого|у|а|ый|ую|ая)|четвёрт(?:ый|ого|ую|ая))\s+)?(понеділ(?:ок|ка|ку)|понедельник(?:а|у)?|вівтор(?:ок|ка|ку)|вторник(?:а|у)?|серед(?:а|и|у)|сред(?:а|ы|у|е)|четвер(?:г|га|гу)|п[’'ʼ]?ятниц(?:я|і|ю)|пятниц(?:а|ы|у|е)|субот(?:а|и|у)|суббот(?:а|ы|у|е)|неділ(?:я|і|ю)|воскресень(?:е|я|ю)|montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag
+     |monday|tuesday|wednesday|thursday|friday|saturday|sunday
+     |lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche
+     |lunedì|martedì|mercoledì|giovedì|venerdì|sabato|domenica
+     |poniedziałek|wtorek|środa|czwartek|piątek|sobota|niedziela
+     |lunes|martes|miércoles|jueves|viernes|sábado|domingo)(?![\p{L}\p{N}])`;
 
-  // 7. Періоди дня без конкретної години
-  const dayPeriods = [
-    {
-      regex: /(?<![\p{L}\p{N}])після\s+обіду(?![\p{L}\p{N}])/iu,
-      hour: 14
-    },
-    {
-      regex: /(?<![\p{L}\p{N}])(?:зранку|вранці|ранком)(?![\p{L}\p{N}])/iu,
-      hour: 9
-    },
-    {
-      regex: /(?<![\p{L}\p{N}])(?:ввечері|увечері|вечором|вечері)(?![\p{L}\p{N}])/iu,
-      hour: 19
+       const weekdayMatch = text.match(
+         new RegExp(weekdayPattern.replace(/\s*\n\s*/g, '').trim(), 'iu')
+       );
+
+  if (weekdayMatch) {
+    const weekdayText = weekdayMatch[2].toLowerCase();
+    const ordinalText = (weekdayMatch[1] || '').toLowerCase();
+
+    const weekday =
+      weekdayText.startsWith('понеділ') || weekdayText.startsWith('понедельник') || weekdayText === 'montag' || weekdayText === 'monday' || weekdayText === 'lundi' || weekdayText === 'lunedì' || weekdayText === 'poniedziałek' || weekdayText === 'lunes' ? 1
+      : weekdayText.startsWith('вівтор') || weekdayText.startsWith('вторник') || weekdayText === 'dienstag' || weekdayText === 'tuesday' || weekdayText === 'mardi' || weekdayText === 'martedì' || weekdayText === 'wtorek' || weekdayText === 'martes' ? 2
+      : weekdayText.startsWith('серед') || weekdayText.startsWith('сред') || weekdayText === 'mittwoch' || weekdayText === 'wednesday' || weekdayText === 'mercredi' || weekdayText === 'mercoledì' || weekdayText === 'środa' || weekdayText === 'miércoles' ? 3
+      : weekdayText.startsWith('четвер') || weekdayText === 'donnerstag' || weekdayText === 'thursday' || weekdayText === 'jeudi' || weekdayText === 'giovedì' || weekdayText === 'czwartek' || weekdayText === 'jueves' ? 4
+      : weekdayText.includes('ятниц') || weekdayText.startsWith('пятниц') || weekdayText === 'freitag' || weekdayText === 'friday' || weekdayText === 'vendredi' || weekdayText === 'venerdì' || weekdayText === 'piątek' || weekdayText === 'viernes' ? 5
+      : weekdayText.startsWith('субот') || weekdayText.startsWith('суббот') || weekdayText === 'samstag' || weekdayText === 'saturday' || weekdayText === 'samedi' || weekdayText === 'sabato' || weekdayText === 'sobota' || weekdayText === 'sábado' ? 6
+      : weekdayText === 'sonntag' || weekdayText.startsWith('неділ') || weekdayText.startsWith('воскресень') || weekdayText === 'sunday' || weekdayText === 'dimanche' || weekdayText === 'domenica' || weekdayText === 'niedziela' || weekdayText === 'domingo' ? 0
+      : 0;
+
+   const ordinal =
+     ordinalText.startsWith('перш') || ordinalText.startsWith('перв') || ordinalText === 'ersten' || ordinalText === 'first' || ordinalText === 'premier' || ordinalText === 'première' || ordinalText === 'primo' || ordinalText === 'prima' || ordinalText === 'pierwszy' || ordinalText === 'pierwsza' || ordinalText === 'primer' || ordinalText === 'primero' || ordinalText === 'primera' ? 1
+     : ordinalText.startsWith('друг') || ordinalText.startsWith('втор') || ordinalText === 'zweiten' || ordinalText === 'second' || ordinalText === 'deuxième' || ordinalText === 'secondo' || ordinalText === 'seconda' || ordinalText === 'drugi' || ordinalText === 'druga' || ordinalText === 'segundo' || ordinalText === 'segunda' ? 2
+     : ordinalText.startsWith('трет') || ordinalText.startsWith('треть') || ordinalText === 'dritten' || ordinalText === 'third' || ordinalText === 'troisième' || ordinalText === 'terzo' || ordinalText === 'terza' || ordinalText === 'trzeci' || ordinalText === 'trzecia' || ordinalText === 'tercero' || ordinalText === 'tercera' ? 3
+     : ordinalText.startsWith('четверт') || ordinalText.startsWith('четвёрт') || ordinalText === 'vierten' || ordinalText === 'fourth' || ordinalText === 'quatrième' || ordinalText === 'quarto' || ordinalText === 'quarta' || ordinalText === 'czwarty' || ordinalText === 'czwarta' || ordinalText === 'cuarto' || ordinalText === 'cuarta' ? 4
+     : 0;
+    const isNextWeekWord =
+      [
+        'наступного', 'следующий', 'nächsten', 'nächste',
+        'next', 'prochain', 'prochaine', 'prossimo', 'prossima',
+        'następny', 'następna', 'następne',
+        'przyszły', 'przyszła', 'przyszłe',
+        'próximo', 'próxima'
+      ].includes(ordinalText);
+    if (ordinal) {
+      let year = now.getFullYear();
+      let month = now.getMonth();
+
+      const findNthWeekday = (y, m) => {
+        const firstDay = new Date(y, m, 1).getDay();
+        const firstMatch = 1 + (weekday - firstDay + 7) % 7;
+        return firstMatch + (ordinal - 1) * 7;
+      };
+
+      let day = findNthWeekday(year, month);
+      const candidate = new Date(year, month, day);
+
+      if (candidate < new Date(now.getFullYear(), now.getMonth(), now.getDate())) {
+        month++;
+        if (month > 11) {
+          month = 0;
+          year++;
+        }
+        day = findNthWeekday(year, month);
+      }
+
+      date.setFullYear(year, month, day);
+    } else {
+      let daysAhead = (weekday - now.getDay() + 7) % 7;
+      if (isNextWeekWord && daysAhead === 0) {
+        daysAhead = 7;
+      }
+      date.setDate(now.getDate() + daysAhead);
     }
-  ];
 
+    hasDate = true;
+    text = text.replace(weekdayMatch[0], ' ');
+  }
+ 
+ // 7. Періоди дня без конкретної години
+const dayPeriods = [
+  {
+    // Наприкінці робочого дня — 17:00
+    regex: /(?<![\p{L}\p{N}])(?:наприкінці\s+робочого\s+дня|в\s+конце\s+рабочего\s+дня|am\s+Ende\s+des\s+Arbeitstages|am\s+Ende\s+des\s+Arbeitstags|at\s+the\s+end\s+of\s+the\s+workday|à\s+la\s+fin\s+de\s+la\s+journée\s+de\s+travail|alla\s+fine\s+della\s+giornata\s+lavorativa|pod\s+koniec\s+dnia\s+pracy|al\s+final\s+de\s+la\s+jornada\s+laboral)(?![\p{L}\p{N}])/iu,
+    hour: 17
+  },
+  {
+    // Після школи — 15:00
+   regex: /(?<![\p{L}\p{N}])(?:після\s+школи|после\s+школы|after\s+school|nach\s+der\s+Schule|après\s+l’école|après\s+l'école|après\s+école|dopo\s+la\s+scuola|po\s+szkole|después\s+de\s+la\s+escuela)(?![\p{L}\p{N}])/iu,
+    hour: 15
+  },
+  {
+    // Опівночі — 00:00
+    regex: /(?<![\p{L}\p{N}])(?:опівночі|полночь|полуночи|полуночью|um\s+Mitternacht|at\s+midnight|à\s+minuit|a\s+mezzanotte|o\s+północy|a\s+medianoche)(?![\p{L}\p{N}])/iu,
+    hour: 0
+  },
+  {
+    // Ніч — 23:00
+   regex: /(?<![\p{L}\p{N}])(?:вночі|уночі|в\s+ночі|ночью|nachts|in\s+der\s+Nacht|at\s+night|in\s+the\s+night|la\s+nuit|de\s+nuit|di\s+notte|w\s+nocy|nocą|de\s+noche|por\s+la\s+noche)(?![\p{L}\p{N}])/iu,
+    hour: 23
+  },
+  {
+    // До обіду — 11:00
+    regex: /(?<![\p{L}\p{N}])(?:до\s+(?:обіду|обеда)|vormittags|am\s+Vormittag|before\s+noon|avant\s+midi|prima\s+di\s+mezzogiorno|przed\s+południem|antes\s+del\s+mediodía|antes\s+del\s+mediodia)(?![\p{L}\p{N}])/iu,
+    hour: 11
+  },
+  {
+    // Обід — 12:00
+    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|во|am|at|à|a|o|al|w)\s+)?(?:обід|обідом|обіді|опівдні|обед|обедом|обеде|полдень|mittag|mittags|noon|midday|midi|mezzogiorno|południe|mediodía)(?![\p{L}\p{N}])/iu,
+    hour: 12
+  },
+  {
+    // Ранок — 09:00
+    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|с|am|in\s+the|le|di|por\s+la)\s+)?(?:ранок|ранком|зранку|вранці|утро|утром|morgens|morgen\s+früh|morgen\s+frueh|morning|matin|le\s+matin|mattina|di\s+mattina|rano)(?![\p{L}\p{N}])/iu,
+    hour: 9
+  },
+  {
+    // Вечір — 19:00
+    regex: /(?<![\p{L}\p{N}])(?:(?:в|у|am|in\s+the|le|di|por\s+la)\s+)?(?:вечір|вечором|вечері|ввечері|увечері|вечер|вечером|вечера|abend|abends|evening|soir|sera|wieczorem)(?![\p{L}\p{N}])/iu,
+    hour: 19
+  },
+  {
+    // Після обіду — 14:00
+    regex: /(?<![\p{L}\p{N}])(?:після\s+обіду|после\s+обеда|nachmittags|nach\s+dem\s+Mittagessen|nach\s+dem\s+Mittag|am\s+Nachmittag|in\s+the\s+afternoon|après\s+le\s+déjeuner|l['’]après-midi|nel\s+pomeriggio|pomeriggio|dopo\s+pranzo|po\s+południu|por\s+la\s+tarde|después\s+del\s+almuerzo)(?![\p{L}\p{N}])/iu,
+    hour: 14
+  }
+];
   if (!hasTime) {
     for (const period of dayPeriods) {
       if (period.regex.test(text)) {
         defaultHour = period.hour;
         text = text.replace(period.regex, ' ');
-        hasDate = true;
         break;
       }
     }
   }
 
-  if (hasDate && !hasTime) {
+   if ((hasDate || defaultHour !== null) && !hasTime) {
     date.setHours(defaultHour === null ? 9 : defaultHour, 0, 0, 0);
   }
+  
 
   // 8. Прибираємо початкові слова-команди та зайві пробіли
   text = text
-    .replace(/^\s*нагадай\s+мені\s*/iu, '')
-    .replace(/^\s*нагадай\s*/iu, '')
-    .replace(/^\s*будь ласка\s*/iu, '')
-    .replace(/\s+/g, ' ')
-    .replace(/^[,.\s]+|[,.\s]+$/g, '')
-    .trim();
+  .replace(/^\s*(?:нагадай(?:\s+мені)?|нагадаємо|нагадуй(?:\s+мені)?|напомни(?:\s+мне)?|напоминай(?:\s+мне)?|erinnere\s+mich|erinner\s+mich|remind\s+me|rappelle[-\s]?moi|ricordami|przypomnij\s+mi|recuérdame|recuerdame)\s*[,!:.]?\s*/iu, '')
+  .replace(/^\s*(?:будь\s+ласка|пожалуйста|bitte|please|s'il\s+vous\s+plaît|s’il\s+vous\s+plaît|s'il\s+te\s+plaît|s’il\s+te\s+plaît|per\s+favore|proszę|por\s+favor)\s*[,!:.]?\s*/iu, '')
+  .replace(/\s+/g, ' ')
+  .replace(/^[,.\s]+|[,.\s]+$/g, '')
+  .trim();
 
-  const dateValue = hasDate
+  const dateValue = (hasDate || defaultHour !== null)
     ? date.getFullYear() + '-' +
       String(date.getMonth() + 1).padStart(2, '0') + '-' +
       String(date.getDate()).padStart(2, '0') + 'T' +
       String(date.getHours()).padStart(2, '0') + ':' +
       String(date.getMinutes()).padStart(2, '0')
     : '';
-
+ 
   return {
-    text: text || original,
+    text: text.trim(),
     date: dateValue,
     hasDate: hasDate,
     hasTime: hasTime
@@ -351,34 +3423,206 @@ function parseVoiceReminder(transcript) {
 }
 
   let recognition=null;
-$('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('voiceStatus').textContent='Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.';return}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang='uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;$('micTitle').textContent='Слухаю тебе…';$('micHint').textContent='Говори після запиту браузера на доступ до мікрофона';$('voiceStatus').textContent='';recognition.onresult = e => {
+  let recognitionTimer = null;
+  $('micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if (!SpeechRecognition) {
+  const unsupportedMessages = {
+    uk: 'Голосове введення не підтримується цим браузером. Спробуй Chrome або введи текст.',
+    ru: 'Голосовой ввод не поддерживается этим браузером. Попробуй Chrome или введи текст.',
+    de: 'Spracheingabe wird von diesem Browser nicht unterstützt. Versuche Chrome oder gib den Text ein.',
+    en: 'Voice input is not supported by this browser. Try Chrome or enter the text.',
+    fr: 'La saisie vocale n’est pas prise en charge par ce navigateur. Essaie Chrome ou saisis le texte.',
+    it: 'La digitazione vocale non è supportata da questo browser. Prova Chrome o inserisci il testo.',
+    pl: 'Wprowadzanie głosowe nie jest obsługiwane przez tę przeglądarkę. Spróbuj użyć Chrome lub wpisz tekst.',
+    es: 'Este navegador no admite la entrada de voz. Prueba Chrome o escribe el texto.'
+  };
+  $('voiceStatus').textContent = unsupportedMessages[appLanguage] || unsupportedMessages.uk;
+  return;
+}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang = ({
+  uk: 'uk-UA',
+  ru: 'ru-RU',
+  de: 'de-DE',
+  en: 'en-US',
+  fr: 'fr-FR',
+  it: 'it-IT',
+  pl: 'pl-PL',
+  es: 'es-ES'
+})[appLanguage] || 'uk-UA';recognition.interimResults=false;recognition.maxAlternatives=1;const micListeningLabels = {
+  uk: ['Слухаю тебе…', 'Говори після запиту браузера на доступ до мікрофона'],
+  ru: ['Слушаю тебя…', 'Говори после запроса браузера на доступ к микрофону'],
+  de: ['Ich höre zu…', 'Sprich, nachdem der Browser dich um Mikrofonzugriff gebeten hat'],
+  en: ['Listening…', 'Speak after the browser asks for microphone access'],
+  fr: ['Je t’écoute…', 'Parle après que le navigateur a demandé l’accès au microphone'],
+  it: ['Ti ascolto…', 'Parla dopo che il browser ha richiesto l’accesso al microfono'],
+  pl: ['Słucham…', 'Mów, gdy przeglądarka poprosi o dostęp do mikrofonu'],
+  es: ['Te escucho…', 'Habla después de que el navegador solicite acceso al micrófono']
+};
+
+const micLabels = micListeningLabels[appLanguage] || micListeningLabels.uk;
+$('micTitle').textContent = micLabels[0];
+$('micHint').textContent = micLabels[1];
+$('voiceStatus').textContent = '';
+recognition.onresult = e => {
+  if (!e.results || !e.results.length || !e.results[0][0].transcript.trim()) {
+   const recognitionMessages = {
+  uk: 'Текст не розпізнано. Спробуй ще раз.',
+  ru: 'Текст не распознан. Попробуй ещё раз.',
+  de: 'Text wurde nicht erkannt. Bitte versuche es erneut.',
+  en: 'Speech was not recognized. Please try again.',
+  fr: 'Le texte n’a pas été reconnu. Réessaie.',
+  it: 'Il testo non è stato riconosciuto. Riprova.',
+  pl: 'Nie rozpoznano tekstu. Spróbuj ponownie.',
+  es: 'No se reconoció el texto. Inténtalo de nuevo.'
+};
+
+$('voiceStatus').textContent =
+  recognitionMessages[appLanguage] || recognitionMessages.uk;
+    return;
+  }
   const spokenText = e.results[0][0].transcript;
+  console.log('Мікрофон розпізнав:', spokenText);
   const result = parseVoiceReminder(spokenText);
-  
-  alert('Текст: ' + result.text + '\nДата і час: ' + result.date);
  
   $('noteText').value = result.text;
   $('noteCategory').value = categoryFor(result.text);
   $('noteDate').value = result.date || '';
   editingId = null;
 
-  $('modalTitle').textContent = 'Перевір голосове нагадування';
-  $('modal').classList.add('open');
+ const voiceResultLabels = {
+  uk: {
+    title: 'Перевір голосове нагадування',
+    recognized: 'Розпізнано: ',
+    date: ' · Дата: ',
+    noDate: ' · Укажи дату й час, якщо вони потрібні.'
+  },
+  ru: {
+    title: 'Проверь голосовое напоминание',
+    recognized: 'Распознано: ',
+    date: ' · Дата: ',
+    noDate: ' · Укажи дату и время, если они нужны.'
+  },
+  de: {
+    title: 'Spracherinnerung überprüfen',
+    recognized: 'Erkannt: ',
+    date: ' · Datum: ',
+    noDate: ' · Gib bei Bedarf Datum und Uhrzeit an.'
+  },
+  en: {
+    title: 'Check voice reminder',
+    recognized: 'Recognized: ',
+    date: ' · Date: ',
+    noDate: ' · Enter a date and time if needed.'
+  },
+  fr: {
+    title: 'Vérifier le rappel vocal',
+    recognized: 'Reconnu : ',
+    date: ' · Date : ',
+    noDate: ' · Indique la date et l’heure si nécessaire.'
+  },
+  it: {
+    title: 'Controlla il promemoria vocale',
+    recognized: 'Riconosciuto: ',
+    date: ' · Data: ',
+    noDate: ' · Indica la data e l’ora, se necessario.'
+  },
+  pl: {
+    title: 'Sprawdź przypomnienie głosowe',
+    recognized: 'Rozpoznano: ',
+    date: ' · Data: ',
+    noDate: ' · Podaj datę i godzinę, jeśli są potrzebne.'
+  },
+  es: {
+    title: 'Revisa el recordatorio de voz',
+    recognized: 'Reconocido: ',
+    date: ' · Fecha: ',
+    noDate: ' · Indica la fecha y la hora si es necesario.'
+  }
+};
 
-  $('voiceStatus').textContent =
-    'Розпізнано: ' + result.text +
-    (result.hasDate
-      ? ' · Дата: ' + new Date(result.date).toLocaleString('uk-UA')
-      : ' · Укажи дату й час, якщо вони потрібні.');
+const voiceLabels = voiceResultLabels[appLanguage] || voiceResultLabels.uk;
+
+$('modalTitle').textContent = voiceLabels.title;
+$('modal').classList.add('open');
+
+$('voiceStatus').textContent =
+  voiceLabels.recognized + result.text +
+  (result.hasDate
+    ? voiceLabels.date + new Date(result.date).toLocaleString(
+        ({
+          uk: 'uk-UA',
+          ru: 'ru-RU',
+          de: 'de-DE',
+          en: 'en-US',
+          fr: 'fr-FR',
+          it: 'it-IT',
+          pl: 'pl-PL',
+          es: 'es-ES'
+        })[appLanguage] || 'uk-UA'
+      )
+    : voiceLabels.noDate);
 };
 
 recognition.onerror = e => {
-  $('voiceStatus').textContent = 'Не вдалося записати голос: ' + e.error;
+  console.log('Помилка мікрофона:', e.error);
+  clearTimeout(recognitionTimer);
+  recognitionTimer = null;
+  $('micBtn').classList.remove('listening');
+ const voiceErrorMessages = {
+  uk: 'Не вдалося записати голос: ',
+  ru: 'Не удалось записать голос: ',
+  de: 'Sprache konnte nicht aufgenommen werden: ',
+  en: 'Could not record voice: ',
+  fr: 'Impossible d’enregistrer la voix : ',
+  it: 'Impossibile registrare la voce: ',
+  pl: 'Nie udało się nagrać głosu: ',
+  es: 'No se pudo grabar la voz: '
+};
+
+$('voiceStatus').textContent =
+  (voiceErrorMessages[appLanguage] || voiceErrorMessages.uk) + e.error;
+};
+recognition.onstart = () => {
+  $('micBtn').classList.add('listening');
+};
+
+recognition.onnomatch = () => {
+  console.log('Мікрофон почув голос, але не розпізнав слова');
+  const noMatchMessages = {
+  uk: 'Голос почуто, але слова не розпізнано.',
+  ru: 'Голос услышан, но слова не распознаны.',
+  de: 'Sprache gehört, aber keine Wörter erkannt.',
+  en: 'Speech was heard, but no words were recognized.',
+  fr: 'La voix a été entendue, mais aucun mot n’a été reconnu.',
+  it: 'La voce è stata udita, ma non sono state riconosciute parole.',
+  pl: 'Głos został usłyszany, ale nie rozpoznano żadnych słów.',
+  es: 'Se oyó la voz, pero no se reconocieron las palabras.'
+};
+
+$('voiceStatus').textContent =
+  noMatchMessages[appLanguage] || noMatchMessages.uk;
+};                      
+
+recognition.onspeechend = () => {
+  console.log('Мікрофон завершив слухати мовлення');
 };
 
 recognition.onend = () => {
-  $('micTitle').textContent = 'Запам’ятати голосом';
-  $('micHint').textContent = 'Натисни та продиктуй думку';
+  clearTimeout(recognitionTimer);
+  recognitionTimer = null;
+  $('micBtn').classList.remove('listening');
+ const micReadyLabels = {
+  uk: ['Сказати нагадування', 'Натисни й продиктуй справу та час'],
+  ru: ['Сказать напоминание', 'Нажми и продиктуй дело и время'],
+  de: ['Erinnerung sprechen', 'Tippe und sprich die Aufgabe und die Zeit'],
+  en: ['Speak a reminder', 'Tap and dictate the task and time'],
+  fr: ['Dicter un rappel', 'Appuie et dicte la tâche et l’heure'],
+  it: ['Pronuncia un promemoria', 'Tocca e detta l’attività e l’ora'],
+  pl: ['Powiedz przypomnienie', 'Naciśnij i podyktuj zadanie oraz godzinę'],
+  es: ['Dictar un recordatorio', 'Pulsa y dicta la tarea y la hora']
+};
+
+const readyLabels = micReadyLabels[appLanguage] || micReadyLabels.uk;
+$('micTitle').textContent = readyLabels[0];
+$('micHint').textContent = readyLabels[1];
   recognition = null;
 };
 
@@ -391,16 +3635,133 @@ load();
 <script>
 if ("Notification" in window && "serviceWorker" in navigator) {
   let reminderRegistration = null;
+
   function checkReminders() {
-    if (!reminderRegistration || Notification.permission !== "granted") return;
-    const now = Date.now();let changed = false;
-    notes.forEach(note => {if (note.date && !note.done && new Date(note.date).getTime() <= now && note.notifiedForDate !== note.date) {reminderRegistration.showNotification("Пам’ятай 🔔", {body: note.text,icon: "./icon-192.png",badge: "./icon-192.png"});note.notifiedForDate = note.date;changed = true;}});
-    if (changed) persist();
+    if (
+      !reminderRegistration ||
+      Notification.permission !== "granted" ||
+      localStorage.getItem("reminders-enabled") === "false"
+    ) return;
+
+    const now = Date.now();
+
+    const dayKey = value => {
+      const d = new Date(value);
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    };
+
+    notes.forEach(note => {
+      if (!note.date || note.done) return;
+
+      const eventTime = new Date(note.date).getTime();
+      if (!Number.isFinite(eventTime) || eventTime <= now) return;
+
+      const eventDay = dayKey(eventTime);
+      const createdDay = note.created ? dayKey(note.created) : dayKey(now);
+      const createdForToday = createdDay === eventDay;
+
+      const schedules = createdForToday
+        ? [
+            {
+              key: "twoHours",
+              time: eventTime - 2 * 60 * 60 * 1000,
+              message: `Через дві години: ${note.text}`
+            }
+          ]
+        : [
+            {
+              key: "oneDay",
+              time: eventTime - 24 * 60 * 60 * 1000,
+              message: `Завтра: ${note.text}`
+            },
+            {
+              key: "oneHour",
+              time: eventTime - 60 * 60 * 1000,
+              message: `Через годину: ${note.text}`
+            }
+          ];
+
+      schedules.forEach(item => {
+        const marker = `notified_${item.key}_${note.date}`;
+
+        if (
+          now >= item.time &&
+          now < item.time + 5 * 60 * 1000 &&
+          !note[marker]
+        ) {
+          reminderRegistration.showNotification("Нагадування 🔔", {
+            body: item.message,
+            icon: "./icon-192.png",
+            badge: "./icon-192.png"
+          }).then(() => {
+            note[marker] = true;
+            persist();
+          }).catch(error => console.log("Помилка сповіщення:", error));
+        }
+      });
+    });
   }
+
   navigator.serviceWorker.register("./sw.js").then(registration => {
-    reminderRegistration = registration;const button = document.createElement("button");button.className = "secondary";button.textContent = "🔔 Увімкнути сповіщення";document.querySelector(".section-head").appendChild(button);
-    button.addEventListener("click", async () => {const permission = await Notification.requestPermission();if (permission === "granted") {button.textContent = "🔔 Сповіщення ввімкнено";checkReminders();} else {button.textContent = "Сповіщення не дозволено";}});
-    checkReminders();setInterval(checkReminders,15000);
+    reminderRegistration = registration;
+
+    const button = $("notificationToggle");
+
+    if (!button) return;
+
+    const notificationLabels = {
+  uk: ['Сповіщення заблоковано', '🔕 Сповіщення вимкнено', '🔔 Сповіщення ввімкнено', '🔔 Увімкнути сповіщення'],
+  ru: ['Уведомления заблокированы', '🔕 Уведомления выключены', '🔔 Уведомления включены', '🔔 Включить уведомления'],
+  de: ['Benachrichtigungen blockiert', '🔕 Benachrichtigungen ausgeschaltet', '🔔 Benachrichtigungen aktiviert', '🔔 Benachrichtigungen aktivieren'],
+  fr: ['Notifications bloquées', '🔕 Notifications désactivées', '🔔 Notifications activées', '🔔 Activer les notifications'],
+  it: ['Notifiche bloccate', '🔕 Notifiche disattivate', '🔔 Notifiche attivate', '🔔 Attiva le notifiche'],
+  en: ['Notifications blocked', '🔕 Notifications turned off', '🔔 Notifications enabled', '🔔 Enable notifications'],
+  pl: ['Powiadomienia zablokowane', '🔕 Powiadomienia wyłączone', '🔔 Powiadomienia włączone', '🔔 Włącz powiadomienia'],
+  es: ['Notificaciones bloqueadas', '🔕 Notificaciones desactivadas', '🔔 Notificaciones activadas', '🔔 Activar notificaciones']
+};
+
+const labels = notificationLabels[appLanguage] || notificationLabels.uk;
+
+if (Notification.permission === "denied") {
+  button.textContent = labels[0];
+} else if (localStorage.getItem("reminders-enabled") === "false") {
+  button.textContent = labels[1];
+} else if (Notification.permission === "granted") {
+  button.textContent = labels[2];
+} else {
+  button.textContent = labels[3];
+}
+
+    button.addEventListener("click", async () => {
+  const enabled = localStorage.getItem("reminders-enabled") === "true";
+
+  if (enabled) {
+    localStorage.setItem("reminders-enabled", "false");
+    button.textContent = labels[1];
+    return;
+  }
+
+  if (Notification.permission === "granted") {
+    localStorage.setItem("reminders-enabled", "true");
+    button.textContent = labels[2];
+    checkReminders();
+    return;
+  }
+
+  const permission = await Notification.requestPermission();
+
+  if (permission === "granted") {
+    localStorage.setItem("reminders-enabled", "true");
+    button.textContent = labels[2];
+    checkReminders();
+  } else {
+    button.textContent = labels[0];
+  }
+});
+
+    checkReminders();
+    setInterval(checkReminders, 15000);
+
   }).catch(error => console.log("Помилка:", error));
 }
 </script>
