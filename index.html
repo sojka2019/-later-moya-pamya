@@ -1510,6 +1510,7 @@ function parseVoiceReminder(transcript) {
   let hasDate = false;
   let hasTime = false;
   let defaultHour = null;
+  let invalidExplicitDate = false;
 
   // Допоміжна функція для пошуку цілих слів
   function removePhrase(regex) {
@@ -2467,8 +2468,8 @@ if (monthMatch || monthFirstMatch) {
   const matched = monthMatch || monthFirstMatch;
 
   const dayText = monthMatch
-  ? matched[1].toLowerCase()
-  : matched[2].toLowerCase();
+    ? matched[1].toLowerCase()
+    : matched[2].toLowerCase();
 
   const monthText = (monthMatch
     ? matched[2]
@@ -2507,6 +2508,8 @@ if (monthMatch || monthFirstMatch) {
     date = candidate;
     hasDate = true;
     text = text.replace(matched[0], ' ');
+  } else {
+    invalidExplicitDate = true;
   }
 }
 // Міжнародний формат дати: YYYY-MM-DD
@@ -3393,7 +3396,7 @@ const dayPeriods = [
     }
   }
 
-   if ((hasDate || defaultHour !== null) && !hasTime) {
+   if (!invalidExplicitDate && (hasDate || defaultHour !== null) && !hasTime) {
     date.setHours(defaultHour === null ? 9 : defaultHour, 0, 0, 0);
   }
   
@@ -3406,7 +3409,7 @@ const dayPeriods = [
   .replace(/^[,.\s]+|[,.\s]+$/g, '')
   .trim();
 
-  const dateValue = (hasDate || defaultHour !== null)
+  const dateValue = (!invalidExplicitDate && (hasDate || defaultHour !== null))
     ? date.getFullYear() + '-' +
       String(date.getMonth() + 1).padStart(2, '0') + '-' +
       String(date.getDate()).padStart(2, '0') + 'T' +
