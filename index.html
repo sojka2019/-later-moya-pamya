@@ -2533,6 +2533,8 @@ if (isoDateMatch) {
     date = candidate;
     hasDate = true;
     text = text.replace(isoDateMatch[0], ' ');
+  } else {
+    invalidExplicitDate = true;
   }
 }
   
@@ -2540,34 +2542,42 @@ const numericDateRegex =
   /(?<![\p{L}\p{N}])(\d{1,2})[./](\d{1,2})(?:[./](\d{4}))?(?![\p{L}\p{N}])/u;
 
 const numericDateMatch = text.match(numericDateRegex);
-  if (numericDateMatch) {
-    const day = Number(numericDateMatch[1]);
-    const month = Number(numericDateMatch[2]) - 1;
-    let year = numericDateMatch[3]
-      ? Number(numericDateMatch[3])
-      : now.getFullYear();
+if (numericDateMatch) {
+  const day = Number(numericDateMatch[1]);
+  const month = Number(numericDateMatch[2]) - 1;
+  let year = numericDateMatch[3]
+    ? Number(numericDateMatch[3])
+    : now.getFullYear();
 
-    let candidate = new Date(year, month, day);
+  let candidate = new Date(year, month, day);
 
-    if (
-      !numericDateMatch[3] &&
-      candidate < new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    ) {
-      year++;
-      candidate = new Date(year, month, day);
-    }
-
-    if (
-      candidate.getFullYear() === year &&
-      candidate.getMonth() === month &&
-      candidate.getDate() === day
-    ) {
-      date = candidate;
-      hasDate = true;
-      text = text.replace(numericDateMatch[0], ' ');
-    }
+  if (
+    !numericDateMatch[3] &&
+    candidate < new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  ) {
+    year++;
+    candidate = new Date(year, month, day);
   }
 
+  if (
+    candidate.getFullYear() === year &&
+    candidate.getMonth() === month &&
+    candidate.getDate() === day
+  ) {
+    date = candidate;
+    hasDate = true;
+    text = text.replace(numericDateMatch[0], ' ');
+  } else {
+    invalidExplicitDate = true;
+  }
+}
+
+
+Ми додали лише один рядок у else:
+invalidExplicitDate = true;
+
+
+Поки що більше нічого не змінюй. Напиши, коли заміниш і збережеш код — тоді перевіримо неправильну дату 2027-02-29.
    // 6. Час цифрами або словами
   const hourWords = {
      // Німецькі числівники годин
