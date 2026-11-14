@@ -3420,7 +3420,7 @@ const dayPeriods = [
   return {
     text: text.trim(),
     date: dateValue,
-    hasDate: hasDate,
+    hasDate: hasDate && !invalidExplicitDate,
     hasTime: hasTime
   };
 }
