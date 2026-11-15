@@ -2476,7 +2476,55 @@ if (monthMatch || monthFirstMatch) {
     : matched[1]).toLowerCase().replace(/\.$/, '');
 
   const day = dayWords[dayText] ?? Number(dayText.replace(/(?:st|nd|rd|th)?[,]?$/i, ''));
-  const month = months[monthText];
+  let month = months[monthText];
+
+if (month === undefined) {
+  const monthKeys = Object.keys(months);
+  const candidates = monthKeys
+    .map(name => {
+      let distance = 0;
+      const a = monthText;
+      const b = name;
+
+      if (Math.abs(a.length - b.length) > 1) {
+        return null;
+      }
+
+      const matrix = Array.from(
+        { length: a.length + 1 },
+        () => Array(b.length + 1).fill(0)
+      );
+
+      for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
+      for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
+
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j] + 1,
+            matrix[i][j - 1] + 1,
+            matrix[i - 1][j - 1] +
+              (a[i - 1] === b[j - 1] ? 0 : 1)
+          );
+        }
+      }
+
+      distance = matrix[a.length][b.length];
+
+      return distance <= 1
+        ? { month: months[name], distance }
+        : null;
+    })
+    .filter(Boolean);
+
+  const uniqueMonths = [...new Set(
+    candidates.map(item => item.month)
+  )];
+
+  if (uniqueMonths.length === 1) {
+    month = uniqueMonths[0];
+  }
+}
 
   const yearText = matched[3];
 
@@ -2484,6 +2532,9 @@ if (monthMatch || monthFirstMatch) {
     ? Number(yearText)
     : now.getFullYear();
 
+  if (month === undefined) {
+  invalidExplicitDate = true;
+} else {
   let candidate = new Date(year, month, day);
 
   // Якщо дата без року вже минула, беремо наступний рік
@@ -2500,7 +2551,7 @@ if (monthMatch || monthFirstMatch) {
   }
 
   // Перевіряємо, що дата справді існує
-  if (
+   if (
     candidate.getFullYear() === year &&
     candidate.getMonth() === month &&
     candidate.getDate() === day
@@ -2511,6 +2562,8 @@ if (monthMatch || monthFirstMatch) {
   } else {
     invalidExplicitDate = true;
   }
+  }
+ }
 }
 // Міжнародний формат дати: YYYY-MM-DD
 const isoDateRegex =
