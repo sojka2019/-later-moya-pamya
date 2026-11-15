@@ -2477,9 +2477,16 @@ for (const match of monthWords) {
   ];
 
   if (possibleMonths.length === 1 && candidates.length > 0) {
-    const canonical = candidates.sort(
-      (a, b) => b.length - a.length
-    )[0];
+  const canonical = candidates.sort((a, b) =>
+    getEditDistance(
+      word.normalize('NFD').replace(/\p{M}/gu, ''),
+      a.normalize('NFD').replace(/\p{M}/gu, '')
+    ) -
+    getEditDistance(
+      word.normalize('NFD').replace(/\p{M}/gu, ''),
+      b.normalize('NFD').replace(/\p{M}/gu, '')
+    )
+  )[0];
 
     monthCorrections.push({
       index: match.index,
