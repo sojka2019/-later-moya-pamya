@@ -134,7 +134,7 @@ jobs:
                    })[getAppLanguage()] || 'uk-UA',
                     maxResults: 5,
                     prompt: 'Скажіть, що потрібно запам’ятати',
-                    popup: true,
+                    popup: false,
                     partialResults: false
                   });
                   const spokenText = String(
