@@ -2464,13 +2464,26 @@ for (const match of monthWords) {
 
   if (months[word] !== undefined) continue;
 
-  const candidates = Object.keys(months).filter(name =>
-    name.length >= 4 &&
-  getEditDistance(
-    word.normalize('NFD').replace(/\p{M}/gu, ''),
-    name.normalize('NFD').replace(/\p{M}/gu, '')
-  ) <= 2
-  );
+  const normalizedWord = word.normalize('NFD').replace(/\p{M}/gu, '');
+
+const distances = Object.keys(months)
+  .filter(name => name.length >= 4)
+  .map(name => ({
+    name,
+    distance: getEditDistance(
+      normalizedWord,
+      name.normalize('NFD').replace(/\p{M}/gu, '')
+    )
+  }))
+  .filter(item => item.distance <= 2);
+
+const minDistance = distances.length
+  ? Math.min(...distances.map(item => item.distance))
+  : Infinity;
+
+const candidates = distances
+  .filter(item => item.distance === minDistance)
+  .map(item => item.name);
 
   const possibleMonths = [
     ...new Set(candidates.map(name => months[name]))
