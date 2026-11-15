@@ -81,7 +81,7 @@ jobs:
           EOF_VITE
           cat > native-app/capacitor.config.json <<'EOF_CAP'
           {
-           "appId": "ch.pamyatai.remember.test122",
+           "appId": "ch.pamyatai.remember.test123",
            "appName": "Нагадування",
            "webDir": "dist"
           }
@@ -137,9 +137,13 @@ jobs:
                     popup: true,
                     partialResults: false
                   });
-                  const spokenText = String(result?.matches?.[0] || '').trim();
+                  const spokenText = String(
+                    result?.matches?.find(text => /\b2030\b/.test(text)) ||
+                    result?.matches?.[0] ||
+                    ''
+                  ).trim();
                  
-                  alert('Варіанти розпізнавання: ' + JSON.stringify(result?.matches));
+                  alert('Вибраний текст: ' + spokenText);
                 
                   if (!spokenText) {
                     if (voiceStatus) voiceStatus.textContent = 'Не вдалося розпізнати слова. Спробуй ще раз або введи текст.';
@@ -746,7 +750,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: Nagaduvannya-4_test122
+          name: Nagaduvannya-4_test123
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
