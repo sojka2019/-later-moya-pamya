@@ -2589,15 +2589,22 @@ const monthFirstRegex = new RegExp(
 const monthFirstMatch = text.match(monthFirstRegex);
 console.log('ПЕРЕВІРКА MONTH-FIRST:', monthFirstRegex, monthFirstMatch);
 if (monthMatch || monthFirstMatch) {
-  const matched = monthMatch || monthFirstMatch;
+ const matched =
+  monthFirstMatch && monthFirstMatch[3]
+    ? monthFirstMatch
+    : monthMatch && monthMatch[3]
+      ? monthMatch
+      : monthFirstMatch || monthMatch;
 
-  const dayText = monthMatch
-    ? matched[1].toLowerCase()
-    : matched[2].toLowerCase();
+const isMonthFirst = matched === monthFirstMatch;
 
-  const monthText = (monthMatch
-    ? matched[2]
-    : matched[1]).toLowerCase().replace(/\.$/, '');
+const dayText = isMonthFirst
+  ? matched[2].toLowerCase()
+  : matched[1].toLowerCase();
+
+const monthText = (isMonthFirst
+  ? matched[1]
+  : matched[2]).toLowerCase().replace(/\.$/, '');
 
   const day = dayWords[dayText] ?? Number(dayText.replace(/(?:st|nd|rd|th)?[,]?$/i, ''));
   let month = months[monthText];
@@ -3684,6 +3691,9 @@ $('voiceStatus').textContent =
     return;
   }
   const spokenText = e.results[0][0].transcript;
+  
+  alert('Телефон розпізнав: ' + spokenText);
+ 
   console.log('Мікрофон розпізнав:', spokenText);
   const result = parseVoiceReminder(spokenText);
  
