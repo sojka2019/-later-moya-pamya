@@ -142,8 +142,6 @@ jobs:
                     result?.matches?.[0] ||
                     ''
                   ).trim();
-                 
-                  alert('Вибраний текст: ' + spokenText);
                 
                   if (!spokenText) {
                     if (voiceStatus) voiceStatus.textContent = 'Не вдалося розпізнати слова. Спробуй ще раз або введи текст.';
