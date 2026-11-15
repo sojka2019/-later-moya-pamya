@@ -2432,7 +2432,14 @@ const escapeDateRegex = value =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
   // Обережне виправлення помилок у назвах місяців
-const monthWords = [...text.matchAll(/\p{L}{4,}/gu)];
+const monthWords = [
+  ...text.matchAll(
+    /(?<![\p{L}\p{N}])\d{1,2}\.?\s+(\p{L}{4,})/gu
+  )
+].map(match => ({
+  0: match[1],
+  index: match.index + match[0].indexOf(match[1])
+}));
 
 function getEditDistance(a, b) {
   const matrix = Array.from(
