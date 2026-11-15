@@ -2466,7 +2466,7 @@ for (const match of monthWords) {
 
   const candidates = Object.keys(months).filter(name =>
     name.length >= 4 &&
-    getEditDistance(word, name) === 1
+    getEditDistance(word, name) <= 2
   );
 
   const possibleMonths = [
