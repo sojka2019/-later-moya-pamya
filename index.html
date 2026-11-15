@@ -2431,6 +2431,67 @@ const dayWords = {
 const escapeDateRegex = value =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+  // Обережне виправлення помилок у назвах місяців
+const monthWords = [...text.matchAll(/\p{L}{4,}/gu)];
+
+function getEditDistance(a, b) {
+  const matrix = Array.from(
+    { length: a.length + 1 },
+    () => Array(b.length + 1).fill(0)
+  );
+
+  for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
+  for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
+
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      matrix[i][j] = Math.min(
+        matrix[i - 1][j] + 1,
+        matrix[i][j - 1] + 1,
+        matrix[i - 1][j - 1] +
+          (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+    }
+  }
+
+  return matrix[a.length][b.length];
+}
+
+const monthCorrections = [];
+
+for (const match of monthWords) {
+  const word = match[0].toLowerCase();
+
+  if (months[word] !== undefined) continue;
+
+  const candidates = Object.keys(months).filter(name =>
+    name.length >= 4 &&
+    getEditDistance(word, name) === 1
+  );
+
+  const possibleMonths = [
+    ...new Set(candidates.map(name => months[name]))
+  ];
+
+  if (possibleMonths.length === 1 && candidates.length > 0) {
+    const canonical = candidates.sort(
+      (a, b) => b.length - a.length
+    )[0];
+
+    monthCorrections.push({
+      index: match.index,
+      original: match[0],
+      corrected: canonical
+    });
+  }
+}
+
+for (const correction of monthCorrections.reverse()) {
+  text =
+    text.slice(0, correction.index) +
+    correction.corrected +
+    text.slice(correction.index + correction.original.length);
+}
 const monthNames = Object.keys(months)
   .sort((a, b) => b.length - a.length)
   .map(name => escapeDateRegex(name) + '\\.?')
