@@ -2488,7 +2488,6 @@ const candidates = distances
   const possibleMonths = [
     ...new Set(candidates.map(name => months[name]))
   ];
-console.log('ПЕРЕВІРКА МІСЯЦЯ:', word, candidates, possibleMonths);
   
   if (possibleMonths.length === 1 && candidates.length > 0) {
   const canonical = candidates.sort((a, b) =>
