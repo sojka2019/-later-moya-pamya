@@ -81,7 +81,7 @@ jobs:
           EOF_VITE
           cat > native-app/capacitor.config.json <<'EOF_CAP'
           {
-           "appId": "ch.pamyatai.remember.test118",
+           "appId": "ch.pamyatai.remember.test119",
            "appName": "Нагадування",
            "webDir": "dist"
           }
@@ -166,6 +166,7 @@ jobs:
                     }
                   }
                 } catch (error) {
+                  alert('Помилка Android: ' + JSON.stringify(error));
                   console.error('Native speech recognition error:', error);
                  if (voiceStatus) voiceStatus.textContent = 'Помилка: ' + (error?.message || String(error));
                 } finally {
@@ -739,7 +740,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: Nagaduvannya-4_test118
+          name: Nagaduvannya-4_test119
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
