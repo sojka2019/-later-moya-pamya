@@ -135,6 +135,356 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
     white-space: normal;
   }
 }
+
+  /* ===== NEON DESIGN: ОСНОВНЕ ОФОРМЛЕННЯ ===== */
+
+:root {
+  --bg: #070b18;
+  --panel: #10182b;
+  --panel2: #17233b;
+  --text: #f4f6ff;
+  --muted: #9ba9c5;
+  --purple: #a78bfa;
+  --purple2: #8055f6;
+  --line: #293858;
+  --green: #5eead4;
+  --neon-cyan: #35e7f2;
+  --neon-pink: #f472d0;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 15% 10%, #34216a88, transparent 38%),
+    radial-gradient(ellipse at 90% 45%, #075b7770, transparent 38%),
+    linear-gradient(145deg, #070b18, #0b1022 55%, #080d1b) !important;
+  color: var(--text);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Декоративні діагональні світлові промені */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .23;
+  background:
+    linear-gradient(125deg, transparent 35%, #8b5cf6 35.2%, transparent 35.8%),
+    linear-gradient(125deg, transparent 58%, #22d3ee 58.2%, transparent 58.7%),
+    linear-gradient(125deg, transparent 76%, #ec4899 76.2%, transparent 76.6%);
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 1120px;
+  padding-bottom: 110px;
+}
+
+/* Верхня панель */
+.top {
+  padding: 14px 18px;
+  border: 1px solid #34466d;
+  border-radius: 22px;
+  background: linear-gradient(120deg, #121b32ee, #101629ee);
+  box-shadow: 0 0 28px #6655d522;
+}
+
+.brand {
+  color: #fff;
+  text-shadow: 0 0 16px #9b7bff99;
+  letter-spacing: .08em;
+}
+
+.tag {
+  color: #a9bad8;
+}
+
+/* Картки */
+.card,
+.stat,
+.note,
+.category-box,
+.modal-box {
+  background: linear-gradient(145deg, #141e36, #0d1529) !important;
+  border: 1px solid #34466d !important;
+  box-shadow:
+    0 10px 30px #0005,
+    inset 0 0 22px #6179b40b;
+}
+
+.card {
+  border-radius: 24px;
+}
+
+.hero .card:first-child {
+  background:
+    radial-gradient(circle at 90% 5%, #7546c533, transparent 42%),
+    linear-gradient(145deg, #17213c, #101629) !important;
+}
+
+.hero h1 {
+  color: #fff;
+  text-shadow: 0 0 22px #9272ff55;
+}
+
+.eyebrow {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 12px #35e7f277;
+}
+
+/* Мікрофон */
+.capture-card {
+  background:
+    radial-gradient(circle at 50% 45%, #633acb55, transparent 48%),
+    linear-gradient(145deg, #17213c, #0c1428) !important;
+  border-color: #6652a8 !important;
+}
+
+.mic {
+  width: 94px;
+  height: 94px;
+  font-size: 42px;
+  color: #fff;
+  background: linear-gradient(145deg, #a855f7, #6845df);
+  border: 2px solid #d3baff;
+  box-shadow:
+    0 0 0 9px #9b5cff18,
+    0 0 28px #a855f7aa,
+    0 0 65px #7c3aed66;
+  transition: .25s ease;
+}
+
+.mic:active {
+  transform: scale(.94);
+}
+
+.mic.listening {
+  background: linear-gradient(145deg, #fb7185, #e11d48) !important;
+  border-color: #ffc0cb !important;
+  box-shadow:
+    0 0 0 10px #fb718533,
+    0 0 35px #fb7185,
+    0 0 75px #e11d48aa !important;
+}
+
+/* Поля введення */
+.field,
+select,
+textarea {
+  background: #090f20 !important;
+  color: #f4f6ff !important;
+  border: 1px solid #34466d !important;
+  border-radius: 13px;
+}
+
+.field:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--neon-cyan) !important;
+  box-shadow: 0 0 0 3px #35e7f222;
+}
+
+/* Кнопки */
+.primary {
+  color: #fff;
+  background: linear-gradient(110deg, #8055f6, #a855f7, #d946ef);
+  box-shadow: 0 0 20px #9855f655;
+}
+
+.secondary,
+.chip {
+  color: #dce6ff;
+  background: #17233b;
+  border: 1px solid #3a4c70;
+}
+
+.chip.active,
+.note-view-switch button.active,
+.category-box.active {
+  color: #fff !important;
+  background: linear-gradient(135deg, #50318c, #243c68) !important;
+  border-color: var(--neon-cyan) !important;
+  box-shadow: 0 0 17px #35e7f233;
+}
+
+/* Категорії та нагадування */
+.category-box {
+  color: #e9eaff !important;
+  border-radius: 18px;
+  transition: .2s ease;
+}
+
+.category-box:hover {
+  border-color: var(--neon-cyan) !important;
+  box-shadow: 0 0 18px #35e7f233;
+  transform: translateY(-2px);
+}
+
+.kind {
+  color: var(--neon-cyan);
+  background: #35e7f215;
+  border-color: #35e7f244;
+}
+
+.note {
+  border-radius: 20px;
+}
+
+.note h3 {
+  color: #fff;
+}
+
+.note p {
+  color: #c4cee4;
+}
+
+.meta,
+.hint,
+.stat span {
+  color: #9ba9c5;
+}
+
+.stat strong {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 14px #35e7f244;
+}
+
+/* Вікна та нижні елементи */
+.modal {
+  background: #030615dd;
+  backdrop-filter: blur(9px);
+}
+
+.modal-box {
+  box-shadow: 0 0 45px #8055f633;
+}
+
+.footer {
+  color: #8192b2;
+}
+
+/* Мобільне відображення */
+@media(max-width: 600px) {
+  .app {
+    padding: 12px 10px 105px;
+  }
+
+  .top {
+    border-radius: 18px;
+    padding: 13px;
+  }
+
+  .card {
+    border-radius: 20px;
+  }
+
+  .mic {
+    width: 100px;
+    height: 100px;
+    font-size: 44px;
+  }
+}
+
+/* ===== ЧОТИРИ ЕКРАНИ ===== */
+
+.app-screen {
+  display: none;
+  animation: screenAppear .3s ease;
+}
+
+.app-screen.active {
+  display: block;
+}
+
+@keyframes screenAppear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== НИЖНЯ НЕОНОВА НАВІГАЦІЯ ===== */
+
+.bottom-nav {
+  position: fixed;
+  z-index: 20;
+  left: 50%;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: min(560px, calc(100% - 24px));
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  padding: 9px;
+  border: 1px solid #52618b;
+  border-radius: 22px;
+  background: rgba(12, 19, 39, .94);
+  box-shadow:
+    0 0 25px #8055f655,
+    0 12px 35px #0009;
+  backdrop-filter: blur(16px);
+}
+
+.nav-item {
+  min-width: 0;
+  min-height: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid transparent;
+  border-radius: 15px;
+  background: transparent;
+  color: #9ba9c5;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.nav-item .nav-icon {
+  font-size: 21px;
+  line-height: 1;
+}
+
+.nav-item.active {
+  color: #fff;
+  border-color: #8065e9;
+  background: linear-gradient(145deg, #55379a, #263b68);
+  box-shadow:
+    0 0 15px #8055f677,
+    inset 0 0 12px #ffffff12;
+}
+
+.nav-item:active {
+  transform: scale(.94);
+}
+
+@media(max-width: 380px) {
+  .bottom-nav {
+    width: calc(100% - 16px);
+    padding: 6px;
+    gap: 2px;
+  }
+
+  .nav-item {
+    font-size: 10px;
+    min-height: 54px;
+  }
+
+  .nav-item .nav-icon {
+    font-size: 19px;
+  }
+}
+  
 </style>
 </head>
 <body>
@@ -158,7 +508,8 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
     style="border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--panel);color:var(--text);font-size:18px;cursor:pointer">⚙️</button>
   <div class="avatar" title="Профіль">✦</div>
 </div></header>
- <div id="helpPanel" style="display:none;position:fixed;inset:0;z-index:1001;background:rgba(0,0,0,.6);padding:20px;overflow-y:auto">
+
+  <div id="helpPanel" style="display:none;position:fixed;inset:0;z-index:1001;background:rgba(0,0,0,.6);padding:20px;overflow-y:auto">
   <div style="width:calc(100% - 24px);max-width:420px;box-sizing:border-box;margin:60px auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
       <h2 id="helpTitle" style="margin:0">📱 Як користуватися?</h2>
@@ -226,6 +577,7 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
 
   </div>
 </div>
+ <main id="screenHome" class="app-screen active">
   <section class="hero"> 
     <div class="card">
       <div class="eyebrow">Швидкий запис</div> 
@@ -258,22 +610,16 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
   </button>
 </div>
   </section> 
-    <section class="categories">
-    <button class="category-box active" data-filter="Усе">📚<span>Усе</span></button>
-    <button class="category-box" data-filter="Покупки">🛍️<span>Покупки</span></button>
-    <button class="category-box" data-filter="Зустрічі">🩺<span>Зустрічі</span></button>
-    <button class="category-box" data-filter="Здоров’я">💊<span>Здоров’я</span></button>
-    <button class="category-box" data-filter="Справи">✓<span>Справи</span></button>
-    <button class="category-box" data-filter="Місця">📍<span>Місця</span></button>
-    <button class="category-box" data-filter="Нотатки">📝<span>Нотатки</span></button>
-    <button class="category-box" data-filter="Їжа та кафе">🍽️<span>Їжа та кафе</span></button>
-    </section>
+   
   
   <section class="stats">
     <div class="stat"><strong id="totalStat">0</strong><span id="totalStatLabel">Збережено записів</span></div>
     <div class="stat"><strong id="reminderStat">0</strong><span id="reminderStatLabel">Мають нагадування</span></div>
-    <div class="stat"><strong id="categoryStat">0</strong><span id="categoryStatLabel">Категорій використано</span></div></section>
-    <div class="section-head"><div><h2 id="memoryTitle">Твоя пам'ять</h2>
+    <div class="stat"><strong id="categoryStat">0</strong>
+      <span id="categoryStatLabel">Категорій використано</span></div></section>
+      </main>
+      <main id="screenReminders" class="app-screen">
+      <div class="section-head"><div><h2 id="memoryTitle">Твоя пам'ять</h2>
 <p id="memorySubtitle">Усе важливе — в одному місці.</p></div><div class="section-actions"><button class="secondary" id="addDetailed">＋ Новий запис</button></div></div>
     <div class="toolbar" id="filters">
   <input class="field" id="search" placeholder="⌕ Пошук за змістом…">
@@ -290,7 +636,44 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
   </button>
  </div>
   <div class="grid" id="notesGrid"></div>
+  </main>
+  <main id="screenCategories" class="app-screen">
+   <section class="categories">
+    <button class="category-box active" data-filter="Усе">📚<span>Усе</span></button>
+    <button class="category-box" data-filter="Покупки">🛍️<span>Покупки</span></button>
+    <button class="category-box" data-filter="Зустрічі">🩺<span>Зустрічі</span></button>
+    <button class="category-box" data-filter="Здоров’я">💊<span>Здоров’я</span></button>
+    <button class="category-box" data-filter="Справи">✓<span>Справи</span></button>
+    <button class="category-box" data-filter="Місця">📍<span>Місця</span></button>
+    <button class="category-box" data-filter="Нотатки">📝<span>Нотатки</span></button>
+    <button class="category-box" data-filter="Їжа та кафе">🍽️<span>Їжа та кафе</span></button>
+    </section>
+  </main>
+ 
+ <main id="screenSettings" class="app-screen">
+  <div class="card">
+    <h2>Налаштування</h2>
+    <p>Керуй мовою, сповіщеннями та резервними копіями.</p>
+    <button class="secondary" type="button" onclick="document.getElementById('settingsBtn').click()">⚙ Відкрити налаштування</button>
+    <button class="secondary" type="button" onclick="document.getElementById('helpBtn').click()">❔ Допомога</button>
+    <button class="secondary" type="button" onclick="document.getElementById('feedbackBtn').click()">✉ Зворотний зв’язок</button>
+  </div>
   <div class="footer">Прототип LATER · Дані зберігаються локально на цьому пристрої. Регулярно роби резервну копію.</div>
+</main>
+<nav class="bottom-nav" aria-label="Головна навігація">
+  <button class="nav-item active" data-screen="screenHome">
+    <span>⌂</span><small>Головна</small>
+  </button>
+  <button class="nav-item" data-screen="screenReminders">
+    <span>▤</span><small>Мої нагадування</small>
+  </button>
+  <button class="nav-item" data-screen="screenCategories">
+    <span>◈</span><small>Категорії</small>
+  </button>
+  <button class="nav-item" data-screen="screenSettings">
+    <span>⚙</span><small>Налаштування</small>
+  </button>
+</nav>
 </div>
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-box"><h2 id="modalTitle">Новий запис</h2><label class="form-label" for="noteText">Що хочеш запам'ятати?</label><textarea class="field" id="noteText" placeholder="Напиши думку, ідею або річ…" rows="3"></textarea><div class="form-row"><div><label class="form-label" for="noteCategory">Категорія</label><select class="field" id="noteCategory"><option>Автоматично</option><option>Покупки</option><option>Ідеї</option><option>Місця</option><option>Рекомендації</option><option>Зустрічі</option><option>Здоров’я</option><option>Нотатки</option><option>Справи</option><option>Їжа та кафе</option><option>Інше</option></select></div><div><label class="form-label" for="noteDate">Нагадати (необов'язково)</label><input class="field" id="noteDate" type="datetime-local"></div></div><div class="modal-actions"><button class="secondary" id="cancelModal">Скасувати</button><button class="primary" id="saveNote">Зберегти запис</button></div></div></div>
 <script>
@@ -3980,6 +4363,25 @@ if (Notification.permission === "denied") {
 
   }).catch(error => console.log("Помилка:", error));
 }
+</script>
+<script>
+document.querySelectorAll('.nav-item[data-screen]').forEach(button => {
+  button.addEventListener('click', () => {
+    const target = button.dataset.screen;
+
+    document.querySelectorAll('.app-screen').forEach(screen => {
+      screen.classList.toggle('active', screen.id === target);
+    });
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+      const active = item === button;
+      item.classList.toggle('active', active);
+      item.setAttribute('aria-current', active ? 'page' : 'false');
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
 </script>
 </body>
 </html>
