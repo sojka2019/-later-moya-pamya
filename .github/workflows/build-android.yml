@@ -45,7 +45,7 @@ jobs:
           marker = "load();\n</script>"
           if marker not in html:
               raise SystemExit("Could not find the expected end of the main app script in index.html")
-          html = html.split(marker, 1)[0] + marker
+          html = html.split(marker, 1)[0] + marker + '\n' + html.split(marker, 1)[1]
           html += '\n<script type="module" src="./native-reminders.js"></script>\n</body>\n</html>\n'
           p.write_text(html, encoding="utf-8")
           PY
