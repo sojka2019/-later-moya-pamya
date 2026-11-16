@@ -81,7 +81,7 @@ jobs:
           EOF_VITE
           cat > native-app/capacitor.config.json <<'EOF_CAP'
           {
-           "appId": "ch.pamyatai.remember.test128",
+           "appId": "ch.pamyatai.remember.test129",
            "appName": "Нагадування",
            "webDir": "dist"
           }
@@ -785,7 +785,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: Nagaduvannya-4_test128
+          name: Nagaduvannya-4_test129
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
