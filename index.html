@@ -2606,7 +2606,7 @@ const monthText = (isMonthFirst
   ? matched[1]
   : matched[2]).toLowerCase().replace(/\.$/, '');
 
-  const day = dayWords[dayText] ?? Number(dayText.replace(/(?:st|nd|rd|th)?[,]?$/i, ''));
+ const day = dayWords[dayText] ?? Number(dayText.replace(/(?:st|nd|rd|th|er)?[,]?$/i, ''));
   let month = months[monthText];
 
 if (month === undefined) {
