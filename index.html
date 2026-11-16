@@ -2566,7 +2566,7 @@ const dayWordNames = Object.keys(dayWords)
   .join('|');
 
 const monthDateRegex = new RegExp(
-  '(?<![\\p{L}\\p{N}])(?:(?:am|el|on)\\s+)?(?:the\\s+)?(' +
+  '(?<![\\p{L}\\p{N}])(?:(?:am|el|on|le)\\s+)?(?:the\\s+)?(' +
   '\\d{1,2}(?:st|nd|rd|th)?\\.?[,]?|' +
   dayWordNames +
   ')(?:\\s+(?:de|of))?\\s+(' +
