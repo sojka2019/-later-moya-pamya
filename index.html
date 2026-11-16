@@ -270,6 +270,94 @@ body::before {
     0 0 75px #e11d48aa !important;
 }
 
+/* НЕОНОВІ ХВИЛІ МІКРОФОНА */
+.mic-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 190px;
+  margin-top: 18px;
+}
+
+.mic-hero {
+  width: 116px;
+  height: 116px;
+  border-radius: 50%;
+  font-size: 54px;
+  position: relative;
+  z-index: 2;
+}
+
+.mic-waves {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  height: 130px;
+}
+
+.mic-waves span {
+  display: block;
+  width: 7px;
+  height: 35px;
+  border-radius: 10px;
+  background: #22d3ee;
+  box-shadow: 0 0 12px #22d3ee;
+  opacity: .8;
+  animation: idleWave 1.4s ease-in-out infinite alternate;
+}
+.mic-waves {
+  inset: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.mic-waves span {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mic-waves span:nth-child(1) { left: 12%; }
+.mic-waves span:nth-child(2) { left: 23%; }
+.mic-waves span:nth-child(3) { display: none; }
+.mic-waves span:nth-child(4) { right: 23%; }
+.mic-waves span:nth-child(5) { right: 12%; }
+
+.mic-stage.listening .mic-waves span {
+  background: #fb7185;
+  box-shadow: 0 0 15px #fb7185, 0 0 30px #e11d48;
+  animation: neonWave .65s ease-in-out infinite alternate;
+  opacity: 1;
+}
+
+.mic-stage.listening .mic-waves span:nth-child(2),
+.mic-stage.listening .mic-waves span:nth-child(4) {
+  animation-delay: .2s;
+}
+
+.mic-stage.listening .mic-waves span:nth-child(3) {
+  animation-delay: .4s;
+}
+
+@keyframes neonWave {
+  from { height: 18px; }
+  to { height: 105px; }
+}
+
+@keyframes idleWave {
+  from { height: 28px; }
+  to { height: 45px; }
+}
+  
+ .mic-caption {
+  text-align: center;
+  margin-top: 4px;
+}
+  
 /* Поля введення */
 .field,
 select,
@@ -583,14 +671,26 @@ textarea:focus {
       <div class="eyebrow">Швидкий запис</div> 
       <h1 style="white-space:normal;overflow-wrap:anywhere;font-size:clamp(22px,7vw,30px);line-height:1.1;letter-spacing:-.04em"> Що і коли нагадати?
 </h1>
-      <p>Натисни 🎙 і скажи, що та коли нагадати. Перевір дані й натисни «Зберегти».</p> 
-      <div style="display:flex;align-items:center;gap:16px;margin-top:12px"> 
-        <button class="mic" id="micBtn" aria-label="Продиктувати нагадування">🎙</button>
-        <div> 
-          <strong id="micTitle">Сказати нагадування</strong>
-          <div class="hint" id="micHint">Натисни й продиктуй справу та час</div>
-        </div> 
-      </div> 
+     <p>Натисни 🎙 і скажи, що та коли нагадати. Перевір дані й натисни «Зберегти».</p>
+
+<div class="mic-stage">
+  <div class="mic-waves" aria-hidden="true">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <button class="mic mic-hero" id="micBtn" aria-label="Продиктувати нагадування">
+    <span>🎙️</span>
+  </button>
+</div>
+
+<div class="mic-caption">
+  <strong id="micTitle">Сказати нагадування</strong>
+  <div class="hint" id="micHint">Натисни й продиктуй справу та час</div>
+</div>
       <div class="status" id="voiceStatus" aria-live="polite"></div>
       <div class="capture">
         <input id="quickInput" class="field" placeholder="Або напиши тут…" aria-label="Швидкий запис">
@@ -4165,6 +4265,7 @@ recognition.onerror = e => {
   clearTimeout(recognitionTimer);
   recognitionTimer = null;
   $('micBtn').classList.remove('listening');
+  document.querySelector('.mic-stage')?.classList.remove('listening'); 
  const voiceErrorMessages = {
   uk: 'Не вдалося записати голос: ',
   ru: 'Не удалось записать голос: ',
@@ -4181,6 +4282,7 @@ $('voiceStatus').textContent =
 };
 recognition.onstart = () => {
   $('micBtn').classList.add('listening');
+  document.querySelector('.mic-stage').classList.add('listening');
 };
 
 recognition.onnomatch = () => {
@@ -4208,7 +4310,9 @@ recognition.onend = () => {
   clearTimeout(recognitionTimer);
   recognitionTimer = null;
   $('micBtn').classList.remove('listening');
- const micReadyLabels = {
+  document.querySelector('.mic-stage')?.classList.remove('listening');
+  
+  const micReadyLabels = {
   uk: ['Сказати нагадування', 'Натисни й продиктуй справу та час'],
   ru: ['Сказать напоминание', 'Нажми и продиктуй дело и время'],
   de: ['Erinnerung sprechen', 'Tippe und sprich die Aufgabe und die Zeit'],
@@ -4363,25 +4467,28 @@ if (Notification.permission === "denied") {
 
   }).catch(error => console.log("Помилка:", error));
 }
-</script>
-<script>
-document.querySelectorAll('.nav-item[data-screen]').forEach(button => {
-  button.addEventListener('click', () => {
-    const target = button.dataset.screen;
+  // кінець попереднього JavaScript
+  </script>
 
-    document.querySelectorAll('.app-screen').forEach(screen => {
-      screen.classList.toggle('active', screen.id === target);
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.nav-item[data-screen]').forEach(button => {
+      button.addEventListener('click', () => {
+        const target = button.dataset.screen;
+
+        document.querySelectorAll('.app-screen').forEach(screen => {
+          screen.classList.toggle('active', screen.id === target);
+        });
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+          const active = item === button;
+          item.classList.toggle('active', active);
+          item.setAttribute('aria-current', active ? 'page' : 'false');
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     });
-
-    document.querySelectorAll('.nav-item').forEach(item => {
-      const active = item === button;
-      item.classList.toggle('active', active);
-      item.setAttribute('aria-current', active ? 'page' : 'false');
-    });
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
-});
-</script>
+  </script>
 </body>
-</html>
