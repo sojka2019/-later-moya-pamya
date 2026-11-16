@@ -4471,24 +4471,23 @@ if (Notification.permission === "denied") {
   </script>
 
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.nav-item[data-screen]').forEach(button => {
-      button.addEventListener('click', () => {
-        const target = button.dataset.screen;
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('.nav-item[data-screen]');
+    if (!button) return;
 
-        document.querySelectorAll('.app-screen').forEach(screen => {
-          screen.classList.toggle('active', screen.id === target);
-        });
+    const target = button.dataset.screen;
 
-        document.querySelectorAll('.nav-item').forEach(item => {
-          const active = item === button;
-          item.classList.toggle('active', active);
-          item.setAttribute('aria-current', active ? 'page' : 'false');
-        });
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
+    document.querySelectorAll('.app-screen').forEach(screen => {
+      screen.classList.toggle('active', screen.id === target);
     });
+
+    document.querySelectorAll('.nav-item[data-screen]').forEach(item => {
+      const active = item === button;
+      item.classList.toggle('active', active);
+      item.setAttribute('aria-current', active ? 'page' : 'false');
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
   </script>
 </body>
