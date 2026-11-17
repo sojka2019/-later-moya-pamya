@@ -183,13 +183,30 @@ body::before {
   padding-bottom: 110px;
 }
 
-/* Верхня панель */
+/* Компактна верхня панель */
 .top {
-  padding: 14px 18px;
-  border: 1px solid #34466d;
-  border-radius: 22px;
-  background: linear-gradient(120deg, #121b32ee, #101629ee);
-  box-shadow: 0 0 28px #6655d522;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  margin-bottom: 12px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.top > div:first-child {
+  display: none;
+}
+
+.top > div:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: nowrap;
 }
 
 .brand {
@@ -350,7 +367,7 @@ body::before {
     drop-shadow(0 0 12px #8055f6);
   animation: arcBreath 3s ease-in-out infinite;
 }
-
+ 
 @keyframes arcBreath {
   0%, 100% {
     opacity: .35;
@@ -368,7 +385,10 @@ body::before {
     drop-shadow(0 0 18px #e11d48);
   animation: arcListening .85s ease-in-out infinite;
 }
-
+.mic-stage.listening .sound-arcs path {
+  stroke: #fb7185;
+}
+  
 @keyframes arcListening {
   0%, 100% {
     opacity: .4;
@@ -397,7 +417,22 @@ body::before {
     drop-shadow(0 0 10px #fb7185)
     drop-shadow(0 0 24px #e11d48);
 }
-.mic-caption {
+
+  /* Мікрофон готовий слухати */
+.mic-stage.voice-ready .studio-mic {
+  filter:
+    drop-shadow(0 0 8px #35e7f2)
+    drop-shadow(0 0 20px #8055f6);
+}
+
+.mic-stage.voice-ready .sound-arcs {
+  filter:
+    drop-shadow(0 0 6px #35e7f2)
+    drop-shadow(0 0 14px #8055f6);
+  animation: arcBreath 1.8s ease-in-out infinite;
+}
+  
+  .mic-caption {
   text-align: center;
   margin-top: 0;
   padding: 0 10px;
@@ -517,9 +552,27 @@ textarea:focus {
   }
 
   .top {
-    border-radius: 18px;
-    padding: 13px;
-  }
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 8px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.top > div:first-child {
+  display: none;
+}
+
+.top > div:last-child {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 12px;
+}
 
   .card {
     border-radius: 20px;
@@ -739,14 +792,22 @@ textarea:focus {
         </linearGradient>
       </defs>
 
-      <g fill="none" stroke="url(#waveColor)" stroke-width="2.5"
-         stroke-linecap="round">
-        <path d="M135 35 Q55 120 135 205 M225 35 Q305 120 225 205"/>
-        <path d="M115 20 Q20 120 115 220 M245 20 Q340 120 245 220"/>
-        <path d="M95 8 Q-5 120 95 232 M265 8 Q365 120 265 232"/>
-        <path d="M75 0 Q-35 120 75 240 M285 0 Q395 120 285 240"/>
-        <path d="M55 0 Q-60 120 55 240 M305 0 Q420 120 305 240"/>
-      </g>
+     <g fill="none" stroke-width="2.5" stroke-linecap="round">
+       <path d="M135 35 Q55 120 135 205" stroke="#35e7f2"/>
+       <path d="M225 35 Q305 120 225 205" stroke="#35e7f2"/>
+
+       <path d="M115 20 Q20 120 115 220" stroke="#fb7185"/>
+       <path d="M245 20 Q340 120 245 220" stroke="#fb7185"/>
+
+       <path d="M95 8 Q-5 120 95 232" stroke="#35e7f2"/>
+       <path d="M265 8 Q365 120 265 232" stroke="#35e7f2"/>
+
+       <path d="M75 0 Q-35 120 75 240" stroke="#fb7185"/>
+       <path d="M285 0 Q395 120 285 240" stroke="#fb7185"/>
+
+       <path d="M55 0 Q-60 120 55 240" stroke="#35e7f2"/>
+       <path d="M305 0 Q420 120 305 240" stroke="#35e7f2"/>
+     </g>
     </svg>
   </div>
 
@@ -4421,8 +4482,9 @@ $('voiceStatus').textContent =
   (voiceErrorMessages[appLanguage] || voiceErrorMessages.uk) + e.error;
 };
 recognition.onstart = () => {
-  $('micBtn').classList.add('listening');
-  document.querySelector('.mic-stage').classList.add('listening');
+  $('micBtn').classList.remove('listening');
+  document.querySelector('.mic-stage')?.classList.remove('listening');
+  document.querySelector('.mic-stage')?.classList.add('voice-ready');
 };
 
 recognition.onnomatch = () => {
@@ -4442,8 +4504,16 @@ $('voiceStatus').textContent =
   noMatchMessages[appLanguage] || noMatchMessages.uk;
 };                      
 
+recognition.onspeechstart = () => {
+  $('micBtn').classList.add('listening');
+  document.querySelector('.mic-stage')?.classList.add('listening');
+};
+
 recognition.onspeechend = () => {
   console.log('Мікрофон завершив слухати мовлення');
+
+  $('micBtn').classList.remove('listening');
+  document.querySelector('.mic-stage')?.classList.remove('listening');
 };
 
 recognition.onend = () => {
@@ -4451,7 +4521,7 @@ recognition.onend = () => {
   recognitionTimer = null;
   $('micBtn').classList.remove('listening');
   document.querySelector('.mic-stage')?.classList.remove('listening');
-  
+  document.querySelector('.mic-stage')?.classList.remove('voice-ready');
   const micReadyLabels = {
   uk: ['Сказати нагадування', 'Натисни й продиктуй справу та час'],
   ru: ['Сказать напоминание', 'Нажми и продиктуй дело и время'],
