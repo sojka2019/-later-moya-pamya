@@ -102,6 +102,19 @@ jobs:
             const micTitle = document.getElementById('micTitle');
             const micHint = document.getElementById('micHint');
             const voiceStatus = document.getElementById('voiceStatus');
+           
+            const micStage = document.querySelector('.mic-stage');
+
+            function setMicListening(isListening) {
+              if (!micStage) return;
+
+              micStage.classList.toggle('listening', isListening);
+              micStage.classList.toggle('voice-ready', !isListening);
+
+              if (micBtn) {
+                micBtn.classList.toggle('listening', isListening);
+              }
+            }
             if (micBtn) {
               micBtn.onclick = async () => {
                 try {
@@ -140,6 +153,7 @@ jobs:
                  try {
                    for (let attempt = 0; attempt < 2; attempt++) {
                      try {
+                       setMicListening(true);
                        result = await SpeechRecognition.start({
                          language: ({
                            uk: 'uk-UA',
@@ -215,6 +229,7 @@ jobs:
                   console.error('Native speech recognition error:', error);
                  if (voiceStatus) voiceStatus.textContent = 'Помилка: ' + (error?.message || String(error));
                 } finally {
+                  setMicListening(false);
                   if (micTitle) micTitle.textContent = 'Запам’ятати голосом';
                   if (micHint) micHint.textContent = 'Натисни та продиктуй думку';
                 }
