@@ -4505,11 +4505,13 @@ $('voiceStatus').textContent =
 };                      
 
 recognition.onspeechstart = () => {
+  console.log('SPEECH START СПРАЦЮВАВ');
   $('micBtn').classList.add('listening');
   document.querySelector('.mic-stage')?.classList.add('listening');
 };
 
 recognition.onspeechend = () => {
+  console.log('SPEECH END СПРАЦЮВАВ');
   console.log('Мікрофон завершив слухати мовлення');
 
   $('micBtn').classList.remove('listening');
