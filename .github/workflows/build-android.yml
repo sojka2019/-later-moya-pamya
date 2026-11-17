@@ -132,62 +132,28 @@ jobs:
                   if (micTitle) micTitle.textContent = 'Слухаю тебе…';
                   if (micHint) micHint.textContent = 'Скажи думку у вікні розпізнавання голосу';
                   if (voiceStatus) voiceStatus.textContent = '';
-                 
-                 let result;
-                 let resolveReady;
 
-                 const readyPromise = new Promise(resolve => {
-                   resolveReady = resolve;
-                 });
+                  let result;
 
-                 const readyListener = await SpeechRecognition.addListener(
-                   'readyForNextSession',
-                   () => {
-                     if (resolveReady) {
-                       resolveReady(true);
-                       resolveReady = null;
-                     }
-                   }
-                 );
+                  setMicListening(true);
 
-                 try {
-                   for (let attempt = 0; attempt < 2; attempt++) {
-                     try {
-                       setMicListening(true);
-                       result = await SpeechRecognition.start({
-                         language: ({
-                           uk: 'uk-UA',
-                           ru: 'ru-RU',
-                           de: 'de-DE',
-                           en: 'en-US',
-                           fr: 'fr-FR',
-                           it: 'it-IT',
-                           pl: 'pl-PL',
-                           es: 'es-ES'
-                         })[getAppLanguage()] || 'uk-UA',
-                         maxResults: 5,
-                         prompt: 'Скажіть, що потрібно запам’ятати',
-                         popup: false,
-                         partialResults: false
-                       });
+                  result = await SpeechRecognition.start({
+                    language: ({
+                      uk: 'uk-UA',
+                      ru: 'ru-RU',
+                      de: 'de-DE',
+                      en: 'en-US',
+                      fr: 'fr-FR',
+                      it: 'it-IT',
+                      pl: 'pl-PL',
+                      es: 'es-ES'
+                    })[getAppLanguage()] || 'uk-UA',
+                    maxResults: 5,
+                    prompt: 'Скажіть, що потрібно запам’ятати',
+                    popup: false,
+                    partialResults: false
+                  });
 
-                       break;
-                     } catch (error) {
-                       if (!/no match/i.test(String(error?.message || error)) || attempt === 1) {
-                         throw error;
-                       }
-
-                       const ready = await Promise.race([
-                         readyPromise,
-                         new Promise(resolve => setTimeout(() => resolve(false), 5000))
-                       ]);
-
-                       if (!ready) throw error;
-                     }
-                   }
-                 } finally {
-                   await readyListener.remove();
-                 }
                   const spokenText = String(
                     result?.matches?.find(text => /\b20(?:3[0-9]|[4-9][0-9])\b/.test(text)) ||
                     result?.matches?.[0] ||
