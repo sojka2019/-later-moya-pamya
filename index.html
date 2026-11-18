@@ -2163,7 +2163,10 @@ $('addDetailed').onclick=()=>openModal();
 $('cancelModal').onclick=closeModal;
 $('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
 $('saveNote').onclick=()=>{const text=$('noteText').value.trim();if(!text){$('noteText').focus();return}const category=$('noteCategory').value;const date=$('noteDate').value;if(editingId){const n=notes.find(n=>n.id===editingId);if(n){n.text=text;n.category=category==='Автоматично'?categoryFor(text):category;n.date=date;n.done=false}}else{const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false})}persist();closeModal()};
-$('search').addEventListener('input',render);
+$('search').addEventListener('input', () => {
+  resetCategoryFilter();
+  render();
+});
 document.querySelector('.categories').addEventListener('click', e => {
   const b = e.target.closest('[data-filter]');
   if (!b) return;
@@ -2200,21 +2203,18 @@ function resetCategoryFilter() {
 $('showUpcomingNotes').addEventListener('click', () => {
   showAllNotes = false;
   showCompletedNotes = false;
-  resetCategoryFilter();
   render();
 });
 
 $('showAllNotes').addEventListener('click', () => {
   showAllNotes = true;
   showCompletedNotes = false;
-  resetCategoryFilter();
   render();
 });
 
 $('showCompletedNotes').addEventListener('click', () => {
   showAllNotes = false;
   showCompletedNotes = true;
-  resetCategoryFilter();
   render();
 });
 $('notesGrid').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const id=Number(b.dataset.id);const n=notes.find(x=>x.id===id);if(!n)return;if(b.dataset.action==='delete'){if(confirm('Видалити цей запис?')){notes=notes.filter(x=>x.id!==id);persist()}}else if(b.dataset.action==='done'){n.done=!n.done;persist()}else if(b.dataset.action==='remind'){openModal(n)}});
