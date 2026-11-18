@@ -4683,11 +4683,17 @@ if (Notification.permission === "denied") {
   </script>
 
   <script>
-  document.addEventListener('click', (event) => {
+   document.addEventListener('click', (event) => {
     const button = event.target.closest('.nav-item[data-screen]');
     if (!button) return;
 
     const target = button.dataset.screen;
+
+    if (target === 'screenSettings') {
+      const settingsPanel = document.getElementById('settingsPanel');
+      if (settingsPanel) settingsPanel.style.display = 'block';
+      return;
+    }
 
     document.querySelectorAll('.app-screen').forEach(screen => {
       screen.classList.toggle('active', screen.id === target);
