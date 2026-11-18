@@ -1088,6 +1088,26 @@ const headerText = headerTranslations[language] || headerTranslations.uk;
 text('header .brand', headerText[0]);
 text('header .tag', headerText[1]);
 
+const navTranslations = {
+  uk: ['Головна', 'Мої нагадування', 'Категорії', 'Налаштування'],
+  ru: ['Главная', 'Мои напоминания', 'Категории', 'Настройки'],
+  de: ['Startseite', 'Meine Erinnerungen', 'Kategorien', 'Einstellungen'],
+  fr: ['Accueil', 'Mes rappels', 'Catégories', 'Paramètres'],
+  it: ['Home', 'I miei promemoria', 'Categorie', 'Impostazioni'],
+  en: ['Home', 'My reminders', 'Categories', 'Settings'],
+  pl: ['Główna', 'Moje przypomnienia', 'Kategorie', 'Ustawienia'],
+  es: ['Inicio', 'Mis recordatorios', 'Categorías', 'Configuración']
+};
+
+const navLabels = navTranslations[language] || navTranslations.uk;
+
+document.querySelectorAll('.bottom-nav .nav-item').forEach((item, index) => {
+  const label = item.querySelector('small');
+  if (label && navLabels[index]) {
+    label.textContent = navLabels[index];
+  }
+});
+  
 const quickTranslations = {
   uk: ['Швидкий запис', 'Що і коли нагадати?', 'Натисни 🎙 і скажи, що та коли нагадати. Перевір дані й натисни «Зберегти».'],
   ru: ['Быстрая запись', 'Что и когда напомнить?', 'Нажми 🎙 и скажи, что и когда напомнить. Проверь данные и нажми «Сохранить».'],
