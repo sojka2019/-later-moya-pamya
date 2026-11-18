@@ -4707,7 +4707,21 @@ if (Notification.permission === "denied") {
 }
   // кінець попереднього JavaScript
   </script>
+    <script>
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    document.querySelectorAll('.app-screen').forEach(screen => {
+      screen.classList.toggle('active', screen.id === 'screenHome');
+    });
 
+    document.querySelectorAll('.nav-item[data-screen]').forEach(item => {
+      const active = item.dataset.screen === 'screenHome';
+      item.classList.toggle('active', active);
+      item.setAttribute('aria-current', active ? 'page' : 'false');
+    });
+  }
+});
+</script>
   <script>
    document.addEventListener('click', (event) => {
     const button = event.target.closest('.nav-item[data-screen]');
