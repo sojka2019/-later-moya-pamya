@@ -953,14 +953,7 @@ textarea:focus {
     </section>
   </main>
  
- <main id="screenSettings" class="app-screen">
-  <div class="card">
-    <h2>Налаштування</h2>
-    <p>Керуй мовою, сповіщеннями та резервними копіями.</p>
-    <button class="secondary" type="button" onclick="document.getElementById('settingsPanel').style.display='block'">⚙ Відкрити налаштування</button>
-    <button class="secondary" type="button" onclick="document.getElementById('helpBtn').click()">❔ Допомога</button>
-    <button class="secondary" type="button" onclick="document.getElementById('feedbackBtn').click()">✉ Зворотний зв’язок</button>
-  </div>
+<main id="screenSettings" class="app-screen">
   <div class="footer">Прототип LATER · Дані зберігаються локально на цьому пристрої. Регулярно роби резервну копію.</div>
 </main>
 <nav class="bottom-nav" aria-label="Головна навігація">
@@ -1836,6 +1829,18 @@ $('helpPanel').addEventListener('click', e => {
   
 $('closeSettings').addEventListener('click', () => {
   $('settingsPanel').style.display = 'none';
+
+  document.querySelectorAll('.app-screen').forEach(screen => {
+    screen.classList.toggle('active', screen.id === 'screenHome');
+  });
+
+  document.querySelectorAll('.nav-item[data-screen]').forEach(item => {
+    const active = item.dataset.screen === 'screenHome';
+    item.classList.toggle('active', active);
+    item.setAttribute('aria-current', active ? 'page' : 'false');
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 $('feedbackBtn').addEventListener('click', () => {
   $('feedbackPanel').style.display = 'block';
