@@ -2169,6 +2169,8 @@ document.querySelector('.categories').addEventListener('click', e => {
   if (!b) return;
 
   activeFilter = b.dataset.filter;
+  showAllNotes = false;
+  showCompletedNotes = false;
   document.querySelectorAll('.category-box').forEach(x =>
     x.classList.toggle('active', x === b)
   );
@@ -4748,7 +4750,10 @@ document.addEventListener('visibilitychange', () => {
     if (!button) return;
 
     const target = button.dataset.screen;
-
+    if (target === 'screenReminders') {
+      resetCategoryFilter();
+    }
+     
     if (target === 'screenSettings') {
       const settingsPanel = document.getElementById('settingsPanel');
       if (settingsPanel) settingsPanel.style.display = 'block';
