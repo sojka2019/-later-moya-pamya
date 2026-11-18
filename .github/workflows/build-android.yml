@@ -185,15 +185,27 @@ jobs:
                     }
                   }
                 } catch (error) {
-                  alert(
-                    'Помилка Android:\n' +
-                    'message: ' + (error?.message || 'немає') + '\n' +
-                    'code: ' + (error?.code || 'немає') + '\n' +
-                    'name: ' + (error?.name || 'немає') + '\n' +
-                    'error: ' + String(error)
-                 );
-                  console.error('Native speech recognition error:', error);
-                 if (voiceStatus) voiceStatus.textContent = 'Помилка: ' + (error?.message || String(error));
+                  const errorMessage = String(error?.message || error);
+
+                  if (/no match/i.test(errorMessage)) {
+                    if (voiceStatus) {
+                      voiceStatus.textContent = 'Слів не розпізнано. Спробуй ще раз.';
+                    }
+                  } else {
+                    alert(
+                      'Помилка Android:\n' +
+                      'message: ' + (error?.message || 'немає') + '\n' +
+                      'code: ' + (error?.code || 'немає') + '\n' +
+                      'name: ' + (error?.name || 'немає') + '\n' +
+                      'error: ' + String(error)
+                    );
+
+                    console.error('Native speech recognition error:', error);
+
+                    if (voiceStatus) {
+                      voiceStatus.textContent = 'Помилка: ' + errorMessage;
+                    }
+                  }
                 } finally {
                   setMicListening(false);
                   if (micTitle) micTitle.textContent = 'Запам’ятати голосом';
