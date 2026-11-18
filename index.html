@@ -4068,9 +4068,9 @@ if (!timeMatch && !priceBeforeNumber) {
     hour = Number(splitMinuteMatch[1]);
     minute = 45;
   }
-  if (!relativeTimeMatch && timeMatch && Number.isFinite(hour)) {
-    const periodMatch = timeMatch[0].match(
-    new RegExp('(?:' + periodPattern + ')$', 'iu')
+ if (!relativeTimeMatch && timeMatch && Number.isFinite(hour)) {
+    const periodMatch = original.match(
+      new RegExp('(?:' + periodPattern + ')(?![\\p{L}])', 'iu')
     );
     const period = periodMatch ? periodMatch[0].toLowerCase() : '';
       console.log('ПЕРЕВІРКА ПЕРІОДУ:', {
