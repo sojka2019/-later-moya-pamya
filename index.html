@@ -2153,11 +2153,19 @@ document.querySelector('.categories').addEventListener('click', e => {
     x.classList.toggle('active', x === b)
   );
 
-  render();
-  document.querySelector('.section-head')?.scrollIntoView({
-    behavior: 'smooth',
-    block: 'start'
+  document.querySelectorAll('.app-screen').forEach(screen => {
+    screen.classList.toggle('active', screen.id === 'screenReminders');
   });
+
+  document.querySelectorAll('.nav-item[data-screen]').forEach(item => {
+    const active = item.dataset.screen === 'screenReminders';
+    item.classList.toggle('active', active);
+    item.setAttribute('aria-current', active ? 'page' : 'false');
+  });
+
+  render();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 function resetCategoryFilter() {
   activeFilter = 'Усе';
