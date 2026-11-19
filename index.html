@@ -4751,7 +4751,7 @@ document.addEventListener('visibilitychange', () => {
     if (!button) return;
 
     const target = button.dataset.screen;
-    if (target === 'screenReminders') {
+    if (target === 'screenReminders' || target === 'screenCategories') {
       resetCategoryFilter();
     }
      
