@@ -295,7 +295,7 @@ body::before {
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height: 230px;
+  min-height: 300px;
   margin-top: 8px;
   isolation: isolate;
 }
@@ -303,8 +303,11 @@ body::before {
 .mic-stage::before {
   content: "";
   position: absolute;
-  width: 155px;
-  height: 155px;
+  width: 280px;
+  height: 280px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
   background: radial-gradient(
     circle,
@@ -359,23 +362,32 @@ body::before {
 .sound-arcs {
   display: block;
   width: 100%;
-  max-width: 360px;
-  height: 240px;
+  max-width: 460px;
+  height: 280px;
   overflow: visible;
   filter:
-    drop-shadow(0 0 5px #35e7f2)
-    drop-shadow(0 0 12px #8055f6);
+    drop-shadow(0 0 7px #35e7f2)
+    drop-shadow(0 0 16px #8055f6)
+    drop-shadow(0 0 24px #ff70d5);
   animation: arcBreath 3s ease-in-out infinite;
 }
  
 @keyframes arcBreath {
   0%, 100% {
-    opacity: .35;
-    transform: scaleX(.94) scaleY(.96);
+    opacity: .45;
+    transform: scaleX(.88) scaleY(.94);
+  }
+  25% {
+    opacity: .75;
+    transform: scaleX(.96) scaleY(1.02);
   }
   50% {
-    opacity: .85;
-    transform: scaleX(1) scaleY(1.04);
+    opacity: 1;
+    transform: scaleX(1.04) scaleY(1.08);
+  }
+  75% {
+    opacity: .75;
+    transform: scaleX(.96) scaleY(1.02);
   }
 }
 
@@ -792,22 +804,28 @@ textarea:focus {
         </linearGradient>
       </defs>
 
-     <g fill="none" stroke-width="2.5" stroke-linecap="round">
-       <path d="M135 35 Q55 120 135 205" stroke="#35e7f2"/>
-       <path d="M225 35 Q305 120 225 205" stroke="#35e7f2"/>
+    <g fill="none"
+   stroke="url(#waveColor)"
+   stroke-width="2.5"
+   stroke-linecap="round">
 
-       <path d="M115 20 Q20 120 115 220" stroke="#fb7185"/>
-       <path d="M245 20 Q340 120 245 220" stroke="#fb7185"/>
+  <!-- Внутрішні хвилі -->
+  <path d="M165 65 C145 80 145 95 165 108 C180 120 180 135 165 148 C145 162 145 177 165 192"/>
+  <path d="M195 65 C215 80 215 95 195 108 C180 120 180 135 195 148 C215 162 215 177 195 192"/>
 
-       <path d="M95 8 Q-5 120 95 232" stroke="#35e7f2"/>
-       <path d="M265 8 Q365 120 265 232" stroke="#35e7f2"/>
+  <!-- Середні хвилі -->
+  <path d="M145 40 C112 65 112 88 145 105 C175 122 175 138 145 155 C112 172 112 195 145 220"/>
+  <path d="M215 40 C248 65 248 88 215 105 C185 122 185 138 215 155 C248 172 248 195 215 220"/>
 
-       <path d="M75 0 Q-35 120 75 240" stroke="#fb7185"/>
-       <path d="M285 0 Q395 120 285 240" stroke="#fb7185"/>
+  <!-- Зовнішні хвилі -->
+  <path d="M120 20 C75 55 75 85 120 108 C165 132 165 148 120 172 C75 195 75 220 120 238"/>
+  <path d="M240 20 C285 55 285 85 240 108 C195 132 195 148 240 172 C285 195 285 220 240 238"/>
 
-       <path d="M55 0 Q-60 120 55 240" stroke="#35e7f2"/>
-       <path d="M305 0 Q420 120 305 240" stroke="#35e7f2"/>
-     </g>
+  <!-- Найширші хвилі -->
+  <path d="M95 5 C35 48 35 82 95 110 C155 138 155 150 95 178 C35 205 35 230 95 240"/>
+  <path d="M265 5 C325 48 325 82 265 110 C205 138 205 150 265 178 C325 205 325 230 265 240"/>
+
+</g>
     </svg>
   </div>
 
