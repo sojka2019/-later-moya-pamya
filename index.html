@@ -4201,7 +4201,13 @@ const hourPatternForParsing = friendActionContext
       date.setHours(hour, minute, 0, 0);
       hasTime = true;
       hasDate = true;
-       text = text.replace(timeMatch[0], ' ');
+       text = text.replace(
+  new RegExp(
+    escapeRegex(timeMatch[0]) + '(?:\\s+час(?:а|ов|у)?(?![\\p{L}\\p{N}]))?',
+    'iu'
+  ),
+  ' '
+);
 
       if (colloquialPastMatch) {
         text = text.replace(colloquialPastMatch[0], ' ');
