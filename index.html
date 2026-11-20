@@ -4067,12 +4067,22 @@ if (!timeMatch && !priceBeforeNumber) {
   }
 }
   
+ // Не сприймаємо "другу" як годину після дієслів дії
+const friendActionContext = /(?:зателефонувати|подзвонити|дзвонити|сказати|зустріти|побачити|зробити)\s+(?:своєму\s+)?другу\b/iu.test(text);
+const hourPatternForParsing = friendActionContext
+  ? Object.keys(hourWords)
+      .filter(word => !['другу', 'друга', 'другого'].includes(word))
+      .sort((a, b) => b.length - a.length)
+      .map(escapeRegex)
+      .join('|')
+  : hourPattern;
+  
   // 3. Час словами: "о сьомій п'ятнадцять"
   if (!timeMatch) {
     timeMatch = text.match(
       new RegExp(
         '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\\s+las|a\\s+la)?\\s*(' +
-         hourPattern +
+         hourPatternForParsing +
         ')' +
         '(?:\\s+Uhr)?' +
         '(?:\\s+(' + minutePattern + '))?' +
