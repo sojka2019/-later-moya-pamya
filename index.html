@@ -83,7 +83,7 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1
   box-shadow: 0 0 0 2px rgba(169, 154, 255, 0.3);
   font-weight: 700;
 }
-.mic.listening:not(.mic-hero) {
+.mic.listening {
   background: #e8757f;
   border-color: #ffadb3;
   color: #fff;
@@ -180,7 +180,6 @@ body::before {
   position: relative;
   z-index: 1;
   max-width: 1120px;
-  margin: 0 auto;
   padding-bottom: 110px;
 }
 
@@ -279,7 +278,7 @@ body::before {
   transform: scale(.94);
 }
 
-.mic.listening:not(.mic-hero) {
+.mic.listening {
   background: linear-gradient(145deg, #fb7185, #e11d48) !important;
   border-color: #ffc0cb !important;
   box-shadow:
@@ -296,7 +295,7 @@ body::before {
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height: 300px;
+  min-height: 230px;
   margin-top: 8px;
   isolation: isolate;
 }
@@ -304,11 +303,8 @@ body::before {
 .mic-stage::before {
   content: "";
   position: absolute;
-  width: 280px;
-  height: 280px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  width: 155px;
+  height: 155px;
   border-radius: 50%;
   background: radial-gradient(
     circle,
@@ -363,32 +359,23 @@ body::before {
 .sound-arcs {
   display: block;
   width: 100%;
-  max-width: 460px;
-  height: 280px;
+  max-width: 360px;
+  height: 240px;
   overflow: visible;
   filter:
-    drop-shadow(0 0 7px #35e7f2)
-    drop-shadow(0 0 16px #8055f6)
-    drop-shadow(0 0 24px #ff70d5);
+    drop-shadow(0 0 5px #35e7f2)
+    drop-shadow(0 0 12px #8055f6);
   animation: arcBreath 3s ease-in-out infinite;
 }
  
 @keyframes arcBreath {
   0%, 100% {
-    opacity: .45;
-    transform: scaleX(.88) scaleY(.94);
-  }
-  25% {
-    opacity: .75;
-    transform: scaleX(.96) scaleY(1.02);
+    opacity: .35;
+    transform: scaleX(.94) scaleY(.96);
   }
   50% {
-    opacity: 1;
-    transform: scaleX(1.04) scaleY(1.08);
-  }
-  75% {
-    opacity: .75;
-    transform: scaleX(.96) scaleY(1.02);
+    opacity: .85;
+    transform: scaleX(1) scaleY(1.04);
   }
 }
 
@@ -805,28 +792,22 @@ textarea:focus {
         </linearGradient>
       </defs>
 
-   <g fill="none"
-   stroke="url(#waveColor)"
-   stroke-width="2.5"
-   stroke-linecap="round">
+     <g fill="none" stroke-width="2.5" stroke-linecap="round">
+       <path d="M135 35 Q55 120 135 205" stroke="#35e7f2"/>
+       <path d="M225 35 Q305 120 225 205" stroke="#35e7f2"/>
 
-  <!-- Внутрішні звукові дуги -->
-  <path d="M160 65 C140 80 130 100 130 120 C130 140 140 160 160 175"/>
-  <path d="M200 65 C220 80 230 100 230 120 C230 140 220 160 200 175"/>
+       <path d="M115 20 Q20 120 115 220" stroke="#fb7185"/>
+       <path d="M245 20 Q340 120 245 220" stroke="#fb7185"/>
 
-  <!-- Середні звукові дуги -->
-  <path d="M145 45 C110 65 95 90 95 120 C95 150 110 175 145 195"/>
-  <path d="M215 45 C250 65 265 90 265 120 C265 150 250 175 215 195"/>
+       <path d="M95 8 Q-5 120 95 232" stroke="#35e7f2"/>
+       <path d="M265 8 Q365 120 265 232" stroke="#35e7f2"/>
 
-  <!-- Зовнішні звукові дуги -->
-  <path d="M125 25 C75 55 55 85 55 120 C55 155 75 185 125 215"/>
-  <path d="M235 25 C285 55 305 85 305 120 C305 155 285 185 235 215"/>
+       <path d="M75 0 Q-35 120 75 240" stroke="#fb7185"/>
+       <path d="M285 0 Q395 120 285 240" stroke="#fb7185"/>
 
-  <!-- Найширші звукові дуги -->
-  <path d="M105 8 C45 45 25 80 25 120 C25 160 45 195 105 232"/>
-  <path d="M255 8 C315 45 335 80 335 120 C335 160 315 195 255 232"/>
-
-</g>
+       <path d="M55 0 Q-60 120 55 240" stroke="#35e7f2"/>
+       <path d="M305 0 Q420 120 305 240" stroke="#35e7f2"/>
+     </g>
     </svg>
   </div>
 
