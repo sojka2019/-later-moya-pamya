@@ -4068,10 +4068,10 @@ if (!timeMatch && !priceBeforeNumber) {
 }
   
  // Не сприймаємо "другу" як годину після дієслів дії
-const friendActionContext = /(?:зателефонувати|подзвонити|дзвонити|сказати|зустріти|побачити|зробити).*?(?<![\p{L}\p{N}])друг(?:у|а|ові)(?![\p{L}\p{N}])/iu.test(original);
+const friendActionContext = /(?:зателефонувати|подзвонити|дзвонити|сказати|зустріти|побачити|зробити|зайти|нагадати|показати|позвонить|сказать|напомнить|показать|встретить|увидеть).*?(?<![\p{L}\p{N}])друг(?:у|а|ові|ом|е)?(?![\p{L}\p{N}])/iu.test(original);
 const hourPatternForParsing = friendActionContext
   ? Object.keys(hourWords)
-      .filter(word => !['другу', 'друга', 'другого'].includes(word))
+      .filter(word => !['другу', 'друга', 'другого', 'другом', 'друге'].includes(word))
       .sort((a, b) => b.length - a.length)
       .map(escapeRegex)
       .join('|')
