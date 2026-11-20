@@ -4109,7 +4109,7 @@ const hourPatternForParsing = friendActionContext
     hour = Number(splitMinuteMatch[1]);
     minute = 45;
   }
- if (!relativeTimeMatch && timeMatch && Number.isFinite(hour) && !friendActionContext) {
+ if (!relativeTimeMatch && timeMatch && Number.isFinite(hour) && !(friendActionContext && timeMatch[0].toLowerCase().includes('другу'))) {
     const periodMatch = original.match(
       new RegExp('(?:' + periodPattern + ')(?![\\p{L}])', 'iu')
     );
