@@ -3212,11 +3212,24 @@ function getEditDistance(a, b) {
   return matrix[a.length][b.length];
 }
 
+ const quantityUnits = new Set([
+  'літр', 'літра', 'літри', 'літрів', 'літру',
+  'литр', 'литра', 'литры', 'литров',
+  'кіло', 'кило',
+  'кілограм', 'кілограма', 'кілограмів', 'кілограмами',
+  'килограмм', 'килограмма', 'килограммов', 'килограммы',
+  'грам', 'грами', 'грамів', 'грамів',
+  'грамм', 'грамма', 'граммов',
+  'мілілітр', 'мілілітри', 'миллилитр', 'миллилитра'
+]);
+  
 const monthCorrections = [];
 
 for (const match of monthWords) {
   const word = match[0].toLowerCase();
-
+ 
+  if (quantityUnits.has(word)) continue;
+  
   if (months[word] !== undefined) continue;
 
   const normalizedWord = word.normalize('NFD').replace(/\p{M}/gu, '');
