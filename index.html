@@ -278,7 +278,7 @@ body::before {
   transform: scale(.94);
 }
 
-.mic.listening {
+.mic.listening:not(.mic-hero) {
   background: linear-gradient(145deg, #fb7185, #e11d48) !important;
   border-color: #ffc0cb !important;
   box-shadow:
@@ -339,8 +339,9 @@ body::before {
   height: 200px;
   overflow: visible;
   filter:
-    drop-shadow(0 0 7px #35e7f2)
-    drop-shadow(0 0 17px #8055f6);
+    drop-shadow(0 0 9px #35e7f2)
+    drop-shadow(0 0 20px #8055f6)
+    drop-shadow(0 0 28px #ff70d5);
   animation: micFloat 3s ease-in-out infinite;
 }
 
@@ -792,22 +793,16 @@ textarea:focus {
         </linearGradient>
       </defs>
 
-     <g fill="none" stroke-width="2.5" stroke-linecap="round">
-       <path d="M135 35 Q55 120 135 205" stroke="#35e7f2"/>
-       <path d="M225 35 Q305 120 225 205" stroke="#35e7f2"/>
-
-       <path d="M115 20 Q20 120 115 220" stroke="#fb7185"/>
-       <path d="M245 20 Q340 120 245 220" stroke="#fb7185"/>
-
-       <path d="M95 8 Q-5 120 95 232" stroke="#35e7f2"/>
-       <path d="M265 8 Q365 120 265 232" stroke="#35e7f2"/>
-
-       <path d="M75 0 Q-35 120 75 240" stroke="#fb7185"/>
-       <path d="M285 0 Q395 120 285 240" stroke="#fb7185"/>
-
-       <path d="M55 0 Q-60 120 55 240" stroke="#35e7f2"/>
-       <path d="M305 0 Q420 120 305 240" stroke="#35e7f2"/>
-     </g>
+     <g fill="none" stroke="url(#waveColor)" stroke-width="2.5" stroke-linecap="round">
+  <path d="M160 65 C140 80 130 100 130 120 C130 140 140 160 160 175"/>
+  <path d="M200 65 C220 80 230 100 230 120 C230 140 220 160 200 175"/>
+  <path d="M145 45 C110 65 95 90 95 120 C95 150 110 175 145 195"/>
+  <path d="M215 45 C250 65 265 90 265 120 C265 150 250 175 215 195"/>
+  <path d="M125 25 C75 55 55 85 55 120 C55 155 75 185 125 215"/>
+  <path d="M235 25 C285 55 305 85 305 120 C305 155 285 185 235 215"/>
+  <path d="M105 8 C45 45 25 80 25 120 C25 160 45 195 105 232"/>
+  <path d="M255 8 C315 45 335 80 335 120 C335 160 315 195 255 232"/>
+</g>
     </svg>
   </div>
 
