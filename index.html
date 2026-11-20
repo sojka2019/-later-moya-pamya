@@ -4068,7 +4068,7 @@ if (!timeMatch && !priceBeforeNumber) {
 }
   
  // Не сприймаємо "другу" як годину після дієслів дії
-const friendActionContext = /(?:зателефонувати|подзвонити|дзвонити|сказати|зустріти|побачити|зробити)\s+(?:своєму\s+)?другу\b/iu.test(text);
+const friendActionContext = /(?:зателефонувати|подзвонити|дзвонити|сказати|зустріти|побачити|зробити).*?\bдруг(?:у|а|ові)\b/iu.test(text);
 const hourPatternForParsing = friendActionContext
   ? Object.keys(hourWords)
       .filter(word => !['другу', 'друга', 'другого'].includes(word))
