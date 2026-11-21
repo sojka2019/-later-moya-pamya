@@ -4298,7 +4298,7 @@ const hourPatternForParsing = friendActionContext
         new RegExp(
           '(?<![\\p{L}\\p{N}])(?:во\\s+)?' +
           escapeRegex(timeMatch[0]) +
-          '(?:\\s+(?:час(?:а|ов|у)?|годин(?:а|и|і|у|ою)?)(?![\\p{L}\\p{N}]))?' +
+          '(?:\\s+(?:час(?:а|ов|у)?|годин(?:а|и|і|у|ою)?|heure(?:s)?)(?![\\p{L}\\p{N}]))?' +
           '(?:\\s+(?:' + periodPattern + '))?',
           'iu'
         ),
