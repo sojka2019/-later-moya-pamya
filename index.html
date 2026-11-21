@@ -4226,48 +4226,59 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
         : 0;
 
   // Італійське "e mezza" — половина години
-const italianHalfMatch = text
-  .slice(timeMatch.index + timeMatch[0].length)
-  .match(/^\s+e\s+mezza(?![\p{L}\p{N}])/iu);
+      const italianHalfMatch = text
+        .slice(timeMatch.index + timeMatch[0].length)
+        .match(/^\s+e\s+mezza(?![\p{L}\p{N}])/iu);
 
-// Іспанське "y media" — половина години
-const spanishHalfMatch = text
-  .slice(timeMatch.index + timeMatch[0].length)
-  .match(/^\s+y\s+media(?![\p{L}\p{N}])/iu);
+      // Іспанське "y media" — половина години
+      const spanishHalfMatch = text
+        .slice(timeMatch.index + timeMatch[0].length)
+        .match(/^\s+y\s+media(?![\p{L}\p{N}])/iu);
 
-if (italianHalfMatch) {
-  minute = 30;
-  timeMatch[0] += italianHalfMatch[0];
-}
+      if (italianHalfMatch) {
+        minute = 30;
+        timeMatch[0] += italianHalfMatch[0];
+      }
 
-if (spanishHalfMatch) {
-  minute = 30;
-  timeMatch[0] += spanishHalfMatch[0];
-}
-// Іспанське "y cuarto" — 15 хвилин
-const spanishQuarterMatch = text
-  .slice(timeMatch.index + timeMatch[0].length)
-  .match(/^\s+y\s+cuarto(?![\p{L}\p{N}])/iu);
+      if (spanishHalfMatch) {
+        minute = 30;
+        timeMatch[0] += spanishHalfMatch[0];
+      }
 
-if (spanishQuarterMatch) {
-  minute = 15;
-  timeMatch[0] += spanishQuarterMatch[0];
-}
+      // Іспанське "y cuarto" — 15 хвилин
+      const spanishQuarterMatch = text
+        .slice(timeMatch.index + timeMatch[0].length)
+        .match(/^\s+y\s+cuarto(?![\p{L}\p{N}])/iu);
 
-// Іспанське "menos cuarto" — без чверті
-const spanishMinusQuarterMatch = text
-  .slice(timeMatch.index + timeMatch[0].length)
-  .match(/^\s+menos\s+cuarto(?![\p{L}\p{N}])/iu);
+      if (spanishQuarterMatch) {
+        minute = 15;
+        timeMatch[0] += spanishQuarterMatch[0];
+      }
 
-if (spanishMinusQuarterMatch) {
-  hour = (hour + 23) % 24;
-  minute = 45;
-  timeMatch[0] += spanishMinusQuarterMatch[0];
-}
-      
-}
+      // Іспанські хвилини: "y veinte", "y diez", "y cinco" тощо
+      const spanishMinuteMatch = text
+        .slice(timeMatch.index + timeMatch[0].length)
+        .match(/^\s+y\s+(cinco|diez|veinte|veinticinco|treinta|treinta y cinco|cuarenta|cuarenta y cinco|cincuenta|cincuenta y cinco)(?![\p{L}\p{N}])/iu);
+
+      if (spanishMinuteMatch) {
+        minute = minuteWords[spanishMinuteMatch[1].toLowerCase()];
+        timeMatch[0] += spanishMinuteMatch[0];
+      }
+
+      // Іспанське "menos cuarto" — без чверті
+      const spanishMinusQuarterMatch = text
+        .slice(timeMatch.index + timeMatch[0].length)
+        .match(/^\s+menos\s+cuarto(?![\p{L}\p{N}])/iu);
+
+      if (spanishMinusQuarterMatch) {
+        hour = (hour + 23) % 24;
+        minute = 45;
+        timeMatch[0] += spanishMinusQuarterMatch[0];
+      }
+    }
   }
- // Виправляємо випадок, коли мікрофон розбиває 14:45 на "14 40 п'ять"
+
+  // Виправляємо випадок, коли мікрофон розбиває 14:45 на "14 40 п'ять"
   const splitMinuteMatch = text.match(
     /(?<![\p{L}\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\s+las|a\s+la)\s*(\d{1,2})[.\s]+\s*40\s+(?:п’ять|п'ять|пять|five|fünf|cinq|cinque|pięć|piec|cinco)(?![\p{L}\p{N}])/iu
   );
