@@ -4225,15 +4225,25 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
         ? minuteWords[timeMatch[2].toLowerCase()]
         : 0;
 
-      // Італійське "e mezza" — половина години
-      const italianHalfMatch = text
-        .slice(timeMatch.index + timeMatch[0].length)
-        .match(/^\s+e\s+mezza(?![\p{L}\p{N}])/iu);
+  // Італійське "e mezza" — половина години
+const italianHalfMatch = text
+  .slice(timeMatch.index + timeMatch[0].length)
+  .match(/^\s+e\s+mezza(?![\p{L}\p{N}])/iu);
 
-      if (italianHalfMatch) {
-        minute = 30;
-        timeMatch[0] += italianHalfMatch[0];
-      }
+// Іспанське "y media" — половина години
+const spanishHalfMatch = text
+  .slice(timeMatch.index + timeMatch[0].length)
+  .match(/^\s+y\s+media(?![\p{L}\p{N}])/iu);
+
+if (italianHalfMatch) {
+  minute = 30;
+  timeMatch[0] += italianHalfMatch[0];
+}
+
+if (spanishHalfMatch) {
+  minute = 30;
+  timeMatch[0] += spanishHalfMatch[0];
+}
     }
   }
  // Виправляємо випадок, коли мікрофон розбиває 14:45 на "14 40 п'ять"
