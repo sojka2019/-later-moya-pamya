@@ -4185,26 +4185,7 @@ const hourPatternForParsing = friendActionContext
       .join('|')
   : hourPattern;
 
-  if (russianClockMatch) {
-    const russianMinutes = {
-      '5': 5, 'пять': 5,
-      '10': 10, 'десять': 10,
-      '15': 15, 'пятнадцать': 15,
-      '20': 20, 'двадцать': 20
-    };
-
-    const russianHours = {
-      'один': 1, 'одна': 1, 'два': 2, 'две': 2,
-      'три': 3, 'четыре': 4, 'пять': 5, 'шесть': 6,
-      'семь': 7, 'восемь': 8, 'девять': 9,
-      'десять': 10, 'одиннадцать': 11, 'двенадцать': 12
-    };
-
-    hour = (russianHours[russianClockMatch[2].toLowerCase()] + 11) % 12;
-    minute = 60 - russianMinutes[russianClockMatch[1].toLowerCase()];
-    timeMatch = russianClockMatch;
-  }
-}
+ 
   
   // 3. Час словами: "о сьомій п'ятнадцять"
   if (!timeMatch) {
