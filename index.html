@@ -4107,6 +4107,12 @@ const hourPatternForParsing = friendActionContext
       )
     );
 
+    if (timeMatch && /\s+(?:пачк(?:а|и|у|ою|ами)?|штук(?:а|и)?|штуки|штук|упаковк(?:а|и|у)?|коробк(?:а|и|у)?|кілограм(?:а|и|ів)?|грам(?:а|и|и)?|литр(?:а|и|ы|ов)?|літр(?:а|и|ів)?|килограмм(?:а|ы|ов)?)(?![\p{L}\p{N}])/iu.test(
+      text.slice(timeMatch.index + timeMatch[0].length)
+    )) {
+      timeMatch = null;
+    }
+
     if (timeMatch) {
       hour = hourWords[timeMatch[1].toLowerCase()];
       minute = timeMatch[2]
