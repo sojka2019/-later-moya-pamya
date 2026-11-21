@@ -4217,11 +4217,21 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
       timeMatch = null;
     }
 
-    if (timeMatch) {
+      if (timeMatch) {
       hour = hourWords[timeMatch[1].toLowerCase()];
       minute = timeMatch[2]
         ? minuteWords[timeMatch[2].toLowerCase()]
         : 0;
+
+      // Італійське "e mezza" — половина години
+      const italianHalfMatch = text
+        .slice(timeMatch.index + timeMatch[0].length)
+        .match(/^\s+e\s+mezza(?![\p{L}\p{N}])/iu);
+
+      if (italianHalfMatch) {
+        minute = 30;
+        timeMatch[0] += italianHalfMatch[0];
+      }
     }
   }
  // Виправляємо випадок, коли мікрофон розбиває 14:45 на "14 40 п'ять"
