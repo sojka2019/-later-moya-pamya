@@ -4190,7 +4190,7 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
         !(friendActionContext && ['другу', 'друга', 'другого', 'другом', 'друге'].includes(word)) &&
         !(frenchArticleContext && ['un', 'une'].includes(word)) &&
         !(italianArticleContext && ['un', 'una'].includes(word)) &&
-        !(spanishArticleContext && ['uno', 'una'].includes(word))
+        !(spanishArticleContext && ['un', 'uno', 'una'].includes(word))
       )
       .sort((a, b) => b.length - a.length)
       .map(escapeRegex)
