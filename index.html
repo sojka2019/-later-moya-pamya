@@ -4186,12 +4186,7 @@ const spanishArticleContext = /(?:llamar|encontrar|ver|visitar|conocer)\s+un\s+/
   
 const hourPatternForParsing = (friendActionContext || frenchArticleContext || italianArticleContext || spanishArticleContext)
   ? Object.keys(hourWords)
-     .filter(word =>
-        !(friendActionContext && ['другу', 'друга', 'другого', 'другом', 'друге'].includes(word)) &&
-        !(frenchArticleContext && ['un', 'une'].includes(word)) &&
-        !(italianArticleContext && ['un', 'una'].includes(word)) &&
-        ? Object.keys(hourWords)
-     .filter(word =>
+      .filter(word =>
         !(friendActionContext && ['другу', 'друга', 'другого', 'другом', 'друге'].includes(word)) &&
         !(frenchArticleContext && ['un', 'une'].includes(word)) &&
         !(italianArticleContext && ['un', 'una'].includes(word)) &&
@@ -4201,11 +4196,6 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
       .map(escapeRegex)
       .join('|')
   : hourPattern;
-      .sort((a, b) => b.length - a.length)
-      .map(escapeRegex)
-      .join('|')
-  : hourPattern;
-
  
   
   // 3. Час словами: "о сьомій п'ятнадцять"
