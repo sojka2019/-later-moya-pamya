@@ -4182,7 +4182,7 @@ const frenchArticleContext = /(?:rencontrer|voir|appeler|retrouver)\s+(?:un|une)
 
 const italianArticleContext = /(?:incontrare|vedere|chiamare|trovare)\s+(?:un|una)\s+/iu.test(original);
 
-const spanishArticleContext = /(?:llamar|encontrar|ver|visitar|conocer)\s+un\s+/iu.test(original);
+const spanishArticleContext = /(?:llamar|encontrar|ver|visitar|conocer)\s+(?:a\s+)?un\s+/iu.test(original);
   
 const hourPatternForParsing = (friendActionContext || frenchArticleContext || italianArticleContext || spanishArticleContext)
   ? Object.keys(hourWords)
