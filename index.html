@@ -4244,7 +4244,28 @@ if (spanishHalfMatch) {
   minute = 30;
   timeMatch[0] += spanishHalfMatch[0];
 }
-    }
+// Іспанське "y cuarto" — 15 хвилин
+const spanishQuarterMatch = text
+  .slice(timeMatch.index + timeMatch[0].length)
+  .match(/^\s+y\s+cuarto(?![\p{L}\p{N}])/iu);
+
+if (spanishQuarterMatch) {
+  minute = 15;
+  timeMatch[0] += spanishQuarterMatch[0];
+}
+
+// Іспанське "menos cuarto" — без чверті
+const spanishMinusQuarterMatch = text
+  .slice(timeMatch.index + timeMatch[0].length)
+  .match(/^\s+menos\s+cuarto(?![\p{L}\p{N}])/iu);
+
+if (spanishMinusQuarterMatch) {
+  hour = (hour + 23) % 24;
+  minute = 45;
+  timeMatch[0] += spanishMinusQuarterMatch[0];
+}
+      
+}
   }
  // Виправляємо випадок, коли мікрофон розбиває 14:45 на "14 40 п'ять"
   const splitMinuteMatch = text.match(
