@@ -4438,6 +4438,13 @@ const dayPeriods = [
     regex: /(?<![\p{L}\p{N}])(?:до\s+(?:обіду|обеда)|vormittags|am\s+Vormittag|vor\s+Mittag|before\s+noon|avant\s+midi|prima\s+di\s+mezzogiorno|przed\s+południem|antes\s+del\s+mediodía|antes\s+del\s+mediodia)(?![\p{L}\p{N}])/iu,
     hour: 11
   },
+
+  {
+    // Французьке після обіду — 14:00
+    regex: /(?<![\p{L}\p{N}])(?:après-midi|l’après-midi|l'après-midi)(?![\p{L}\p{N}])/iu,
+    hour: 14
+  },
+  
   {
     // Обід — 12:00
     regex: /(?<![\p{L}\p{N}])(?:(?:в|у|во|am|at|à|a|o|al|w|um)\s+)?(?:обід|обідом|обіді|опівдні|обед|обедом|обеде|полдень|mittag|mittags|noon|midday|midi|mezzogiorno|południe|mediodía)(?![\p{L}\p{N}])/iu,
