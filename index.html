@@ -4253,7 +4253,7 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
   if (!timeMatch) {
     timeMatch = text.match(
       new RegExp(
-        '(?<![\\p{L}\\p{N}])(?:о|об|на|в|у|o|um|at|à|alle|a\\s+las|a\\s+la)?\\s*(' +
+        '(?<![\\p{L}\\p{N}])(?:(?:о|об|на|в|у|o|um|at|à|alle|a\\s+las|a\\s+la)\\s*)?(' +
          hourPatternForParsing +
         ')' +
         '(?:\\s+Uhr)?' +
