@@ -93,9 +93,55 @@ jobs:
           import { Capacitor } from '@capacitor/core';
           import { LocalNotifications } from '@capacitor/local-notifications';
           import { SpeechRecognition } from '@capgo/capacitor-speech-recognition';
+          import { FirebaseAnalytics } from '@capacitor-firebase/analytics';
           const STORAGE_KEY = 'later-prototype-v1';
           const getAppLanguage = () => localStorage.getItem('app-language') || 'uk';
+          const ANALYTICS_CONSENT_KEY = 'analytics-consent-v1';
+
+          async function applyAnalyticsConsent(consent) {
+            const granted = consent === 'granted';
+
+            await FirebaseAnalytics.setConsent({
+              type: 'ANALYTICS_STORAGE',
+              status: granted ? 'GRANTED' : 'DENIED'
+            });
+
+            await FirebaseAnalytics.setEnabled({
+              enabled: granted
+            });
+          }
+
+          async function initializeAnalyticsConsent() {
+            let consent = localStorage.getItem(ANALYTICS_CONSENT_KEY);
+
+            if (!consent) {
+              const messages = {
+                uk: 'Дозволити збір статистики використання застосунку? Ми рахуватимемо відкриття, створення нагадувань та використання голосу. Тексти нагадувань і аудіо не передаються. Відмова не впливає на роботу застосунку.',
+                ru: 'Разрешить сбор статистики использования приложения? Мы будем считать открытия, создание напоминаний и использование голоса. Тексты напоминаний и аудио не передаются. Отказ не влияет на работу приложения.',
+                de: 'Möchtest du Nutzungsstatistiken erlauben? Erfasst werden App-Öffnungen, erstellte Erinnerungen und die Sprachnutzung. Erinnerungstexte und Audio werden nicht übertragen. Eine Ablehnung hat keinen Einfluss auf die App.',
+                fr: 'Autoriser la collecte de statistiques d’utilisation ? Nous compterons les ouvertures, les rappels créés et l’utilisation de la voix. Les textes et les fichiers audio ne sont pas transmis. Le refus ne limite pas l’application.',
+                it: 'Consentire la raccolta di statistiche di utilizzo? Conteggiamo le aperture, i promemoria creati e l’uso della voce. I testi e gli audio non vengono trasmessi. Il rifiuto non limita l’app.',
+                en: 'Allow usage statistics? We count app opens, reminders created and voice feature usage. Reminder text and audio are not transmitted. Declining does not affect the app.',
+                pl: 'Zezwolić na zbieranie statystyk użytkowania? Zliczamy otwarcia aplikacji, utworzone przypomnienia i użycie głosu. Treść przypomnień i nagrania audio nie są przesyłane. Odmowa nie ogranicza działania aplikacji.',
+                es: '¿Permitir estadísticas de uso? Contaremos las aperturas, los recordatorios creados y el uso de la voz. No se transmiten los textos ni el audio. Rechazar no afecta al funcionamiento de la aplicación.'
+              };
+
+              const accepted = window.confirm(
+                messages[getAppLanguage()] || messages.uk
+              );
+
+              consent = accepted ? 'granted' : 'denied';
+
+              localStorage.setItem(ANALYTICS_CONSENT_KEY, consent);
+            }
+
+            await applyAnalyticsConsent(consent);
+          }
           if (Capacitor.isNativePlatform()) {
+            initializeAnalyticsConsent().catch(error => {
+              console.error('Analytics consent setup error:', error);
+            });
+
             const startupVoiceStatus = document.getElementById('voiceStatus');
             if (startupVoiceStatus) {
               startupVoiceStatus.textContent = 'Android-модуль завантажено';
@@ -771,22 +817,49 @@ jobs:
           rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
           python3 - <<'PY'
           from pathlib import Path
+          import re
+
           p = Path("android/app/src/main/AndroidManifest.xml")
           text = p.read_text(encoding="utf-8")
-           
+
           text = text.replace(
               'android:label="@string/app_name"',
               'android:label="Нагадування"'
           )
+
+          # Вимикаємо Firebase Analytics до згоди користувача
+          analytics_setting = """        <meta-data
+              android:name="firebase_analytics_collection_enabled"
+              android:value="false" />"""
+
+          if 'android:name="firebase_analytics_collection_enabled"' not in text:
+              text, count = re.subn(
+                  r'(<application\b[^>]*>)',
+                  lambda match: match.group(1) + "\n" + analytics_setting,
+                  text,
+                  count=1
+              )
+              if count != 1:
+                  raise SystemExit("Не знайдено тег application у AndroidManifest.xml")
+
           permissions = [
               '    <uses-permission android:name="android.permission.RECORD_AUDIO" />',
               '    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />',
           ]
+
           for permission in permissions:
               permission_name = permission.split('"')[1]
               if permission_name not in text:
-                  text = text.replace("<application", permission + "\n\n    <application", 1)
+                  text = text.replace(
+                      "<application",
+                      permission + "\n\n    <application",
+                      1
+                  )
+
           p.write_text(text, encoding="utf-8")
+
+          print("Firebase Analytics вимкнено до згоди користувача")
+          print("AndroidManifest.xml оновлено")
           PY
 
       - name: Build installable debug APK
