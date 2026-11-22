@@ -854,7 +854,9 @@ jobs:
               root_gradle.write_text(root_text, encoding="utf-8")
 
           app_text = app_gradle.read_text(encoding="utf-8")
-
+          print("===== APP GRADLE BEFORE VERSION FIX =====")
+          print(app_text)
+          print("===== END APP GRADLE =====")
           if re.search(r'versionCode\s+\d+', app_text):
               app_text = re.sub(
                   r'versionCode\s+\d+',
