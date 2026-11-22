@@ -62,7 +62,9 @@ jobs:
               "@capgo/capacitor-speech-recognition": "^8.4.4",
               "@capawesome/capacitor-file-picker": "^8.1.0",
               "@capacitor/filesystem": "^8.0.0",
-              "@capacitor/share": "^8.0.0"
+              "@capacitor/share": "^8.0.0",
+              "@capacitor-firebase/analytics": "^8.0.0"
+            
             },
             "devDependencies": {
               "@capacitor/android": "^8.0.0",
