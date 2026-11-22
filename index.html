@@ -744,7 +744,17 @@ textarea:focus {
     🔔 Увімкнути сповіщення
   </button>
 </div>
- <div style="margin-top:24px">
+  <h3 id="analyticsSettingsTitle">Статистика використання</h3>
+    <div style="display:grid;gap:10px;margin-bottom:24px">
+      <p id="analyticsSettingsText">
+        Дозволити збір статистики використання застосунку. Особистий вміст нагадувань та аудіо не передаються.
+      </p>
+      <button class="secondary" id="analyticsToggle" type="button">
+        Увімкнути статистику
+      </button>
+    </div>
+    
+<div style="margin-top:24px">
   <button class="secondary" id="feedbackBtn" type="button" style="width:100%">
     ✉️ Повідомити про помилку / Поділитися ідеєю
   </button>
@@ -2308,8 +2318,7 @@ $('exportBackup').onclick=()=>{
     setTimeout(()=>URL.revokeObjectURL(url),1000);
 
     if(localStorage.getItem('analytics-consent-v1')==='granted'){
-      FirebaseAnalytics.logEvent({name:'backup_exported'})
-        .catch(error=>console.error('Analytics error:',error));
+      window.logAppAnalytics?.('backup_exported');
     }
 
     backupStatus(`Резервну копію створено: ${notes.length} записів. Збережи файл у надійному місці.`);
