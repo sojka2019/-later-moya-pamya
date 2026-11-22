@@ -723,37 +723,6 @@ jobs:
           test -n "$GOOGLE_SERVICES_JSON"
           printf '%s' "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
           npx cap sync android
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-
-          root_gradle = Path("android/build.gradle")
-          app_gradle = Path("android/app/build.gradle")
-
-          root_text = root_gradle.read_text(encoding="utf-8")
-
-          if "com.google.gms:google-services" not in root_text:
-              pattern = r"(buildscript\s*\{.*?dependencies\s*\{)"
-              replacement = (
-                  r"\1\n        classpath 'com.google.gms:google-services:4.6.0'"
-              )
-              root_text, count = re.subn(
-                  pattern, replacement, root_text, count=1, flags=re.S
-              )
-              if count != 1:
-                  raise SystemExit("Не знайдено buildscript dependencies в android/build.gradle")
-              root_gradle.write_text(root_text, encoding="utf-8")
-
-          app_text = app_gradle.read_text(encoding="utf-8")
-
-          if "com.google.gms.google-services" not in app_text:
-              app_gradle.write_text(
-                  app_text.rstrip() + "\n\napply plugin: 'com.google.gms.google-services'\n",
-                  encoding="utf-8"
-              )
-
-          print("Firebase Google Services налаштовано")
-          PY
           sed -i '/^android[[:space:]]*{/a\    compileSdk 36' android/app/build.gradle 
           mkdir -p assets
           cp ../icon.png.png.png assets/icon.png
