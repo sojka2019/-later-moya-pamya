@@ -825,11 +825,13 @@ jobs:
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
+          
           npm install --no-save @capacitor/assets --no-audit --no-fund
           npx cap add android
           test -n "$GOOGLE_SERVICES_JSON"
           printf '%s' "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
           npx cap sync android
+
           python3 - <<'PY'
           from pathlib import Path
           import re
@@ -852,16 +854,32 @@ jobs:
               root_gradle.write_text(root_text, encoding="utf-8")
 
           app_text = app_gradle.read_text(encoding="utf-8")
-          
-          if "com.google.gms.google-services" not in app_text:
-              app_gradle.write_text(
-                  app_text.rstrip() + "\n\napply plugin: 'com.google.gms.google-services'\n",
-                  encoding="utf-8"
+
+          if re.search(r'versionCode\s+\d+', app_text):
+              app_text = re.sub(
+                  r'versionCode\s+\d+',
+                  'versionCode 2',
+                  app_text,
+                  count=1
+              )
+          else:
+              app_text = re.sub(
+                  r'(defaultConfig\s*\{)',
+                  r'\1\n        versionCode 2',
+                  app_text,
+                  count=1
               )
 
+          if "com.google.gms.google-services" not in app_text:
+              app_text = app_text.rstrip() + "\n\napply plugin: 'com.google.gms.google-services'\n"
+
+          app_gradle.write_text(app_text, encoding="utf-8")
+
           print("Firebase Google Services налаштовано")
+          print("Android versionCode встановлено: 2")
           PY
-          sed -i '/^android[[:space:]]*{/a\    compileSdk 36' android/app/build.gradle 
+
+          sed -i '/^android[[:space:]]*{/a\    compileSdk 36' android/app/build.gradle
           mkdir -p assets
           cp ../icon.png.png.png assets/icon.png
           npx capacitor-assets generate --android
@@ -950,7 +968,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: Nagaduvannya-5_test17
+          name: Nagaduvannya-5_test18
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
