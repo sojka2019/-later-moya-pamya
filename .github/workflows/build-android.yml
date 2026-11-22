@@ -852,7 +852,7 @@ jobs:
               root_gradle.write_text(root_text, encoding="utf-8")
 
           app_text = app_gradle.read_text(encoding="utf-8")
-
+          
           if "com.google.gms.google-services" not in app_text:
               app_gradle.write_text(
                   app_text.rstrip() + "\n\napply plugin: 'com.google.gms.google-services'\n",
