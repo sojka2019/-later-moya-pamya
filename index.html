@@ -3904,6 +3904,15 @@ if (numericDateMatch) {
 
     if (hour < 0) hour = 23;
 
+     const germanPrefixMatch = text
+      .slice(0, germanTimeMatch.index)
+      .match(/um\s*$/iu);
+
+    if (germanPrefixMatch) {
+      germanTimeMatch[0] = germanPrefixMatch[0] + germanTimeMatch[0];
+      germanTimeMatch.index -= germanPrefixMatch[0].length;
+    }
+
     timeMatch = germanTimeMatch;
   }
 
