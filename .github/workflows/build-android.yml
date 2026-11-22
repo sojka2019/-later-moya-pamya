@@ -97,7 +97,22 @@ jobs:
           const STORAGE_KEY = 'later-prototype-v1';
           const getAppLanguage = () => localStorage.getItem('app-language') || 'uk';
           const ANALYTICS_CONSENT_KEY = 'analytics-consent-v1';
+         
+          window.logAppAnalytics = async function(name, params = {}) {
+            if (localStorage.getItem(ANALYTICS_CONSENT_KEY) !== 'granted') {
+              return;
+            }
 
+            try {
+              await FirebaseAnalytics.logEvent({
+                name,
+                params
+              });
+            } catch (error) {
+              console.error('Analytics error:', error);
+            }
+          };
+          
           async function applyAnalyticsConsent(consent) {
             const granted = consent === 'granted';
 
@@ -140,8 +155,7 @@ jobs:
           if (Capacitor.isNativePlatform()) {
              initializeAnalyticsConsent().then(() => {
               if (localStorage.getItem('analytics-consent-v1') === 'granted') {
-                FirebaseAnalytics.logEvent({ name: 'app_open' })
-                  .catch(error => console.error('Analytics error:', error));
+                window.logAppAnalytics('app_open');
               }
             }).catch(error => {
               console.error('Analytics consent setup error:', error);
