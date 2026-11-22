@@ -1821,7 +1821,18 @@ render();
 }
 
 $('languageSelect').addEventListener('change', (event) => {
-  setAppLanguage(event.target.value);
+  const selectedLanguage = event.target.value;
+
+  setAppLanguage(selectedLanguage);
+
+  if (localStorage.getItem('analytics-consent-v1') === 'granted') {
+    FirebaseAnalytics.logEvent({
+      name: 'language_changed',
+      params: {
+        language: selectedLanguage
+      }
+    }).catch(error => console.error('Analytics error:', error));
+  }
 
   if (window.updateNativeReminderButtonLanguage) {
     window.updateNativeReminderButtonLanguage();
