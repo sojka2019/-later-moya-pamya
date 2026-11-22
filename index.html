@@ -1825,13 +1825,10 @@ $('languageSelect').addEventListener('change', (event) => {
 
   setAppLanguage(selectedLanguage);
 
-  if (localStorage.getItem('analytics-consent-v1') === 'granted') {
-    FirebaseAnalytics.logEvent({
-      name: 'language_changed',
-      params: {
-        language: selectedLanguage
-      }
-    }).catch(error => console.error('Analytics error:', error));
+   if (localStorage.getItem('analytics-consent-v1') === 'granted') {
+    window.logAppAnalytics?.('language_changed', {
+      language: selectedLanguage
+    });
   }
 
   if (window.updateNativeReminderButtonLanguage) {
