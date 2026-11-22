@@ -712,6 +712,43 @@ jobs:
 
                 updateSettingsNotificationButton();
               }
+               const analyticsSettingsButton = document.getElementById('analyticsToggle');
+              const analyticsSettingsText = document.getElementById('analyticsSettingsText');
+
+              if (analyticsSettingsButton) {
+                async function updateAnalyticsSettingsButton() {
+                  const consent = localStorage.getItem(ANALYTICS_CONSENT_KEY);
+
+                  analyticsSettingsButton.textContent =
+                    consent === 'granted'
+                      ? '🔕 Вимкнути статистику'
+                      : '📊 Увімкнути статистику';
+
+                  if (analyticsSettingsText) {
+                    analyticsSettingsText.textContent =
+                      consent === 'granted'
+                        ? 'Статистика використання ввімкнена. Особистий вміст нагадувань та аудіо не передаються.'
+                        : 'Статистика використання вимкнена. Можеш дозволити збір статистики в будь-який момент.';
+                  }
+                }
+
+                analyticsSettingsButton.addEventListener('click', async () => {
+                  const currentConsent = localStorage.getItem(ANALYTICS_CONSENT_KEY);
+                  const newConsent = currentConsent === 'granted' ? 'denied' : 'granted';
+
+                  try {
+                    localStorage.setItem(ANALYTICS_CONSENT_KEY, newConsent);
+                    await applyAnalyticsConsent(newConsent);
+                    await updateAnalyticsSettingsButton();
+                  } catch (error) {
+                    console.error('Analytics settings error:', error);
+                    alert('Не вдалося змінити налаштування статистики.');
+                  }
+                });
+
+                updateAnalyticsSettingsButton();
+              }
+               
                button.addEventListener('click', async () => {
                 try {
                   let permission = await LocalNotifications.checkPermissions();
