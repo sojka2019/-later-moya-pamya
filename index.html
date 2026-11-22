@@ -2157,7 +2157,41 @@ $('quickInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefa
 $('addDetailed').onclick=()=>openModal();
 $('cancelModal').onclick=closeModal;
 $('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
-$('saveNote').onclick=()=>{const text=$('noteText').value.trim();if(!text){$('noteText').focus();return}const category=$('noteCategory').value;const date=$('noteDate').value;if(editingId){const n=notes.find(n=>n.id===editingId);if(n){n.text=text;n.category=category==='Автоматично'?categoryFor(text):category;n.date=date;n.done=false}}else{const cat=category==='Автоматично'?categoryFor(text):category;notes.unshift({id:Date.now()+Math.random(),text,category:cat,date,created:new Date().toISOString(),done:false})}persist();closeModal()};
+$('saveNote').onclick=()=>{
+  const text=$('noteText').value.trim();
+  if(!text){$('noteText').focus();return}
+
+  const category=$('noteCategory').value;
+  const date=$('noteDate').value;
+
+  if(editingId){
+    const n=notes.find(n=>n.id===editingId);
+    if(n){
+      n.text=text;
+      n.category=category==='Автоматично'?categoryFor(text):category;
+      n.date=date;
+      n.done=false;
+    }
+  }else{
+    const cat=category==='Автоматично'?categoryFor(text):category;
+    notes.unshift({
+      id:Date.now()+Math.random(),
+      text,
+      category:cat,
+      date,
+      created:new Date().toISOString(),
+      done:false
+    });
+
+    if (localStorage.getItem('analytics-consent-v1') === 'granted') {
+      FirebaseAnalytics.logEvent({ name: 'reminder_created' })
+        .catch(error => console.error('Analytics error:', error));
+    }
+  }
+
+  persist();
+  closeModal();
+};
 $('search').addEventListener('input', () => {
   resetCategoryFilter();
   render();
@@ -2212,7 +2246,34 @@ $('showCompletedNotes').addEventListener('click', () => {
   showCompletedNotes = true;
   render();
 });
-$('notesGrid').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const id=Number(b.dataset.id);const n=notes.find(x=>x.id===id);if(!n)return;if(b.dataset.action==='delete'){if(confirm('Видалити цей запис?')){notes=notes.filter(x=>x.id!==id);persist()}}else if(b.dataset.action==='done'){n.done=!n.done;persist()}else if(b.dataset.action==='remind'){openModal(n)}});
+$('notesGrid').addEventListener('click',e=>{
+  const b=e.target.closest('[data-action]');
+  if(!b)return;
+
+  const id=Number(b.dataset.id);
+  const n=notes.find(x=>x.id===id);
+  if(!n)return;
+
+  if(b.dataset.action==='delete'){
+    if(confirm('Видалити цей запис?')){
+      notes=notes.filter(x=>x.id!==id);
+      persist();
+    }
+  }else if(b.dataset.action==='done'){
+    const wasDone=n.done;
+    n.done=!n.done;
+
+    if(!wasDone && n.done &&
+       localStorage.getItem('analytics-consent-v1')==='granted'){
+      FirebaseAnalytics.logEvent({name:'reminder_completed'})
+        .catch(error=>console.error('Analytics error:',error));
+    }
+
+    persist();
+  }else if(b.dataset.action==='remind'){
+    openModal(n);
+  }
+});
 function backupStatus(message){$('quickStatus').textContent=message;setTimeout(()=>$('quickStatus').textContent='',6000)}
 $('exportBackup').onclick=()=>{try{const payload={format:'pamyatai-backup',version:1,exportedAt:new Date().toISOString(),notes};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='pamyatai-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);backupStatus(`Резервну копію створено: ${notes.length} записів. Збережи файл у надійному місці.`)}catch(error){console.error(error);backupStatus('Не вдалося створити резервну копію в цьому середовищі. Спробуй вебверсію в Chrome.')}};
 $('importBackup').onclick=()=>$('importFile').click();
