@@ -35,7 +35,7 @@ jobs:
           mkdir -p native-app/public native-app/assets
           cp index.html native-app/index.html
           cp manifest.json icon-192.png icon-512.png native-app/public/
-                  # Use the new Remember icon for the Android launcher.
+          # Use the new Remember icon for the Android launcher.
           cp icon-512.png native-app/assets/icon.png
           # Make a separate Android copy. Leave the published website untouched.
           python3 - <<'PY'
@@ -222,10 +222,7 @@ jobs:
                     partialResults: false
                   });
 
-                  if (localStorage.getItem('analytics-consent-v1') === 'granted') {
-                    FirebaseAnalytics.logEvent({ name: 'voice_used' })
-                      .catch(error => console.error('Analytics error:', error));
-                  }
+                    window.logAppAnalytics('voice_used');
 
                   const spokenText = String(
                     result?.matches?.find(text => /\b20(?:3[0-9]|[4-9][0-9])\b/.test(text)) ||
@@ -431,7 +428,7 @@ jobs:
                     const merged = getNotes();
                     const fingerprints = new Set(merged.map(n => [String(n.text || '').trim().toLowerCase(), String(n.category || ''), String(n.date || ''), String(n.created || '')].join('\u241f')));
                     const ids = new Set(merged.map(n => String(n.id)));
-                     let added = 0;
+                    let added = 0;
                     let duplicates = 0;
                     let invalid = 0;
 
@@ -585,10 +582,10 @@ jobs:
                     String(d.getDate()).padStart(2, '0');
                 };
 
-                const schedules = [];
+                 const schedules = [];
 
                  for (const note of notes) {
-                   if (!note.date || note.done) continue;
+                  if (!note.date || note.done) continue;
 
                    const eventTime = new Date(note.date).getTime();
                    if (!Number.isFinite(eventTime) || eventTime <= now) continue;
@@ -665,16 +662,16 @@ jobs:
                      ? 'Заплановано сповіщень: ' + schedules.length + '.'
                      : 'Немає майбутніх сповіщень, які ще потрібно запланувати.';
 
-                } catch (error) {
-                  console.error('Local reminder error:', error);
-                  status.textContent = 'Не вдалося запланувати нагадування. Перевір дозволи сповіщень.';
-                }
-                }
+               } catch (error) {
+                console.error('Local reminder error:', error);
+                status.textContent = 'Не вдалося запланувати нагадування. Перевір дозволи сповіщень.';
+              }
+            }
                const settingsNotificationButton = document.getElementById('notificationToggle');
 
               if (settingsNotificationButton) {
                 async function updateSettingsNotificationButton() {
-                  const permission = await LocalNotifications.checkPermissions();
+                 const permission = await LocalNotifications.checkPermissions();
                   const enabled = localStorage.getItem('reminders-enabled') !== 'false';
 
                   if (permission.display === 'denied') {
@@ -800,7 +797,7 @@ jobs:
               document.getElementById('quickAdd')?.addEventListener('click', refreshSoon);
               document.getElementById('notesGrid')?.addEventListener('click', refreshSoon);
               setTimeout(async () => {
-                const permission = await LocalNotifications.checkPermissions();
+                 const permission = await LocalNotifications.checkPermissions();
                 if (permission.display === 'granted') await syncReminders();
               }, 800);
             }
@@ -871,7 +868,8 @@ jobs:
                   app_text,
                   count=1
               )
-
+          if not re.search(r'versionCode\s+2\b', app_text):
+              raise SystemExit("ERROR: versionCode 2 не встановлено")
           if "com.google.gms.google-services" not in app_text:
               app_text = app_text.rstrip() + "\n\napply plugin: 'com.google.gms.google-services'\n"
 
@@ -970,7 +968,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: Nagaduvannya-5_test18
+          name: Nagaduvannya-5_test19
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
