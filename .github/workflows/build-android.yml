@@ -955,7 +955,11 @@ jobs:
       - name: Build installable debug APK
         working-directory: native-app/android
         run: |
+          set -euo pipefail
           chmod +x gradlew
+          mkdir -p "$HOME/.android"
+          test -f "$HOME/.android/debug.keystore"
+          ls -l "$HOME/.android/debug.keystore" 
           ./gradlew assembleDebug
 
       - name: Verify notification recovery after reboot
@@ -979,7 +983,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: Nagaduvannya-5_test20
+          name: Nagaduvannya-5_test21
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
