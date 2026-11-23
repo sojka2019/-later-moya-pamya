@@ -4587,7 +4587,7 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
        let weekdayMatch = text.match(weekdayRegex);
 
        // Французький порядок: jeudi prochain
-       if (!weekdayMatch) {
+       {
          const frenchWeekdayRegex = new RegExp(
            String.raw`\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\s+(prochain|prochaine|prochains|prochaines)\b`,
            'iu'
