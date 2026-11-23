@@ -3669,7 +3669,7 @@ if (numericDateMatch) {
     let candidate = new Date(year, month, day);
 
     if (
-      !matched[3] &&
+      !numericDateMatch[3] &&
       candidate < new Date(now.getFullYear(), now.getMonth(), now.getDate())
     ) {
       year++;
