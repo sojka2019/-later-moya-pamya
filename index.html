@@ -4586,21 +4586,21 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
 
        let weekdayMatch = text.match(weekdayRegex);
 
-       // Французький порядок: jeudi prochain
+       // Французький та італійський порядок: jeudi prochain, giovedì prossimo
        {
-         const frenchWeekdayRegex = new RegExp(
-           String.raw`\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\s+(prochain|prochaine|prochains|prochaines)\b`,
+         const postWeekdayRegex = new RegExp(
+           String.raw`\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|lunedì|martedì|mercoledì|giovedì|venerdì|sabato|domenica)\s+(prochain|prochaine|prochains|prochaines|prossimo|prossima|prossimi|prossime)\b`,
            'iu'
          );
 
-         const frenchMatch = text.match(frenchWeekdayRegex);
+         const postWeekdayMatch = text.match(postWeekdayRegex);
 
-         if (frenchMatch) {
+         if (postWeekdayMatch) {
            weekdayMatch = [];
-           weekdayMatch[1] = frenchMatch[2];
-           weekdayMatch[2] = frenchMatch[1];
-           weekdayMatch.index = frenchMatch.index;
-           weekdayMatch[0] = frenchMatch[0];
+           weekdayMatch[1] = postWeekdayMatch[2];
+           weekdayMatch[2] = postWeekdayMatch[1];
+           weekdayMatch.index = postWeekdayMatch.index;
+           weekdayMatch[0] = postWeekdayMatch[0];
          }
        }
 
