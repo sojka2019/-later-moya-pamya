@@ -884,10 +884,37 @@ jobs:
           if "com.google.gms.google-services" not in app_text:
               app_text = app_text.rstrip() + "\n\napply plugin: 'com.google.gms.google-services'\n"
 
+          signing_config = '''
+              signingConfigs {
+                  debug {
+                      storeFile file(System.getenv("HOME") + "/.android/debug.keystore")
+                      storePassword "android"
+                      keyAlias "androiddebugkey"
+                      keyPassword "android"
+                  }
+              }
+          '''
+
+          if "signingConfigs {" not in app_text:
+              app_text = app_text.replace(
+                  "android {",
+                  "android {\n" + signing_config,
+                  1
+              )
+
+          if "buildTypes {" in app_text and "signingConfig signingConfigs.debug" not in app_text:
+              app_text = app_text.replace(
+                  "buildTypes {",
+                  'buildTypes {\n        debug {\n            signingConfig signingConfigs.debug\n        }',
+                  1
+              )
+
           app_gradle.write_text(app_text, encoding="utf-8")
 
           print("Firebase Google Services налаштовано")
           print("Android versionCode встановлено: 2")
+          print("Постійний debug-підпис налаштовано")
+          print("Підготовка Android Gradle завершена")
           PY
 
           sed -i '/^android[[:space:]]*{/a\    compileSdk 36' android/app/build.gradle
@@ -959,9 +986,37 @@ jobs:
           chmod +x gradlew
           mkdir -p "$HOME/.android"
           test -f "$HOME/.android/debug.keystore"
-          ls -l "$HOME/.android/debug.keystore" 
+          ls -l "$HOME/.android/debug.keystore"
           ./gradlew assembleDebug
 
+      - name: Verify APK signature
+        working-directory: native-app/android
+        run: |
+          set -euo pipefail
+          APK="app/build/outputs/apk/debug/app-debug.apk"
+          test -f "$APK"
+
+          APKSIGNER="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -n 1)/apksigner"
+
+          EXPECTED_CERT=$("$APKSIGNER" verify --print-certs "$APK" | grep "Signer #1 certificate SHA-256 digest" | awk '{print $NF}')
+
+          KEY_CERT=$(keytool -list -v \
+            -keystore "$HOME/.android/debug.keystore" \
+            -storepass android \
+            -alias androiddebugkey | grep "SHA256:" | head -n 1 | awk '{print $2}')
+
+          EXPECTED_CERT=$(echo "$EXPECTED_CERT" | tr -d ':' | tr '[:upper:]' '[:lower:]')
+          KEY_CERT=$(echo "$KEY_CERT" | tr -d ':' | tr '[:upper:]' '[:lower:]')
+
+          echo "APK certificate: $EXPECTED_CERT"
+          echo "Keystore certificate: $KEY_CERT"
+
+          if [ "$EXPECTED_CERT" != "$KEY_CERT" ]; then
+            echo "ERROR: APK підписаний не нашим постійним ключем!"
+            exit 1
+          fi
+
+          echo "SUCCESS: APK підписаний нашим постійним ключем."
       - name: Verify notification recovery after reboot
         working-directory: native-app/android
         run: |
@@ -983,7 +1038,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: Nagaduvannya-5_test21
+          name: Nagaduvannya-5_test22
           path: native-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
