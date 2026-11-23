@@ -4615,11 +4615,11 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
     const weekday =
       weekdayText.startsWith('понеділ') || weekdayText.startsWith('понедельник') || weekdayText === 'montag' || weekdayText === 'monday' || weekdayText === 'lundi' || weekdayText === 'lunedì' || weekdayText === 'poniedziałek' || weekdayText === 'lunes' ? 1
       : weekdayText.startsWith('вівтор') || weekdayText.startsWith('вторник') || weekdayText === 'dienstag' || weekdayText === 'tuesday' || weekdayText === 'mardi' || weekdayText === 'martedì' || weekdayText === 'wtorek' || weekdayText === 'martes' ? 2
-      : weekdayText.startsWith('серед') || weekdayText.startsWith('сред') || weekdayText === 'mittwoch' || weekdayText === 'wednesday' || weekdayText === 'mercredi' || weekdayText === 'mercoledì' || weekdayText === 'środa' || weekdayText === 'miércoles' ? 3
+      : weekdayText.startsWith('серед') || weekdayText.startsWith('сред') || weekdayText === 'mittwoch' || weekdayText === 'wednesday' || weekdayText === 'mercredi' || weekdayText === 'mercoledì' || weekdayText.startsWith('środ') || weekdayText === 'miércoles' ? 3
       : weekdayText.startsWith('четвер') || weekdayText === 'donnerstag' || weekdayText === 'thursday' || weekdayText === 'jeudi' || weekdayText === 'giovedì' || weekdayText === 'czwartek' || weekdayText === 'jueves' ? 4
-      : weekdayText.includes('ятниц') || weekdayText.startsWith('пятниц') || weekdayText === 'freitag' || weekdayText === 'friday' || weekdayText === 'vendredi' || weekdayText === 'venerdì' || weekdayText === 'piątek' || weekdayText === 'viernes' ? 5
-      : weekdayText.startsWith('субот') || weekdayText.startsWith('суббот') || weekdayText === 'samstag' || weekdayText === 'saturday' || weekdayText === 'samedi' || weekdayText === 'sabato' || weekdayText === 'sobota' || weekdayText === 'sábado' ? 6
-      : weekdayText === 'sonntag' || weekdayText.startsWith('неділ') || weekdayText.startsWith('воскресень') || weekdayText === 'sunday' || weekdayText === 'dimanche' || weekdayText === 'domenica' || weekdayText === 'niedziela' || weekdayText === 'domingo' ? 0
+      : weekdayText.includes('ятниц') || weekdayText.startsWith('пятниц') || weekdayText === 'freitag' || weekdayText === 'friday' || weekdayText === 'vendredi' || weekdayText === 'venerdì' || weekdayText.startsWith('piątk') || weekdayText === 'viernes' ? 5
+      : weekdayText.startsWith('субот') || weekdayText.startsWith('суббот') || weekdayText === 'samstag' || weekdayText === 'saturday' || weekdayText === 'samedi' || weekdayText === 'sabato' || weekdayText.startsWith('sobot') || weekdayText === 'sábado' ? 6
+      : weekdayText === 'sonntag' || weekdayText.startsWith('неділ') || weekdayText.startsWith('воскресень') || weekdayText === 'sunday' || weekdayText === 'dimanche' || weekdayText === 'domenica' || weekdayText.startsWith('niedziel') || weekdayText === 'domingo' ? 0
       : 0;
 
    const ordinal =
