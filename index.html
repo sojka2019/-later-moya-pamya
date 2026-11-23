@@ -4585,7 +4585,9 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
        );
 
        let weekdayMatch = text.match(weekdayRegex);
-
+       console.log('WEEKDAY MATCH:', weekdayMatch);
+       console.log('ORDINAL:', weekdayMatch?.[1]);
+       console.log('DAY:', weekdayMatch?.[2]);
        // Французький та італійський порядок: jeudi prochain, giovedì prossimo
        {
          const postWeekdayRegex = new RegExp(
