@@ -4621,7 +4621,8 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
       : weekdayText.startsWith('субот') || weekdayText.startsWith('суббот') || weekdayText === 'samstag' || weekdayText === 'saturday' || weekdayText === 'samedi' || weekdayText === 'sabato' || weekdayText.startsWith('sobot') || weekdayText === 'sábado' ? 6
       : weekdayText === 'sonntag' || weekdayText.startsWith('неділ') || weekdayText.startsWith('воскресень') || weekdayText === 'sunday' || weekdayText === 'dimanche' || weekdayText === 'domenica' || weekdayText.startsWith('niedziel') || weekdayText === 'domingo' ? 0
       : 0;
-
+      console.log('ВИЗНАЧЕНИЙ НОМЕР ДНЯ:', weekday, 'ТЕКСТ:', weekdayText);
+    
    const ordinal =
      ordinalText.startsWith('перш') || ordinalText.startsWith('перв') || ordinalText === 'ersten' || ordinalText === 'first' || ordinalText === 'premier' || ordinalText === 'première' || ordinalText === 'primo' || ordinalText === 'prima' || ordinalText === 'pierwszy' || ordinalText === 'pierwsza' || ordinalText === 'primer' || ordinalText === 'primero' || ordinalText === 'primera' ? 1
      : ordinalText.startsWith('друг') || ordinalText.startsWith('втор') || ordinalText === 'zweiten' || ordinalText === 'second' || ordinalText === 'deuxième' || ordinalText === 'secondo' || ordinalText === 'seconda' || ordinalText === 'drugi' || ordinalText === 'druga' || ordinalText === 'segundo' || ordinalText === 'segunda' ? 2
