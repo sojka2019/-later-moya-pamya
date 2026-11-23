@@ -4632,13 +4632,14 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
         }
         day = findNthWeekday(year, month);
       }
-
-      date.setFullYear(year, month, day);
+           date.setFullYear(year, month, day);
     } else {
       let daysAhead = (weekday - now.getDay() + 7) % 7;
-      if (isNextWeekWord && daysAhead === 0) {
-        daysAhead = 7;
+
+      if (isNextWeekWord) {
+        daysAhead += 7;
       }
+
       date.setDate(now.getDate() + daysAhead);
     }
 
