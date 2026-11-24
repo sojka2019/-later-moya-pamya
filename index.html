@@ -2935,7 +2935,7 @@ if (halfYearMatch) {
 }
 // Наступного місяця — перше число наступного місяця
 const nextMonthMatch = text.match(
-  /(?<![\p{L}\p{N}])(?:(?:наступного|наступний)\s+місяця|(?:в\s+)?следующего\s+месяца|(?:im\s+)?(?:nächsten|nächste|kommenden)\s+Monat|next\s+month|the\s+coming\s+month|le\s+mois\s+prochain|dans\s+le\s+mois\s+prochain|il\s+prossimo\s+mese|nel\s+prossimo\s+mese|w\s+przyszłym\s+miesiącu|w\s+przyszlym\s+miesiacu|el\s+próximo\s+mes|el\s+proximo\s+mes|próximo\s+mes|proximo\s+mes)(?![\p{L}\p{N}])/iu
+  /(?<![\p{L}\p{N}])(?:(?:наступного|наступний)\s+місяця|(?:в\s+)?следующ(?:ем\s+месяце|его\s+месяца)|(?:im\s+)?(?:nächsten|nächste|kommenden)\s+Monat|next\s+month|the\s+coming\s+month|le\s+mois\s+prochain|dans\s+le\s+mois\s+prochain|il\s+prossimo\s+mese|nel\s+prossimo\s+mese|w\s+przyszłym\s+miesiącu|w\s+przyszlym\s+miesiacu|el\s+próximo\s+mes|el\s+proximo\s+mes|próximo\s+mes|proximo\s+mes)(?![\p{L}\p{N}])/iu
 );
 
 if (nextMonthMatch) {
