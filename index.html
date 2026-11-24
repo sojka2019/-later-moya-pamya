@@ -2946,8 +2946,11 @@ if (nextMonthMatch) {
 }
 
 // Через один, два, три та інші місяці
+const relativeMonthPattern =
+  String.raw`(?<![\p{L}\p{N}])(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|jeden|jedna|jedną|dwa|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|jedenaście|jedenascie|dwanaście|dwanascie|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce)\s+)?(?:місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten|month|months|mois|mese|mesi|miesiąc|miesiąca|miesiącu|miesięcy|miesiące|mes|meses)(?![\p{L}\p{N}])`;
+
 const relativeMonthMatch = text.match(
-  /(?<![\p{L}\p{N}])(?:(?:через|in|dans|tra|fra|dentro de|en|za)\s+(?:(один|одна|одну|два|дві|две|три|чотири|четыре|п’ять|п'ять|пять|шість|шесть|сім|семь|вісім|восемь|дев’ять|девять|десять|одинадцять|одиннадцать|дванадцять|двенадцать|1|2|3|4|5|6|7|8|9|10|11|12|ein|eine|einen|einem|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|jeden|jedna|jedną|dwa|dwie|trzy|cztery|pięć|piec|sześć|szesc|siedem|osiem|dziewięć|dziewiec|dziesięć|dziesiec|jedenaście|jedenascie|dwanaście|dwanascie|un|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce)\s+)?(?:місяць|місяця|місяці|місяців|месяц|месяца|месяцев|Monat|Monate|Monaten|month|months|mois|mese|mesi|miesiąc|miesiąca|miesiącu|miesięcy|miesiące|mes|meses)(?![\p{L}\p{N}])/iu
+  new RegExp(relativeMonthPattern, 'iu')
 );
 
 if (relativeMonthMatch) {
