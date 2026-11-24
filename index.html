@@ -2933,7 +2933,7 @@ if (halfYearMatch) {
   hasDate = true;
   text = text.replace(halfYearMatch[0], ' ');
 }
-// Наступного місяця — перше число, або те саме число з уточненням «в цей день»
+// Наступного місяця — перше число, конкретне число або те саме число з уточненням
 const sameDayNextMonthMatch = text.match(
   /(?<![\p{L}\p{N}])(?:в\s+цей\s+день|в\s+этот\s+день|an\s+diesem\s+Tag|on\s+this\s+day|ce\s+jour-là|in\s+questo\s+giorno|w\s+tym\s+dniu|en\s+este\s+día)(?![\p{L}\p{N}])/iu
 );
@@ -2942,14 +2942,36 @@ const nextMonthMatch = text.match(
   /(?<![\p{L}\p{N}])(?:(?:наступного|наступний)\s+місяця|(?:в\s+)?следующ(?:ем\s+месяце|его\s+месяца)|(?:im\s+)?(?:nächsten|nächste|kommenden)\s+Monat|next\s+month|the\s+coming\s+month|le\s+mois\s+prochain|dans\s+le\s+mois\s+prochain|il\s+prossimo\s+mese|nel\s+prossimo\s+mese|w\s+przyszłym\s+miesiącu|w\s+przyszlym\s+miesiacu|el\s+próximo\s+mes|el\s+proximo\s+mes|próximo\s+mes|proximo\s+mes)(?![\p{L}\p{N}])/iu
 );
 
+// Конкретне число наступного місяця: «15 числа», «15-го числа»
+const nextMonthDayMatch = text.match(
+  /(?<![\p{L}\p{N}])(\d{1,2})(?:-го)?\s+числа(?![\p{L}\p{N}])/iu
+);
+
 if (nextMonthMatch) {
+  const originalDay = date.getDate();
   date = addCalendarMonths(date, 1);
 
-  if (!sameDayNextMonthMatch) {
+  if (nextMonthDayMatch) {
+    const requestedDay = Number(nextMonthDayMatch[1]);
+    const daysInMonth = new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      0
+    ).getDate();
+
+    if (requestedDay >= 1 && requestedDay <= daysInMonth) {
+      date.setDate(requestedDay);
+      text = text.replace(nextMonthDayMatch[0], ' ');
+    } else {
+      invalidExplicitDate = true;
+    }
+  } else if (sameDayNextMonthMatch) {
+    date.setDate(originalDay);
+  } else {
     date.setDate(1);
   }
 
-  hasDate = true;
+  hasDate = !invalidExplicitDate;
   text = text.replace(nextMonthMatch[0], ' ');
 }
 
