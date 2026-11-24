@@ -1413,14 +1413,14 @@ text('#helpTitle', hu[1]);
   es: ['Registros guardados', 'Con recordatorios', 'Categorías utilizadas', 'Tu memoria', 'Todo lo importante en un solo lugar.', '＋ Nueva nota']
 };
 
-const dashboardLabels = dashboardTexts[language] || dashboardTexts.uk;
+  const dashboardLabels = dashboardTexts[language] || dashboardTexts.uk;
 
-text('#totalStatLabel', dashboardLabels[0]);
-text('#reminderStatLabel', dashboardLabels[1]);
-text('#categoryStatLabel', dashboardLabels[2]);
-text('#memoryTitle', dashboardLabels[3]);
-text('#memorySubtitle', dashboardLabels[4]);
-text('#addDetailed', dashboardLabels[5]);
+  text('#totalStatLabel', dashboardLabels[0]);
+  text('#reminderStatLabel', dashboardLabels[1]);
+  text('#categoryStatLabel', dashboardLabels[2]);
+  text('#memoryTitle', dashboardLabels[3]);
+  text('#memorySubtitle', dashboardLabels[4]);
+  text('#addDetailed', dashboardLabels[5]);
   text('#helpBtn', hu[2]);
   const helpContentTexts = {
   uk: `
@@ -3683,7 +3683,7 @@ if (numericDateMatch) {
     ) {
       date = candidate;
       hasDate = true;
-      text = text.replace(matched[0], ' ');
+      text = text.replace(numericDateMatch[0], ' ');
     } else {
       invalidExplicitDate = true;
     }
