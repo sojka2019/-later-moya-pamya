@@ -3602,7 +3602,7 @@ if (month === undefined) {
   ) {
     date = candidate;
     hasDate = true;
-    text = text.replace(numericDateMatch[0], ' ');
+    text = text.replace(matched[0], ' ');
   } else {
     invalidExplicitDate = true;
   }
