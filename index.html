@@ -2989,7 +2989,7 @@ const relativeMonthMatch = text.match(
 
 // Конкретне число після фрази «через місяць»
 const relativeMonthDayMatch = text.match(
-  /(?<![\p{L}\p{N}])(\d{1,2})(?:-го)?\s+числа(?![\p{L}\p{N}])/iu
+  /(?<![\p{L}\p{N}])(?:(?:am|on\s+the|the|le|il|el|w\s+dniu)\s*(\d{1,2})(?:st|nd|rd|th|er|e|º|°|\.)?|(\d{1,2})(?:-го)?\s+(?:числа|Tag|day|jour|giorno|día|dniu)|(\d{1,2})\.(?=\s|$))(?![\p{L}\p{N}])/iu
 );
 
 if (relativeMonthMatch) {
@@ -3002,7 +3002,11 @@ if (relativeMonthMatch) {
     date = addCalendarMonths(date, monthsToAdd);
 
     if (relativeMonthDayMatch) {
-      const requestedDay = Number(relativeMonthDayMatch[1]);
+   const requestedDay = Number(
+     relativeMonthDayMatch[1] ||
+     relativeMonthDayMatch[2] ||
+     relativeMonthDayMatch[3]
+   );
       const daysInMonth = new Date(
         date.getFullYear(),
         date.getMonth() + 1,
