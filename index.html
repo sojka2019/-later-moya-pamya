@@ -2987,6 +2987,11 @@ const relativeMonthMatch = text.match(
   new RegExp(relativeMonthPattern, 'iu')
 );
 
+// Конкретне число після фрази «через місяць»
+const relativeMonthDayMatch = text.match(
+  /(?<![\p{L}\p{N}])(\d{1,2})(?:-го)?\s+числа(?![\p{L}\p{N}])/iu
+);
+
 if (relativeMonthMatch) {
   const word = (relativeMonthMatch[1] || '1').toLowerCase();
   const monthsToAdd = /^\d+$/.test(word)
@@ -2995,7 +3000,24 @@ if (relativeMonthMatch) {
 
   if (monthsToAdd) {
     date = addCalendarMonths(date, monthsToAdd);
-    hasDate = true;
+
+    if (relativeMonthDayMatch) {
+      const requestedDay = Number(relativeMonthDayMatch[1]);
+      const daysInMonth = new Date(
+        date.getFullYear(),
+        date.getMonth() + 1,
+        0
+      ).getDate();
+
+      if (requestedDay >= 1 && requestedDay <= daysInMonth) {
+        date.setDate(requestedDay);
+        text = text.replace(relativeMonthDayMatch[0], ' ');
+      } else {
+        invalidExplicitDate = true;
+      }
+    }
+
+    hasDate = !invalidExplicitDate;
     text = text.replace(relativeMonthMatch[0], ' ');
   }
 }
