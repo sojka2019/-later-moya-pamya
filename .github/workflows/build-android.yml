@@ -235,11 +235,7 @@ jobs:
 
                     window.logAppAnalytics('voice_used');
 
-                  const spokenText = String(
-                    result?.matches?.find(text => /\b20(?:3[0-9]|[4-9][0-9])\b/.test(text)) ||
-                    result?.matches?.[0] ||
-                    ''
-                  ).trim();
+                  const spokenText = String(result?.matches?.[0] || '').trim();
                 
                   if (!spokenText) {
                     if (voiceStatus) voiceStatus.textContent = 'Не вдалося розпізнати слова. Спробуй ще раз або введи текст.';
