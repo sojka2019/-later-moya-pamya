@@ -2838,7 +2838,18 @@ const relativeTimeMatch = text.match(
     }
   }
    
- // Англійська конструкція: one, two, three weeks from now
+  // Англійський вираз: fortnight = 14 днів
+  const fortnightMatch = text.match(
+    /(?<![\p{L}\p{N}])(?:in\s+a\s+fortnight|a\s+fortnight\s+from\s+now)(?![\p{L}\p{N}])/iu
+  );
+
+  if (fortnightMatch) {
+    date.setDate(date.getDate() + 14);
+    hasDate = true;
+    text = text.replace(fortnightMatch[0], ' ');
+  }
+  
+  // Англійська конструкція: one, two, three weeks from now
  const aWeekFromNowMatch = text.match(
    /(?<![\p{L}\p{N}])(?:a|one|two|three|1|2|3)\s+weeks?\s+from\s+now(?![\p{L}\p{N}])/iu
  );
