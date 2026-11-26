@@ -4509,7 +4509,43 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
       .map(escapeRegex)
       .join('|')
   : hourPattern;
- 
+
+   // Англійський цифровий час словами: six thirty, seven fifteen тощо
+  if (!timeMatch) {
+    const englishWordTimeMatch = text.match(
+      /(?<![\p{L}\p{N}])(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+(five|ten|fifteen|twenty-five|twenty five|twenty|thirty|thirty-five|thirty five|forty-five|forty five|forty|fifty-five|fifty five|fifty)(?![\p{L}\p{N}])/iu
+    );
+
+    if (englishWordTimeMatch) {
+      const englishHours = {
+        one: 1, two: 2, three: 3, four: 4,
+        five: 5, six: 6, seven: 7, eight: 8,
+        nine: 9, ten: 10, eleven: 11, twelve: 12
+      };
+
+      const englishWordMinutes = {
+        five: 5,
+        ten: 10,
+        fifteen: 15,
+        twenty: 20,
+        'twenty-five': 25,
+        'twenty five': 25,
+        thirty: 30,
+        'thirty-five': 35,
+        'thirty five': 35,
+        forty: 40,
+        'forty-five': 45,
+        'forty five': 45,
+        fifty: 50,
+        'fifty-five': 55,
+        'fifty five': 55
+      };
+
+      hour = englishHours[englishWordTimeMatch[1].toLowerCase()];
+      minute = englishWordMinutes[englishWordTimeMatch[2].toLowerCase()];
+      timeMatch = englishWordTimeMatch;
+    }
+  }
   
   // 3. Час словами: "о сьомій п'ятнадцять"
   if (!timeMatch) {
