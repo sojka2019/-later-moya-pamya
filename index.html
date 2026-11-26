@@ -4582,10 +4582,16 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
       hour,
       originalText: original
     });
-    // Англійський 12-годинний час AM/PM
-    if (/^p\.?\s*m\.?$/iu.test(period)) {
+     // Англійський 12-годинний час AM/PM та частини доби
+    if (
+      /^p\.?\s*m\.?$/iu.test(period) ||
+      /^(?:in the )?(?:afternoon|evening)$/iu.test(period)
+    ) {
       if (hour < 12) hour += 12;
-    } else if (/^a\.?\s*m\.?$/iu.test(period)) {
+    } else if (
+      /^a\.?\s*m\.?$/iu.test(period) ||
+      /^in the morning$/iu.test(period)
+    ) {
       if (hour === 12) hour = 0;
     }
     
