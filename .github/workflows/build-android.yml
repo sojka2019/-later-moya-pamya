@@ -221,7 +221,7 @@ jobs:
                       uk: 'uk-UA',
                       ru: 'ru-RU',
                       de: 'de-DE',
-                      en: 'en-GB',
+                      en: 'en-US',
                       fr: 'fr-FR',
                       it: 'it-IT',
                       pl: 'pl-PL',
