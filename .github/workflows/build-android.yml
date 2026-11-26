@@ -236,7 +236,8 @@ jobs:
                     window.logAppAnalytics('voice_used');
 
                   const spokenText = String(result?.matches?.[0] || '').trim();
-                
+                  alert('ANDROID РОЗПІЗНАВ: ' + spokenText);
+                  
                   if (!spokenText) {
                     if (voiceStatus) voiceStatus.textContent = 'Не вдалося розпізнати слова. Спробуй ще раз або введи текст.';
                     return;
