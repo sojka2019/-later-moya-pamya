@@ -2849,6 +2849,17 @@ const relativeTimeMatch = text.match(
     text = text.replace(coupleOfDaysMatch[0], ' ');
   }
   
+    // Англійський вираз: a few days = 3 дні
+  const fewDaysMatch = text.match(
+    /(?<![\p{L}\p{N}])in\s+a\s+few\s+days?(?![\p{L}\p{N}])/iu
+  );
+
+  if (fewDaysMatch) {
+    date.setDate(date.getDate() + 3);
+    hasDate = true;
+    text = text.replace(fewDaysMatch[0], ' ');
+  }
+  
   // Англійський вираз: fortnight = 14 днів
   const fortnightMatch = text.match(
     /(?<![\p{L}\p{N}])(?:in\s+a\s+fortnight|a\s+fortnight\s+from\s+now)(?![\p{L}\p{N}])/iu
