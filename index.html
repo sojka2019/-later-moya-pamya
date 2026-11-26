@@ -4053,13 +4053,17 @@ if (numericDateMatch) {
   let timeMatch;
   let hour;
   let minute = 0;
-
+  console.log('ТЕКСТ ПЕРЕД ENGLISH:', text);
+  
     // Англійський розмовний час: half past, quarter past, ten to тощо
   if (!timeMatch) {
     const englishTimeMatch = text.match(
       /(?<![\p{L}\p{N}])(?:(half|quarter|five|ten|fifteen|twenty|twenty-five|twenty five|thirty|five and a half|a quarter)\s+(past|to)\s+(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\d{1,2}))(?![\p{L}\p{N}])/iu
     );
 
+    console.log('ENGLISH TEXT:', text);
+    console.log('ENGLISH MATCH:', englishTimeMatch?.[0]);
+   
     if (englishTimeMatch) {
       const englishHours = {
         one: 1, two: 2, three: 3, four: 4,
@@ -4075,18 +4079,19 @@ if (numericDateMatch) {
         ? Number(hourToken)
         : englishHours[hourToken];
 
-      const englishMinutes = {
-        half: 30,
-        quarter: 15,
-        'a quarter': 15,
-        five: 5,
-        ten: 10,
-        fifteen: 15,
-        twenty: 20,
-        'twenty-five': 25,
-        'twenty five': 25,
-        thirty: 30
-      };
+     const englishMinutes = {
+       half: 30,
+       quarter: 15,
+       'a quarter': 15,
+       five: 5,
+       'five and a half': 5,
+       ten: 10,
+       fifteen: 15,
+       twenty: 20,
+       'twenty-five': 25,
+       'twenty five': 25,
+       thirty: 30
+     };
 
       const minutes = englishMinutes[token];
 
@@ -4294,31 +4299,7 @@ if (ukrainianWithoutMatch && !timeMatch) {
   timeMatch = ukrainianWithoutMatch;
 }
   
-   // Англійський розмовний час: "half past two" = 2:30,
-  // "quarter past six" = 6:15
-  const englishPastMatch = text.match(
-    /(?<![\p{L}\p{N}])(half|quarter)\s+past\s+(twelve|eleven|ten|nine|eight|seven|six|five|four|three|two|one|\d{1,2})(?![\p{L}\p{N}])/iu
-  );
-
-  if (englishPastMatch && !timeMatch) {
-    const englishHours = {
-      one: 1, two: 2, three: 3, four: 4,
-      five: 5, six: 6, seven: 7, eight: 8,
-      nine: 9, ten: 10, eleven: 11, twelve: 12
-    };
-
-    const hourText = englishPastMatch[2].toLowerCase();
-
-    hour = /^\d+$/.test(hourText)
-      ? Number(hourText)
-      : englishHours[hourText];
-
-    minute = englishPastMatch[1].toLowerCase() === 'half' ? 30 : 15;
-
-    timeMatch = englishPastMatch;
-
-    console.log('ENGLISH PAST TIME:', englishPastMatch[0], hour, minute);
-  }
+  
   
   const colloquialPastMatch = text.match(
   /(?<![\p{L}\p{N}])(5|10|15|20|п’ять|п'ять|пять|десять|десят|п’ятнадцять|п'ятнадцять|пятнадцать|двадцять|двадцать)\s+по\s+(1[0-2]|[1-9]|першій|другій|третій|четвертій|п’ятій|п'ятій|шостій|сьомій|восьмій|дев’ятій|дев'ятій|десятій|одинадцятій|дванадцятій|первой|второй|третьей|четвертой|четвёртой|пятой|шестой|седьмой|восьмой|девятой|десятой|одиннадцатой|двенадцатой)(?![\p{L}\p{N}])/iu
