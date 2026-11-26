@@ -4868,8 +4868,15 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
            date.setFullYear(year, month, day);
     } else {
      let daysAhead = (weekday - now.getDay() + 7) % 7;
-     if (isNextWeekWord && daysAhead === 0) {
-     daysAhead = 7;
+
+     const isThisDay = weekdayMatch[0]
+       .toLowerCase()
+       .startsWith('this ');
+
+     if (isThisDay && daysAhead === 0) {
+       daysAhead = 0;
+     } else if (isNextWeekWord && daysAhead === 0) {
+       daysAhead = 7;
      }
 
       date.setDate(now.getDate() + daysAhead);
