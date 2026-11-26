@@ -4243,6 +4243,32 @@ if (ukrainianWithoutMatch && !timeMatch) {
   timeMatch = ukrainianWithoutMatch;
 }
   
+   // Англійський розмовний час: "half past two" = 2:30,
+  // "quarter past six" = 6:15
+  const englishPastMatch = text.match(
+    /(?<![\p{L}\p{N}])(half|quarter)\s+past\s+(twelve|eleven|ten|nine|eight|seven|six|five|four|three|two|one|\d{1,2})(?![\p{L}\p{N}])/iu
+  );
+
+  if (englishPastMatch && !timeMatch) {
+    const englishHours = {
+      one: 1, two: 2, three: 3, four: 4,
+      five: 5, six: 6, seven: 7, eight: 8,
+      nine: 9, ten: 10, eleven: 11, twelve: 12
+    };
+
+    const hourText = englishPastMatch[2].toLowerCase();
+
+    hour = /^\d+$/.test(hourText)
+      ? Number(hourText)
+      : englishHours[hourText];
+
+    minute = englishPastMatch[1].toLowerCase() === 'half' ? 30 : 15;
+
+    timeMatch = englishPastMatch;
+
+    console.log('ENGLISH PAST TIME:', englishPastMatch[0], hour, minute);
+  }
+  
   const colloquialPastMatch = text.match(
   /(?<![\p{L}\p{N}])(5|10|15|20|п’ять|п'ять|пять|десять|десят|п’ятнадцять|п'ятнадцять|пятнадцать|двадцять|двадцать)\s+по\s+(1[0-2]|[1-9]|першій|другій|третій|четвертій|п’ятій|п'ятій|шостій|сьомій|восьмій|дев’ятій|дев'ятій|десятій|одинадцятій|дванадцятій|первой|второй|третьей|четвертой|четвёртой|пятой|шестой|седьмой|восьмой|девятой|десятой|одиннадцатой|двенадцатой)(?![\p{L}\p{N}])/iu
 );
@@ -4640,10 +4666,11 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
 
      text = text.replace(
         new RegExp(
-          '(?<![\\p{L}\\p{N}])(?:во\\s+)?' +
+          '(?<![\\p{L}\\p{N}])(?:(?:at|во)\\s+)?' +
           escapeRegex(timeMatch[0]) +
           '(?:\\s+(?:час(?:а|ов|у)?|годин(?:а|и|і|у|ою)?|heure(?:s)?)(?![\\p{L}\\p{N}]))?' +
-          '(?:\\s+(?:' + periodPattern + '))?',
+          '(?:\\s+(?:' + periodPattern + '))?' +
+          '(?:\\s+to(?=\\s+[\\p{L}]))?',
           'iu'
         ),
         ' '
