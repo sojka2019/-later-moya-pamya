@@ -2826,18 +2826,29 @@ const relativeTimeMatch = text.match(
 
   if (relativeDayMatch) {
     const word = (relativeDayMatch[1] || '1').toLowerCase();
-   
-   const daysToAdd = /^\d+$/.test(word)
+    
+  const daysToAdd = /^\d+$/.test(word)
   ? Number(word)
   : relativeNumbers[word];
-
+    
     if (daysToAdd) {
       date.setDate(date.getDate() + daysToAdd);
       hasDate = true;
       text = text.replace(relativeDayMatch[0], ' ');
     }
   }
-   
+
+   // Англійський вираз: a couple of days = 2 дні
+  const coupleOfDaysMatch = text.match(
+    /(?<![\p{L}\p{N}])in\s+a\s+couple\s+of\s+days?(?![\p{L}\p{N}])/iu
+  );
+
+  if (coupleOfDaysMatch) {
+    date.setDate(date.getDate() + 2);
+    hasDate = true;
+    text = text.replace(coupleOfDaysMatch[0], ' ');
+  }
+  
   // Англійський вираз: fortnight = 14 днів
   const fortnightMatch = text.match(
     /(?<![\p{L}\p{N}])(?:in\s+a\s+fortnight|a\s+fortnight\s+from\s+now)(?![\p{L}\p{N}])/iu
