@@ -2838,16 +2838,25 @@ const relativeTimeMatch = text.match(
     }
   }
    
-  // Англійська конструкція: a week from now
-  const aWeekFromNowMatch = text.match(
-    /(?<![\p{L}\p{N}])a\s+week\s+from\s+now(?![\p{L}\p{N}])/iu
-  );
+ // Англійська конструкція: one, two, three weeks from now
+ const aWeekFromNowMatch = text.match(
+   /(?<![\p{L}\p{N}])(?:a|one|two|three|1|2|3)\s+weeks?\s+from\s+now(?![\p{L}\p{N}])/iu
+ );
 
-  if (aWeekFromNowMatch) {
-    date.setDate(date.getDate() + 7);
-    hasDate = true;
-    text = text.replace(aWeekFromNowMatch[0], ' ');
-  }
+ if (aWeekFromNowMatch) {
+   const word = aWeekFromNowMatch[0].match(/^(a|one|two|three|1|2|3)/iu)[0].toLowerCase();
+
+   const weeks = ({
+     'a': 1, 'one': 1, '1': 1,
+     'two': 2, '2': 2,
+     'three': 3, '3': 3
+   })[word];
+
+   date.setDate(date.getDate() + weeks * 7);
+   hasDate = true;
+   text = text.replace(aWeekFromNowMatch[0], ' ');
+ }
+
   
   const weekMatch = text.match(
     /(?<![\p{L}\p{N}])(?:через|in|after|dans|tra|fra|dentro de|en|za)\s+(одну|один|одна|дві|две|два|три|eine|einen|einer|ein|zwei|drei|one|a|two|three|un|une|deux|trois|una|uno|due|tre|dos|tres|jeden|jedna|jedną|dwa|dwie|trzy|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели|Woche|Wochen|week|weeks|semaine|semaines|settimana|settimane|tydzień|tygodnie|tygodni|semana|semanas)(?![\p{L}\p{N}])/iu
