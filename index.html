@@ -4513,7 +4513,7 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
    // Англійський цифровий час словами: six thirty, seven fifteen тощо
   if (!timeMatch) {
     const englishWordTimeMatch = text.match(
-      /(?<![\p{L}\p{N}])(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+(five|ten|fifteen|twenty-five|twenty five|twenty|thirty|thirty-five|thirty five|forty-five|forty five|forty|fifty-five|fifty five|fifty)(?![\p{L}\p{N}])/iu
+      /(?<![\p{L}\p{N}])(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+(?:oh\s+)?(five|ten|fifteen|twenty-five|twenty five|twenty|thirty|thirty-five|thirty five|forty-five|forty five|forty|fifty-five|fifty five|fifty)(?![\p{L}\p{N}])/iu
     );
 
     if (englishWordTimeMatch) {
