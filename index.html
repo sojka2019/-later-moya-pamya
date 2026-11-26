@@ -2944,7 +2944,7 @@ const nextMonthMatch = text.match(
 
 // Конкретне число наступного місяця: «15 числа», «15-го числа»
 const nextMonthDayMatch = text.match(
-  /(?<![\p{L}\p{N}])(\d{1,2})(?:-го)?\s+числа(?![\p{L}\p{N}])/iu
+  /(?<![\p{L}\p{N}])(?:(?:on\s+the)\s+)?(\d{1,2})(?:(?:st|nd|rd|th)(?![\p{L}\p{N}])|(?:-го)?\s+(?:числа|Tag|day|jour|giorno|día|dniu)|\.(?=\s|$))(?![\p{L}\p{N}])/iu
 );
 
 if (nextMonthMatch) {
