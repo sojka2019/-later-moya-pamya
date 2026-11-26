@@ -3036,6 +3036,38 @@ if (relativeMonthMatch) {
   }
 }
 
+  // Поточний місяць: this month on the 30th
+const thisMonthMatch = text.match(
+  /(?<![\p{L}\p{N}])this\s+month(?![\p{L}\p{N}])/iu
+);
+
+if (thisMonthMatch) {
+  const thisMonthDayMatch = text.match(
+    /(?<![\p{L}\p{N}])on\s+the\s+(\d{1,2})(?:st|nd|rd|th)(?![\p{L}\p{N}])/iu
+  );
+
+  if (thisMonthDayMatch) {
+    const requestedDay = Number(thisMonthDayMatch[1]);
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    if (
+      requestedDay >= 1 &&
+      requestedDay <= daysInMonth &&
+      requestedDay >= now.getDate()
+    ) {
+      date.setFullYear(year, month, requestedDay);
+      hasDate = true;
+      text = text.replace(thisMonthDayMatch[0], ' ');
+    } else {
+      invalidExplicitDate = true;
+    }
+  }
+
+  text = text.replace(thisMonthMatch[0], ' ');
+}
+  
   // 4. Назви місяців
    const months = {
     // Українська
