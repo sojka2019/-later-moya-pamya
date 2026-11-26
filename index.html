@@ -2351,6 +2351,7 @@ function parseVoiceReminder(transcript) {
 // Через пів години / полчаса
 // Іспанською: півтори години — 90 хвилин
   console.log('ПЕРЕВІРКА 90 ХВ:', JSON.stringify(text));
+  console.log('ПЕРЕВІРКА AFTER TOMORROW:', text);
 const spanishHourAndHalfMatch = text.match(
   /(?<![\p{L}\p{N}])dentro\s+de\s+(una\s+hora|dos\s+horas|tres\s+horas)\s+y\s+media(?![\p{L}\p{N}])/iu
 );
@@ -2616,7 +2617,7 @@ const relativeTimeMatch = text.match(
   }
   
   // 1. Відносні дати всіма підтримуваними мовами
-  if (removePhrase(/(?<![\p{L}\p{N}])(?:післязавтра|послезавтра|übermorgen|the day after tomorrow|après-demain|dopodomani|pojutrze|pasado mañana)(?![\p{L}\p{N}])/iu)) {
+  if (removePhrase(/(?<![\p{L}\p{N}])(?:післязавтра|послезавтра|übermorgen|the day after tomorrow|today after tomorrow|après-demain|dopodomani|pojutrze|pasado mañana)(?![\p{L}\p{N}])/iu)) {
     date.setDate(date.getDate() + 2);
     hasDate = true;
  } else if (
