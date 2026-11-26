@@ -4582,7 +4582,8 @@ const hourPatternForParsing = (friendActionContext || frenchArticleContext || it
       hour,
       originalText: original
     });
-    // Англійський 12-годинний час AM/PM та частини доби
+
+ // Англійський 12-годинний час AM/PM та частини доби
     if (
       /^p\.?\s*m\.?$/iu.test(period) ||
       /^(?:in the )?(?:afternoon|evening)$/iu.test(period)
