@@ -4053,7 +4053,7 @@ if (numericDateMatch) {
   let timeMatch;
   let hour;
   let minute = 0;
-  console.log('ТЕКСТ ПЕРЕД ENGLISH:', text);
+  
   
     // Англійський розмовний час: half past, quarter past, ten to тощо
   if (!timeMatch) {
@@ -4061,8 +4061,6 @@ if (numericDateMatch) {
       /(?<![\p{L}\p{N}])(?:(half|quarter|five|ten|fifteen|twenty|twenty-five|twenty five|thirty|five and a half|a quarter)\s+(past|to)\s+(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\d{1,2}))(?![\p{L}\p{N}])/iu
     );
 
-    console.log('ENGLISH TEXT:', text);
-    console.log('ENGLISH MATCH:', englishTimeMatch?.[0]);
    
     if (englishTimeMatch) {
       const englishHours = {
