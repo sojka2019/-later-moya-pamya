@@ -2868,6 +2868,16 @@ const relativeTimeMatch = text.match(
    text = text.replace(aWeekFromNowMatch[0], ' ');
  }
 
+    // Англійський вираз: a couple of weeks = 2 тижні
+    const coupleOfWeeksMatch = text.match(
+      /(?<![\p{L}\p{N}])in\s+a\s+couple\s+of\s+weeks?(?![\p{L}\p{N}])/iu
+    );
+
+    if (coupleOfWeeksMatch) {
+      date.setDate(date.getDate() + 14);
+      hasDate = true;
+      text = text.replace(coupleOfWeeksMatch[0], ' ');
+    }
   
   const weekMatch = text.match(
     /(?<![\p{L}\p{N}])(?:через|in|after|dans|tra|fra|dentro de|en|za)\s+(одну|один|одна|дві|две|два|три|eine|einen|einer|ein|zwei|drei|one|a|two|three|un|une|deux|trois|una|uno|due|tre|dos|tres|jeden|jedna|jedną|dwa|dwie|trzy|1|2|3)\s+(?:неділю|неділі|тиждень|тижні|неделю|недели|Woche|Wochen|week|weeks|semaine|semaines|settimana|settimane|tydzień|tygodnie|tygodni|semana|semanas)(?![\p{L}\p{N}])/iu
