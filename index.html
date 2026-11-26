@@ -3072,6 +3072,17 @@ const relativeMonthMatch = text.match(
   new RegExp(relativeMonthPattern, 'iu')
 );
 
+// Англійський вираз: a couple of months = 2 місяці
+const coupleOfMonthsMatch = text.match(
+  /(?<![\p{L}\p{N}])in\s+a\s+couple\s+of\s+months?(?![\p{L}\p{N}])/iu
+);
+
+if (coupleOfMonthsMatch) {
+  date = addCalendarMonths(date, 2);
+  hasDate = true;
+  text = text.replace(coupleOfMonthsMatch[0], ' ');
+}
+  
 // Конкретне число після фрази «через місяць»
 const relativeMonthDayMatch = text.match(
   /(?<![\p{L}\p{N}])(?:(?:am|on\s+the|the|le|il|el|w\s+dniu)\s*(\d{1,2})(?:st|nd|rd|th|er|e|º|°|\.)?|(\d{1,2})(?:-го)?\s+(?:числа|Tag|day|jour|giorno|día|dniu)|(\d{1,2})\.(?=\s|$))(?![\p{L}\p{N}])/iu
