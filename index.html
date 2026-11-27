@@ -2382,7 +2382,7 @@ if (halfHourMatch) {
 
 // Англійська конструкція: one and a half hours
 const oneAndHalfHoursMatch = text.match(
-  /(?<![\p{L}\p{N}])(?:in\s+)?one\s+and\s+a\s+half\s+hours?(?:\s+from\s+now)?(?![\p{L}\p{N}])/iu
+  /(?<![\p{L}\p{N}])(?:in\s+)?(?:one\s+and\s+a\s+half\s+hours?|an?\s+hour\s+and\s+a\s+half)(?:\s+from\s+now)?(?![\p{L}\p{N}])/iu
 );
 
 if (oneAndHalfHoursMatch) {
@@ -2396,7 +2396,7 @@ const oneHourMatch = text.match(
   /(?<![\p{L}\p{N}])(?:через\s+годину|через\s+один\s+час|через\s+час|через\s+одну\s+годину|in einer Stunde|in one hour|dans une heure|tra un'ora|fra un'ora|za godzinę|za jedną godzinę|dentro de una hora|en una hora)(?![\p{L}\p{N}])/iu
 );
 
-if (oneHourMatch && !halfHourMatch && !spanishHourAndHalfMatch) {
+if (oneHourMatch && !halfHourMatch && !oneAndHalfHoursMatch && !spanishHourAndHalfMatch) {
   date = new Date(now.getTime() + 60 * 60 * 1000);
   hasDate = true;
   hasTime = true;
