@@ -49,6 +49,7 @@ jobs:
           # Use the new Remember icon for the Android launcher.
           cp icon-512.png native-app/assets/icon.png
           # Make a separate Android copy. Leave the published website untouched.
+         
           python3 - <<'PY'
           from pathlib import Path
           p = Path("native-app/index.html")
@@ -836,7 +837,52 @@ jobs:
           test -n "$GOOGLE_SERVICES_JSON"
           printf '%s' "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
           npx cap sync android
+         
+          find android/app/src/main/java -name "MainActivity.java" -print
+         
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
 
+          files = list(Path("android/app/src/main/java").rglob("MainActivity.java"))
+
+          if len(files) != 1:
+              raise SystemExit(f"Очікував один MainActivity.java, знайдено: {len(files)}")
+
+          p = files[0]
+          source = p.read_text(encoding="utf-8")
+
+          if "setWebContentsDebuggingEnabled(true)" not in source:
+              if re.search(r'\bonCreate\s*\(', source):
+                  pattern = r'(super\.onCreate\s*\([^;]*\)\s*;)'
+                  source, count = re.subn(
+                      pattern,
+                      r'\1\n        android.webkit.WebView.setWebContentsDebuggingEnabled(true);',
+                      source,
+                      count=1
+                  )
+                  if count != 1:
+                      raise SystemExit("Не вдалося знайти виклик super.onCreate()")
+              else:
+                  pos = source.rfind("}")
+                  if pos == -1:
+                      raise SystemExit("Не знайдено кінець MainActivity")
+
+                  method = """
+              @Override
+              public void onCreate(android.os.Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+                  android.webkit.WebView.setWebContentsDebuggingEnabled(true);
+              }
+          """
+                  source = source[:pos] + method + source[pos:]
+
+              p.write_text(source, encoding="utf-8")
+
+          print("SUCCESS: WebView debugging увімкнено!")
+          PY
+          
+          
           python3 - <<'PY'
           from pathlib import Path
           import re
@@ -929,6 +975,7 @@ jobs:
           convert assets/icon.png -resize ${adaptive_size}x${adaptive_size} "android/app/src/main/res/mipmap-${density}/ic_launcher_foreground.png"
           done
           rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+          
           python3 - <<'PY'
           from pathlib import Path
           import re
