@@ -2380,23 +2380,33 @@ if (halfHourMatch) {
   text = text.replace(halfHourMatch[0], ' ');
 }
 
-// Англійська конструкція: one and a half hours
-const oneAndHalfHoursMatch = text.match(
-  /(?<![\p{L}\p{N}])(?:in\s+)?(?:one\s+and\s+a\s+half\s+hours?|an?\s+hour\s+and\s+a\s+half)(?:\s+from\s+now)?(?![\p{L}\p{N}])/iu
+// Англійська конструкція: one, two, three... and a half hours
+const hoursAndHalfMatch = text.match(
+  /(?<![\p{L}\p{N}])(?:in\s+)?(?:(one|two|three|four|five|six|seven|eight|nine|ten|\d{1,2})\s+and\s+a\s+half\s+hours?|an?\s+hour\s+and\s+a\s+half)(?:\s+from\s+now)?(?![\p{L}\p{N}])/iu
 );
 
-if (oneAndHalfHoursMatch) {
-  date = new Date(now.getTime() + 90 * 60 * 1000);
+if (hoursAndHalfMatch) {
+  const words = {
+    one: 1, two: 2, three: 3, four: 4, five: 5,
+    six: 6, seven: 7, eight: 8, nine: 9, ten: 10
+  };
+
+  const matchedNumber = hoursAndHalfMatch[1]?.toLowerCase();
+  const hours = matchedNumber
+    ? (words[matchedNumber] || Number(matchedNumber))
+    : 1;
+
+  date = new Date(now.getTime() + (hours * 60 + 30) * 60 * 1000);
   hasDate = true;
   hasTime = true;
-  text = text.replace(oneAndHalfHoursMatch[0], ' ');
+  text = text.replace(hoursAndHalfMatch[0], ' ');
 }
   
 const oneHourMatch = text.match(
   /(?<![\p{L}\p{N}])(?:через\s+годину|через\s+один\s+час|через\s+час|через\s+одну\s+годину|in einer Stunde|in one hour|dans une heure|tra un'ora|fra un'ora|za godzinę|za jedną godzinę|dentro de una hora|en una hora)(?![\p{L}\p{N}])/iu
 );
 
-if (oneHourMatch && !halfHourMatch && !oneAndHalfHoursMatch && !spanishHourAndHalfMatch) {
+if (oneHourMatch && !halfHourMatch && !hoursAndHalfMatch && !spanishHourAndHalfMatch) {
   date = new Date(now.getTime() + 60 * 60 * 1000);
   hasDate = true;
   hasTime = true;
@@ -2559,7 +2569,7 @@ const relativeTimeMatch = text.match(
   )
 );
 
-  if (relativeTimeMatch && !halfHourMatch && !oneHourMatch && !oneAndHalfHoursMatch && !spanishHourAndHalfMatch) {
+ if (relativeTimeMatch && !halfHourMatch && !oneHourMatch && !hoursAndHalfMatch && !spanishHourAndHalfMatch) {
     const amountWord = (relativeTimeMatch[1] || '1')
       .toLowerCase();
 
