@@ -2559,7 +2559,38 @@ if (oneHourMatch && !halfHourMatch && !hoursAndHalfMatch && !spanishHourAndHalfM
   .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
   .join('|');
 
+// Англійська конструкція: 2 hours and 30 minutes
+const englishHoursMinutesMatch = text.match(
+  new RegExp(
+    '(?<![\\p{L}\\p{N}])(?:in\\s+)?(' +
+    amountPattern + '|\\d{1,2})\\s+hours?\\s+and\\s+(' +
+    amountPattern + '|\\d{1,2})\\s+minutes?(?![\\p{L}\\p{N}])',
+    'iu'
+  )
+);
 
+if (englishHoursMinutesMatch) {
+  const hoursWord = englishHoursMinutesMatch[1].toLowerCase();
+  const minutesWord = englishHoursMinutesMatch[2].toLowerCase();
+
+  const hours = /^\d+$/.test(hoursWord)
+    ? Number(hoursWord)
+    : amounts[hoursWord];
+
+  const minutes = /^\d+$/.test(minutesWord)
+    ? Number(minutesWord)
+    : amounts[minutesWord];
+
+  date = new Date(
+    now.getTime() + (hours * 60 + minutes) * 60 * 1000
+  );
+
+  hasDate = true;
+  hasTime = true;
+
+  text = text.replace(englishHoursMinutesMatch[0], ' ');
+}
+  
 const relativeTimeMatch = text.match(
   new RegExp(
     '(?<![\\p{L}\\p{N}])(?:через|за|in|dans|tra|fra|dentro de|en)\\s+(?:(' +
