@@ -2600,7 +2600,7 @@ const relativeTimeMatch = text.match(
   )
 );
 
- if (relativeTimeMatch && !halfHourMatch && !oneHourMatch && !hoursAndHalfMatch && !spanishHourAndHalfMatch) {
+ if (relativeTimeMatch && !halfHourMatch && !oneHourMatch && !hoursAndHalfMatch && !spanishHourAndHalfMatch && !englishHoursMinutesMatch) {
     const amountWord = (relativeTimeMatch[1] || '1')
       .toLowerCase();
 
