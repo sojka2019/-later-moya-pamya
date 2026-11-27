@@ -2837,6 +2837,26 @@ const relativeTimeMatch = text.match(
       hasDate = true;
       text = text.replace(relativeDayMatch[0], ' ');
     }
+
+    // Англійська конструкція: days from now
+const daysFromNowMatch = text.match(
+  /(?<![\p{L}\p{N}])(?:a|one|two|three|1|2|3)\s+days?\s+from\s+now(?![\p{L}\p{N}])/iu
+);
+
+if (daysFromNowMatch) {
+  const word = daysFromNowMatch[0].match(/^(a|one|two|three|1|2|3)/iu)[0].toLowerCase();
+
+  const days = ({
+    'a': 1, 'one': 1, '1': 1,
+    'two': 2, '2': 2,
+    'three': 3, '3': 3
+  })[word];
+
+  date.setDate(date.getDate() + days);
+  hasDate = true;
+  text = text.replace(daysFromNowMatch[0], ' ');
+}
+  
   }
 
    // Англійський вираз: a couple of days = 2 дні
