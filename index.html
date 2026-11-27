@@ -2837,8 +2837,9 @@ const relativeTimeMatch = text.match(
       hasDate = true;
       text = text.replace(relativeDayMatch[0], ' ');
     }
-
-    // Англійська конструкція: days from now
+  }
+   
+  // Англійська конструкція: days from now
 const daysFromNowMatch = text.match(
   /(?<![\p{L}\p{N}])(?:a|one|two|three|1|2|3)\s+days?\s+from\s+now(?![\p{L}\p{N}])/iu
 );
@@ -2857,7 +2858,7 @@ if (daysFromNowMatch) {
   text = text.replace(daysFromNowMatch[0], ' ');
 }
   
-  }
+ 
 
    // Англійський вираз: a couple of days = 2 дні
   const coupleOfDaysMatch = text.match(
